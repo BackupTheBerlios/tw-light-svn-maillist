@@ -1,0 +1,2507 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r146 - in trunk: . Util doc gamedata gamedata/python gamedata/python/lib mingw-libs/include/SDL rawgraphic source source/games source/generated source/python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r146%20-%20in%20trunk%3A%20.%20Util%20doc%20gamedata%20gamedata/python%20gamedata/python/lib%20mingw-libs/include/SDL%20rawgraphic%20source%20source/games%20source/generated%20source/python&In-Reply-To=%3C200505021950.j42JowYV019690%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000091.html">
+   <LINK REL="Next"  HREF="000093.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r146 - in trunk: . Util doc gamedata gamedata/python gamedata/python/lib mingw-libs/include/SDL rawgraphic source source/games source/generated source/python</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r146%20-%20in%20trunk%3A%20.%20Util%20doc%20gamedata%20gamedata/python%20gamedata/python/lib%20mingw-libs/include/SDL%20rawgraphic%20source%20source/games%20source/generated%20source/python&In-Reply-To=%3C200505021950.j42JowYV019690%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r146 - in trunk: . Util doc gamedata gamedata/python gamedata/python/lib mingw-libs/include/SDL rawgraphic source source/games source/generated source/python">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Mon May  2 21:50:58 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000091.html">[Tw-light-svn] r145 - in trunk: gamedata/python source/games source/generated
+</A></li>
+        <LI>Next message: <A HREF="000093.html">[Tw-light-svn] r147 - in trunk: . doc gamedata source source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#92">[ date ]</a>
+              <a href="thread.html#92">[ thread ]</a>
+              <a href="subject.html#92">[ subject ]</a>
+              <a href="author.html#92">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-02 21:50:55 +0200 (Mon, 02 May 2005)
+New Revision: 146
+
+Added:
+   trunk/gamedata/python/lib/
+   trunk/gamedata/python/lib/copy.py
+   trunk/gamedata/python/lib/pickle.py
+   trunk/gamedata/python/lib/types.py
+   trunk/mingw-libs/include/SDL/SDL.h
+   trunk/msvcr71.dll
+   trunk/rawgraphic/Estion.jpg
+   trunk/rawgraphic/QuanExplode.PNG
+Removed:
+   trunk/mingw-libs/include/SDL/sdl.h
+Modified:
+   trunk/Util/timewarp.nsi
+   trunk/doc/Doxyfile
+   trunk/gamedata/python/ggob.py
+   trunk/gamedata/readme.html
+   trunk/makefile
+   trunk/source/doxygen.cpp
+   trunk/source/games/ggob.h
+   trunk/source/generated/ggob.py
+   trunk/source/generated/ggob_wrap.cpp
+   trunk/source/python/python_class.cpp
+   trunk/source/scp.cpp
+Log:
+adding missing files for win32
+
+Modified: trunk/Util/timewarp.nsi
+===================================================================
+--- trunk/Util/timewarp.nsi	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/Util/timewarp.nsi	2005-05-02 19:50:55 UTC (rev 146)
+@@ -38,7 +38,7 @@
+ !define MUI_WELCOMEPAGE_TEXT &quot;This wizard will guide you through the installation of ${PRODUCT_NAME}.\r\n\r\n\r\n$_CLICK&quot;
+ 
+ !insertmacro MUI_PAGE_WELCOME
+-!insertmacro MUI_PAGE_LICENSE &quot;..\copying&quot;
++!insertmacro MUI_PAGE_LICENSE &quot;..\COPYING&quot;
+ !insertmacro MUI_PAGE_COMPONENTS
+ Page custom CreateShortCutF
+ !insertmacro MUI_PAGE_DIRECTORY
+
+Modified: trunk/doc/Doxyfile
+===================================================================
+--- trunk/doc/Doxyfile	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/doc/Doxyfile	2005-05-02 19:50:55 UTC (rev 146)
+@@ -4,7 +4,7 @@
+ # General configuration options
+ #---------------------------------------------------------------------------
+ PROJECT_NAME           = TW-Light
+-PROJECT_NUMBER         = 0.3b69
++PROJECT_NUMBER         = 0.3b146
+ OUTPUT_DIRECTORY       = ./
+ OUTPUT_LANGUAGE        = English
+ USE_WINDOWS_ENCODING   = YES
+
+Modified: trunk/gamedata/python/ggob.py
+===================================================================
+--- trunk/gamedata/python/ggob.py	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/gamedata/python/ggob.py	2005-05-02 19:50:55 UTC (rev 146)
+@@ -112,6 +112,11 @@
+     __swig_setmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_set
+     __swig_getmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_get
+     if _newclass:pos_y = property(_ggob.SaveGobGameInfo_pos_y_get, _ggob.SaveGobGameInfo_pos_y_set)
++    __swig_setmethods__[&quot;system&quot;] = _ggob.SaveGobGameInfo_system_set
++    __swig_getmethods__[&quot;system&quot;] = _ggob.SaveGobGameInfo_system_get
++    if _newclass:system = property(_ggob.SaveGobGameInfo_system_get, _ggob.SaveGobGameInfo_system_set)
++    def getSystem(*args): return _ggob.SaveGobGameInfo_getSystem(*args)
++    def setSystem(*args): return _ggob.SaveGobGameInfo_setSystem(*args)
+     __swig_setmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_set
+     __swig_getmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_get
+     if _newclass:tst = property(_ggob.SaveGobGameInfo_tst_get, _ggob.SaveGobGameInfo_tst_set)
+
+Added: trunk/gamedata/python/lib/copy.py
+===================================================================
+--- trunk/gamedata/python/lib/copy.py	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/gamedata/python/lib/copy.py	2005-05-02 19:50:55 UTC (rev 146)
+@@ -0,0 +1,412 @@
++&quot;&quot;&quot;Generic (shallow and deep) copying operations.
++
++Interface summary:
++
++        import copy
++
++        x = copy.copy(y)        # make a shallow copy of y
++        x = copy.deepcopy(y)    # make a deep copy of y
++
++For module specific errors, copy.Error is raised.
++
++The difference between shallow and deep copying is only relevant for
++compound objects (objects that contain other objects, like lists or
++class instances).
++
++- A shallow copy constructs a new compound object and then (to the
++  extent possible) inserts *the same objects* into in that the
++  original contains.
++
++- A deep copy constructs a new compound object and then, recursively,
++  inserts *copies* into it of the objects found in the original.
++
++Two problems often exist with deep copy operations that don't exist
++with shallow copy operations:
++
++ a) recursive objects (compound objects that, directly or indirectly,
++    contain a reference to themselves) may cause a recursive loop
++
++ b) because deep copy copies *everything* it may copy too much, e.g.
++    administrative data structures that should be shared even between
++    copies
++
++Python's deep copy operation avoids these problems by:
++
++ a) keeping a table of objects already copied during the current
++    copying pass
++
++ b) letting user-defined classes override the copying operation or the
++    set of components copied
++
++This version does not copy types like module, class, function, method,
++nor stack trace, stack frame, nor file, socket, window, nor array, nor
++any similar types.
++
++Classes can use the same interfaces to control copying that they use
++to control pickling: they can define methods called __getinitargs__(),
++__getstate__() and __setstate__().  See the documentation for module
++&quot;pickle&quot; for information on these methods.
++&quot;&quot;&quot;
++
++import types
++from copy_reg import dispatch_table
++
++class Error(Exception):
++    pass
++error = Error   # backward compatibility
++
++try:
++    from org.python.core import PyStringMap
++except ImportError:
++    PyStringMap = None
++
++__all__ = [&quot;Error&quot;, &quot;copy&quot;, &quot;deepcopy&quot;]
++
++def copy(x):
++    &quot;&quot;&quot;Shallow copy operation on arbitrary Python objects.
++
++    See the module's __doc__ string for more info.
++    &quot;&quot;&quot;
++
++    cls = type(x)
++
++    copier = _copy_dispatch.get(cls)
++    if copier:
++        return copier(x)
++
++    copier = getattr(cls, &quot;__copy__&quot;, None)
++    if copier:
++        return copier(x)
++
++    reductor = dispatch_table.get(cls)
++    if reductor:
++        rv = reductor(x)
++    else:
++        reductor = getattr(x, &quot;__reduce_ex__&quot;, None)
++        if reductor:
++            rv = reductor(2)
++        else:
++            reductor = getattr(x, &quot;__reduce__&quot;, None)
++            if reductor:
++                rv = reductor()
++            else:
++                raise Error(&quot;un(shallow)copyable object of type %s&quot; % cls)
++
++    return _reconstruct(x, rv, 0)
++
++
++_copy_dispatch = d = {}
++
++def _copy_immutable(x):
++    return x
++for t in (types.NoneType, int, long, float, bool, str, tuple,
++          frozenset, type, xrange, types.ClassType,
++          types.BuiltinFunctionType):
++    d[t] = _copy_immutable
++for name in (&quot;ComplexType&quot;, &quot;UnicodeType&quot;, &quot;CodeType&quot;):
++    t = getattr(types, name, None)
++    if t is not None:
++        d[t] = _copy_immutable
++
++def _copy_with_constructor(x):
++    return type(x)(x)
++for t in (list, dict, set):
++    d[t] = _copy_with_constructor
++
++def _copy_with_copy_method(x):
++    return x.copy()
++if PyStringMap is not None:
++    d[PyStringMap] = _copy_with_copy_method
++
++def _copy_inst(x):
++    if hasattr(x, '__copy__'):
++        return x.__copy__()
++    if hasattr(x, '__getinitargs__'):
++        args = x.__getinitargs__()
++        y = x.__class__(*args)
++    else:
++        y = _EmptyClass()
++        y.__class__ = x.__class__
++    if hasattr(x, '__getstate__'):
++        state = x.__getstate__()
++    else:
++        state = x.__dict__
++    if hasattr(y, '__setstate__'):
++        y.__setstate__(state)
++    else:
++        y.__dict__.update(state)
++    return y
++d[types.InstanceType] = _copy_inst
++
++del d
++
++def deepcopy(x, memo=None, _nil=[]):
++    &quot;&quot;&quot;Deep copy operation on arbitrary Python objects.
++
++    See the module's __doc__ string for more info.
++    &quot;&quot;&quot;
++
++    if memo is None:
++        memo = {}
++
++    d = id(x)
++    y = memo.get(d, _nil)
++    if y is not _nil:
++        return y
++
++    cls = type(x)
++
++    copier = _deepcopy_dispatch.get(cls)
++    if copier:
++        y = copier(x, memo)
++    else:
++        try:
++            issc = issubclass(cls, type)
++        except TypeError: # cls is not a class (old Boost; see SF #502085)
++            issc = 0
++        if issc:
++            y = _deepcopy_atomic(x, memo)
++        else:
++            copier = getattr(x, &quot;__deepcopy__&quot;, None)
++            if copier:
++                y = copier(memo)
++            else:
++                reductor = dispatch_table.get(cls)
++                if reductor:
++                    rv = reductor(x)
++                else:
++                    reductor = getattr(x, &quot;__reduce_ex__&quot;, None)
++                    if reductor:
++                        rv = reductor(2)
++                    else:
++                        reductor = getattr(x, &quot;__reduce__&quot;, None)
++                        if reductor:
++                            rv = reductor()
++                        else:
++                            raise Error(
++                                &quot;un(deep)copyable object of type %s&quot; % cls)
++                y = _reconstruct(x, rv, 1, memo)
++
++    memo[d] = y
++    _keep_alive(x, memo) # Make sure x lives at least as long as d
++    return y
++
++_deepcopy_dispatch = d = {}
++
++def _deepcopy_atomic(x, memo):
++    return x
++d[types.NoneType] = _deepcopy_atomic
++d[types.IntType] = _deepcopy_atomic
++d[types.LongType] = _deepcopy_atomic
++d[types.FloatType] = _deepcopy_atomic
++d[types.BooleanType] = _deepcopy_atomic
++try:
++    d[types.ComplexType] = _deepcopy_atomic
++except AttributeError:
++    pass
++d[types.StringType] = _deepcopy_atomic
++try:
++    d[types.UnicodeType] = _deepcopy_atomic
++except AttributeError:
++    pass
++try:
++    d[types.CodeType] = _deepcopy_atomic
++except AttributeError:
++    pass
++d[types.TypeType] = _deepcopy_atomic
++d[types.XRangeType] = _deepcopy_atomic
++d[types.ClassType] = _deepcopy_atomic
++d[types.BuiltinFunctionType] = _deepcopy_atomic
++
++def _deepcopy_list(x, memo):
++    y = []
++    memo[id(x)] = y
++    for a in x:
++        y.append(deepcopy(a, memo))
++    return y
++d[types.ListType] = _deepcopy_list
++
++def _deepcopy_tuple(x, memo):
++    y = []
++    for a in x:
++        y.append(deepcopy(a, memo))
++    d = id(x)
++    try:
++        return memo[d]
++    except KeyError:
++        pass
++    for i in range(len(x)):
++        if x[i] is not y[i]:
++            y = tuple(y)
++            break
++    else:
++        y = x
++    memo[d] = y
++    return y
++d[types.TupleType] = _deepcopy_tuple
++
++def _deepcopy_dict(x, memo):
++    y = {}
++    memo[id(x)] = y
++    for key, value in x.iteritems():
++        y[deepcopy(key, memo)] = deepcopy(value, memo)
++    return y
++d[types.DictionaryType] = _deepcopy_dict
++if PyStringMap is not None:
++    d[PyStringMap] = _deepcopy_dict
++
++def _keep_alive(x, memo):
++    &quot;&quot;&quot;Keeps a reference to the object x in the memo.
++
++    Because we remember objects by their id, we have
++    to assure that possibly temporary objects are kept
++    alive by referencing them.
++    We store a reference at the id of the memo, which should
++    normally not be used unless someone tries to deepcopy
++    the memo itself...
++    &quot;&quot;&quot;
++    try:
++        memo[id(memo)].append(x)
++    except KeyError:
++        # aha, this is the first one :-)
++        memo[id(memo)]=[x]
++
++def _deepcopy_inst(x, memo):
++    if hasattr(x, '__deepcopy__'):
++        return x.__deepcopy__(memo)
++    if hasattr(x, '__getinitargs__'):
++        args = x.__getinitargs__()
++        args = deepcopy(args, memo)
++        y = x.__class__(*args)
++    else:
++        y = _EmptyClass()
++        y.__class__ = x.__class__
++    memo[id(x)] = y
++    if hasattr(x, '__getstate__'):
++        state = x.__getstate__()
++    else:
++        state = x.__dict__
++    state = deepcopy(state, memo)
++    if hasattr(y, '__setstate__'):
++        y.__setstate__(state)
++    else:
++        y.__dict__.update(state)
++    return y
++d[types.InstanceType] = _deepcopy_inst
++
++def _reconstruct(x, info, deep, memo=None):
++    if isinstance(info, str):
++        return x
++    assert isinstance(info, tuple)
++    if memo is None:
++        memo = {}
++    n = len(info)
++    assert n in (2, 3, 4, 5)
++    callable, args = info[:2]
++    if n &gt; 2:
++        state = info[2]
++    else:
++        state = {}
++    if n &gt; 3:
++        listiter = info[3]
++    else:
++        listiter = None
++    if n &gt; 4:
++        dictiter = info[4]
++    else:
++        dictiter = None
++    if deep:
++        args = deepcopy(args, memo)
++    y = callable(*args)
++    memo[id(x)] = y
++    if listiter is not None:
++        for item in listiter:
++            if deep:
++                item = deepcopy(item, memo)
++            y.append(item)
++    if dictiter is not None:
++        for key, value in dictiter:
++            if deep:
++                key = deepcopy(key, memo)
++                value = deepcopy(value, memo)
++            y[key] = value
++    if state:
++        if deep:
++            state = deepcopy(state, memo)
++        if hasattr(y, '__setstate__'):
++            y.__setstate__(state)
++        else:
++            if isinstance(state, tuple) and len(state) == 2:
++                state, slotstate = state
++            else:
++                slotstate = None
++            if state is not None:
++                y.__dict__.update(state)
++            if slotstate is not None:
++                for key, value in slotstate.iteritems():
++                    setattr(y, key, value)
++    return y
++
++del d
++
++del types
++
++# Helper for instance creation without calling __init__
++class _EmptyClass:
++    pass
++
++def _test():
++    l = [None, 1, 2L, 3.14, 'xyzzy', (1, 2L), [3.14, 'abc'],
++         {'abc': 'ABC'}, (), [], {}]
++    l1 = copy(l)
++    print l1==l
++    l1 = map(copy, l)
++    print l1==l
++    l1 = deepcopy(l)
++    print l1==l
++    class C:
++        def __init__(self, arg=None):
++            self.a = 1
++            self.arg = arg
++            if __name__ == '__main__':
++                import sys
++                file = sys.argv[0]
++            else:
++                file = __file__
++            self.fp = open(file)
++            self.fp.close()
++        def __getstate__(self):
++            return {'a': self.a, 'arg': self.arg}
++        def __setstate__(self, state):
++            for key, value in state.iteritems():
++                setattr(self, key, value)
++        def __deepcopy__(self, memo=None):
++            new = self.__class__(deepcopy(self.arg, memo))
++            new.a = self.a
++            return new
++    c = C('argument sketch')
++    l.append(c)
++    l2 = copy(l)
++    print l == l2
++    print l
++    print l2
++    l2 = deepcopy(l)
++    print l == l2
++    print l
++    print l2
++    l.append({l[1]: l, 'xyz': l[2]})
++    l3 = copy(l)
++    import repr
++    print map(repr.repr, l)
++    print map(repr.repr, l1)
++    print map(repr.repr, l2)
++    print map(repr.repr, l3)
++    l3 = deepcopy(l)
++    import repr
++    print map(repr.repr, l)
++    print map(repr.repr, l1)
++    print map(repr.repr, l2)
++    print map(repr.repr, l3)
++
++if __name__ == '__main__':
++    _test()
+
+Added: trunk/gamedata/python/lib/pickle.py
+===================================================================
+--- trunk/gamedata/python/lib/pickle.py	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/gamedata/python/lib/pickle.py	2005-05-02 19:50:55 UTC (rev 146)
+@@ -0,0 +1,1403 @@
++&quot;&quot;&quot;Create portable serialized representations of Python objects.
++
++See module cPickle for a (much) faster implementation.
++See module copy_reg for a mechanism for registering custom picklers.
++See module pickletools source for extensive comments.
++
++Classes:
++
++    Pickler
++    Unpickler
++
++Functions:
++
++    dump(object, file)
++    dumps(object) -&gt; string
++    load(file) -&gt; object
++    loads(string) -&gt; object
++
++Misc variables:
++
++    __version__
++    format_version
++    compatible_formats
++
++&quot;&quot;&quot;
++
++__version__ = &quot;$Revision: 1.158 $&quot;       # Code version
++
++from types import *
++from copy_reg import dispatch_table
++from copy_reg import _extension_registry, _inverted_registry, _extension_cache
++import marshal
++import sys
++import struct
++import re
++import warnings
++
++__all__ = [&quot;PickleError&quot;, &quot;PicklingError&quot;, &quot;UnpicklingError&quot;, &quot;Pickler&quot;,
++           &quot;Unpickler&quot;, &quot;dump&quot;, &quot;dumps&quot;, &quot;load&quot;, &quot;loads&quot;]
++
++# These are purely informational; no code uses these.
++format_version = &quot;2.0&quot;                  # File format version we write
++compatible_formats = [&quot;1.0&quot;,            # Original protocol 0
++                      &quot;1.1&quot;,            # Protocol 0 with INST added
++                      &quot;1.2&quot;,            # Original protocol 1
++                      &quot;1.3&quot;,            # Protocol 1 with BINFLOAT added
++                      &quot;2.0&quot;,            # Protocol 2
++                      ]                 # Old format versions we can read
++
++# Keep in synch with cPickle.  This is the highest protocol number we
++# know how to read.
++HIGHEST_PROTOCOL = 2
++
++# Why use struct.pack() for pickling but marshal.loads() for
++# unpickling?  struct.pack() is 40% faster than marshal.dumps(), but
++# marshal.loads() is twice as fast as struct.unpack()!
++mloads = marshal.loads
++
++class PickleError(Exception):
++    &quot;&quot;&quot;A common base class for the other pickling exceptions.&quot;&quot;&quot;
++    pass
++
++class PicklingError(PickleError):
++    &quot;&quot;&quot;This exception is raised when an unpicklable object is passed to the
++    dump() method.
++
++    &quot;&quot;&quot;
++    pass
++
++class UnpicklingError(PickleError):
++    &quot;&quot;&quot;This exception is raised when there is a problem unpickling an object,
++    such as a security violation.
++
++    Note that other exceptions may also be raised during unpickling, including
++    (but not necessarily limited to) AttributeError, EOFError, ImportError,
++    and IndexError.
++
++    &quot;&quot;&quot;
++    pass
++
++# An instance of _Stop is raised by Unpickler.load_stop() in response to
++# the STOP opcode, passing the object that is the result of unpickling.
++class _Stop(Exception):
++    def __init__(self, value):
++        self.value = value
++
++# Jython has PyStringMap; it's a dict subclass with string keys
++try:
++    from org.python.core import PyStringMap
++except ImportError:
++    PyStringMap = None
++
++# UnicodeType may or may not be exported (normally imported from types)
++try:
++    UnicodeType
++except NameError:
++    UnicodeType = None
++
++# Pickle opcodes.  See pickletools.py for extensive docs.  The listing
++# here is in kind-of alphabetical order of 1-character pickle code.
++# pickletools groups them by purpose.
++
++MARK            = '('   # push special markobject on stack
++STOP            = '.'   # every pickle ends with STOP
++POP             = '0'   # discard topmost stack item
++POP_MARK        = '1'   # discard stack top through topmost markobject
++DUP             = '2'   # duplicate top stack item
++FLOAT           = 'F'   # push float object; decimal string argument
++INT             = 'I'   # push integer or bool; decimal string argument
++BININT          = 'J'   # push four-byte signed int
++BININT1         = 'K'   # push 1-byte unsigned int
++LONG            = 'L'   # push long; decimal string argument
++BININT2         = 'M'   # push 2-byte unsigned int
++NONE            = 'N'   # push None
++PERSID          = 'P'   # push persistent object; id is taken from string arg
++BINPERSID       = 'Q'   #  &quot;       &quot;         &quot;  ;  &quot;  &quot;   &quot;     &quot;  stack
++REDUCE          = 'R'   # apply callable to argtuple, both on stack
++STRING          = 'S'   # push string; NL-terminated string argument
++BINSTRING       = 'T'   # push string; counted binary string argument
++SHORT_BINSTRING = 'U'   #  &quot;     &quot;   ;    &quot;      &quot;       &quot;      &quot; &lt; 256 bytes
++UNICODE         = 'V'   # push Unicode string; raw-unicode-escaped'd argument
++BINUNICODE      = 'X'   #   &quot;     &quot;       &quot;  ; counted UTF-8 string argument
++APPEND          = 'a'   # append stack top to list below it
++BUILD           = 'b'   # call __setstate__ or __dict__.update()
++GLOBAL          = 'c'   # push self.find_class(modname, name); 2 string args
++DICT            = 'd'   # build a dict from stack items
++EMPTY_DICT      = '}'   # push empty dict
++APPENDS         = 'e'   # extend list on stack by topmost stack slice
++GET             = 'g'   # push item from memo on stack; index is string arg
++BINGET          = 'h'   #   &quot;    &quot;    &quot;    &quot;   &quot;   &quot;  ;   &quot;    &quot; 1-byte arg
++INST            = 'i'   # build &amp; push class instance
++LONG_BINGET     = 'j'   # push item from memo on stack; index is 4-byte arg
++LIST            = 'l'   # build list from topmost stack items
++EMPTY_LIST      = ']'   # push empty list
++OBJ             = 'o'   # build &amp; push class instance
++PUT             = 'p'   # store stack top in memo; index is string arg
++BINPUT          = 'q'   #   &quot;     &quot;    &quot;   &quot;   &quot; ;   &quot;    &quot; 1-byte arg
++LONG_BINPUT     = 'r'   #   &quot;     &quot;    &quot;   &quot;   &quot; ;   &quot;    &quot; 4-byte arg
++SETITEM         = 's'   # add key+value pair to dict
++TUPLE           = 't'   # build tuple from topmost stack items
++EMPTY_TUPLE     = ')'   # push empty tuple
++SETITEMS        = 'u'   # modify dict by adding topmost key+value pairs
++BINFLOAT        = 'G'   # push float; arg is 8-byte float encoding
++
++TRUE            = 'I01\n'  # not an opcode; see INT docs in pickletools.py
++FALSE           = 'I00\n'  # not an opcode; see INT docs in pickletools.py
++
++# Protocol 2
++
++PROTO           = '\x80'  # identify pickle protocol
++NEWOBJ          = '\x81'  # build object by applying cls.__new__ to argtuple
++EXT1            = '\x82'  # push object from extension registry; 1-byte index
++EXT2            = '\x83'  # ditto, but 2-byte index
++EXT4            = '\x84'  # ditto, but 4-byte index
++TUPLE1          = '\x85'  # build 1-tuple from stack top
++TUPLE2          = '\x86'  # build 2-tuple from two topmost stack items
++TUPLE3          = '\x87'  # build 3-tuple from three topmost stack items
++NEWTRUE         = '\x88'  # push True
++NEWFALSE        = '\x89'  # push False
++LONG1           = '\x8a'  # push long from &lt; 256 bytes
++LONG4           = '\x8b'  # push really big long
++
++_tuplesize2code = [EMPTY_TUPLE, TUPLE1, TUPLE2, TUPLE3]
++
++
++__all__.extend([x for x in dir() if re.match(&quot;[A-Z][A-Z0-9_]+$&quot;,x)])
++del x
++
++
++# Pickling machinery
++
++class Pickler:
++
++    def __init__(self, file, protocol=None, bin=None):
++        &quot;&quot;&quot;This takes a file-like object for writing a pickle data stream.
++
++        The optional protocol argument tells the pickler to use the
++        given protocol; supported protocols are 0, 1, 2.  The default
++        protocol is 0, to be backwards compatible.  (Protocol 0 is the
++        only protocol that can be written to a file opened in text
++        mode and read back successfully.  When using a protocol higher
++        than 0, make sure the file is opened in binary mode, both when
++        pickling and unpickling.)
++
++        Protocol 1 is more efficient than protocol 0; protocol 2 is
++        more efficient than protocol 1.
++
++        Specifying a negative protocol version selects the highest
++        protocol version supported.  The higher the protocol used, the
++        more recent the version of Python needed to read the pickle
++        produced.
++
++        The file parameter must have a write() method that accepts a single
++        string argument.  It can thus be an open file object, a StringIO
++        object, or any other custom object that meets this interface.
++
++        &quot;&quot;&quot;
++        if protocol is not None and bin is not None:
++            raise ValueError, &quot;can't specify both 'protocol' and 'bin'&quot;
++        if bin is not None:
++            warnings.warn(&quot;The 'bin' argument to Pickler() is deprecated&quot;,
++                          DeprecationWarning)
++            protocol = bin
++        if protocol is None:
++            protocol = 0
++        if protocol &lt; 0:
++            protocol = HIGHEST_PROTOCOL
++        elif not 0 &lt;= protocol &lt;= HIGHEST_PROTOCOL:
++            raise ValueError(&quot;pickle protocol must be &lt;= %d&quot; % HIGHEST_PROTOCOL)
++        self.write = file.write
++        self.memo = {}
++        self.proto = int(protocol)
++        self.bin = protocol &gt;= 1
++        self.fast = 0
++
++    def clear_memo(self):
++        &quot;&quot;&quot;Clears the pickler's &quot;memo&quot;.
++
++        The memo is the data structure that remembers which objects the
++        pickler has already seen, so that shared or recursive objects are
++        pickled by reference and not by value.  This method is useful when
++        re-using picklers.
++
++        &quot;&quot;&quot;
++        self.memo.clear()
++
++    def dump(self, obj):
++        &quot;&quot;&quot;Write a pickled representation of obj to the open file.&quot;&quot;&quot;
++        if self.proto &gt;= 2:
++            self.write(PROTO + chr(self.proto))
++        self.save(obj)
++        self.write(STOP)
++
++    def memoize(self, obj):
++        &quot;&quot;&quot;Store an object in the memo.&quot;&quot;&quot;
++
++        # The Pickler memo is a dictionary mapping object ids to 2-tuples
++        # that contain the Unpickler memo key and the object being memoized.
++        # The memo key is written to the pickle and will become
++        # the key in the Unpickler's memo.  The object is stored in the
++        # Pickler memo so that transient objects are kept alive during
++        # pickling.
++
++        # The use of the Unpickler memo length as the memo key is just a
++        # convention.  The only requirement is that the memo values be unique.
++        # But there appears no advantage to any other scheme, and this
++        # scheme allows the Unpickler memo to be implemented as a plain (but
++        # growable) array, indexed by memo key.
++        if self.fast:
++            return
++        assert id(obj) not in self.memo
++        memo_len = len(self.memo)
++        self.write(self.put(memo_len))
++        self.memo[id(obj)] = memo_len, obj
++
++    # Return a PUT (BINPUT, LONG_BINPUT) opcode string, with argument i.
++    def put(self, i, pack=struct.pack):
++        if self.bin:
++            if i &lt; 256:
++                return BINPUT + chr(i)
++            else:
++                return LONG_BINPUT + pack(&quot;&lt;i&quot;, i)
++
++        return PUT + repr(i) + '\n'
++
++    # Return a GET (BINGET, LONG_BINGET) opcode string, with argument i.
++    def get(self, i, pack=struct.pack):
++        if self.bin:
++            if i &lt; 256:
++                return BINGET + chr(i)
++            else:
++                return LONG_BINGET + pack(&quot;&lt;i&quot;, i)
++
++        return GET + repr(i) + '\n'
++
++    def save(self, obj):
++        # Check for persistent id (defined by a subclass)
++        pid = self.persistent_id(obj)
++        if pid:
++            self.save_pers(pid)
++            return
++
++        # Check the memo
++        x = self.memo.get(id(obj))
++        if x:
++            self.write(self.get(x[0]))
++            return
++
++        # Check the type dispatch table
++        t = type(obj)
++        f = self.dispatch.get(t)
++        if f:
++            f(self, obj) # Call unbound method with explicit self
++            return
++
++        # Check for a class with a custom metaclass; treat as regular class
++        try:
++            issc = issubclass(t, TypeType)
++        except TypeError: # t is not a class (old Boost; see SF #502085)
++            issc = 0
++        if issc:
++            self.save_global(obj)
++            return
++
++        # Check copy_reg.dispatch_table
++        reduce = dispatch_table.get(t)
++        if reduce:
++            rv = reduce(obj)
++        else:
++            # Check for a __reduce_ex__ method, fall back to __reduce__
++            reduce = getattr(obj, &quot;__reduce_ex__&quot;, None)
++            if reduce:
++                rv = reduce(self.proto)
++            else:
++                reduce = getattr(obj, &quot;__reduce__&quot;, None)
++                if reduce:
++                    rv = reduce()
++                else:
++                    raise PicklingError(&quot;Can't pickle %r object: %r&quot; %
++                                        (t.__name__, obj))
++
++        # Check for string returned by reduce(), meaning &quot;save as global&quot;
++        if type(rv) is StringType:
++            self.save_global(obj, rv)
++            return
++
++        # Assert that reduce() returned a tuple
++        if type(rv) is not TupleType:
++            raise PicklingError(&quot;%s must return string or tuple&quot; % reduce)
++
++        # Assert that it returned an appropriately sized tuple
++        l = len(rv)
++        if not (2 &lt;= l &lt;= 5):
++            raise PicklingError(&quot;Tuple returned by %s must have &quot;
++                                &quot;two to five elements&quot; % reduce)
++
++        # Save the reduce() output and finally memoize the object
++        self.save_reduce(obj=obj, *rv)
++
++    def persistent_id(self, obj):
++        # This exists so a subclass can override it
++        return None
++
++    def save_pers(self, pid):
++        # Save a persistent id reference
++        if self.bin:
++            self.save(pid)
++            self.write(BINPERSID)
++        else:
++            self.write(PERSID + str(pid) + '\n')
++
++    def save_reduce(self, func, args, state=None,
++                    listitems=None, dictitems=None, obj=None):
++        # This API is called by some subclasses
++
++        # Assert that args is a tuple or None
++        if not isinstance(args, TupleType):
++            if args is None:
++                # A hack for Jim Fulton's ExtensionClass, now deprecated.
++                # See load_reduce()
++                warnings.warn(&quot;__basicnew__ special case is deprecated&quot;,
++                              DeprecationWarning)
++            else:
++                raise PicklingError(
++                    &quot;args from reduce() should be a tuple&quot;)
++
++        # Assert that func is callable
++        if not callable(func):
++            raise PicklingError(&quot;func from reduce should be callable&quot;)
++
++        save = self.save
++        write = self.write
++
++        # Protocol 2 special case: if func's name is __newobj__, use NEWOBJ
++        if self.proto &gt;= 2 and getattr(func, &quot;__name__&quot;, &quot;&quot;) == &quot;__newobj__&quot;:
++            # A __reduce__ implementation can direct protocol 2 to
++            # use the more efficient NEWOBJ opcode, while still
++            # allowing protocol 0 and 1 to work normally.  For this to
++            # work, the function returned by __reduce__ should be
++            # called __newobj__, and its first argument should be a
++            # new-style class.  The implementation for __newobj__
++            # should be as follows, although pickle has no way to
++            # verify this:
++            #
++            # def __newobj__(cls, *args):
++            #     return cls.__new__(cls, *args)
++            #
++            # Protocols 0 and 1 will pickle a reference to __newobj__,
++            # while protocol 2 (and above) will pickle a reference to
++            # cls, the remaining args tuple, and the NEWOBJ code,
++            # which calls cls.__new__(cls, *args) at unpickling time
++            # (see load_newobj below).  If __reduce__ returns a
++            # three-tuple, the state from the third tuple item will be
++            # pickled regardless of the protocol, calling __setstate__
++            # at unpickling time (see load_build below).
++            #
++            # Note that no standard __newobj__ implementation exists;
++            # you have to provide your own.  This is to enforce
++            # compatibility with Python 2.2 (pickles written using
++            # protocol 0 or 1 in Python 2.3 should be unpicklable by
++            # Python 2.2).
++            cls = args[0]
++            if not hasattr(cls, &quot;__new__&quot;):
++                raise PicklingError(
++                    &quot;args[0] from __newobj__ args has no __new__&quot;)
++            if obj is not None and cls is not obj.__class__:
++                raise PicklingError(
++                    &quot;args[0] from __newobj__ args has the wrong class&quot;)
++            args = args[1:]
++            save(cls)
++            save(args)
++            write(NEWOBJ)
++        else:
++            save(func)
++            save(args)
++            write(REDUCE)
++
++        if obj is not None:
++            self.memoize(obj)
++
++        # More new special cases (that work with older protocols as
++        # well): when __reduce__ returns a tuple with 4 or 5 items,
++        # the 4th and 5th item should be iterators that provide list
++        # items and dict items (as (key, value) tuples), or None.
++
++        if listitems is not None:
++            self._batch_appends(listitems)
++
++        if dictitems is not None:
++            self._batch_setitems(dictitems)
++
++        if state is not None:
++            save(state)
++            write(BUILD)
++
++    # Methods below this point are dispatched through the dispatch table
++
++    dispatch = {}
++
++    def save_none(self, obj):
++        self.write(NONE)
++    dispatch[NoneType] = save_none
++
++    def save_bool(self, obj):
++        if self.proto &gt;= 2:
++            self.write(obj and NEWTRUE or NEWFALSE)
++        else:
++            self.write(obj and TRUE or FALSE)
++    dispatch[bool] = save_bool
++
++    def save_int(self, obj, pack=struct.pack):
++        if self.bin:
++            # If the int is small enough to fit in a signed 4-byte 2's-comp
++            # format, we can store it more efficiently than the general
++            # case.
++            # First one- and two-byte unsigned ints:
++            if obj &gt;= 0:
++                if obj &lt;= 0xff:
++                    self.write(BININT1 + chr(obj))
++                    return
++                if obj &lt;= 0xffff:
++                    self.write(&quot;%c%c%c&quot; % (BININT2, obj&amp;0xff, obj&gt;&gt;8))
++                    return
++            # Next check for 4-byte signed ints:
++            high_bits = obj &gt;&gt; 31  # note that Python shift sign-extends
++            if high_bits == 0 or high_bits == -1:
++                # All high bits are copies of bit 2**31, so the value
++                # fits in a 4-byte signed int.
++                self.write(BININT + pack(&quot;&lt;i&quot;, obj))
++                return
++        # Text pickle, or int too big to fit in signed 4-byte format.
++        self.write(INT + repr(obj) + '\n')
++    dispatch[IntType] = save_int
++
++    def save_long(self, obj, pack=struct.pack):
++        if self.proto &gt;= 2:
++            bytes = encode_long(obj)
++            n = len(bytes)
++            if n &lt; 256:
++                self.write(LONG1 + chr(n) + bytes)
++            else:
++                self.write(LONG4 + pack(&quot;&lt;i&quot;, n) + bytes)
++            return
++        self.write(LONG + repr(obj) + '\n')
++    dispatch[LongType] = save_long
++
++    def save_float(self, obj, pack=struct.pack):
++        if self.bin:
++            self.write(BINFLOAT + pack('&gt;d', obj))
++        else:
++            self.write(FLOAT + repr(obj) + '\n')
++    dispatch[FloatType] = save_float
++
++    def save_string(self, obj, pack=struct.pack):
++        if self.bin:
++            n = len(obj)
++            if n &lt; 256:
++                self.write(SHORT_BINSTRING + chr(n) + obj)
++            else:
++                self.write(BINSTRING + pack(&quot;&lt;i&quot;, n) + obj)
++        else:
++            self.write(STRING + repr(obj) + '\n')
++        self.memoize(obj)
++    dispatch[StringType] = save_string
++
++    def save_unicode(self, obj, pack=struct.pack):
++        if self.bin:
++            encoding = obj.encode('utf-8')
++            n = len(encoding)
++            self.write(BINUNICODE + pack(&quot;&lt;i&quot;, n) + encoding)
++        else:
++            obj = obj.replace(&quot;\\&quot;, &quot;\\u005c&quot;)
++            obj = obj.replace(&quot;\n&quot;, &quot;\\u000a&quot;)
++            self.write(UNICODE + obj.encode('raw-unicode-escape') + '\n')
++        self.memoize(obj)
++    dispatch[UnicodeType] = save_unicode
++
++    if StringType == UnicodeType:
++        # This is true for Jython
++        def save_string(self, obj, pack=struct.pack):
++            unicode = obj.isunicode()
++
++            if self.bin:
++                if unicode:
++                    obj = obj.encode(&quot;utf-8&quot;)
++                l = len(obj)
++                if l &lt; 256 and not unicode:
++                    self.write(SHORT_BINSTRING + chr(l) + obj)
++                else:
++                    s = pack(&quot;&lt;i&quot;, l)
++                    if unicode:
++                        self.write(BINUNICODE + s + obj)
++                    else:
++                        self.write(BINSTRING + s + obj)
++            else:
++                if unicode:
++                    obj = obj.replace(&quot;\\&quot;, &quot;\\u005c&quot;)
++                    obj = obj.replace(&quot;\n&quot;, &quot;\\u000a&quot;)
++                    obj = obj.encode('raw-unicode-escape')
++                    self.write(UNICODE + obj + '\n')
++                else:
++                    self.write(STRING + repr(obj) + '\n')
++            self.memoize(obj)
++        dispatch[StringType] = save_string
++
++    def save_tuple(self, obj):
++        write = self.write
++        proto = self.proto
++
++        n = len(obj)
++        if n == 0:
++            if proto:
++                write(EMPTY_TUPLE)
++            else:
++                write(MARK + TUPLE)
++            return
++
++        save = self.save
++        memo = self.memo
++        if n &lt;= 3 and proto &gt;= 2:
++            for element in obj:
++                save(element)
++            # Subtle.  Same as in the big comment below.
++            if id(obj) in memo:
++                get = self.get(memo[id(obj)][0])
++                write(POP * n + get)
++            else:
++                write(_tuplesize2code[n])
++                self.memoize(obj)
++            return
++
++        # proto 0 or proto 1 and tuple isn't empty, or proto &gt; 1 and tuple
++        # has more than 3 elements.
++        write(MARK)
++        for element in obj:
++            save(element)
++
++        if id(obj) in memo:
++            # Subtle.  d was not in memo when we entered save_tuple(), so
++            # the process of saving the tuple's elements must have saved
++            # the tuple itself:  the tuple is recursive.  The proper action
++            # now is to throw away everything we put on the stack, and
++            # simply GET the tuple (it's already constructed).  This check
++            # could have been done in the &quot;for element&quot; loop instead, but
++            # recursive tuples are a rare thing.
++            get = self.get(memo[id(obj)][0])
++            if proto:
++                write(POP_MARK + get)
++            else:   # proto 0 -- POP_MARK not available
++                write(POP * (n+1) + get)
++            return
++
++        # No recursion.
++        self.write(TUPLE)
++        self.memoize(obj)
++
++    dispatch[TupleType] = save_tuple
++
++    # save_empty_tuple() isn't used by anything in Python 2.3.  However, I
++    # found a Pickler subclass in Zope3 that calls it, so it's not harmless
++    # to remove it.
++    def save_empty_tuple(self, obj):
++        self.write(EMPTY_TUPLE)
++
++    def save_list(self, obj):
++        write = self.write
++
++        if self.bin:
++            write(EMPTY_LIST)
++        else:   # proto 0 -- can't use EMPTY_LIST
++            write(MARK + LIST)
++
++        self.memoize(obj)
++        self._batch_appends(iter(obj))
++
++    dispatch[ListType] = save_list
++
++    # Keep in synch with cPickle's BATCHSIZE.  Nothing will break if it gets
++    # out of synch, though.
++    _BATCHSIZE = 1000
++
++    def _batch_appends(self, items):
++        # Helper to batch up APPENDS sequences
++        save = self.save
++        write = self.write
++
++        if not self.bin:
++            for x in items:
++                save(x)
++                write(APPEND)
++            return
++
++        r = xrange(self._BATCHSIZE)
++        while items is not None:
++            tmp = []
++            for i in r:
++                try:
++                    x = items.next()
++                    tmp.append(x)
++                except StopIteration:
++                    items = None
++                    break
++            n = len(tmp)
++            if n &gt; 1:
++                write(MARK)
++                for x in tmp:
++                    save(x)
++                write(APPENDS)
++            elif n:
++                save(tmp[0])
++                write(APPEND)
++            # else tmp is empty, and we're done
++
++    def save_dict(self, obj):
++        write = self.write
++
++        if self.bin:
++            write(EMPTY_DICT)
++        else:   # proto 0 -- can't use EMPTY_DICT
++            write(MARK + DICT)
++
++        self.memoize(obj)
++        self._batch_setitems(obj.iteritems())
++
++    dispatch[DictionaryType] = save_dict
++    if not PyStringMap is None:
++        dispatch[PyStringMap] = save_dict
++
++    def _batch_setitems(self, items):
++        # Helper to batch up SETITEMS sequences; proto &gt;= 1 only
++        save = self.save
++        write = self.write
++
++        if not self.bin:
++            for k, v in items:
++                save(k)
++                save(v)
++                write(SETITEM)
++            return
++
++        r = xrange(self._BATCHSIZE)
++        while items is not None:
++            tmp = []
++            for i in r:
++                try:
++                    tmp.append(items.next())
++                except StopIteration:
++                    items = None
++                    break
++            n = len(tmp)
++            if n &gt; 1:
++                write(MARK)
++                for k, v in tmp:
++                    save(k)
++                    save(v)
++                write(SETITEMS)
++            elif n:
++                k, v = tmp[0]
++                save(k)
++                save(v)
++                write(SETITEM)
++            # else tmp is empty, and we're done
++
++    def save_inst(self, obj):
++        cls = obj.__class__
++
++        memo  = self.memo
++        write = self.write
++        save  = self.save
++
++        if hasattr(obj, '__getinitargs__'):
++            args = obj.__getinitargs__()
++            len(args) # XXX Assert it's a sequence
++            _keep_alive(args, memo)
++        else:
++            args = ()
++
++        write(MARK)
++
++        if self.bin:
++            save(cls)
++            for arg in args:
++                save(arg)
++            write(OBJ)
++        else:
++            for arg in args:
++                save(arg)
++            write(INST + cls.__module__ + '\n' + cls.__name__ + '\n')
++
++        self.memoize(obj)
++
++        try:
++            getstate = obj.__getstate__
++        except AttributeError:
++            stuff = obj.__dict__
++        else:
++            stuff = getstate()
++            _keep_alive(stuff, memo)
++        save(stuff)
++        write(BUILD)
++
++    dispatch[InstanceType] = save_inst
++
++    def save_global(self, obj, name=None, pack=struct.pack):
++        write = self.write
++        memo = self.memo
++
++        if name is None:
++            name = obj.__name__
++
++        module = getattr(obj, &quot;__module__&quot;, None)
++        if module is None:
++            module = whichmodule(obj, name)
++
++        try:
++            __import__(module)
++            mod = sys.modules[module]
++            klass = getattr(mod, name)
++        except (ImportError, KeyError, AttributeError):
++            raise PicklingError(
++                &quot;Can't pickle %r: it's not found as %s.%s&quot; %
++                (obj, module, name))
++        else:
++            if klass is not obj:
++                raise PicklingError(
++                    &quot;Can't pickle %r: it's not the same object as %s.%s&quot; %
++                    (obj, module, name))
++
++        if self.proto &gt;= 2:
++            code = _extension_registry.get((module, name))
++            if code:
++                assert code &gt; 0
++                if code &lt;= 0xff:
++                    write(EXT1 + chr(code))
++                elif code &lt;= 0xffff:
++                    write(&quot;%c%c%c&quot; % (EXT2, code&amp;0xff, code&gt;&gt;8))
++                else:
++                    write(EXT4 + pack(&quot;&lt;i&quot;, code))
++                return
++
++        write(GLOBAL + module + '\n' + name + '\n')
++        self.memoize(obj)
++
++    dispatch[ClassType] = save_global
++    dispatch[FunctionType] = save_global
++    dispatch[BuiltinFunctionType] = save_global
++    dispatch[TypeType] = save_global
++
++# Pickling helpers
++
++def _keep_alive(x, memo):
++    &quot;&quot;&quot;Keeps a reference to the object x in the memo.
++
++    Because we remember objects by their id, we have
++    to assure that possibly temporary objects are kept
++    alive by referencing them.
++    We store a reference at the id of the memo, which should
++    normally not be used unless someone tries to deepcopy
++    the memo itself...
++    &quot;&quot;&quot;
++    try:
++        memo[id(memo)].append(x)
++    except KeyError:
++        # aha, this is the first one :-)
++        memo[id(memo)]=[x]
++
++
++# A cache for whichmodule(), mapping a function object to the name of
++# the module in which the function was found.
++
++classmap = {} # called classmap for backwards compatibility
++
++def whichmodule(func, funcname):
++    &quot;&quot;&quot;Figure out the module in which a function occurs.
++
++    Search sys.modules for the module.
++    Cache in classmap.
++    Return a module name.
++    If the function cannot be found, return &quot;__main__&quot;.
++    &quot;&quot;&quot;
++    # Python functions should always get an __module__ from their globals.
++    mod = getattr(func, &quot;__module__&quot;, None)
++    if mod is not None:
++        return mod
++    if func in classmap:
++        return classmap[func]
++
++    for name, module in sys.modules.items():
++        if module is None:
++            continue # skip dummy package entries
++        if name != '__main__' and getattr(module, funcname, None) is func:
++            break
++    else:
++        name = '__main__'
++    classmap[func] = name
++    return name
++
++
++# Unpickling machinery
++
++class Unpickler:
++
++    def __init__(self, file):
++        &quot;&quot;&quot;This takes a file-like object for reading a pickle data stream.
++
++        The protocol version of the pickle is detected automatically, so no
++        proto argument is needed.
++
++        The file-like object must have two methods, a read() method that
++        takes an integer argument, and a readline() method that requires no
++        arguments.  Both methods should return a string.  Thus file-like
++        object can be a file object opened for reading, a StringIO object,
++        or any other custom object that meets this interface.
++        &quot;&quot;&quot;
++        self.readline = file.readline
++        self.read = file.read
++        self.memo = {}
++
++    def load(self):
++        &quot;&quot;&quot;Read a pickled object representation from the open file.
++
++        Return the reconstituted object hierarchy specified in the file.
++        &quot;&quot;&quot;
++        self.mark = object() # any new unique object
++        self.stack = []
++        self.append = self.stack.append
++        read = self.read
++        dispatch = self.dispatch
++        try:
++            while 1:
++                key = read(1)
++                dispatch[key](self)
++        except _Stop, stopinst:
++            return stopinst.value
++
++    # Return largest index k such that self.stack[k] is self.mark.
++    # If the stack doesn't contain a mark, eventually raises IndexError.
++    # This could be sped by maintaining another stack, of indices at which
++    # the mark appears.  For that matter, the latter stack would suffice,
++    # and we wouldn't need to push mark objects on self.stack at all.
++    # Doing so is probably a good thing, though, since if the pickle is
++    # corrupt (or hostile) we may get a clue from finding self.mark embedded
++    # in unpickled objects.
++    def marker(self):
++        stack = self.stack
++        mark = self.mark
++        k = len(stack)-1
++        while stack[k] is not mark: k = k-1
++        return k
++
++    dispatch = {}
++
++    def load_eof(self):
++        raise EOFError
++    dispatch[''] = load_eof
++
++    def load_proto(self):
++        proto = ord(self.read(1))
++        if not 0 &lt;= proto &lt;= 2:
++            raise ValueError, &quot;unsupported pickle protocol: %d&quot; % proto
++    dispatch[PROTO] = load_proto
++
++    def load_persid(self):
++        pid = self.readline()[:-1]
++        self.append(self.persistent_load(pid))
++    dispatch[PERSID] = load_persid
++
++    def load_binpersid(self):
++        pid = self.stack.pop()
++        self.append(self.persistent_load(pid))
++    dispatch[BINPERSID] = load_binpersid
++
++    def load_none(self):
++        self.append(None)
++    dispatch[NONE] = load_none
++
++    def load_false(self):
++        self.append(False)
++    dispatch[NEWFALSE] = load_false
++
++    def load_true(self):
++        self.append(True)
++    dispatch[NEWTRUE] = load_true
++
++    def load_int(self):
++        data = self.readline()
++        if data == FALSE[1:]:
++            val = False
++        elif data == TRUE[1:]:
++            val = True
++        else:
++            try:
++                val = int(data)
++            except ValueError:
++                val = long(data)
++        self.append(val)
++    dispatch[INT] = load_int
++
++    def load_binint(self):
++        self.append(mloads('i' + self.read(4)))
++    dispatch[BININT] = load_binint
++
++    def load_binint1(self):
++        self.append(ord(self.read(1)))
++    dispatch[BININT1] = load_binint1
++
++    def load_binint2(self):
++        self.append(mloads('i' + self.read(2) + '\000\000'))
++    dispatch[BININT2] = load_binint2
++
++    def load_long(self):
++        self.append(long(self.readline()[:-1], 0))
++    dispatch[LONG] = load_long
++
++    def load_long1(self):
++        n = ord(self.read(1))
++        bytes = self.read(n)
++        self.append(decode_long(bytes))
++    dispatch[LONG1] = load_long1
++
++    def load_long4(self):
++        n = mloads('i' + self.read(4))
++        bytes = self.read(n)
++        self.append(decode_long(bytes))
++    dispatch[LONG4] = load_long4
++
++    def load_float(self):
++        self.append(float(self.readline()[:-1]))
++    dispatch[FLOAT] = load_float
++
++    def load_binfloat(self, unpack=struct.unpack):
++        self.append(unpack('&gt;d', self.read(8))[0])
++    dispatch[BINFLOAT] = load_binfloat
++
++    def load_string(self):
++        rep = self.readline()[:-1]
++        for q in &quot;\&quot;'&quot;: # double or single quote
++            if rep.startswith(q):
++                if not rep.endswith(q):
++                    raise ValueError, &quot;insecure string pickle&quot;
++                rep = rep[len(q):-len(q)]
++                break
++        else:
++            raise ValueError, &quot;insecure string pickle&quot;
++        self.append(rep.decode(&quot;string-escape&quot;))
++    dispatch[STRING] = load_string
++
++    def load_binstring(self):
++        len = mloads('i' + self.read(4))
++        self.append(self.read(len))
++    dispatch[BINSTRING] = load_binstring
++
++    def load_unicode(self):
++        self.append(unicode(self.readline()[:-1],'raw-unicode-escape'))
++    dispatch[UNICODE] = load_unicode
++
++    def load_binunicode(self):
++        len = mloads('i' + self.read(4))
++        self.append(unicode(self.read(len),'utf-8'))
++    dispatch[BINUNICODE] = load_binunicode
++
++    def load_short_binstring(self):
++        len = ord(self.read(1))
++        self.append(self.read(len))
++    dispatch[SHORT_BINSTRING] = load_short_binstring
++
++    def load_tuple(self):
++        k = self.marker()
++        self.stack[k:] = [tuple(self.stack[k+1:])]
++    dispatch[TUPLE] = load_tuple
++
++    def load_empty_tuple(self):
++        self.stack.append(())
++    dispatch[EMPTY_TUPLE] = load_empty_tuple
++
++    def load_tuple1(self):
++        self.stack[-1] = (self.stack[-1],)
++    dispatch[TUPLE1] = load_tuple1
++
++    def load_tuple2(self):
++        self.stack[-2:] = [(self.stack[-2], self.stack[-1])]
++    dispatch[TUPLE2] = load_tuple2
++
++    def load_tuple3(self):
++        self.stack[-3:] = [(self.stack[-3], self.stack[-2], self.stack[-1])]
++    dispatch[TUPLE3] = load_tuple3
++
++    def load_empty_list(self):
++        self.stack.append([])
++    dispatch[EMPTY_LIST] = load_empty_list
++
++    def load_empty_dictionary(self):
++        self.stack.append({})
++    dispatch[EMPTY_DICT] = load_empty_dictionary
++
++    def load_list(self):
++        k = self.marker()
++        self.stack[k:] = [self.stack[k+1:]]
++    dispatch[LIST] = load_list
++
++    def load_dict(self):
++        k = self.marker()
++        d = {}
++        items = self.stack[k+1:]
++        for i in range(0, len(items), 2):
++            key = items[i]
++            value = items[i+1]
++            d[key] = value
++        self.stack[k:] = [d]
++    dispatch[DICT] = load_dict
++
++    # INST and OBJ differ only in how they get a class object.  It's not
++    # only sensible to do the rest in a common routine, the two routines
++    # previously diverged and grew different bugs.
++    # klass is the class to instantiate, and k points to the topmost mark
++    # object, following which are the arguments for klass.__init__.
++    def _instantiate(self, klass, k):
++        args = tuple(self.stack[k+1:])
++        del self.stack[k:]
++        instantiated = 0
++        if (not args and
++                type(klass) is ClassType and
++                not hasattr(klass, &quot;__getinitargs__&quot;)):
++            try:
++                value = _EmptyClass()
++                value.__class__ = klass
++                instantiated = 1
++            except RuntimeError:
++                # In restricted execution, assignment to inst.__class__ is
++                # prohibited
++                pass
++        if not instantiated:
++            try:
++                value = klass(*args)
++            except TypeError, err:
++                raise TypeError, &quot;in constructor for %s: %s&quot; % (
++                    klass.__name__, str(err)), sys.exc_info()[2]
++        self.append(value)
++
++    def load_inst(self):
++        module = self.readline()[:-1]
++        name = self.readline()[:-1]
++        klass = self.find_class(module, name)
++        self._instantiate(klass, self.marker())
++    dispatch[INST] = load_inst
++
++    def load_obj(self):
++        # Stack is ... markobject classobject arg1 arg2 ...
++        k = self.marker()
++        klass = self.stack.pop(k+1)
++        self._instantiate(klass, k)
++    dispatch[OBJ] = load_obj
++
++    def load_newobj(self):
++        args = self.stack.pop()
++        cls = self.stack[-1]
++        obj = cls.__new__(cls, *args)
++        self.stack[-1] = obj
++    dispatch[NEWOBJ] = load_newobj
++
++    def load_global(self):
++        module = self.readline()[:-1]
++        name = self.readline()[:-1]
++        klass = self.find_class(module, name)
++        self.append(klass)
++    dispatch[GLOBAL] = load_global
++
++    def load_ext1(self):
++        code = ord(self.read(1))
++        self.get_extension(code)
++    dispatch[EXT1] = load_ext1
++
++    def load_ext2(self):
++        code = mloads('i' + self.read(2) + '\000\000')
++        self.get_extension(code)
++    dispatch[EXT2] = load_ext2
++
++    def load_ext4(self):
++        code = mloads('i' + self.read(4))
++        self.get_extension(code)
++    dispatch[EXT4] = load_ext4
++
++    def get_extension(self, code):
++        nil = []
++        obj = _extension_cache.get(code, nil)
++        if obj is not nil:
++            self.append(obj)
++            return
++        key = _inverted_registry.get(code)
++        if not key:
++            raise ValueError(&quot;unregistered extension code %d&quot; % code)
++        obj = self.find_class(*key)
++        _extension_cache[code] = obj
++        self.append(obj)
++
++    def find_class(self, module, name):
++        # Subclasses may override this
++        __import__(module)
++        mod = sys.modules[module]
++        klass = getattr(mod, name)
++        return klass
++
++    def load_reduce(self):
++        stack = self.stack
++        args = stack.pop()
++        func = stack[-1]
++        if args is None:
++            # A hack for Jim Fulton's ExtensionClass, now deprecated
++            warnings.warn(&quot;__basicnew__ special case is deprecated&quot;,
++                          DeprecationWarning)
++            value = func.__basicnew__()
++        else:
++            value = func(*args)
++        stack[-1] = value
++    dispatch[REDUCE] = load_reduce
++
++    def load_pop(self):
++        del self.stack[-1]
++    dispatch[POP] = load_pop
++
++    def load_pop_mark(self):
++        k = self.marker()
++        del self.stack[k:]
++    dispatch[POP_MARK] = load_pop_mark
++
++    def load_dup(self):
++        self.append(self.stack[-1])
++    dispatch[DUP] = load_dup
++
++    def load_get(self):
++        self.append(self.memo[self.readline()[:-1]])
++    dispatch[GET] = load_get
++
++    def load_binget(self):
++        i = ord(self.read(1))
++        self.append(self.memo[repr(i)])
++    dispatch[BINGET] = load_binget
++
++    def load_long_binget(self):
++        i = mloads('i' + self.read(4))
++        self.append(self.memo[repr(i)])
++    dispatch[LONG_BINGET] = load_long_binget
++
++    def load_put(self):
++        self.memo[self.readline()[:-1]] = self.stack[-1]
++    dispatch[PUT] = load_put
++
++    def load_binput(self):
++        i = ord(self.read(1))
++        self.memo[repr(i)] = self.stack[-1]
++    dispatch[BINPUT] = load_binput
++
++    def load_long_binput(self):
++        i = mloads('i' + self.read(4))
++        self.memo[repr(i)] = self.stack[-1]
++    dispatch[LONG_BINPUT] = load_long_binput
++
++    def load_append(self):
++        stack = self.stack
++        value = stack.pop()
++        list = stack[-1]
++        list.append(value)
++    dispatch[APPEND] = load_append
++
++    def load_appends(self):
++        stack = self.stack
++        mark = self.marker()
++        list = stack[mark - 1]
++        list.extend(stack[mark + 1:])
++        del stack[mark:]
++    dispatch[APPENDS] = load_appends
++
++    def load_setitem(self):
++        stack = self.stack
++        value = stack.pop()
++        key = stack.pop()
++        dict = stack[-1]
++        dict[key] = value
++    dispatch[SETITEM] = load_setitem
++
++    def load_setitems(self):
++        stack = self.stack
++        mark = self.marker()
++        dict = stack[mark - 1]
++        for i in range(mark + 1, len(stack), 2):
++            dict[stack[i]] = stack[i + 1]
++
++        del stack[mark:]
++    dispatch[SETITEMS] = load_setitems
++
++    def load_build(self):
++        stack = self.stack
++        state = stack.pop()
++        inst = stack[-1]
++        setstate = getattr(inst, &quot;__setstate__&quot;, None)
++        if setstate:
++            setstate(state)
++            return
++        slotstate = None
++        if isinstance(state, tuple) and len(state) == 2:
++            state, slotstate = state
++        if state:
++            try:
++                inst.__dict__.update(state)
++            except RuntimeError:
++                # XXX In restricted execution, the instance's __dict__
++                # is not accessible.  Use the old way of unpickling
++                # the instance variables.  This is a semantic
++                # difference when unpickling in restricted
++                # vs. unrestricted modes.
++                # Note, however, that cPickle has never tried to do the
++                # .update() business, and always uses
++                #     PyObject_SetItem(inst.__dict__, key, value) in a
++                # loop over state.items().
++                for k, v in state.items():
++                    setattr(inst, k, v)
++        if slotstate:
++            for k, v in slotstate.items():
++                setattr(inst, k, v)
++    dispatch[BUILD] = load_build
++
++    def load_mark(self):
++        self.append(self.mark)
++    dispatch[MARK] = load_mark
++
++    def load_stop(self):
++        value = self.stack.pop()
++        raise _Stop(value)
++    dispatch[STOP] = load_stop
++
++# Helper class for load_inst/load_obj
++
++class _EmptyClass:
++    pass
++
++# Encode/decode longs in linear time.
++
++import binascii as _binascii
++
++def encode_long(x):
++    r&quot;&quot;&quot;Encode a long to a two's complement little-endian binary string.
++    Note that 0L is a special case, returning an empty string, to save a
++    byte in the LONG1 pickling context.
++
++    &gt;&gt;&gt; encode_long(0L)
++    ''
++    &gt;&gt;&gt; encode_long(255L)
++    '\xff\x00'
++    &gt;&gt;&gt; encode_long(32767L)
++    '\xff\x7f'
++    &gt;&gt;&gt; encode_long(-256L)
++    '\x00\xff'
++    &gt;&gt;&gt; encode_long(-32768L)
++    '\x00\x80'
++    &gt;&gt;&gt; encode_long(-128L)
++    '\x80'
++    &gt;&gt;&gt; encode_long(127L)
++    '\x7f'
++    &gt;&gt;&gt;
++    &quot;&quot;&quot;
++
++    if x == 0:
++        return ''
++    if x &gt; 0:
++        ashex = hex(x)
++        assert ashex.startswith(&quot;0x&quot;)
++        njunkchars = 2 + ashex.endswith('L')
++        nibbles = len(ashex) - njunkchars
++        if nibbles &amp; 1:
++            # need an even # of nibbles for unhexlify
++            ashex = &quot;0x0&quot; + ashex[2:]
++        elif int(ashex[2], 16) &gt;= 8:
++            # &quot;looks negative&quot;, so need a byte of sign bits
++            ashex = &quot;0x00&quot; + ashex[2:]
++    else:
++        # Build the 256's-complement:  (1L &lt;&lt; nbytes) + x.  The trick is
++        # to find the number of bytes in linear time (although that should
++        # really be a constant-time task).
++        ashex = hex(-x)
++        assert ashex.startswith(&quot;0x&quot;)
++        njunkchars = 2 + ashex.endswith('L')
++        nibbles = len(ashex) - njunkchars
++        if nibbles &amp; 1:
++            # Extend to a full byte.
++            nibbles += 1
++        nbits = nibbles * 4
++        x += 1L &lt;&lt; nbits
++        assert x &gt; 0
++        ashex = hex(x)
++        njunkchars = 2 + ashex.endswith('L')
++        newnibbles = len(ashex) - njunkchars
++        if newnibbles &lt; nibbles:
++            ashex = &quot;0x&quot; + &quot;0&quot; * (nibbles - newnibbles) + ashex[2:]
++        if int(ashex[2], 16) &lt; 8:
++            # &quot;looks positive&quot;, so need a byte of sign bits
++            ashex = &quot;0xff&quot; + ashex[2:]
++
++    if ashex.endswith('L'):
++        ashex = ashex[2:-1]
++    else:
++        ashex = ashex[2:]
++    assert len(ashex) &amp; 1 == 0, (x, ashex)
++    binary = _binascii.unhexlify(ashex)
++    return binary[::-1]
++
++def decode_long(data):
++    r&quot;&quot;&quot;Decode a long from a two's complement little-endian binary string.
++
++    &gt;&gt;&gt; decode_long('')
++    0L
++    &gt;&gt;&gt; decode_long(&quot;\xff\x00&quot;)
++    255L
++    &gt;&gt;&gt; decode_long(&quot;\xff\x7f&quot;)
++    32767L
++    &gt;&gt;&gt; decode_long(&quot;\x00\xff&quot;)
++    -256L
++    &gt;&gt;&gt; decode_long(&quot;\x00\x80&quot;)
++    -32768L
++    &gt;&gt;&gt; decode_long(&quot;\x80&quot;)
++    -128L
++    &gt;&gt;&gt; decode_long(&quot;\x7f&quot;)
++    127L
++    &quot;&quot;&quot;
++
++    nbytes = len(data)
++    if nbytes == 0:
++        return 0L
++    ashex = _binascii.hexlify(data[::-1])
++    n = long(ashex, 16) # quadratic time before Python 2.3; linear now
++    if data[-1] &gt;= '\x80':
++        n -= 1L &lt;&lt; (nbytes * 8)
++    return n
++
++# Shorthands
++
++try:
++    from cStringIO import StringIO
++except ImportError:
++    from StringIO import StringIO
++
++def dump(obj, file, protocol=None, bin=None):
++    Pickler(file, protocol, bin).dump(obj)
++
++def dumps(obj, protocol=None, bin=None):
++    file = StringIO()
++    Pickler(file, protocol, bin).dump(obj)
++    return file.getvalue()
++
++def load(file):
++    return Unpickler(file).load()
++
++def loads(str):
++    file = StringIO(str)
++    return Unpickler(file).load()
++
++# Doctest
++
++def _test():
++    import doctest
++    return doctest.testmod()
++
++if __name__ == &quot;__main__&quot;:
++    _test()
+
+Added: trunk/gamedata/python/lib/types.py
+===================================================================
+--- trunk/gamedata/python/lib/types.py	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/gamedata/python/lib/types.py	2005-05-02 19:50:55 UTC (rev 146)
+@@ -0,0 +1,89 @@
++&quot;&quot;&quot;Define names for all type symbols known in the standard interpreter.
++
++Types that are part of optional modules (e.g. array) are not listed.
++&quot;&quot;&quot;
++import sys
++
++# Iterators in Python aren't a matter of type but of protocol.  A large
++# and changing number of builtin types implement *some* flavor of
++# iterator.  Don't check the type!  Use hasattr to check for both
++# &quot;__iter__&quot; and &quot;next&quot; attributes instead.
++
++NoneType = type(None)
++TypeType = type
++ObjectType = object
++
++IntType = int
++LongType = long
++FloatType = float
++BooleanType = bool
++try:
++    ComplexType = complex
++except NameError:
++    pass
++
++StringType = str
++
++# StringTypes is already outdated.  Instead of writing &quot;type(x) in
++# types.StringTypes&quot;, you should use &quot;isinstance(x, basestring)&quot;.  But
++# we keep around for compatibility with Python 2.2.
++try:
++    UnicodeType = unicode
++    StringTypes = (StringType, UnicodeType)
++except NameError:
++    StringTypes = (StringType,)
++
++BufferType = buffer
++
++TupleType = tuple
++ListType = list
++DictType = DictionaryType = dict
++
++def _f(): pass
++FunctionType = type(_f)
++LambdaType = type(lambda: None)         # Same as FunctionType
++try:
++    CodeType = type(_f.func_code)
++except RuntimeError:
++    # Execution in restricted environment
++    pass
++
++def _g():
++    yield 1
++GeneratorType = type(_g())
++
++class _C:
++    def _m(self): pass
++ClassType = type(_C)
++UnboundMethodType = type(_C._m)         # Same as MethodType
++_x = _C()
++InstanceType = type(_x)
++MethodType = type(_x._m)
++
++BuiltinFunctionType = type(len)
++BuiltinMethodType = type([].append)     # Same as BuiltinFunctionType
++
++ModuleType = type(sys)
++FileType = file
++XRangeType = xrange
++
++try:
++    raise TypeError
++except TypeError:
++    try:
++        tb = sys.exc_info()[2]
++        TracebackType = type(tb)
++        FrameType = type(tb.tb_frame)
++    except AttributeError:
++        # In the restricted environment, exc_info returns (None, None,
++        # None) Then, tb.tb_frame gives an attribute error
++        pass
++    tb = None; del tb
++
++SliceType = slice
++EllipsisType = type(Ellipsis)
++
++DictProxyType = type(TypeType.__dict__)
++NotImplementedType = type(NotImplemented)
++
++del sys, _f, _g, _C, _x                  # Not for export
+
+Modified: trunk/gamedata/readme.html
+===================================================================
+--- trunk/gamedata/readme.html	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/gamedata/readme.html	2005-05-02 19:50:55 UTC (rev 146)
+@@ -3,16 +3,16 @@
+ &lt;title&gt;TW-Light: TW-Light&lt;/title&gt;
+ &lt;link href=&quot;doxygen.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+ &lt;/head&gt;&lt;body&gt;
+-&lt;!-- Generated by Doxygen 1.3.8 --&gt;
++&lt;!-- Generated by Doxygen 1.3.9.1 --&gt;
+ &lt;h1&gt;TW-Light &lt;/h1&gt;
+ &lt;p&gt;
+-&lt;h3 align=&quot;center&quot;&gt;0.3b69 &lt;/h3&gt;&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;overview_sec&quot;&gt;
++&lt;h3 align=&quot;center&quot;&gt;0.3b146 &lt;/h3&gt;&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;overview_sec&quot;&gt;
+ Overview: What is TW-Light?&lt;/a&gt;&lt;/h2&gt;
+-TW-Light is an open source clone/sequel to the epic cross-genre game Star Control II. Currently it includes only a combat portion, although epic adventure part that is called TW:Legacies is actively developed now.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;getting_started_sec&quot;&gt;
++TW-Light is an open source clone/sequel to the epic cross-genre game Star &lt;a class=&quot;el&quot; href=&quot;classControl.html&quot;&gt;Control&lt;/a&gt; II. Currently it includes only a combat portion, although epic adventure part that is called TW:Legacies is actively developed now.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;getting_started_sec&quot;&gt;
+ Getting Started&lt;/a&gt;&lt;/h2&gt;
+ &lt;ul&gt;
+ &lt;li&gt;Melee: Starts a battle. In battle the following keys do stuff:&lt;ul&gt;
+-&lt;li&gt;F1 brings up the help screen (this file, at the moment)&lt;/li&gt;&lt;li&gt;F2 brings up the options menu&lt;/li&gt;&lt;li&gt;F3 switches camera focus&lt;/li&gt;&lt;li&gt;F4 is fast-forward (speeds up in-game time greatly)&lt;/li&gt;&lt;li&gt;F5 displays fleet status&lt;/li&gt;&lt;li&gt;F7 changes game tic rate (physics quality)&lt;/li&gt;&lt;li&gt;F8 changes camera mode&lt;/li&gt;&lt;li&gt;F9 creates planets (silly &quot;feature&quot;)&lt;/li&gt;&lt;li&gt;F10 quits (so does ESCAPE)&lt;/li&gt;&lt;li&gt;F11 saves screenshots&lt;/li&gt;&lt;li&gt;F12 displays framerates / performance data&lt;/li&gt;&lt;li&gt;- zooms out on some viewing modes.&lt;/li&gt;&lt;li&gt;+ (or =) zooms in on some viewing modes.&lt;/li&gt;&lt;li&gt;0 also effect the camera in some viewing modes.&lt;/li&gt;&lt;li&gt;ctrl+T = toggle team indicators on/off&lt;/li&gt;&lt;li&gt;ctrl+H = toggle healthbar indicators on/off&lt;/li&gt;&lt;li&gt;Also, if some controllers are set to keyboard, customizable&lt;/li&gt;&lt;li&gt;buttons may cause ship actions. Be default these are:&lt;/li&gt;&lt;li&gt;Config 0:&lt;ul&gt;
++&lt;li&gt;F1 brings up this help screen&lt;/li&gt;&lt;li&gt;F2 save game&lt;/li&gt;&lt;li&gt;F3 load game&lt;/li&gt;&lt;li&gt;F4 brings up the options menu&lt;/li&gt;&lt;li&gt;F5 is fast-forward (speeds up in-game time greatly)&lt;/li&gt;&lt;li&gt;F6 displays fleet status&lt;/li&gt;&lt;li&gt;F7 changes game tic rate (physics quality)&lt;/li&gt;&lt;li&gt;F8 changes camera mode&lt;/li&gt;&lt;li&gt;F9 switches camera focus&lt;/li&gt;&lt;li&gt;F10 menu&lt;/li&gt;&lt;li&gt;F12 displays framerates / performance data&lt;/li&gt;&lt;li&gt;- zooms out on some viewing modes.&lt;/li&gt;&lt;li&gt;+ (or =) zooms in on some viewing modes.&lt;/li&gt;&lt;li&gt;0 also effect the camera in some viewing modes.&lt;/li&gt;&lt;li&gt;T = toggle team indicators on/off&lt;/li&gt;&lt;li&gt;H = toggle healthbar indicators on/off&lt;/li&gt;&lt;li&gt;O = toggle track target indicator&lt;/li&gt;&lt;li&gt;ctrl+Alt+k = kill all ships and ship-objects in the melee-game&lt;/li&gt;&lt;li&gt;Also, if some controllers are set to keyboard, customizable&lt;/li&gt;&lt;li&gt;buttons may cause ship actions. Be default these are:&lt;/li&gt;&lt;li&gt;Config 0:&lt;ul&gt;
+ &lt;li&gt;left: Keypad 4&lt;/li&gt;&lt;li&gt;thrust: Keypad 8&lt;/li&gt;&lt;li&gt;right: Keypad 6&lt;/li&gt;&lt;li&gt;fire: Enter&lt;/li&gt;&lt;li&gt;special:Ctrl&lt;/li&gt;&lt;li&gt;next: Closebrace (])&lt;/li&gt;&lt;li&gt;prev: Openbrace ([)&lt;/li&gt;&lt;li&gt;near: P&lt;/li&gt;&lt;/ul&gt;
+ &lt;/li&gt;&lt;/ul&gt;
+ &lt;/li&gt;&lt;/ul&gt;
+@@ -25,7 +25,7 @@
+ &lt;p&gt;
+ Currently we are working on the following tasks:&lt;p&gt;
+ &lt;ul&gt;
+-&lt;li&gt;Introduce the most interesting and cool TimeWarp ships&lt;/li&gt;&lt;li&gt;Simplify and fix melee engine&lt;/li&gt;&lt;li&gt;Add TimeWarp Markup Language (TML) support&lt;/li&gt;&lt;li&gt;Write plot&lt;/li&gt;&lt;li&gt;Implement plot with TML&lt;/li&gt;&lt;/ul&gt;
++&lt;li&gt;Introduce the most interesting and cool TimeWarp ships&lt;/li&gt;&lt;li&gt;Simplify and fix melee engine&lt;/li&gt;&lt;li&gt;Write plot&lt;/li&gt;&lt;/ul&gt;
+ &lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;intoro&quot;&gt;
+ Introduce the most interesting and cool TimeWarp ships&lt;/a&gt;&lt;/h3&gt;
+ Currently TW-Light includes the following ships:&lt;p&gt;
+@@ -33,22 +33,18 @@
+ &lt;li&gt;Alary Battlecruiser&lt;/li&gt;&lt;li&gt;Bipole Katamaran&lt;/li&gt;&lt;li&gt;The Chorali Extractor&lt;/li&gt;&lt;li&gt;Confed Cargotran&lt;/li&gt;&lt;li&gt;Confederation Hornet&lt;/li&gt;&lt;li&gt;Drax Griffon&lt;/li&gt;&lt;li&gt;Earthling Crusader MK3&lt;/li&gt;&lt;li&gt;Zekfahan Shocker&lt;/li&gt;&lt;li&gt;Garash Tyrant&lt;/li&gt;&lt;li&gt;Ilwrath Spider&lt;/li&gt;&lt;li&gt;Kahr Boomerang&lt;/li&gt;&lt;li&gt;Re-Koj Assassin&lt;/li&gt;&lt;li&gt;Rogue Squadron&lt;/li&gt;&lt;li&gt;Tau Archon&lt;/li&gt;&lt;li&gt;Tau Dagger&lt;/li&gt;&lt;li&gt;Tau Slider&lt;/li&gt;&lt;li&gt;Tau Torrent&lt;/li&gt;&lt;li&gt;Zekfahan Shocker&lt;/li&gt;&lt;/ul&gt;
+ &lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;simplyfy_subsec&quot;&gt;
+ Simplify and fix melee engine&lt;/a&gt;&lt;/h3&gt;
+-Almost done.&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;TML_subsec&quot;&gt;
+-Add TimeWarp Markup Language (TML) support&lt;/a&gt;&lt;/h3&gt;
+-No progress.&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;plot_subsec&quot;&gt;
++Almost done.&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;plot_subsec&quot;&gt;
+ Write plot&lt;/a&gt;&lt;/h3&gt;
+-The Plot is fully writen.&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;plot_impl_subsec&quot;&gt;
+-Implement plot with TML&lt;/a&gt;&lt;/h3&gt;
+-No progress.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;licene_sec&quot;&gt;
++The Plot is fully writen, if you can help by writting dialogs for us you can download it from &lt;a href=&quot;<A HREF="http://www.tw-light.berlios.de/twplot.zip">http://www.tw-light.berlios.de/twplot.zip</A>&quot;&gt;here&lt;/a&gt;.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;licene_sec&quot;&gt;
+ License&lt;/a&gt;&lt;/h2&gt;
+-Copyright (C) 2004 &lt;a href=&quot;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at land.ru</A>&quot;&gt;Yura Semashko aka Yurand&lt;/a&gt; Copyright (C) 2001-2004 TimeWarp development team&lt;p&gt;
++Copyright (C) 2004,2005 &lt;a href=&quot;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at land.ru</A>&quot;&gt;Yura Semashko aka Yurand&lt;/a&gt;&lt;br/&gt; Copyright (C) 2001-2004 TimeWarp development team&lt;p&gt;
+ This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;p&gt;
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;credits_sec&quot;&gt;
+ Credits&lt;/a&gt;&lt;/h2&gt;
+ &lt;ul&gt;
+ &lt;li&gt;TW-Light is derivative work from &lt;a href=&quot;timewarp.sourceforge.net&quot;&gt;Star Control: TimeWarp&lt;/a&gt;&lt;/li&gt;&lt;li&gt;Some code and documents were taken from &lt;a href=&quot;www.wesnoth.org&quot;&gt;Battle for Wesnoth&lt;/a&gt;&lt;/li&gt;&lt;li&gt;UQM Ships description were taken from Ultronomicon (&lt;a href=&quot;<A HREF="http://uqm.stack.nl/wiki/">http://uqm.stack.nl/wiki/</A>&quot;&gt;<A HREF="http://uqm.stack.nl/wiki/&lt;/a">http://uqm.stack.nl/wiki/&lt;/a</A>&gt;)&lt;/li&gt;&lt;li&gt;Some battle music were written by Robeter Productions Inc. &lt;/li&gt;&lt;/ul&gt;
+-&lt;hr size=&quot;1&quot;&gt;&lt;address style=&quot;align: right;&quot;&gt;&lt;small&gt;Generated on Mon Sep 27 22:11:45 2004 for TW-Light by
++&lt;hr size=&quot;1&quot;&gt;&lt;address style=&quot;align: right;&quot;&gt;&lt;small&gt;Generated on Mon May 2 21:59:05 2005 for TW-Light by&nbsp;
+ &lt;a href=&quot;<A HREF="http://www.doxygen.org/index.html">http://www.doxygen.org/index.html</A>&quot;&gt;
+-&lt;img src=&quot;doxygen.png&quot; alt=&quot;doxygen&quot; align=&quot;middle&quot; border=0 &gt;&lt;/a&gt; 1.3.8 &lt;/small&gt;&lt;/address&gt;
++&lt;img src=&quot;doxygen.png&quot; alt=&quot;doxygen&quot; align=&quot;middle&quot; border=&quot;0&quot;&gt;&lt;/a&gt; 1.3.9.1 &lt;/small&gt;&lt;/address&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/makefile	2005-05-02 19:50:55 UTC (rev 146)
+@@ -196,6 +196,7 @@
+ 	rmdir $(EXPDIR)/web
+ 	$(RM) $(EXPDIR)/rawgraphic/*
+ 	rmdir $(EXPDIR)/rawgraphic
++	$(RM) -r $(EXPDIR)/doc/plot
+ 	echo &quot;TW-Light $(PRODUCTVERSION)r$(SVNVERSION) - $(TIMESTAMP)&quot; &gt;$(EXPDIR)/gamedata/version.txt
+ 	echo &quot;!define VER_VERSION $(PRODUCTVERSION)&quot; &gt;$(EXPDIR)/Util/ver
+ 	echo &quot;!define VER_SVNVERSION $(SVNVERSION)&quot;  &gt;$(EXPDIR)/Util/svnver
+
+Copied: trunk/mingw-libs/include/SDL/SDL.h (from rev 145, trunk/mingw-libs/include/SDL/sdl.h)
+
+Deleted: trunk/mingw-libs/include/SDL/sdl.h
+===================================================================
+--- trunk/mingw-libs/include/SDL/sdl.h	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/mingw-libs/include/SDL/sdl.h	2005-05-02 19:50:55 UTC (rev 146)
+@@ -1,97 +0,0 @@
+-/*
+-    SDL - Simple DirectMedia Layer
+-    Copyright (C) 1997-2004 Sam Lantinga
+-
+-    This library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Library General Public
+-    License as published by the Free Software Foundation; either
+-    version 2 of the License, or (at your option) any later version.
+-
+-    This library is distributed in the hope that it will be useful,
+-    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-    Library General Public License for more details.
+-
+-    You should have received a copy of the GNU Library General Public
+-    License along with this library; if not, write to the Free
+-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-
+-    Sam Lantinga
+-    <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">slouken at libsdl.org</A>
+-*/
+-
+-#ifdef SAVE_RCSID
+-static char rcsid =
+- &quot;@(#) $Id: SDL.h,v 1.8 2004/01/04 16:49:07 slouken Exp $&quot;;
+-#endif
+-
+-/* Main include header for the SDL library */
+-
+-#ifndef _SDL_H
+-#define _SDL_H
+-
+-#include &quot;SDL_main.h&quot;
+-#include &quot;SDL_types.h&quot;
+-#include &quot;SDL_getenv.h&quot;
+-#include &quot;SDL_error.h&quot;
+-#include &quot;SDL_rwops.h&quot;
+-#include &quot;SDL_timer.h&quot;
+-#include &quot;SDL_audio.h&quot;
+-#include &quot;SDL_cdrom.h&quot;
+-#include &quot;SDL_joystick.h&quot;
+-#include &quot;SDL_events.h&quot;
+-#include &quot;SDL_video.h&quot;
+-#include &quot;SDL_byteorder.h&quot;
+-#include &quot;SDL_version.h&quot;
+-
+-#include &quot;begin_code.h&quot;
+-/* Set up for C function definitions, even when using C++ */
+-#ifdef __cplusplus
+-extern &quot;C&quot; {
+-#endif
+-
+-/* As of version 0.5, SDL is loaded dynamically into the application */
+-
+-/* These are the flags which may be passed to SDL_Init() -- you should
+-   specify the subsystems which you will be using in your application.
+-*/
+-#define	SDL_INIT_TIMER		0x00000001
+-#define SDL_INIT_AUDIO		0x00000010
+-#define SDL_INIT_VIDEO		0x00000020
+-#define SDL_INIT_CDROM		0x00000100
+-#define SDL_INIT_JOYSTICK	0x00000200
+-#define SDL_INIT_NOPARACHUTE	0x00100000	/* Don't catch fatal signals */
+-#define SDL_INIT_EVENTTHREAD	0x01000000	/* Not supported on all OS's */
+-#define SDL_INIT_EVERYTHING	0x0000FFFF
+-
+-/* This function loads the SDL dynamically linked library and initializes 
+- * the subsystems specified by 'flags' (and those satisfying dependencies)
+- * Unless the SDL_INIT_NOPARACHUTE flag is set, it will install cleanup
+- * signal handlers for some commonly ignored fatal signals (like SIGSEGV)
+- */
+-extern DECLSPEC int SDLCALL SDL_Init(Uint32 flags);
+-
+-/* This function initializes specific SDL subsystems */
+-extern DECLSPEC int SDLCALL SDL_InitSubSystem(Uint32 flags);
+-
+-/* This function cleans up specific SDL subsystems */
+-extern DECLSPEC void SDLCALL SDL_QuitSubSystem(Uint32 flags);
+-
+-/* This function returns mask of the specified subsystems which have
+-   been initialized.
+-   If 'flags' is 0, it returns a mask of all initialized subsystems.
+-*/
+-extern DECLSPEC Uint32 SDLCALL SDL_WasInit(Uint32 flags);
+-
+-/* This function cleans up all initialized subsystems and unloads the
+- * dynamically linked library.  You should call it upon all exit conditions.
+- */
+-extern DECLSPEC void SDLCALL SDL_Quit(void);
+-
+-/* Ends C function definitions when using C++ */
+-#ifdef __cplusplus
+-}
+-#endif
+-#include &quot;close_code.h&quot;
+-
+-#endif /* _SDL_H */
+
+Added: trunk/msvcr71.dll
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/msvcr71.dll
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/rawgraphic/Estion.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/rawgraphic/Estion.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/rawgraphic/QuanExplode.PNG
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/rawgraphic/QuanExplode.PNG
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: trunk/source/doxygen.cpp
+===================================================================
+--- trunk/source/doxygen.cpp	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/source/doxygen.cpp	2005-05-02 19:50:55 UTC (rev 146)
+@@ -25,16 +25,16 @@
+  *  \section getting_started_sec Getting Started
+  * 
+  * - Melee:  Starts a battle.  In battle the following keys do stuff:
+- *       - F1 brings up the help screen (this file, at the moment)
+- *       - F2 brings up the options menu
+- *       - F3 switches camera focus
+- *       - F4 is fast-forward (speeds up in-game time greatly)
+- *       - F5 displays fleet status
++ *       - F1 brings up this help screen
++ *       - F2 save game
++ *       - F3 load game
++ *       - F4 brings up the options menu
++ *       - F5 is fast-forward (speeds up in-game time greatly)
++ *       - F6 displays fleet status
+  *       - F7 changes game tic rate (physics quality)
+  *       - F8 changes camera mode
+- *       - F9 creates planets (silly &quot;feature&quot;)
+- *       - F10 quits (so does ESCAPE)
+- *       - F11 saves screenshots
++ *       - F9 switches camera focus
++ *       - F10 menu
+  *       - F12 displays framerates / performance data
+  *       - - zooms out on some viewing modes.
+  *       - + (or =) zooms in on some viewing modes.
+@@ -102,7 +102,8 @@
+  * 
+  * \subsection plot_subsec Write plot
+  * 
+- *  The Plot is fully writen.
++ *  The Plot is fully writen, if you can help by writting dialogs for us you can
++ *  download it from &lt;a href=&quot;<A HREF="http://www.tw-light.berlios.de/twplot.zip">http://www.tw-light.berlios.de/twplot.zip</A>&quot;&gt;here&lt;/a&gt;.
+  *
+  *
+  * \section licene_sec License
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/source/games/ggob.h	2005-05-02 19:50:55 UTC (rev 146)
+@@ -60,7 +60,7 @@
+ 
+   std::string system;
+   std::string getSystem(){return system;}
+-  void setSystem(const std::string&amp; s){system = sys ;}
++  void setSystem(const std::string&amp; s){system = s ;}
+ 
+   // 
+   std::vector&lt;EnemySaveData&gt; tst;
+
+Modified: trunk/source/generated/ggob.py
+===================================================================
+--- trunk/source/generated/ggob.py	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/source/generated/ggob.py	2005-05-02 19:50:55 UTC (rev 146)
+@@ -112,6 +112,11 @@
+     __swig_setmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_set
+     __swig_getmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_get
+     if _newclass:pos_y = property(_ggob.SaveGobGameInfo_pos_y_get, _ggob.SaveGobGameInfo_pos_y_set)
++    __swig_setmethods__[&quot;system&quot;] = _ggob.SaveGobGameInfo_system_set
++    __swig_getmethods__[&quot;system&quot;] = _ggob.SaveGobGameInfo_system_get
++    if _newclass:system = property(_ggob.SaveGobGameInfo_system_get, _ggob.SaveGobGameInfo_system_set)
++    def getSystem(*args): return _ggob.SaveGobGameInfo_getSystem(*args)
++    def setSystem(*args): return _ggob.SaveGobGameInfo_setSystem(*args)
+     __swig_setmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_set
+     __swig_getmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_get
+     if _newclass:tst = property(_ggob.SaveGobGameInfo_tst_get, _ggob.SaveGobGameInfo_tst_set)
+
+Modified: trunk/source/generated/ggob_wrap.cpp
+===================================================================
+--- trunk/source/generated/ggob_wrap.cpp	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/source/generated/ggob_wrap.cpp	2005-05-02 19:50:55 UTC (rev 146)
+@@ -719,8 +719,8 @@
+ #define  SWIGTYPE_p_RainbowRift swig_types[16] 
+ #define  SWIGTYPE_p_GobGame swig_types[17] 
+ #define  SWIGTYPE_p_EnemySaveData swig_types[18] 
+-#define  SWIGTYPE_p_Vector2 swig_types[19] 
+-#define  SWIGTYPE_p_std__string swig_types[20] 
++#define  SWIGTYPE_p_std__string swig_types[19] 
++#define  SWIGTYPE_p_Vector2 swig_types[20] 
+ #define  SWIGTYPE_p_SaveGobGameInfo swig_types[21] 
+ #define  SWIGTYPE_p_pair swig_types[22] 
+ #define  SWIGTYPE_p_SpaceSprite swig_types[23] 
+@@ -1337,6 +1337,89 @@
+ }
+ 
+ 
++static PyObject *_wrap_SaveGobGameInfo_system_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::string *arg2 = (std::string *) 0 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:SaveGobGameInfo_system_set&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_std__string,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;system = *arg2;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_system_get(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::string *result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_system_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (std::string *)&amp; ((arg1)-&gt;system);
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__string, 0);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_getSystem(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::string result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_getSystem&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (arg1)-&gt;getSystem();
++    
++    {
++        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_setSystem(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::string *arg2 = 0 ;
++    std::string temp2 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:SaveGobGameInfo_setSystem&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        if (PyString_Check(obj1)) {
++            temp2 = std::string(PyString_AsString(obj1),
++            PyString_Size(obj1));
++            arg2 = &amp;temp2;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    (arg1)-&gt;setSystem((std::string const &amp;)*arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_SaveGobGameInfo_tst_set(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
+@@ -4662,6 +4745,10 @@
+ 	 { (char *)&quot;SaveGobGameInfo_pos_x_get&quot;, _wrap_SaveGobGameInfo_pos_x_get, METH_VARARGS },
+ 	 { (char *)&quot;SaveGobGameInfo_pos_y_set&quot;, _wrap_SaveGobGameInfo_pos_y_set, METH_VARARGS },
+ 	 { (char *)&quot;SaveGobGameInfo_pos_y_get&quot;, _wrap_SaveGobGameInfo_pos_y_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_system_set&quot;, _wrap_SaveGobGameInfo_system_set, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_system_get&quot;, _wrap_SaveGobGameInfo_system_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_getSystem&quot;, _wrap_SaveGobGameInfo_getSystem, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_setSystem&quot;, _wrap_SaveGobGameInfo_setSystem, METH_VARARGS },
+ 	 { (char *)&quot;SaveGobGameInfo_tst_set&quot;, _wrap_SaveGobGameInfo_tst_set, METH_VARARGS },
+ 	 { (char *)&quot;SaveGobGameInfo_tst_get&quot;, _wrap_SaveGobGameInfo_tst_get, METH_VARARGS },
+ 	 { (char *)&quot;SaveGobGameInfo_getTst&quot;, _wrap_SaveGobGameInfo_getTst, METH_VARARGS },
+@@ -4853,8 +4940,8 @@
+ static swig_type_info _swigt__p_RainbowRift[] = {{&quot;_p_RainbowRift&quot;, 0, &quot;RainbowRift *&quot;, 0},{&quot;_p_RainbowRift&quot;},{0}};
+ static swig_type_info _swigt__p_GobGame[] = {{&quot;_p_GobGame&quot;, 0, &quot;GobGame *&quot;, 0},{&quot;_p_GobGame&quot;},{0}};
+ static swig_type_info _swigt__p_EnemySaveData[] = {{&quot;_p_EnemySaveData&quot;, 0, &quot;EnemySaveData *&quot;, 0},{&quot;_p_EnemySaveData&quot;},{0}};
++static swig_type_info _swigt__p_std__string[] = {{&quot;_p_std__string&quot;, 0, &quot;std::string *&quot;, 0},{&quot;_p_std__string&quot;},{0}};
+ static swig_type_info _swigt__p_Vector2[] = {{&quot;_p_Vector2&quot;, 0, &quot;Vector2 *&quot;, 0},{&quot;_p_Vector2&quot;},{0}};
+-static swig_type_info _swigt__p_std__string[] = {{&quot;_p_std__string&quot;, 0, &quot;std::string *&quot;, 0},{&quot;_p_std__string&quot;},{0}};
+ static swig_type_info _swigt__p_SaveGobGameInfo[] = {{&quot;_p_SaveGobGameInfo&quot;, 0, &quot;SaveGobGameInfo *&quot;, 0},{&quot;_p_SaveGobGameInfo&quot;},{0}};
+ static swig_type_info _swigt__p_pair[] = {{&quot;_p_pair&quot;, 0, &quot;pair *&quot;, 0},{&quot;_p_pair&quot;},{0}};
+ static swig_type_info _swigt__p_SpaceSprite[] = {{&quot;_p_SpaceSprite&quot;, 0, &quot;SpaceSprite *&quot;, 0},{&quot;_p_SpaceSprite&quot;},{0}};
+@@ -4886,8 +4973,8 @@
+ _swigt__p_RainbowRift, 
+ _swigt__p_GobGame, 
+ _swigt__p_EnemySaveData, 
++_swigt__p_std__string, 
+ _swigt__p_Vector2, 
+-_swigt__p_std__string, 
+ _swigt__p_SaveGobGameInfo, 
+ _swigt__p_pair, 
+ _swigt__p_SpaceSprite, 
+
+Modified: trunk/source/python/python_class.cpp
+===================================================================
+--- trunk/source/python/python_class.cpp	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/source/python/python_class.cpp	2005-05-02 19:50:55 UTC (rev 146)
+@@ -45,6 +45,11 @@
+ {
+     Py_Initialize ();
+     insert_path(DATAFILE_PATH&quot;/python&quot;);
++
++#ifdef WIN32
++    // For windows we should include part of standart library we use
++    insert_path(DATAFILE_PATH&quot;/python/lib&quot;);
++#endif
+     init_ggob();
+ }
+ 
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-05-01 18:53:47 UTC (rev 145)
++++ trunk/source/scp.cpp	2005-05-02 19:50:55 UTC (rev 146)
+@@ -759,6 +759,7 @@
+ 	  about.push_back(&quot;&quot;);
+ 	  about.push_back(&quot;Special Thanks:&quot;);
+ 	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;  * Orz&quot;);
+ 	  about.push_back(&quot;  * Tau&quot;);
+ 	  about.push_back(&quot;  * GeomanNL&quot;);
+ 	  about.push_back(&quot;  * Officer Flubbo&quot;);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000091.html">[Tw-light-svn] r145 - in trunk: gamedata/python source/games source/generated
+</A></li>
+	<LI>Next message: <A HREF="000093.html">[Tw-light-svn] r147 - in trunk: . doc gamedata source source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#92">[ date ]</a>
+              <a href="thread.html#92">[ thread ]</a>
+              <a href="subject.html#92">[ subject ]</a>
+              <a href="author.html#92">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

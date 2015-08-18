@@ -1,0 +1,683 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r80 - trunk/source/ships
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r80%20-%20trunk/source/ships&In-Reply-To=%3C200410160901.i9G91Cr3015233%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000027.html">
+   <LINK REL="Next"  HREF="000029.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r80 - trunk/source/ships</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r80%20-%20trunk/source/ships&In-Reply-To=%3C200410160901.i9G91Cr3015233%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r80 - trunk/source/ships">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Oct 16 11:01:12 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000027.html">[Tw-light-svn] r79 - in trunk/source: games melee
+</A></li>
+        <LI>Next message: <A HREF="000029.html">[Tw-light-svn] r81 - branches/multiplayer-branch/source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-10-16 11:01:11 +0200 (Sat, 16 Oct 2004)
+New Revision: 80
+
+Modified:
+   trunk/source/ships/shpforsh.cpp
+   trunk/source/ships/shpgarty.cpp
+Log:
+fixed issue #10 Ga'Rath Tyrant primary hit itself 
+
+
+Modified: trunk/source/ships/shpforsh.cpp
+===================================================================
+--- trunk/source/ships/shpforsh.cpp	2004-10-15 19:46:04 UTC (rev 79)
++++ trunk/source/ships/shpforsh.cpp	2004-10-16 09:01:11 UTC (rev 80)
+@@ -20,73 +20,78 @@
+ #include &quot;ship.h&quot;
+ 
+ class ForevianShocker : public Ship
+-{	double		weaponRange, weaponVelocity;
+-	int			weaponDamage, weaponArmour;
+-	int			weapon_type;
+-	int			weapon_frame_size;
++{
++  double weaponRange, weaponVelocity;
++  int	weaponDamage, weaponArmour;
++  int	weapon_type;
++  int	weapon_frame_size;
+ 
+-	double		specialRange, specialVelocity;
+-	int			specialDamage, specialArmour;
+-	int			specialFrames;
+-	int			shockingFrames;
+-	int			shockVar;
+-	int			specialLoss;
++  double specialRange, specialVelocity;
++  int	specialDamage, specialArmour;
++  int	specialFrames;
++  int	shockingFrames;
++  int	shockVar;
++  int	specialLoss;
+ 
+-	bool		new_special;
+-	int			special_frame_size, special_frame_num;
++  bool new_special;
++  int special_frame_size, special_frame_num;
+ 
+-	SpaceSprite *special_sprite;
+-
++  SpaceSprite *special_sprite;
++  
+ public:
+-	ForevianShocker(Vector2 opos, double shipAngle, ShipData *shipData, unsigned int code);
++  ForevianShocker(Vector2 opos, double shipAngle, ShipData *shipData, unsigned int code);
+ 
+ protected:
+-	virtual int activate_weapon();
+-	virtual int activate_special();
+-	virtual void calculate();
++  virtual int activate_weapon();
++  virtual int activate_special();
++  virtual void calculate();
+ };
+ 
+ class ForevianShockwave : public AnimatedShot
+ {
+-	SpaceObject *last_hit;	int loss;
++  SpaceObject *last_hit;	int loss;
+ 
+ public:
+-	ForevianShockwave(double ox, double oy, double oangle, double ov, int odamage, double orange, int oarmour, Ship *oship, SpaceLocation *opos, SpaceSprite *osprite, int ofcount, int ofsize, int ol);
+-	virtual void inflict_damage(SpaceObject *other);
++  ForevianShockwave(double ox, double oy, double oangle, double ov, int odamage, double orange, int oarmour, Ship *oship, SpaceLocation *opos, SpaceSprite *osprite, int ofcount, int ofsize, int ol);
++  virtual void inflict_damage(SpaceObject *other);
+ };
+ 
+ ForevianShocker::ForevianShocker(Vector2 opos, double shipAngle, ShipData *shipData, unsigned int code) :
+-	Ship(opos, shipAngle, shipData, code)
++  Ship(opos, shipAngle, shipData, code)
+ {
+   STACKTRACE;
+-	weaponRange		= scale_range(get_config_float(&quot;Weapon&quot;, &quot;Range&quot;, 0)); 
+-	weaponVelocity	= scale_velocity(get_config_float(&quot;Weapon&quot;, &quot;Velocity&quot;, 0));
+-	weaponDamage	= get_config_int(&quot;Weapon&quot;, &quot;Damage&quot;, 0); 
+-	weaponArmour	= get_config_int(&quot;Weapon&quot;, &quot;Armour&quot;, 0); 
+-	weapon_type		= get_config_int(&quot;Weapon&quot;, &quot;Type&quot;, 0);
+-	
+-	specialRange	= scale_range(get_config_float(&quot;Special&quot;, &quot;Range&quot;, 0)); 
+-	specialVelocity	= scale_velocity(get_config_float(&quot;Special&quot;, &quot;Velocity&quot;, 0)); 
+-	specialDamage	= get_config_int(&quot;Special&quot;, &quot;Damage&quot;, 0); 
+-	specialArmour	= get_config_int(&quot;Special&quot;, &quot;Armour&quot;, 0); 
+-	specialFrames	= get_config_int(&quot;Special&quot;, &quot;Frames&quot;, 0); 
++  weaponRange	= scale_range(get_config_float(&quot;Weapon&quot;, &quot;Range&quot;, 0)); 
++  weaponVelocity = scale_velocity(get_config_float(&quot;Weapon&quot;, &quot;Velocity&quot;, 0));
++  weaponDamage	= get_config_int(&quot;Weapon&quot;, &quot;Damage&quot;, 0); 
++  weaponArmour	= get_config_int(&quot;Weapon&quot;, &quot;Armour&quot;, 0); 
++  weapon_type	= get_config_int(&quot;Weapon&quot;, &quot;Type&quot;, 0);
++  
++  specialRange	= scale_range(get_config_float(&quot;Special&quot;, &quot;Range&quot;, 0)); 
++  specialVelocity = scale_velocity(get_config_float(&quot;Special&quot;, &quot;Velocity&quot;, 0)); 
++  specialDamage	= get_config_int(&quot;Special&quot;, &quot;Damage&quot;, 0); 
++  specialArmour	= get_config_int(&quot;Special&quot;, &quot;Armour&quot;, 0); 
++  specialFrames	= get_config_int(&quot;Special&quot;, &quot;Frames&quot;, 0); 
++  
++  specialLoss = get_config_int(&quot;Special&quot;, &quot;Loss&quot;, 0); 
++  
++  shockingFrames = 0;
++  shockVar = 0; 
++  
++  new_special = (get_config_int(&quot;Special&quot;, &quot;NewGFX&quot;, 0) != 0);
++  weapon_frame_size = iround(weaponRange/weaponVelocity/32);
+ 
+-	specialLoss		= get_config_int(&quot;Special&quot;, &quot;Loss&quot;, 0); 
+-	
+-	shockingFrames	= 0;
+-	shockVar		= 0; 
+-	
+-	new_special		= (get_config_int(&quot;Special&quot;, &quot;NewGFX&quot;, 0) != 0);
+-	weapon_frame_size	= iround(weaponRange/weaponVelocity/32);
+-
+-	if (new_special) {
+-		special_sprite= data-&gt;spriteExtraExplosion;
+-		special_frame_size = iround(specialRange/specialVelocity/32);	
+-		special_frame_num = 32; }	
+-	else {	
+-		special_sprite = data-&gt;spriteSpecial;	
+-		special_frame_size = 50;	
+-		special_frame_num = 2; }
++  if (new_special) 
++    {
++      special_sprite= data-&gt;spriteExtraExplosion;
++      special_frame_size = iround(specialRange/specialVelocity/32);	
++      special_frame_num = 32; 
++    }	
++  else 
++    {	
++      special_sprite = data-&gt;spriteSpecial;	
++      special_frame_size = 50;	
++      special_frame_num = 2; 
++    }
+ }
+ 
+ int ForevianShocker::activate_weapon()
+
+Modified: trunk/source/ships/shpgarty.cpp
+===================================================================
+--- trunk/source/ships/shpgarty.cpp	2004-10-15 19:46:04 UTC (rev 79)
++++ trunk/source/ships/shpgarty.cpp	2004-10-16 09:01:11 UTC (rev 80)
+@@ -1,7 +1,6 @@
+-/* $Id: shpgarty.cpp,v 1.1.1.1 2004/08/01 10:21:25 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -17,46 +16,51 @@
+ 
+ #include &quot;ship.h&quot;
+ 
+-class GarashTyrant : public Ship {
++
++/// Garash Tyrant ship
++
++class GarashTyrant : public Ship 
++{
+   double       weaponVelocity;
+   int          weaponDamage;
+   int          weaponArmour;
+   int          weaponChargeIncrement;
+   double       weaponRange;
+-	int					 weaponChargeSpeed;
+-	double       weaponChargingDistance;
+-	int          weaponChargingDistanceDamage;
++  int          weaponChargeSpeed;
++  double       weaponChargingDistance;
++  int          weaponChargingDistanceDamage;
+   SpaceObject *weaponObject;
+ 
+   double       specialDamage;
+   double       specialRange;
+   int          specialRepulse;
+-	int					 specialStunFrames;
+-	int          panelDelay;
+-	int					 panelFrame;
+-	int					 origPanelDelay;
++  int          specialStunFrames;
++  int          panelDelay;
++  int	       panelFrame;
++  int	       origPanelDelay;
+ 
+-	bool         repulse;
++  bool         repulse;
+ 
+-	int					 weaponMinTimeLimit;
+-	int					 weaponMaxTimeLimit;
++  int					 weaponMinTimeLimit;
++  int					 weaponMaxTimeLimit;
+ 
+   public:
+   GarashTyrant(Vector2 opos, double shipAngle,
+-    ShipData *shipData, unsigned int code);
+-	friend class GarashShot;
+-
+-	virtual void calculate_fire_weapon();
+-
++	       ShipData *shipData, unsigned int code);
++  friend class GarashShot;
++  
++  virtual void calculate_fire_weapon();
++  
+   virtual int  activate_weapon();
+   virtual int  activate_special();
+-
++  
+   virtual void calculate();
+-	virtual void stun_ship(SpaceObject *other);
+-
++  virtual void stun_ship(SpaceObject *other);
++  
+ };
+ 
+-class GarashShot : public Shot {
++class GarashShot : public Shot 
++{
+   double v;
+   int  frame;
+   int  frame_step;
+@@ -65,33 +69,32 @@
+   int  charge_frame;
+   int  charge_phase;
+   int  released;
+-	bool ship_hit;
+-	bool done_once;
++  bool ship_hit;
++  bool done_once;
++  
++  int		 Timer;
++  int		 MinTL;
++  int		 MaxTL;
++  int		 Charge;
++  
++  Vector2		StartC;
++  double CD;
++  int    CDD;
+ 
+-	int		 Timer;
+-	int		 MinTL;
+-	int		 MaxTL;
+-	int		 Charge;
+-
+-	Vector2		StartC;
+-	double CD;
+-	int    CDD;
+-
+-
+-
+-  public:
++  
++  
++public:
+   GarashShot(Vector2 opos, double oangle, double ov, int odamage, double 
+-orange,
+-    int oarmour, Ship *oship, SpaceSprite *osprite, int ofsize, int ofcount,
+-		int oCI, int oMinTL, int oMaxTL, double oChargeDistance, int 
+-oChargingDistanceDamage);
+-
++	     orange,
++	     int oarmour, Ship *oship, SpaceSprite *osprite, int ofsize, int ofcount,
++	     int oCI, int oMinTL, int oMaxTL, double oChargeDistance, int 
++	     oChargingDistanceDamage);
++  
+   virtual void calculate();
+   virtual void animateExplosion();
+   virtual void inflict_damage(SpaceObject *other);
+   virtual int handle_damage(SpaceLocation *source, double normal, double 
+-direct);
+-	virtual int  canCollide(SpaceLocation *other);
++			    direct);
+ };
+ 
+ class GarashRepulsarStun: public SpaceObject {
+@@ -103,10 +106,10 @@
+   int   frame_count;
+   int   targetIsDead;
+ 
+-  public:
++public:
+   GarashRepulsarStun(Ship *oship, SpaceSprite *osprite, int ofcount,
+-    int ofsize, int disableFrames);
+-
++		     int ofsize, int disableFrames);
++  
+   virtual void calculate();
+ };
+ 
+@@ -117,29 +120,29 @@
+ 	Ship(opos, shipAngle, shipData, code)
+ {
+   STACKTRACE;
++  
++  weaponDamage = get_config_int(&quot;Weapon&quot;, &quot;Damage&quot;, 8);
++  weaponArmour = get_config_int(&quot;Weapon&quot;, &quot;Armour&quot;, 8);
++  weaponChargeIncrement	= get_config_int(&quot;Weapon&quot;, &quot;ChargeIncrement&quot;, 3);
++  weaponVelocity = scale_velocity(get_config_float(&quot;Weapon&quot;, &quot;Velocity&quot;, 200));
++  weaponRange  = scale_range(get_config_float(&quot;Weapon&quot;, &quot;Range&quot;, 54));
++  weaponChargeSpeed = scale_frames(get_config_int(&quot;Weapon&quot;, &quot;ChargeSpeed&quot;,2));
++  weaponMinTimeLimit = scale_frames(get_config_int(&quot;Weapon&quot;,&quot;MinTimeLimit&quot;,152));
++  weaponMaxTimeLimit = scale_frames(get_config_int(&quot;Weapon&quot;,&quot;MaxTimeLimit&quot;,430));
++  weaponChargingDistance = scale_range(get_config_float(&quot;Weapon&quot;, &quot;ChargingDistance&quot;, 9));
++  weaponChargingDistanceDamage = get_config_int(&quot;Weapon&quot;, &quot;ChargingDistanceDamage&quot;, 0);
+ 
+-	weaponDamage					 = get_config_int(&quot;Weapon&quot;, &quot;Damage&quot;, 8);
+-	weaponArmour					 = get_config_int(&quot;Weapon&quot;, &quot;Armour&quot;, 8);
+-	weaponChargeIncrement	 = get_config_int(&quot;Weapon&quot;, &quot;ChargeIncrement&quot;, 3);
+-	weaponVelocity				 = scale_velocity(get_config_float(&quot;Weapon&quot;, &quot;Velocity&quot;, 200));
+-	weaponRange						 = scale_range(get_config_float(&quot;Weapon&quot;, &quot;Range&quot;, 54));
+-	weaponChargeSpeed      = scale_frames(get_config_int(&quot;Weapon&quot;, &quot;ChargeSpeed&quot;,2));
+-	weaponMinTimeLimit		 = scale_frames(get_config_int(&quot;Weapon&quot;,&quot;MinTimeLimit&quot;,152));
+-	weaponMaxTimeLimit		 = scale_frames(get_config_int(&quot;Weapon&quot;,&quot;MaxTimeLimit&quot;,430));
+-	weaponChargingDistance = scale_range(get_config_float(&quot;Weapon&quot;, &quot;ChargingDistance&quot;, 9));
+-	weaponChargingDistanceDamage = get_config_int(&quot;Weapon&quot;, &quot;ChargingDistanceDamage&quot;, 0);
+-
+-	specialDamage			= get_config_int(&quot;Special&quot;, &quot;Damage&quot;, 4);
+-	specialRange			= scale_range(get_config_int(&quot;Special&quot;, &quot;Range&quot;, 9));
+-	specialRepulse		= get_config_int(&quot;Special&quot;,&quot;Repulse&quot;,80);
+-	//specialStunFrames = scale_frames(get_config_int(&quot;Special&quot;,&quot;StunFrames&quot;,24));
++  specialDamage	= get_config_int(&quot;Special&quot;, &quot;Damage&quot;, 4);
++  specialRange = scale_range(get_config_int(&quot;Special&quot;, &quot;Range&quot;, 9));
++  specialRepulse = get_config_int(&quot;Special&quot;,&quot;Repulse&quot;,80);
++  //specialStunFrames = scale_frames(get_config_int(&quot;Special&quot;,&quot;StunFrames&quot;,24));
+   specialStunFrames = scale_frames(get_config_int(&quot;Special&quot;,&quot;StunTime&quot;,24));
+-	repulse						= FALSE;
++  repulse = FALSE;
+ 
+-	weaponObject			= NULL;
+-	origPanelDelay		= scale_frames(get_config_int(&quot;Extra&quot;,&quot;PanelDelay&quot;,0));
+-	panelDelay        = origPanelDelay;
+-	panelFrame				= 0;
++  weaponObject = NULL;
++  origPanelDelay = scale_frames(get_config_int(&quot;Extra&quot;,&quot;PanelDelay&quot;,0));
++  panelDelay = origPanelDelay;
++  panelFrame = 0;
+ 
+ 
+ }
+@@ -148,68 +151,65 @@
+ {
+   STACKTRACE;
+ 
+-if (!fire_weapon  &amp;&amp;
+-		!fire_special &amp;&amp;
+-		!turn_left    &amp;&amp;
+-		!turn_right   &amp;&amp;
+-		!thrust)
+-		{
+-		panelDelay -= frame_time;
+-		if (panelDelay==0)
+-			{
+-			BITMAP *b=spritePanel-&gt;get_bitmap(1);
+-			switch (panelFrame) {
+-				case 0:
+-					ship-&gt;spritePanel-&gt;overlay(1, 1, b);
+-					break;
+-				case 1:
+-					ship-&gt;spritePanel-&gt;overlay(1, 2, b);
+-					break;
+-				case 2:
+-					ship-&gt;spritePanel-&gt;overlay(1, 5, b);
+-					break;
+-				case 3:
+-					ship-&gt;spritePanel-&gt;overlay(1, 6, b);
+-					break;
+-				}
+-		  blit(b,spritePanel-&gt;get_bitmap(1), 0, 0, 0, 70, 55, 30);
+-			ship-&gt;update_panel = TRUE;
+-
+-			panelFrame++;
+-			if (panelFrame &gt; 3)
+-				panelFrame = 0;
+-			panelDelay = origPanelDelay;
+-			}
+-		}
+-
+-if (repulse)
++  if (!fire_weapon  &amp;&amp;
++      !fire_special &amp;&amp;
++      !turn_left    &amp;&amp;
++      !turn_right   &amp;&amp;
++      !thrust)
++    {
++      panelDelay -= frame_time;
++      if (panelDelay==0)
+ 	{
++	  BITMAP *b=spritePanel-&gt;get_bitmap(1);
++	  switch (panelFrame) 
++	    {
++	    case 0:
++	      ship-&gt;spritePanel-&gt;overlay(1, 1, b);
++	      break;
++	    case 1:
++	      ship-&gt;spritePanel-&gt;overlay(1, 2, b);
++	      break;
++	    case 2:
++	      ship-&gt;spritePanel-&gt;overlay(1, 5, b);
++	      break;
++	    case 3:
++	      ship-&gt;spritePanel-&gt;overlay(1, 6, b);
++	      break;
++	    }
++	  blit(b,spritePanel-&gt;get_bitmap(1), 0, 0, 0, 70, 55, 30);
++	  ship-&gt;update_panel = TRUE;
++	  
++	  panelFrame++;
++	  if (panelFrame &gt; 3)
++	    panelFrame = 0;
++	  panelDelay = origPanelDelay;
++	}
++    }
++  
++  if (repulse)
++    {
++      Query q;
++      for (q.begin(this, OBJECT_LAYERS, specialRange); q.currento; q.next()) {
++	
++	// bugfix Geo
++	// Space-locations have mass, but can be included in this search. So, add an extra
++	// check for that. Otherwise the &quot;mass&quot; has a &quot;value&quot; that's not defined (its the value
++	// of some other variable).
++	
++	stun_ship(q.currento);
+ 
+-		Query q;
+-		for (q.begin(this, OBJECT_LAYERS, specialRange); q.currento; q.next()) {
++	if (q.currento-&gt;isObject())
++	  {
++	    if (q.currento-&gt;mass)
++	      q.currento-&gt;accelerate (q.currento, trajectory_angle(q.currento), 
++				      specialRepulse / q.currento-&gt;mass, MAX_SPEED);
++	    
++	    damage(q.currento, 0, specialDamage);
++	  }
+ 
+-			// bugfix Geo
+-			// Space-locations have mass, but can be included in this search. So, add an extra
+-			// check for that. Otherwise the &quot;mass&quot; has a &quot;value&quot; that's not defined (its the value
+-			// of some other variable).
+-
+-			stun_ship(q.currento);
+-
+-			if (q.currento-&gt;isObject())
+-			{
+-				if (q.currento-&gt;mass)
+-					q.currento-&gt;accelerate (q.currento, trajectory_angle(q.currento), 
+-					specialRepulse / q.currento-&gt;mass, MAX_SPEED);
+-
+-				damage(q.currento, 0, specialDamage);
+ 			}
++      add(new FixedAnimation(this,this, data-&gt;spriteSpecial, 0, 7, 70, LAYER_EXPLOSIONS));
+ 
+-
+-
+-
+-			}
+-		add(new FixedAnimation(this,this, data-&gt;spriteSpecial, 0, 7, 70, LAYER_EXPLOSIONS));
+-
+ 		damage(this, 0);
+ 
+ 		repulse=false;
+@@ -303,44 +303,55 @@
+   sprite_index = 0;
+ }
+ 
+-void GarashRepulsarStun::calculate() {
++void GarashRepulsarStun::calculate() 
++{
+   STACKTRACE;
+-  if(!ship) targetIsDead = TRUE;
+-  else {
+-    if(!ship-&gt;exists()) targetIsDead = TRUE;
+-    else {
+-      if(ship-&gt;crew&lt;1) targetIsDead = TRUE;
+-      if(ship-&gt;state==0) targetIsDead = TRUE;
++  if(!ship) 
++    targetIsDead = TRUE;
++  else 
++    {
++      if(!ship-&gt;exists()) 
++	targetIsDead = TRUE;
++      else 
++	{
++	  if(ship-&gt;crew&lt;1) 
++	    targetIsDead = TRUE;
++	  if(ship-&gt;state==0) 
++	    targetIsDead = TRUE;
++	}
+     }
+-  }
+   //should prevent bad pointer crashes.
+-  if(!targetIsDead) {
+-    this-&gt;pos = ship-&gt;pos;
+-    this-&gt;vel = ship-&gt;vel;
+-  }
++  if(!targetIsDead) 
++    {
++      this-&gt;pos = ship-&gt;pos;
++      this-&gt;vel = ship-&gt;vel;
++    }
+   //may crash if target dies while the stun is in place.
+   //targetIsDead SHOULD prevent this from happening.
+-	frame_step+= frame_time;
+-	while (frame_step &gt;= frame_size) {
+-		frame_step -= frame_size;
+-		sprite_index++;
+-		if(sprite_index == frame_count)
+-			sprite_index = 0;
+-		}
+-	if(!(ship &amp;&amp; ship-&gt;exists()))
+-	{
+-		ship = 0;
+-		state = 0;
+-		return;
+-		}
++  frame_step+= frame_time;
++  while (frame_step &gt;= frame_size) 
++    {
++      frame_step -= frame_size;
++      sprite_index++;
++      if(sprite_index == frame_count)
++	sprite_index = 0;
++    }
++  if(!(ship &amp;&amp; ship-&gt;exists()))
++    {
++      ship = 0;
++      state = 0;
++      return;
++    }
+ 
+   ship-&gt;nextkeys &amp;= ~(keyflag::left | keyflag::right | keyflag::thrust | keyflag::special);
+ 
+   stunframe += frame_time;
+-  if (stunframe &gt;= stunframe_count) state = 0;
+-  if(targetIsDead) this-&gt;state=0;
+-	SpaceObject::calculate();
+-	}
++  if (stunframe &gt;= stunframe_count) 
++    state = 0;
++  if(targetIsDead) 
++    this-&gt;state=0;
++  SpaceObject::calculate();
++}
+ 
+ 
+ 
+@@ -357,22 +368,22 @@
+   charge_frame(0),
+   charge_phase(0),
+   released(FALSE),
+-	ship_hit(FALSE),
+-	done_once(FALSE),
+-	StartC(opos),
+-	CD(oChargingDistance),
+-	CDD(oChargingDistanceDamage)
++  ship_hit(FALSE),
++  done_once(FALSE),
++  StartC(opos),
++  CD(oChargingDistance),
++  CDD(oChargingDistanceDamage)
+ {
+   STACKTRACE;
+-	  vel = ship-&gt;get_vel();
++  vel = ship-&gt;get_vel();
+ 
+-	Timer  = 0;
+-	MinTL  = oMinTL;
+-	MaxTL  = oMaxTL;
+-	Charge = oCI;
++  Timer  = 0;
++  MinTL  = oMinTL;
++  MaxTL  = oMaxTL;
++  Charge = oCI;
+ 
+   collide_flag_anyone   = (ALL_LAYERS);
+-	collide_flag_sameship = 0;
++  collide_flag_sameship = 0;
+ 
+   explosionSprite     = data-&gt;spriteWeaponExplosion;
+   explosionFrameCount = 7;
+@@ -385,7 +396,8 @@
+   STACKTRACE;
+   if(released) 
+     Shot::calculate();
+-  else SpaceObject::calculate();
++  else 
++    SpaceObject::calculate();
+   
+   if (!exists()) 
+     return;
+@@ -450,7 +462,8 @@
+ 	  sprite_index = (get_index(ship-&gt;get_angle()) +
+ 			  (sprite_phase * 64));
+ 	}
+-      else released = TRUE;
++      else 
++	released = TRUE;
+       
+       Timer += frame_time;
+     } 
+@@ -529,10 +542,6 @@
+   return 0;
+ }
+ 
+-int GarashShot::canCollide(SpaceLocation *other)
+-{
+-  STACKTRACE;
+-  return(TRUE);
+-}
+ REGISTER_SHIP(GarashTyrant)
++
+   
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000027.html">[Tw-light-svn] r79 - in trunk/source: games melee
+</A></li>
+	<LI>Next message: <A HREF="000029.html">[Tw-light-svn] r81 - branches/multiplayer-branch/source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

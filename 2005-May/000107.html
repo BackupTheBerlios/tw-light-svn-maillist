@@ -1,0 +1,2329 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r161 - in trunk: gamedata/images/alien gamedata/python source source/games source/generated source/melee source/python source/tml source/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r161%20-%20in%20trunk%3A%20gamedata/images/alien%20gamedata/python%20source%20source/games%20source/generated%20source/melee%20source/python%20source/tml%20source/util&In-Reply-To=%3C200505101628.j4AGSPHN012341%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000106.html">
+   <LINK REL="Next"  HREF="000108.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r161 - in trunk: gamedata/images/alien gamedata/python source source/games source/generated source/melee source/python source/tml source/util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r161%20-%20in%20trunk%3A%20gamedata/images/alien%20gamedata/python%20source%20source/games%20source/generated%20source/melee%20source/python%20source/tml%20source/util&In-Reply-To=%3C200505101628.j4AGSPHN012341%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r161 - in trunk: gamedata/images/alien gamedata/python source source/games source/generated source/melee source/python source/tml source/util">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Tue May 10 18:28:25 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000106.html">[Tw-light-svn] r160 - in trunk: . gamedata/python gamedata/test_game mingw-libs/include mingw-libs/include/boost mingw-libs/include/boost/bind mingw-libs/include/boost/compatibility mingw-libs/include/boost/compatibility/cpp_c_headers mingw-libs/include/boost/config mingw-libs/include/boost/config/abi mingw-libs/include/boost/config/compiler mingw-libs/include/boost/config/platform mingw-libs/include/boost/config/stdlib mingw-libs/include/boost/date_time mingw-libs/include/boost/date_time/gregorian mingw-libs/include/boost/date_time/posix_time mingw-libs/include/boost/detail mingw-libs/include/boost/filesystem mingw-libs/include/boost/format mingw-libs/include/boost/format/detail mingw-libs/include/boost/function mingw-libs/include/boost/function/detail mingw-libs/include/boost/graph mingw-libs/include/boost/graph/detail mingw-libs/include/boost/integer mingw-libs/include/boost/io mingw-libs/include/boost/iterator mingw-libs/include/boost/iterator/detail mingw-libs/include/boost/l! ambda mingw-libs/include/boost/lambda/detail mingw-libs/include/boost/math mingw-libs/include/boost/math/special_functions mingw-libs/include/boost/mpl mingw-libs/include/boost/mpl/aux_ mingw-libs/include/boost/mpl/aux_/config mingw-libs/include/boost/mpl/aux_/preprocessed mingw-libs/include/boost/mpl/aux_/preprocessed/bcc mingw-libs/include/boost/mpl/aux_/preprocessed/bcc551 mingw-libs/include/boost/mpl/aux_/preprocessed/gcc mingw-libs/include/boost/mpl/aux_/preprocessed/msvc60 mingw-libs/include/boost/mpl/aux_/preprocessed/msvc70 mingw-libs/include/boost/mpl/aux_/preprocessed/mwcw mingw-libs/include/boost/mpl/aux_/preprocessed/no_ctps mingw-libs/include/boost/mpl/aux_/preprocessed/no_ttp mingw-libs/include/boost/mpl/aux_/preprocessed/plain mingw-libs/include/boost/mpl/aux_/preprocessor mingw-libs/include/boost/mpl/aux_/range_c mingw-libs/include/boost/mpl/aux_/test mingw-libs/include/boost/mpl/limits mingw-libs/include/boost/mpl/list mingw-libs/include/boost/mpl/list/aux_! mingw-libs/include/boost/mpl/list/aux_/preprocessed mingw-lib! s/includ
+</A></li>
+        <LI>Next message: <A HREF="000108.html">[Tw-light-svn] r162 - in trunk: . gamedata/default_ini/ships gamedata/images/ships gamedata/images/ships/shpsamat gamedata/python gamedata/ships gamedata/sound/ships gamedata/sound/ships/shpsamat source/ais source/games source/generated source/python source/tml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#107">[ date ]</a>
+              <a href="thread.html#107">[ thread ]</a>
+              <a href="subject.html#107">[ subject ]</a>
+              <a href="author.html#107">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-10 18:28:22 +0200 (Tue, 10 May 2005)
+New Revision: 161
+
+Added:
+   trunk/gamedata/images/alien/spathimain.jpg
+Removed:
+   trunk/gamedata/images/alien/SpathiMain.jpg
+Modified:
+   trunk/gamedata/python/tml.py
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mship.h
+   trunk/source/python/python_class.h
+   trunk/source/scp.cpp
+   trunk/source/tml/eventmanager.cpp
+   trunk/source/tml/eventmanager.h
+   trunk/source/tml/gameaction.cpp
+   trunk/source/tml/gameaction.h
+   trunk/source/tml/gameevent.cpp
+   trunk/source/tml/gameevent.h
+   trunk/source/util/base.h
+   trunk/source/util/vector2.h
+Log:
+Implementing:
+* ShipDeathEvents
+* DistanceEvents*
+
+
+
+Deleted: trunk/gamedata/images/alien/SpathiMain.jpg
+===================================================================
+(Binary files differ)
+
+Copied: trunk/gamedata/images/alien/spathimain.jpg (from rev 160, trunk/gamedata/images/alien/SpathiMain.jpg)
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/gamedata/python/tml.py	2005-05-10 16:28:22 UTC (rev 161)
+@@ -37,6 +37,8 @@
+     __getattr__ = lambda self, name: _swig_getattr(self, GameAction, name)
+     def __repr__(self):
+         return &quot;&lt;C GameAction instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;clean&quot;] = lambda x: _tml.GameAction_clean
++    if _newclass:clean = staticmethod(_tml.GameAction_clean)
+     __swig_getmethods__[&quot;add_system&quot;] = lambda x: _tml.GameAction_add_system
+     if _newclass:add_system = staticmethod(_tml.GameAction_add_system)
+     __swig_getmethods__[&quot;add_planet&quot;] = lambda x: _tml.GameAction_add_planet
+@@ -55,6 +57,8 @@
+     if _newclass:save_flag = staticmethod(_tml.GameAction_save_flag)
+     __swig_getmethods__[&quot;get_double_flag&quot;] = lambda x: _tml.GameAction_get_double_flag
+     if _newclass:get_double_flag = staticmethod(_tml.GameAction_get_double_flag)
++    __swig_getmethods__[&quot;get_player_ship_id&quot;] = lambda x: _tml.GameAction_get_player_ship_id
++    if _newclass:get_player_ship_id = staticmethod(_tml.GameAction_get_player_ship_id)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -70,6 +74,8 @@
+         _swig_setattr(self, GameAction,self.__class__,GameAction)
+ _tml.GameAction_swigregister(GameActionPtr)
+ 
++GameAction_clean = _tml.GameAction_clean
++
+ GameAction_add_system = _tml.GameAction_add_system
+ 
+ GameAction_add_planet = _tml.GameAction_add_planet
+@@ -86,6 +92,8 @@
+ 
+ GameAction_get_double_flag = _tml.GameAction_get_double_flag
+ 
++GameAction_get_player_ship_id = _tml.GameAction_get_player_ship_id
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+@@ -169,12 +177,26 @@
+     __getattr__ = lambda self, name: _swig_getattr(self, EventManager, name)
+     def __repr__(self):
+         return &quot;&lt;C EventManager instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;clean&quot;] = lambda x: _tml.EventManager_clean
++    if _newclass:clean = staticmethod(_tml.EventManager_clean)
+     __swig_getmethods__[&quot;setSingleTimeEvent&quot;] = lambda x: _tml.EventManager_setSingleTimeEvent
+     if _newclass:setSingleTimeEvent = staticmethod(_tml.EventManager_setSingleTimeEvent)
+     __swig_getmethods__[&quot;setRepeatableTimeEvent&quot;] = lambda x: _tml.EventManager_setRepeatableTimeEvent
+     if _newclass:setRepeatableTimeEvent = staticmethod(_tml.EventManager_setRepeatableTimeEvent)
+     __swig_getmethods__[&quot;disableEvent&quot;] = lambda x: _tml.EventManager_disableEvent
+     if _newclass:disableEvent = staticmethod(_tml.EventManager_disableEvent)
++    __swig_getmethods__[&quot;shipDeathByName&quot;] = lambda x: _tml.EventManager_shipDeathByName
++    if _newclass:shipDeathByName = staticmethod(_tml.EventManager_shipDeathByName)
++    __swig_getmethods__[&quot;shipDeathByType&quot;] = lambda x: _tml.EventManager_shipDeathByType
++    if _newclass:shipDeathByType = staticmethod(_tml.EventManager_shipDeathByType)
++    __swig_getmethods__[&quot;distanceMoreThen&quot;] = lambda x: _tml.EventManager_distanceMoreThen
++    if _newclass:distanceMoreThen = staticmethod(_tml.EventManager_distanceMoreThen)
++    __swig_getmethods__[&quot;distanceLessThen&quot;] = lambda x: _tml.EventManager_distanceLessThen
++    if _newclass:distanceLessThen = staticmethod(_tml.EventManager_distanceLessThen)
++    __swig_getmethods__[&quot;distanceMoreThen&quot;] = lambda x: _tml.EventManager_distanceMoreThen
++    if _newclass:distanceMoreThen = staticmethod(_tml.EventManager_distanceMoreThen)
++    __swig_getmethods__[&quot;distanceLessThen&quot;] = lambda x: _tml.EventManager_distanceLessThen
++    if _newclass:distanceLessThen = staticmethod(_tml.EventManager_distanceLessThen)
+     def __init__(self, *args):
+         _swig_setattr(self, EventManager, 'this', _tml.new_EventManager(*args))
+         _swig_setattr(self, EventManager, 'thisown', 1)
+@@ -190,12 +212,22 @@
+         _swig_setattr(self, EventManager,self.__class__,EventManager)
+ _tml.EventManager_swigregister(EventManagerPtr)
+ 
++EventManager_clean = _tml.EventManager_clean
++
+ EventManager_setSingleTimeEvent = _tml.EventManager_setSingleTimeEvent
+ 
+ EventManager_setRepeatableTimeEvent = _tml.EventManager_setRepeatableTimeEvent
+ 
+ EventManager_disableEvent = _tml.EventManager_disableEvent
+ 
++EventManager_shipDeathByName = _tml.EventManager_shipDeathByName
++
++EventManager_shipDeathByType = _tml.EventManager_shipDeathByType
++
++EventManager_distanceMoreThen = _tml.EventManager_distanceMoreThen
++
++EventManager_distanceLessThen = _tml.EventManager_distanceLessThen
++
+ class SoundSystem(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, SoundSystem, name, value)
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/games/ggob.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -50,6 +50,7 @@
+ #include &quot;python/python_class.h&quot;
+ #include &quot;tml/gameconfig.h&quot;
+ #include &quot;tml/eventmanager.h&quot;
++#include &quot;tml/gameaction.h&quot;
+ 
+ #define gobgame ((GobGame*)game)
+ 
+@@ -140,7 +141,9 @@
+   a-&gt;match_velocity(this);
+   game-&gt;add(a);
+ 
+-  game-&gt;add ( new GobAsteroid(gen_pos, gen_angle, gen_speed) );
++  GobAsteroid* asteroid  = new GobAsteroid(gen_pos, gen_angle, gen_speed);
++  asteroid-&gt;set_id(get_id());
++  game-&gt;add ( asteroid );
+   return;
+ }
+ 
+@@ -311,7 +314,10 @@
+ void GobGame::init(Log *_log, const std::string&amp; save) 
+ {
+   STACKTRACE;
++  
+   GobGameBase::init(_log, save);
++  GameAction::clean();
++  EventManager::clean();
+   
+   size = Vector2(24000, 24000);
+   log_file(&quot;server.ini&quot;);
+@@ -340,6 +346,17 @@
+   delete s;
+   _exec_py_script(GameConfig::GetAbsolutePath(&quot;scripts/start.py&quot;).c_str(), 0, 0);
+   
++
++  Ship *ship = create_ship(channel_server, &quot;shosc&quot;, &quot;WussieBot&quot;, 
++			   random(size), random(PI2), enemy_team);
++  add(ship);
++  ship-&gt;die();
++
++  ship = create_ship(channel_server, &quot;shosc&quot;, &quot;WussieBot&quot;, 
++			   random(size), random(PI2), enemy_team);
++  add(ship);
++  ship-&gt;die();
++
+   add ( new RainbowRift() );
+   
+   next_add_new_enemy_time = 1000;
+@@ -378,20 +395,12 @@
+   return;
+ }
+ 
+-void GobGame::add_planet(const std::string&amp; system, const std::string&amp; name, int x, int y)
++int GobGame::add_planet(const std::string&amp; system, const std::string&amp; name, int x, int y)
+ {
+   Planet *p = new Planet (Vector2(x,y), meleedata.planetSprite, 1/*planet_index*/);
+   p-&gt;set_name(name);
+-  //  p
+-    /*  if (num_planets) while (true) 
+-    {
+-      SpaceLocation *n;
+-      n = p-&gt;nearest_planet();
+-      if (!n || (p-&gt;distance(n) &gt; 1500)) 
+-	break;
+-      p-&gt;translate(random(size));
+-      }*/
+   add ( p );
++  return p-&gt;get_id();
+ }
+ 
+ Planet* GobGame::get_planet(const std::string&amp; name)
+@@ -405,7 +414,7 @@
+   return NULL;
+ }
+ 
+-void GobGame::add_orbiter_station(const std::string&amp; system, 
++int GobGame::add_orbiter_station(const std::string&amp; system, 
+ 			     const std::string&amp; planet, 
+ 			     const std::string&amp; gatafile,
+ 			     const std::string&amp; station_sprite,
+@@ -425,6 +434,7 @@
+   gs-&gt;collide_flag_anyone = ALL_LAYERS;
+   gs-&gt;set_dialog_script(commander_dialog);
+   add ( gs );
++  return gs-&gt;get_id();
+ }
+ 
+ 
+@@ -635,10 +645,12 @@
+   STACKTRACE;
+   add(new Stars());
+ }
+-void GobGame::add_asteroid(const std::string system, Vector2 pos, double angle, int speed)
++int GobGame::add_asteroid(const std::string system, Vector2 pos, double angle, int speed)
+ {
+   STACKTRACE;
+-  add(new GobAsteroid(pos, angle, speed));
++  GobAsteroid* a = new GobAsteroid(pos, angle, speed);
++  add(a);
++  return a-&gt;get_id();
+ }
+ 
+ void GobGame::add_system(std::string name, int x, int y)
+@@ -647,10 +659,10 @@
+   _galaxy.add(new StarSystem(name,Vector2(x,y)));
+   gobgame-&gt;switch_system(name);
+ }
+-void GobGame::add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y)
++int GobGame::add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y)
+ {
+   STACKTRACE;
+-  add_gobplayer(system, shptype, Vector2(x,y));
++  return add_gobplayer(system, shptype, Vector2(x,y));
+ }
+ 
+ void GobEnemy::init(Ship *ship, int kill_starbucks, int kill_buckazoids) 
+@@ -1207,7 +1219,7 @@
+ }
+ 
+ 
+-void GobGame::add_gobplayer(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos)
++int GobGame::add_gobplayer(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos)
+ {
+   STACKTRACE;
+   switch_system(system);
+@@ -1215,6 +1227,7 @@
+   add_focus(_player_control, _player_control-&gt;channel);
+   gobplayer.new_ship(shiptype(shptype.c_str()));
+   gobplayer.ship-&gt;translate(pos);
++  return gobplayer.ship-&gt;get_id();
+ }
+ 
+ /// Save game 
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/games/ggob.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -142,7 +142,7 @@
+   /// move player to system
+   virtual void switch_system(const std::string&amp; name);
+   /// Add new player to the game
+-  void add_gobplayer(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos);
++  int add_gobplayer(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos);
+ 
+   GobGame();
+   static GobGame* get_this() {return gobgame;}
+@@ -162,7 +162,7 @@
+   virtual void init (Log *log, const std::string&amp; save);
+   virtual void play_sound (SAMPLE *sample, SpaceLocation *source, int vol = 256, int freq = 1000);
+ 
+-  virtual void add_planet(const std::string&amp; system, const std::string&amp; name, int x, int y);
++  virtual int add_planet(const std::string&amp; system, const std::string&amp; name, int x, int y);
+   virtual void add_gobplayer(Control *control);
+   virtual GobPlayer *get_player(SpaceLocation *what);
+   int gobenemies, max_enemies;
+@@ -178,9 +178,9 @@
+   // For Python interface
+   void add_new_enemy();
+   void add_stars();
+-  void add_asteroid(const std::string system, Vector2 pos, double angle, int speed);
++  int add_asteroid(const std::string system, Vector2 pos, double angle, int speed);
+   void add_system(std::string name, int x, int y);;
+-  void add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y);
++  int add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y);
+  
+   int next_add_new_enemy_time;
+   
+@@ -198,7 +198,7 @@
+   virtual int Load(const std::string&amp; file);
+ 
+  public:
+-  void add_orbiter_station(const std::string&amp; system, 
++  int add_orbiter_station(const std::string&amp; system, 
+ 			   const std::string&amp; planet, 
+ 			   const std::string&amp; gatafile,
+ 			   const std::string&amp; station_sprite,
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/generated/tml.py	2005-05-10 16:28:22 UTC (rev 161)
+@@ -37,6 +37,8 @@
+     __getattr__ = lambda self, name: _swig_getattr(self, GameAction, name)
+     def __repr__(self):
+         return &quot;&lt;C GameAction instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;clean&quot;] = lambda x: _tml.GameAction_clean
++    if _newclass:clean = staticmethod(_tml.GameAction_clean)
+     __swig_getmethods__[&quot;add_system&quot;] = lambda x: _tml.GameAction_add_system
+     if _newclass:add_system = staticmethod(_tml.GameAction_add_system)
+     __swig_getmethods__[&quot;add_planet&quot;] = lambda x: _tml.GameAction_add_planet
+@@ -55,6 +57,8 @@
+     if _newclass:save_flag = staticmethod(_tml.GameAction_save_flag)
+     __swig_getmethods__[&quot;get_double_flag&quot;] = lambda x: _tml.GameAction_get_double_flag
+     if _newclass:get_double_flag = staticmethod(_tml.GameAction_get_double_flag)
++    __swig_getmethods__[&quot;get_player_ship_id&quot;] = lambda x: _tml.GameAction_get_player_ship_id
++    if _newclass:get_player_ship_id = staticmethod(_tml.GameAction_get_player_ship_id)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -70,6 +74,8 @@
+         _swig_setattr(self, GameAction,self.__class__,GameAction)
+ _tml.GameAction_swigregister(GameActionPtr)
+ 
++GameAction_clean = _tml.GameAction_clean
++
+ GameAction_add_system = _tml.GameAction_add_system
+ 
+ GameAction_add_planet = _tml.GameAction_add_planet
+@@ -86,6 +92,8 @@
+ 
+ GameAction_get_double_flag = _tml.GameAction_get_double_flag
+ 
++GameAction_get_player_ship_id = _tml.GameAction_get_player_ship_id
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+@@ -169,12 +177,26 @@
+     __getattr__ = lambda self, name: _swig_getattr(self, EventManager, name)
+     def __repr__(self):
+         return &quot;&lt;C EventManager instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;clean&quot;] = lambda x: _tml.EventManager_clean
++    if _newclass:clean = staticmethod(_tml.EventManager_clean)
+     __swig_getmethods__[&quot;setSingleTimeEvent&quot;] = lambda x: _tml.EventManager_setSingleTimeEvent
+     if _newclass:setSingleTimeEvent = staticmethod(_tml.EventManager_setSingleTimeEvent)
+     __swig_getmethods__[&quot;setRepeatableTimeEvent&quot;] = lambda x: _tml.EventManager_setRepeatableTimeEvent
+     if _newclass:setRepeatableTimeEvent = staticmethod(_tml.EventManager_setRepeatableTimeEvent)
+     __swig_getmethods__[&quot;disableEvent&quot;] = lambda x: _tml.EventManager_disableEvent
+     if _newclass:disableEvent = staticmethod(_tml.EventManager_disableEvent)
++    __swig_getmethods__[&quot;shipDeathByName&quot;] = lambda x: _tml.EventManager_shipDeathByName
++    if _newclass:shipDeathByName = staticmethod(_tml.EventManager_shipDeathByName)
++    __swig_getmethods__[&quot;shipDeathByType&quot;] = lambda x: _tml.EventManager_shipDeathByType
++    if _newclass:shipDeathByType = staticmethod(_tml.EventManager_shipDeathByType)
++    __swig_getmethods__[&quot;distanceMoreThen&quot;] = lambda x: _tml.EventManager_distanceMoreThen
++    if _newclass:distanceMoreThen = staticmethod(_tml.EventManager_distanceMoreThen)
++    __swig_getmethods__[&quot;distanceLessThen&quot;] = lambda x: _tml.EventManager_distanceLessThen
++    if _newclass:distanceLessThen = staticmethod(_tml.EventManager_distanceLessThen)
++    __swig_getmethods__[&quot;distanceMoreThen&quot;] = lambda x: _tml.EventManager_distanceMoreThen
++    if _newclass:distanceMoreThen = staticmethod(_tml.EventManager_distanceMoreThen)
++    __swig_getmethods__[&quot;distanceLessThen&quot;] = lambda x: _tml.EventManager_distanceLessThen
++    if _newclass:distanceLessThen = staticmethod(_tml.EventManager_distanceLessThen)
+     def __init__(self, *args):
+         _swig_setattr(self, EventManager, 'this', _tml.new_EventManager(*args))
+         _swig_setattr(self, EventManager, 'thisown', 1)
+@@ -190,12 +212,22 @@
+         _swig_setattr(self, EventManager,self.__class__,EventManager)
+ _tml.EventManager_swigregister(EventManagerPtr)
+ 
++EventManager_clean = _tml.EventManager_clean
++
+ EventManager_setSingleTimeEvent = _tml.EventManager_setSingleTimeEvent
+ 
+ EventManager_setRepeatableTimeEvent = _tml.EventManager_setRepeatableTimeEvent
+ 
+ EventManager_disableEvent = _tml.EventManager_disableEvent
+ 
++EventManager_shipDeathByName = _tml.EventManager_shipDeathByName
++
++EventManager_shipDeathByType = _tml.EventManager_shipDeathByType
++
++EventManager_distanceMoreThen = _tml.EventManager_distanceMoreThen
++
++EventManager_distanceLessThen = _tml.EventManager_distanceLessThen
++
+ class SoundSystem(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, SoundSystem, name, value)
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/generated/tml_wrap.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -885,6 +885,19 @@
+ #ifdef __cplusplus
+ extern &quot;C&quot; {
+ #endif
++static PyObject *_wrap_GameAction_clean(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:GameAction_clean&quot;)) goto fail;
++    GameAction::clean();
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_GameAction_add_system(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     std::string *arg1 = 0 ;
+@@ -918,6 +931,7 @@
+     std::string *arg2 = 0 ;
+     double arg3 ;
+     double arg4 ;
++    int result;
+     std::string temp1 ;
+     std::string temp2 ;
+     PyObject * obj0 = 0 ;
+@@ -942,9 +956,9 @@
+             SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
+         }
+     }
+-    GameAction::add_planet((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,arg3,arg4);
++    result = (int)GameAction::add_planet((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,arg3,arg4);
+     
+-    Py_INCREF(Py_None); resultobj = Py_None;
++    resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -960,6 +974,7 @@
+     std::string *arg5 = 0 ;
+     std::string *arg6 = 0 ;
+     std::string *arg7 = 0 ;
++    int result;
+     std::string temp1 ;
+     std::string temp2 ;
+     std::string temp3 ;
+@@ -1039,9 +1054,9 @@
+             SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
+         }
+     }
+-    GameAction::add_orbiter_station((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,(std::string const &amp;)*arg3,(std::string const &amp;)*arg4,(std::string const &amp;)*arg5,(std::string const &amp;)*arg6,(std::string const &amp;)*arg7);
++    result = (int)GameAction::add_orbiter_station((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,(std::string const &amp;)*arg3,(std::string const &amp;)*arg4,(std::string const &amp;)*arg5,(std::string const &amp;)*arg6,(std::string const &amp;)*arg7);
+     
+-    Py_INCREF(Py_None); resultobj = Py_None;
++    resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -1055,6 +1070,7 @@
+     double arg3 = (double) -1 ;
+     double arg4 = (double) -1 ;
+     double arg5 = (double) -1 ;
++    int result;
+     std::string temp1 ;
+     PyObject * obj0 = 0 ;
+     
+@@ -1068,9 +1084,9 @@
+             SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
+         }
+     }
+-    GameAction::add_asteroid((std::string const &amp;)*arg1,arg2,arg3,arg4,arg5);
++    result = (int)GameAction::add_asteroid((std::string const &amp;)*arg1,arg2,arg3,arg4,arg5);
+     
+-    Py_INCREF(Py_None); resultobj = Py_None;
++    resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -1083,6 +1099,7 @@
+     std::string *arg2 = 0 ;
+     double arg3 ;
+     double arg4 ;
++    int result;
+     std::string temp1 ;
+     std::string temp2 ;
+     PyObject * obj0 = 0 ;
+@@ -1107,9 +1124,9 @@
+             SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
+         }
+     }
+-    GameAction::add_player((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,arg3,arg4);
++    result = (int)GameAction::add_player((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,arg3,arg4);
+     
+-    Py_INCREF(Py_None); resultobj = Py_None;
++    resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -1276,6 +1293,20 @@
+ }
+ 
+ 
++static PyObject *_wrap_GameAction_get_player_ship_id(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:GameAction_get_player_ship_id&quot;)) goto fail;
++    result = (double)GameAction::get_player_ship_id();
++    
++    resultobj = PyFloat_FromDouble(result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_GameAction(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GameAction *result;
+@@ -1554,6 +1585,19 @@
+     Py_INCREF(obj);
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
++static PyObject *_wrap_EventManager_clean(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:EventManager_clean&quot;)) goto fail;
++    EventManager::clean();
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_EventManager_setSingleTimeEvent(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     double arg1 ;
+@@ -1622,6 +1666,336 @@
+ }
+ 
+ 
++static PyObject *_wrap_EventManager_shipDeathByName(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::string *arg1 = 0 ;
++    std::string *arg2 = 0 ;
++    int result;
++    std::string temp1 ;
++    std::string temp2 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:EventManager_shipDeathByName&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    {
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    {
++        if (PyString_Check(obj1)) {
++            temp2 = std::string(PyString_AsString(obj1),
++            PyString_Size(obj1));
++            arg2 = &amp;temp2;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = (int)EventManager::shipDeathByName((std::string const &amp;)*arg1,(std::string const &amp;)*arg2);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EventManager_shipDeathByType(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::string *arg1 = 0 ;
++    std::string *arg2 = 0 ;
++    int result;
++    std::string temp1 ;
++    std::string temp2 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:EventManager_shipDeathByType&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    {
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    {
++        if (PyString_Check(obj1)) {
++            temp2 = std::string(PyString_AsString(obj1),
++            PyString_Size(obj1));
++            arg2 = &amp;temp2;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = (int)EventManager::shipDeathByType((std::string const &amp;)*arg1,(std::string const &amp;)*arg2);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EventManager_distanceMoreThen__SWIG_0(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    double arg4 ;
++    std::string *arg5 = 0 ;
++    int result;
++    std::string temp5 ;
++    PyObject * obj4 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;ddddO:EventManager_distanceMoreThen&quot;,&amp;arg1,&amp;arg2,&amp;arg3,&amp;arg4,&amp;obj4)) goto fail;
++    {
++        if (PyString_Check(obj4)) {
++            temp5 = std::string(PyString_AsString(obj4),
++            PyString_Size(obj4));
++            arg5 = &amp;temp5;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = (int)EventManager::distanceMoreThen(arg1,arg2,arg3,arg4,(std::string const &amp;)*arg5);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EventManager_distanceLessThen__SWIG_0(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    double arg4 ;
++    std::string *arg5 = 0 ;
++    int result;
++    std::string temp5 ;
++    PyObject * obj4 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;ddddO:EventManager_distanceLessThen&quot;,&amp;arg1,&amp;arg2,&amp;arg3,&amp;arg4,&amp;obj4)) goto fail;
++    {
++        if (PyString_Check(obj4)) {
++            temp5 = std::string(PyString_AsString(obj4),
++            PyString_Size(obj4));
++            arg5 = &amp;temp5;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = (int)EventManager::distanceLessThen(arg1,arg2,arg3,arg4,(std::string const &amp;)*arg5);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EventManager_distanceMoreThen__SWIG_1(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    std::string *arg4 = 0 ;
++    int result;
++    std::string temp4 ;
++    PyObject * obj3 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;dddO:EventManager_distanceMoreThen&quot;,&amp;arg1,&amp;arg2,&amp;arg3,&amp;obj3)) goto fail;
++    {
++        if (PyString_Check(obj3)) {
++            temp4 = std::string(PyString_AsString(obj3),
++            PyString_Size(obj3));
++            arg4 = &amp;temp4;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = (int)EventManager::distanceMoreThen(arg1,arg2,arg3,(std::string const &amp;)*arg4);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EventManager_distanceMoreThen(PyObject *self, PyObject *args) {
++    int argc;
++    PyObject *argv[6];
++    int ii;
++    
++    argc = PyObject_Length(args);
++    for (ii = 0; (ii &lt; argc) &amp;&amp; (ii &lt; 5); ii++) {
++        argv[ii] = PyTuple_GetItem(args,ii);
++    }
++    if (argc == 4) {
++        int _v;
++        {
++            _v = (PyFloat_Check(argv[0]) || PyInt_Check(argv[0]) || PyLong_Check(argv[0])) ? 1 : 0;
++        }
++        if (_v) {
++            {
++                _v = (PyFloat_Check(argv[1]) || PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
++            }
++            if (_v) {
++                {
++                    _v = (PyFloat_Check(argv[2]) || PyInt_Check(argv[2]) || PyLong_Check(argv[2])) ? 1 : 0;
++                }
++                if (_v) {
++                    {
++                        _v = PyString_Check(argv[3]) ? 1 : 0;
++                    }
++                    if (_v) {
++                        return _wrap_EventManager_distanceMoreThen__SWIG_1(self,args);
++                    }
++                }
++            }
++        }
++    }
++    if (argc == 5) {
++        int _v;
++        {
++            _v = (PyFloat_Check(argv[0]) || PyInt_Check(argv[0]) || PyLong_Check(argv[0])) ? 1 : 0;
++        }
++        if (_v) {
++            {
++                _v = (PyFloat_Check(argv[1]) || PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
++            }
++            if (_v) {
++                {
++                    _v = (PyFloat_Check(argv[2]) || PyInt_Check(argv[2]) || PyLong_Check(argv[2])) ? 1 : 0;
++                }
++                if (_v) {
++                    {
++                        _v = (PyFloat_Check(argv[3]) || PyInt_Check(argv[3]) || PyLong_Check(argv[3])) ? 1 : 0;
++                    }
++                    if (_v) {
++                        {
++                            _v = PyString_Check(argv[4]) ? 1 : 0;
++                        }
++                        if (_v) {
++                            return _wrap_EventManager_distanceMoreThen__SWIG_0(self,args);
++                        }
++                    }
++                }
++            }
++        }
++    }
++    
++    PyErr_SetString(PyExc_TypeError,&quot;No matching function for overloaded 'EventManager_distanceMoreThen'&quot;);
++    return NULL;
++}
++
++
++static PyObject *_wrap_EventManager_distanceLessThen__SWIG_1(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    std::string *arg4 = 0 ;
++    int result;
++    std::string temp4 ;
++    PyObject * obj3 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;dddO:EventManager_distanceLessThen&quot;,&amp;arg1,&amp;arg2,&amp;arg3,&amp;obj3)) goto fail;
++    {
++        if (PyString_Check(obj3)) {
++            temp4 = std::string(PyString_AsString(obj3),
++            PyString_Size(obj3));
++            arg4 = &amp;temp4;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = (int)EventManager::distanceLessThen(arg1,arg2,arg3,(std::string const &amp;)*arg4);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EventManager_distanceLessThen(PyObject *self, PyObject *args) {
++    int argc;
++    PyObject *argv[6];
++    int ii;
++    
++    argc = PyObject_Length(args);
++    for (ii = 0; (ii &lt; argc) &amp;&amp; (ii &lt; 5); ii++) {
++        argv[ii] = PyTuple_GetItem(args,ii);
++    }
++    if (argc == 4) {
++        int _v;
++        {
++            _v = (PyFloat_Check(argv[0]) || PyInt_Check(argv[0]) || PyLong_Check(argv[0])) ? 1 : 0;
++        }
++        if (_v) {
++            {
++                _v = (PyFloat_Check(argv[1]) || PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
++            }
++            if (_v) {
++                {
++                    _v = (PyFloat_Check(argv[2]) || PyInt_Check(argv[2]) || PyLong_Check(argv[2])) ? 1 : 0;
++                }
++                if (_v) {
++                    {
++                        _v = PyString_Check(argv[3]) ? 1 : 0;
++                    }
++                    if (_v) {
++                        return _wrap_EventManager_distanceLessThen__SWIG_1(self,args);
++                    }
++                }
++            }
++        }
++    }
++    if (argc == 5) {
++        int _v;
++        {
++            _v = (PyFloat_Check(argv[0]) || PyInt_Check(argv[0]) || PyLong_Check(argv[0])) ? 1 : 0;
++        }
++        if (_v) {
++            {
++                _v = (PyFloat_Check(argv[1]) || PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
++            }
++            if (_v) {
++                {
++                    _v = (PyFloat_Check(argv[2]) || PyInt_Check(argv[2]) || PyLong_Check(argv[2])) ? 1 : 0;
++                }
++                if (_v) {
++                    {
++                        _v = (PyFloat_Check(argv[3]) || PyInt_Check(argv[3]) || PyLong_Check(argv[3])) ? 1 : 0;
++                    }
++                    if (_v) {
++                        {
++                            _v = PyString_Check(argv[4]) ? 1 : 0;
++                        }
++                        if (_v) {
++                            return _wrap_EventManager_distanceLessThen__SWIG_0(self,args);
++                        }
++                    }
++                }
++            }
++        }
++    }
++    
++    PyErr_SetString(PyExc_TypeError,&quot;No matching function for overloaded 'EventManager_distanceLessThen'&quot;);
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_EventManager(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     EventManager *result;
+@@ -2403,6 +2777,7 @@
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
+ static PyMethodDef SwigMethods[] = {
++	 { (char *)&quot;GameAction_clean&quot;, _wrap_GameAction_clean, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_add_system&quot;, _wrap_GameAction_add_system, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_add_planet&quot;, _wrap_GameAction_add_planet, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_add_orbiter_station&quot;, _wrap_GameAction_add_orbiter_station, METH_VARARGS },
+@@ -2411,6 +2786,7 @@
+ 	 { (char *)&quot;GameAction_get_string_flag&quot;, _wrap_GameAction_get_string_flag, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_save_flag&quot;, _wrap_GameAction_save_flag, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_get_double_flag&quot;, _wrap_GameAction_get_double_flag, METH_VARARGS },
++	 { (char *)&quot;GameAction_get_player_ship_id&quot;, _wrap_GameAction_get_player_ship_id, METH_VARARGS },
+ 	 { (char *)&quot;new_GameAction&quot;, _wrap_new_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;delete_GameAction&quot;, _wrap_delete_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_swigregister&quot;, GameAction_swigregister, METH_VARARGS },
+@@ -2428,9 +2804,14 @@
+ 	 { (char *)&quot;new_GameConfig&quot;, _wrap_new_GameConfig, METH_VARARGS },
+ 	 { (char *)&quot;delete_GameConfig&quot;, _wrap_delete_GameConfig, METH_VARARGS },
+ 	 { (char *)&quot;GameConfig_swigregister&quot;, GameConfig_swigregister, METH_VARARGS },
++	 { (char *)&quot;EventManager_clean&quot;, _wrap_EventManager_clean, METH_VARARGS },
+ 	 { (char *)&quot;EventManager_setSingleTimeEvent&quot;, _wrap_EventManager_setSingleTimeEvent, METH_VARARGS },
+ 	 { (char *)&quot;EventManager_setRepeatableTimeEvent&quot;, _wrap_EventManager_setRepeatableTimeEvent, METH_VARARGS },
+ 	 { (char *)&quot;EventManager_disableEvent&quot;, _wrap_EventManager_disableEvent, METH_VARARGS },
++	 { (char *)&quot;EventManager_shipDeathByName&quot;, _wrap_EventManager_shipDeathByName, METH_VARARGS },
++	 { (char *)&quot;EventManager_shipDeathByType&quot;, _wrap_EventManager_shipDeathByType, METH_VARARGS },
++	 { (char *)&quot;EventManager_distanceMoreThen&quot;, _wrap_EventManager_distanceMoreThen, METH_VARARGS },
++	 { (char *)&quot;EventManager_distanceLessThen&quot;, _wrap_EventManager_distanceLessThen, METH_VARARGS },
+ 	 { (char *)&quot;new_EventManager&quot;, _wrap_new_EventManager, METH_VARARGS },
+ 	 { (char *)&quot;delete_EventManager&quot;, _wrap_delete_EventManager, METH_VARARGS },
+ 	 { (char *)&quot;EventManager_swigregister&quot;, EventManager_swigregister, METH_VARARGS },
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/melee/mframe.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -40,6 +40,8 @@
+ #include &quot;scp.h&quot;
+ #include &quot;tml/gameconfig.h&quot;
+ #include &quot;python/python_class.h&quot;
++#include &quot;tml/gameevent.h&quot;
++#include &quot;tml/eventmanager.h&quot;
+ 
+ int total_presences;
+ 
+@@ -369,6 +371,13 @@
+ 	return this;
+ 	}
+ 
++static int new_space_object_id()
++{
++  static int id = 0;
++  id++;
++  return id;
++}
++
+ SpaceLocation::SpaceLocation(SpaceLocation *creator, Vector2 lpos, double langle) :
+ 	pos(lpos),
+ 	qnext(NULL),
+@@ -381,22 +390,24 @@
+ 	collide_flag_sameship(0)
+ 
+ {
+-	id |= SPACE_LOCATION;
+-	attributes |= ATTRIB_SYNCHED;
+-	attributes |= ATTRIB_LOCATION;
+-	if (creator) {
+-		ally_flag = creator-&gt;ally_flag;
+-		ship = creator-&gt;ship;
+-		data = creator-&gt;data;
+-		if (data) data-&gt;lock();
+-		set_target( creator-&gt;get_target());
+-		}
+-	else {
+-		ally_flag = 0;
+-		ship = NULL;
+-		data = NULL;
+-		set_target(NULL);
+-		}
++  id |= SPACE_LOCATION;
++  attributes |= ATTRIB_SYNCHED;
++  attributes |= ATTRIB_LOCATION;
++  if (creator) {
++    ally_flag = creator-&gt;ally_flag;
++    ship = creator-&gt;ship;
++    data = creator-&gt;data;
++    if (data) data-&gt;lock();
++    set_target( creator-&gt;get_target());
++  }
++  else {
++    ally_flag = 0;
++    ship = NULL;
++    data = NULL;
++    set_target(NULL);
++  }
++  _id = new_space_object_id();
++  EventManager::m_allSpaceLocations.insert(this);
+ }
+ 
+ 
+@@ -405,8 +416,14 @@
+   STACKTRACE;
+   if (data) 
+     data-&gt;unlock();
++  EventManager::m_allSpaceLocations.erase(this);
+ }
+ 
++void SpaceLocation::add_event(boost::shared_ptr&lt;TGameEvent&gt; e)
++{
++  event.push_back(e);
++}
++
+ SpaceObject* SpaceLocation::get_target()
+ {
+   return _target;
+@@ -528,9 +545,8 @@
+ 	return (i == 0);
+ };
+ 
+-
+-
+-int SpaceLocation::canCollide(SpaceLocation *other) {
++int SpaceLocation::canCollide(SpaceLocation *other) 
++{
+ 	if (!detectable()) return 0;
+ 	if (sameShip(other)) return ((1 &lt;&lt; other-&gt;layer) &amp; collide_flag_sameship);
+ 	else if (sameTeam(other)) return ((1 &lt;&lt; other-&gt;layer) &amp; collide_flag_sameteam);
+@@ -588,6 +604,8 @@
+ }
+ 
+ 
++
++
+ int SpaceLocation::translate( Vector2 delta) 
+ {
+   pos = normalize ( pos + delta, map_size );
+@@ -680,6 +698,7 @@
+     {
+       ship_died();
+     }
++  event.erase(std::remove_if(event.begin(), event.end(), std::not1(twl::isexists())),event.end());
+   return;
+ }
+ 
+@@ -699,6 +718,7 @@
+   return;
+ }
+ 
++
+ SpaceObject::SpaceObject(SpaceLocation *creator, Vector2 opos, 
+ 			 double oangle, SpaceSprite *osprite) 
+   :
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/melee/mframe.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -22,6 +22,7 @@
+ 
+ #include &quot;melee.h&quot;
+ #include &quot;util/vector2.h&quot;
++#include &lt;boost/shared_ptr.hpp&gt;
+ 
+ //debuging purposes only:
+ extern int total_presences;
+@@ -175,20 +176,31 @@
+   
+ };
+ 
++
++class TGameEvent;
+ /// \brief any item in the game that has a location, base class for all items in game
+ class SpaceLocation : public Presence 
+ { 
+-
+  private:
+   friend class Physics;
+   friend struct Query;
+   
+  protected:
++  
++  int _id;
+   SpaceObject *_target; ///&lt; it's target, if it has one
++  std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; event;
++
+  public: 
+   
++  SpaceLocation::SpaceLocation();
++
++  virtual void add_event(boost::shared_ptr&lt;TGameEvent&gt; e);
+   virtual SpaceObject* get_target();
+   virtual void set_target(SpaceObject*);
++  
++  virtual int get_id() const {return _id;}; 
++  virtual void set_id(int id){_id = id;};
+ 
+   //aught to be protected, but we're lazy
+   Vector2 pos;
+@@ -271,6 +283,7 @@
+   Vector2 normal_pos() const;          
+   Vector2 nearest_pos(SpaceLocation *l) const;
+   double distance(SpaceLocation *l);
++
+   double trajectory_angle(SpaceLocation *l);
+ 
+   virtual double isProtected() const;  ///&lt; returns 0 normally, or a positive number if shielded
+@@ -307,7 +320,8 @@
+ /// \brief any item with a sprite (only SpaceObjects can bounce)
+ class SpaceObject : public SpaceLocation 
+ {
+-  std::string _script;
++  std::string _script;   // dialog file name for chat key
++  
+  public:
+   Vector2 size; ///&lt; size of sprite
+   double  mass; ///&lt; mass of object
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/melee/mship.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -35,6 +35,8 @@
+ #include &quot;scp.h&quot;
+ #include &quot;mitems.h&quot;
+ #include &quot;tml/gameconfig.h&quot;
++#include &quot;tml/eventmanager.h&quot;
++#include &quot;tml/gameevent.h&quot;
+ 
+ /*------------------------------*
+  *		Ship Class Registration *
+@@ -292,6 +294,7 @@
+   sprite_index = get_index(angle);
+   
+   hashotspots = true;
++  ship_name = &quot;&quot;;
+ }
+ 
+ Ship::Ship(Vector2 opos, double shipAngle, ShipData *shipData, unsigned int ally_flag) :
+@@ -391,9 +394,15 @@
+   sprite_index = get_index(angle);
+ 
+   hashotspots = true;
++  ship_name = &quot;&quot;;
+ }
+ 
+ 
++std::string Ship::get_ship_name()
++{
++  return ship_name;
++}
++
+ void Ship::set_target(SpaceObject* target)
+ {
+   STACKTRACE;
+@@ -427,7 +436,31 @@
+ 	}
+       _target_TeamIndicator = NULL;
+     }
+-  return;
++    // Process death event
++    twl::EventList::iterator i = event.begin();
++    while(i!=event.end())
++      {
++	i = twl::has_event(i,event.end(),TGameEventType::SHIP_DEATH_BY_NAME );
++	if(i!=event.end())
++	  {
++	    (*i)-&gt;trigger();
++	    i++;
++	  }
++      }
++    
++    twl::EventList::iterator i2 = EventManager::g_events.begin();
++    while(i2!=EventManager::g_events.end())
++      {
++	i2 = twl::has_event(i2,
++			    EventManager::g_events.end(),
++			    TGameEventType::SHIP_DEATH_BY_TYPE );
++	if(i2!=EventManager::g_events.end())
++	  {
++	    ((TEventShipDeathByType*)((*i2).get()))-&gt;calculate(this);
++	    i2++;
++	  }
++      }
++    return;
+ }
+ 
+ Ship::~Ship() 
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/melee/mship.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -77,6 +77,7 @@
+ {
+  protected:
+   
++  std::string ship_name;
+   int hotspot_frame;
+   int recharge_step;
+   int weapon_recharge;
+@@ -97,6 +98,8 @@
+   virtual double get_angle_ex() const; ///&lt; stupid helper for camera
+   
+  public:
++  virtual std::string get_ship_name();
++
+   virtual void set_target(SpaceObject* target);
+ 
+   ShipType *type;
+
+Modified: trunk/source/python/python_class.h
+===================================================================
+--- trunk/source/python/python_class.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/python/python_class.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -28,6 +28,7 @@
+ #ifndef PYTHON_CLASS_H__
+ #define PYTHON_CLASS_H__
+ 
++#undef _POSIX_C_SOURCE
+ #include &quot;Python.h&quot;
+ #include &quot;compile.h&quot;
+ #include &quot;eval.h&quot;
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/scp.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -74,7 +74,6 @@
+ #include &quot;melee/mfleet.h&quot;
+ #include &quot;tml/gameconfig.h&quot;
+ 
+-#include &lt;Python.h&gt;
+ #include &quot;python/python_class.h&quot;
+ 
+ 
+
+Modified: trunk/source/tml/eventmanager.cpp
+===================================================================
+--- trunk/source/tml/eventmanager.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/tml/eventmanager.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -23,15 +23,30 @@
+ #include &lt;functional&gt;
+ #include &lt;list&gt;
+ 
++#include &quot;melee.h&quot;
++#include &quot;melee/mframe.h&quot;
++#include &quot;games/ggob.h&quot;
++#include &quot;melee/mship.h&quot;
+ 
+ //////////////////////////////////////////////////////////////////
+-static std::list&lt;boost::shared_ptr&lt;GameEvent&gt; &gt; g_events;
++std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; EventManager::g_events;
++std::set&lt;SpaceLocation*&gt; EventManager::m_allSpaceLocations;
++
+ //////////////////////////////////////////////////////////////////
+ 
++void EventManager::clean()
++{
++  for(twl::EventList::iterator i = g_events.begin(); i!= g_events.end();i++)
++    {
++      (*i)-&gt;die();
++    }
++  g_events.clear();
++}
++
+ int EventManager::setSingleTimeEvent(double time, const std::string&amp; script)
+ {
+-  EventSingleTime* e = new EventSingleTime();
+-  boost::shared_ptr&lt;GameEvent&gt; ev( e );
++  TEventSingleTime* e = new TEventSingleTime();
++  boost::shared_ptr&lt;TGameEvent&gt; ev( e );
+   int id = e-&gt;setUp((int)time,script);
+   g_events.push_back(ev);
+   return id;
+@@ -39,18 +54,18 @@
+ 
+ int EventManager::setRepeatableTimeEvent(double time, const std::string&amp; script)
+ {
+-  EventRepeatableTime* e = new EventRepeatableTime();
+-  boost::shared_ptr&lt;GameEvent&gt; ev( e );
++  TEventRepeatableTime* e = new TEventRepeatableTime();
++  boost::shared_ptr&lt;TGameEvent&gt; ev( e );
+   int id = e-&gt;setUp((int)time,script);
+   g_events.push_back(ev);
+   return id;
+ }
+ 
+-struct find_event_by_id : public std::binary_function&lt; boost::shared_ptr&lt;GameEvent&gt;, int, bool&gt;
++struct find_event_by_id : public std::binary_function&lt; boost::shared_ptr&lt;TGameEvent&gt;, int, bool&gt;
+ {
+-  bool operator() (boost::shared_ptr&lt;GameEvent&gt; e, int id) const
++  bool operator() (boost::shared_ptr&lt;TGameEvent&gt; e, int id) const
+   {
+-    if(e-&gt;exists())
++    if(e-&gt;exists() &amp;&amp; e-&gt;getID()==id)
+       {
+ 	return true;
+       }
+@@ -63,11 +78,90 @@
+   (*std::find_if(g_events.begin(), g_events.end(), std::bind2nd(find_event_by_id(),id)))-&gt;die();
+ }
+ 
++
++int EventManager::shipDeathByName(const std::string&amp; name, const std::string&amp; script )
++{
++  int ret = -1;
++  for(std::list&lt;SpaceLocation*&gt;::iterator i = gobgame-&gt;item.begin(); i!= gobgame-&gt;item.end();i++)
++    {
++      if( (*i)-&gt;exists() &amp;&amp; (*i)-&gt;isShip() &amp;&amp; ((Ship*)(*i))-&gt;get_ship_name()==name)
++	{
++	  TEventShipDeathByName* e = new TEventShipDeathByName();
++	  ret = e-&gt;setUp(script);
++	  boost::shared_ptr&lt;TGameEvent&gt; ev (e);
++	  (*i)-&gt;add_event(ev);
++	}
++    }
++  return ret;
++}
++
++int EventManager::shipDeathByType(const std::string&amp; type, const std::string&amp; script )
++{
++  TEventShipDeathByType* e = new TEventShipDeathByType();
++  boost::shared_ptr&lt;TGameEvent&gt; ev( e );
++  int ret = e-&gt;setUp(type, script);
++  g_events.push_back(ev);
++  return ret;
++}
++
++
++template &lt;class T&gt;
++int EventManager::distanceXThen(double obj, double x, double y, double dist, const std::string&amp; script)
++{
++  std::set&lt;SpaceLocation*&gt;::iterator i = twl::get_location&lt; std::set&lt;SpaceLocation*&gt;::iterator &gt; (m_allSpaceLocations.begin(),m_allSpaceLocations.end(), (int)obj);
++  if(i!=m_allSpaceLocations.end())
++    {
++      T* e = new T();
++      boost::shared_ptr&lt;TGameEvent&gt; ev( e );
++      int ret = e-&gt;setUp(*i, Vector2(x,y), dist, script);
++      g_events.push_back(ev);
++      return ret;
++    }
++  return -1;
++}
++
++int EventManager::distanceMoreThen(double obj, double x, double y, double dist, const std::string&amp; script)
++{
++  return distanceXThen&lt;TEventDistanceMoreThen1Obj&gt;(obj, x, y, dist, script);
++}
++
++int EventManager::distanceLessThen(double obj, double x, double y, double dist, const std::string&amp; script)
++{
++  return distanceXThen&lt;TEventDistanceLessThen1Obj&gt;(obj, x, y, dist, script);
++}
++
++
++template &lt;class T&gt;
++int EventManager::distanceXThen(double obj1, double obj2, double dist, const std::string&amp; script)
++{
++  std::set&lt;SpaceLocation*&gt;::iterator i1 = twl::get_location&lt; std::set&lt;SpaceLocation*&gt;::iterator &gt; (m_allSpaceLocations.begin(),m_allSpaceLocations.end(), (int)obj1);
++  std::set&lt;SpaceLocation*&gt;::iterator i2 = twl::get_location&lt; std::set&lt;SpaceLocation*&gt;::iterator &gt; (m_allSpaceLocations.begin(),m_allSpaceLocations.end(), (int)obj2);
++  if(i1!=m_allSpaceLocations.end()&amp;&amp;i2!=m_allSpaceLocations.end())
++    {
++      T* e = new T();
++      boost::shared_ptr&lt;TGameEvent&gt; ev( e );
++      int ret = e-&gt;setUp(*i1,*i2, dist, script);
++      g_events.push_back(ev);
++      return ret;
++    }
++  return -1;
++}
++
++int EventManager::distanceMoreThen(double obj1, double obj2, double dist, const std::string&amp; script)
++{
++  return distanceXThen&lt;TEventDistanceMoreThen2Obj&gt;(obj1, obj2, dist, script);
++}
++
++int EventManager::distanceLessThen(double obj1, double obj2, double dist, const std::string&amp; script)
++{
++  return distanceXThen&lt;TEventDistanceLessThen2Obj&gt;(obj1, obj2, dist, script);
++}
++
+ //////////////////////////////////////////////////////////////////
+ //  Calculate events                                            //
+ //////////////////////////////////////////////////////////////////
+ 
+-static void calcevent(boost::shared_ptr&lt;GameEvent&gt; e)
++static void calcevent(boost::shared_ptr&lt;TGameEvent&gt; e)
+ {
+   if(e-&gt;exists())
+     {
+@@ -75,9 +169,9 @@
+     }
+ }
+ 
+-struct isexist : public std::unary_function&lt; boost::shared_ptr&lt;GameEvent&gt;, bool&gt;
++namespace twl
+ {
+-  bool operator() (boost::shared_ptr&lt;GameEvent&gt; e) const
++  bool isexists::operator() (boost::shared_ptr&lt;TGameEvent&gt; e) const
+   {
+     if(e-&gt;exists())
+       {
+@@ -85,10 +179,34 @@
+       }
+     return false;
+   }
++  EventList::iterator has_event( EventList::iterator begin,
++				 EventList::iterator end,
++				 int type)
++  {
++    for (EventList::iterator i = begin; i!= end;i++)
++      {
++	if( (*i)-&gt;type() == type &amp;&amp; (*i)-&gt;exists())
++	  return i;
++      }
++    return end;
++  }
++
++  template&lt;class T&gt;
++  T get_location(T begin,  T end,  int id)
++  {
++    for(T i = begin; i!= end;i++)
++      {
++	if( (*i)-&gt;get_id()==id &amp;&amp; (*i)-&gt;exists())
++	  {
++	    return i;
++	  }
++      }
++    return end;
++  }
+ };
+ 
+ void EventManager::calculate()
+ {
+   std::for_each(g_events.begin(), g_events.end(), calcevent);  
+-  g_events.erase(std::remove_if(g_events.begin(), g_events.end(), std::not1(isexist())),g_events.end());
++  g_events.erase(std::remove_if(g_events.begin(), g_events.end(), std::not1(twl::isexists())),g_events.end());
+ }
+
+Modified: trunk/source/tml/eventmanager.h
+===================================================================
+--- trunk/source/tml/eventmanager.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/tml/eventmanager.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -18,23 +18,31 @@
+ #ifndef __TW_LIGHT_EVENTMANAGER_H__
+ #define __TW_LIGHT_EVENTMANAGER_H__
+ 
++#include &lt;boost/shared_ptr.hpp&gt;
+ #include &lt;string&gt;
++#include &lt;list&gt;
++#include &lt;set&gt;
+ 
++class SpaceLocation;
++class TGameEvent;
+ /// event API for python
+ class EventManager
+ {
+  public:
++  /// Destroy all events
++  static void clean();
++  
+   /// Create one time time event
+   ///
+   /// @param time - time when call code
+-  /// @script     - string with code to call
++  /// @script     - function to call
+   /// @return     - event id
+   static int setSingleTimeEvent(double time, const std::string&amp; script);
+   
+   /// Create one time time event
+   ///
+   /// @param time - time between calls
+-  /// @script     - string with code to call
++  /// @script     - function to call
+   /// @return     - event id
+   static int setRepeatableTimeEvent(double time, const std::string&amp; script);
+   
+@@ -43,12 +51,109 @@
+   /// @param id - id of event
+   static void disableEvent(double id);
+ 
++
++  /// Call function script when ship named 'name' die
++  ///
++  /// @param name   - unique name of the ship
++  /// @param script - function to call
++  static int shipDeathByName(const std::string&amp; name, const std::string&amp; script );
++  
++  /// Call function script when ship whose type type die
++  ///
++  /// @param type   - ship build type 
++  /// @param script - function to call
++  static int shipDeathByType(const std::string&amp; type, const std::string&amp; script );
++
++  /// Call function if distance between object and x,y more then dist
++  ///
++  /// If obj dies, this event should die as well
++  ///
++  /// @param obj    - space location id (number you recieve by create* functions)
++  /// @param x      - x coord of point
++  /// @param y      - y coord of point
++  /// @param script - function to call
++  /// @return event id
++  static int distanceMoreThen(double obj, double x, double y, double dist, const std::string&amp; script);
++
++  /// Call function if distance between object and x,y less then dist
++  ///
++  /// If obj dies, this event should die as well
++  ///
++  /// @param obj    - space location id (number you recieve by create* functions)
++  /// @param x      - x coord of point
++  /// @param y      - y coord of point
++  /// @param script - function to call
++  /// @return event id
++  static int distanceLessThen(double obj, double x, double y, double dist, const std::string&amp; script);
++
++  /// Call function if distance between object1 and object2 more then dist
++  ///
++  /// If obj dies, this event should die as well
++  ///
++  /// @param obj    - space location id (number you recieve by create* functions)
++  /// @param x      - x coord of point
++  /// @param y      - y coord of point
++  /// @param script - function to call
++  /// @return event id
++  static int distanceMoreThen(double obj1, double obj2, double dist, const std::string&amp; script);
++
++  /// Call function if distance between object and object2 less then dist
++  ///
++  /// If obj dies, this event should die as well
++  ///
++  /// @param obj    - space location id (number you recieve by create* functions)
++  /// @param x      - x coord of point
++  /// @param y      - y coord of point
++  /// @param script - function to call
++  /// @return event id
++  static int distanceLessThen(double obj1, double obj2, double dist, const std::string&amp; script);
++
+ #ifndef SWIG
++  template &lt;class T&gt;
++  static int distanceXThen(double obj, double x, double y, double dist, const std::string&amp; script);
++
++  template &lt;class T&gt;
++  static int distanceXThen(double obj1, double obj2, double dist, const std::string&amp; script);
++
++  static std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; g_events;
++  static std::set&lt;SpaceLocation*&gt; m_allSpaceLocations;
+   /// Should be called every frame for calculating events
+   static void calculate();
+ #endif
+ 
+ };
+ 
++#ifndef SWIG
++
++namespace twl
++{
++
++  typedef std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; EventList;
++
++  struct isexists : public std::unary_function&lt; boost::shared_ptr&lt;TGameEvent&gt;, bool&gt;
++  {
++    bool operator() (boost::shared_ptr&lt;TGameEvent&gt; e) const;
++  };
++
++/// Check if event with type type present
++///
++/// @param begin - begin of sequence
++/// @param end   - end of sequence
++/// @return      - finded item or end if not found
++  EventList::iterator has_event( EventList::iterator begin,
++				 EventList::iterator end,
++				 int type);
++
++  /// Get SpaceLocation by it's id
++  ///
++  /// @param begin 
++  /// @param end
++  /// @param id id of space object, returned by create* function
++  template&lt;class T&gt;
++    T get_location(T begin, T end, int id);
++};
++
+ #endif
+ 
++#endif
++
+
+Modified: trunk/source/tml/gameaction.cpp
+===================================================================
+--- trunk/source/tml/gameaction.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/tml/gameaction.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -16,23 +16,34 @@
+ 
+ 
+ #include &quot;gameaction.h&quot;
++#include &quot;melee/mframe.h&quot;
+ #include &quot;games/ggob.h&quot;
++#include &quot;melee/mship.h&quot;
+ 
+ #include &lt;map&gt;
+ #include &lt;iostream&gt;
+ 
++
++static std::map&lt;std::string,std::string&gt; g_string_flag_map;
++static std::map&lt;std::string,double&gt; g_double_flag_map;
++
++void GameAction::clean()
++{
++  g_string_flag_map.clear();
++  g_double_flag_map.clear();
++}
+ void GameAction::add_system(const std::string&amp; name, double x, double y)
+ {
+   gobgame-&gt;add_system(name, (int)x, (int)y);
+   gobgame-&gt;prepare();
+ }
+ 
+-void GameAction::add_planet(const std::string&amp; system, const std::string&amp; name, double x, double y)
++int GameAction::add_planet(const std::string&amp; system, const std::string&amp; name, double x, double y)
+ {
+-  gobgame-&gt;add_planet(system, name, (int)x, (int)y);
++  return gobgame-&gt;add_planet(system, name, (int)x, (int)y);
+ }
+ 
+-void GameAction::add_orbiter_station(const std::string&amp; system, 
++int GameAction::add_orbiter_station(const std::string&amp; system, 
+ 			     const std::string&amp; planet, 
+ 			     const std::string&amp; gatafile,
+ 			     const std::string&amp; station_sprite,
+@@ -40,21 +51,24 @@
+ 			     const std::string&amp; buildtype,
+ 			     const std::string&amp; commander_dialog)
+ {
+-  gobgame-&gt;add_orbiter_station(system, planet, gatafile,station_sprite, background_picture, buildtype,commander_dialog);
++  return gobgame-&gt;add_orbiter_station(system, planet, gatafile,station_sprite, background_picture, buildtype,commander_dialog);
+ }
+ 
+-void GameAction::add_asteroid(const std::string&amp; system, double x, double y, double oangle, double speed)
++int GameAction::add_asteroid(const std::string&amp; system, double x, double y, double oangle, double speed)
+ {
+-  gobgame-&gt;add_asteroid(system, Vector2(x,y), (int)oangle, (int)speed);
++  return gobgame-&gt;add_asteroid(system, Vector2(x,y), (int)oangle, (int)speed);
+ }
+ 
+-void GameAction::add_player(const std::string&amp; system, const std::string&amp; shptype, double x, double y)
++int GameAction::add_player(const std::string&amp; system, const std::string&amp; shptype, double x, double y)
+ {
+-  gobgame-&gt;add_player(system, shptype, (int)x, (int)y);
++  return gobgame-&gt;add_player(system, shptype, (int)x, (int)y);
+ }
+ 
++double GameAction::get_player_ship_id()
++{
++  return gobgame-&gt;gobplayer.ship-&gt;get_id();
++}
+ 
+-static std::map&lt;std::string,std::string&gt; g_string_flag_map;
+ void GameAction::save_flag(const std::string&amp; name, const std::string&amp; value)
+ {
+   g_string_flag_map[name] = value;
+@@ -73,7 +87,6 @@
+   return g_string_flag_map[name];
+ }
+ 
+-static std::map&lt;std::string,double&gt; g_double_flag_map;
+ void GameAction::save_flag(const std::string&amp; name, double value)
+ {
+   g_double_flag_map[name] = value;
+
+Modified: trunk/source/tml/gameaction.h
+===================================================================
+--- trunk/source/tml/gameaction.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/tml/gameaction.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -24,6 +24,9 @@
+ class GameAction
+ {
+  public:
++  /// Clear all variables
++  static void clean();
++
+   /// Add new star system to the game
+   ///
+   /// @param name - star system name, should be unique serve as id
+@@ -37,7 +40,8 @@
+   /// @param name    - planet name (should be unique in star system range)
+   /// @param x planet coordinate in system
+   /// @param y planet coordinate in system
+-  static void add_planet(const std::string&amp; system, const std::string&amp; name, double x, double y);
++  /// @return planet id
++  static int add_planet(const std::string&amp; system, const std::string&amp; name, double x, double y);
+   
+   /// Add station that move on planet orbit
+   ///
+@@ -50,7 +54,8 @@
+   /// @param background_picture - background pickture when player at the station
+   /// @buildtype                - what kind of ships player can build here
+   /// @commander_dialog         - commander dialog file
+-  static void add_orbiter_station(const std::string&amp; system, 
++  /// @return station id
++  static int add_orbiter_station(const std::string&amp; system, 
+ 			     const std::string&amp; planet, 
+ 			     const std::string&amp; gatafile,
+ 			     const std::string&amp; station_sprite,
+@@ -65,14 +70,16 @@
+   /// @param y The asteroid will be created in (x,y) position and will be also be respawned here -1 for random
+   /// @param oangle - angle in rad where steroid pointed -1 for random
+   /// @param speed asteroid speed -1 for random
+-  static void add_asteroid(const std::string&amp; system, double x = -1, double y = -1, double oangle = -1, double speed = -1);
++  /// @return asteroid id
++  static int add_asteroid(const std::string&amp; system, double x = -1, double y = -1, double oangle = -1, double speed = -1);
+   
+   /// Add player to the game, should be called only once per game
+   ///
+   /// @param system where player appear
+   /// @param x player coordinate in system
+   /// @param y player coordinate in system
+-  static void add_player(const std::string&amp; system, const std::string&amp;, double x, double y);
++  /// @return player id
++  static int add_player(const std::string&amp; system, const std::string&amp;, double x, double y);
+ 
+ 
+   //////////////////////////////////////////////////////////////////////////////////////////
+@@ -102,6 +109,7 @@
+   /// @return flag value
+   static double get_double_flag(const std::string&amp; name);
+ 
++  static double get_player_ship_id();
+ };
+ 
+ 
+
+Modified: trunk/source/tml/gameevent.cpp
+===================================================================
+--- trunk/source/tml/gameevent.cpp	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/tml/gameevent.cpp	2005-05-10 16:28:22 UTC (rev 161)
+@@ -18,6 +18,8 @@
+ #include &quot;gameevent.h&quot;
+ #include &quot;games/ggob.h&quot;
+ #include &quot;python/python_class.h&quot;
++#include &quot;melee.h&quot;
++#include &quot;melee/mship.h&quot;
+ 
+ static int generateEventID()
+ {
+@@ -26,60 +28,64 @@
+   return id;
+ }
+ 
+-GameEvent::GameEvent()
++TGameEvent::TGameEvent()
+ {
+   exist = true;
+   id = generateEventID();
+ }
+ 
+-GameEvent::~GameEvent()
++TGameEvent::~TGameEvent()
+ {
+ }
+ 
+-EventTime::EventTime()
+-  :
+-  GameEvent()
++void TGameEvent::trigger()
+ {
++  // execute function
++  python::exec_function(_script);
+ }
+ 
+-EventTime::~EventTime()
++void TOneTimeEvent::trigger()
+ {
++  TOneTimeEventBase::trigger();
++  die();
+ }
+ 
+-void EventTime::die()
++TEventTime::TEventTime()
+ {
+-  GameEvent::die();
+ }
+ 
+-bool EventTime::calculate()
++TEventTime::~TEventTime()
+ {
++}
++
++bool TEventTime::calculate()
++{
+   if( _spot_time == gobgame-&gt;game_time / 1000)
+     {
+-      // execute function
+-      python::exec_function(_script);
++      trigger();
+       return true;
+     }
+   return false;
+ }
+ 
+-int EventTime::setUp(int time, const std::string&amp; script)
++int TEventTime::setUp(int time, const std::string&amp; script)
+ {
+   _spot_time = time;
+   _script = script;
+   return id;
+ }
+ 
+-EventSingleTime::EventSingleTime()
++TEventSingleTime::TEventSingleTime()
+ {  
+ }
+ 
+-EventSingleTime::~EventSingleTime()
++TEventSingleTime::~TEventSingleTime()
+ {
+ }
+ 
+-bool EventSingleTime::calculate()
++bool TEventSingleTime::calculate()
+ {
+-  if(EventTime::calculate())
++  if(TEventTime::calculate())
+     {
+       die();
+       return true;
+@@ -87,18 +93,18 @@
+   return false;
+ }
+ 
+-EventRepeatableTime::EventRepeatableTime()
++TEventRepeatableTime::TEventRepeatableTime()
+ {
+   interval = -1;
+ }
+ 
+-EventRepeatableTime::~EventRepeatableTime()
++TEventRepeatableTime::~TEventRepeatableTime()
+ {
+ }
+ 
+-bool EventRepeatableTime::calculate()
++bool TEventRepeatableTime::calculate()
+ {
+-  if(EventRepeatableTimeBase::calculate())
++  if(TEventRepeatableTimeBase::calculate())
+     {
+       _spot_time += interval;
+       return true;
+@@ -106,8 +112,172 @@
+   return false;
+ }
+ 
+-int EventRepeatableTime::setUp(int time, const std::string&amp; script)
++int TEventRepeatableTime::setUp(int time, const std::string&amp; script)
+ {
+   interval = time;
+-  EventRepeatableTimeBase::setUp(gobgame-&gt;game_time/1000 + time, script);
++  TEventRepeatableTimeBase::setUp(gobgame-&gt;game_time/1000 + time, script);
++  return id;
+ }
++
++
++TEventShipDeathByName::~TEventShipDeathByName()
++{
++}
++
++int TEventShipDeathByName::setUp(const std::string&amp; script)
++{
++  _script = script;
++  return id;
++}
++
++
++TEventShipDeathByType::TEventShipDeathByType()
++{
++}
++TEventShipDeathByType::~TEventShipDeathByType()
++{
++}
++
++int TEventShipDeathByType::setUp(const std::string type, const std::string&amp; script)
++{
++  _type = type;
++  _script = script;
++  return id;
++}
++
++bool TEventShipDeathByType::calculate(Ship* s)
++{
++  if(_type == s-&gt;type-&gt;id)
++    {
++      trigger();
++      return true;
++    }
++  return false;
++}
++
++
++TEventDistance::TEventDistance()
++{
++}
++TEventDistance::~TEventDistance()
++{
++}
++
++
++bool TEventDistance::calculate()
++{
++  // check if location doesn't exist, event is invalid
++  if(!m_location-&gt;exists()||!m_location2-&gt;exists())
++    {
++      die();
++    }
++  return check();
++}
++
++bool TEventDistance::check_less()
++{
++  if(m_location2-&gt;distance(m_location)&lt;m_dist)
++    {
++      printf(&quot;dist: %d \n&quot;, (int)m_location2-&gt;distance(m_location));
++      printf(&quot;location (%d,%d)\n&quot;,  (int)m_location-&gt;normal_pos().x, (int)m_location-&gt;normal_pos().y);
++      printf(&quot;location2 (%d,%d)\n&quot;, (int)m_location2-&gt;normal_pos().x, (int)m_location2-&gt;normal_pos().y);
++      trigger();
++      return true;
++    }
++  return false;
++}
++
++bool TEventDistance::check_more()
++{
++  if(m_location2-&gt;distance(m_location)&gt;m_dist)
++    {
++      printf(&quot;dist: %d \n&quot;, (int)m_location2-&gt;distance(m_location));
++      printf(&quot;location (%d,%d)\n&quot;,  (int)m_location-&gt;normal_pos().x, (int)m_location-&gt;normal_pos().y);
++      printf(&quot;location2 (%d,%d)\n&quot;, (int)m_location2-&gt;normal_pos().x, (int)m_location2-&gt;normal_pos().y);
++      trigger();
++      return true;
++    }
++  return false;
++}
++
++
++
++TEventDistanceMoreThen1Obj::TEventDistanceMoreThen1Obj()
++{
++  m_location2 = new Asteroid();
++}
++
++TEventDistanceMoreThen1Obj::~TEventDistanceMoreThen1Obj()
++{
++  delete m_location2;
++}
++
++
++bool TEventDistanceMoreThen1Obj::check()
++{
++  return check_more();
++}
++
++int TEventDistanceMoreThen1Obj::setUp(SpaceLocation* l, Vector2 pos, double dist, const std::string&amp; script)
++{
++  m_location = l;
++  m_location2-&gt;pos = Vector2(0,0);
++  m_location2-&gt;translate(pos);
++  m_dist     = dist;
++  _script    = script;
++  return id;
++}
++
++
++/////////////////////////////////////////////////////////////////////////////////////////////////////////////
++TEventDistanceLessThen1Obj::TEventDistanceLessThen1Obj()
++{
++}
++
++TEventDistanceLessThen1Obj::~TEventDistanceLessThen1Obj()
++{
++}
++
++bool TEventDistanceLessThen1Obj::check()
++{
++  return check_less();
++}
++
++
++////////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++TEventDistanceMoreThen2Obj::TEventDistanceMoreThen2Obj()
++{
++}
++TEventDistanceMoreThen2Obj::~TEventDistanceMoreThen2Obj()
++{
++}
++
++bool TEventDistanceMoreThen2Obj::check()
++{
++  return check_more();
++}
++
++int TEventDistanceMoreThen2Obj::setUp(SpaceLocation* l1, SpaceLocation* l2, double dist, const std::string&amp; script)
++{
++  m_location  = l1;
++  m_location2 = l2;;
++  m_dist     = dist;
++  _script    = script;
++  return id;
++}
++///////////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++TEventDistanceLessThen2Obj::TEventDistanceLessThen2Obj()
++{
++}
++
++TEventDistanceLessThen2Obj::~TEventDistanceLessThen2Obj()
++{
++}
++
++bool TEventDistanceLessThen2Obj::check()
++{
++  return check_less();
++}
++/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Modified: trunk/source/tml/gameevent.h
+===================================================================
+--- trunk/source/tml/gameevent.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/tml/gameevent.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -19,53 +19,202 @@
+ #define __TW_LIGHT_GAMEEVENT_H__
+ 
+ #include &lt;string&gt;
++#include &quot;util/vector2.h&quot;
++#include &lt;boost/shared_ptr.hpp&gt;
+ 
+-class GameEvent
++class Ship;
++class SpaceLocation;
++
++struct TGameEventType
+ {
++  enum 
++    {
++      UNKNOWN,
++      SINGLE_TIME,
++      REPEATABLE_TIME,
++      SHIP_DEATH_BY_NAME,
++      SHIP_DEATH_BY_TYPE,
++      DISTANCE,
++  };
++};
++
++
++
++/// Base class of all game event
++class TGameEvent
++{
+  protected:
+-  int id;
+-  bool exist;
++  int id;               ///&lt; uniqe id of event
++  bool exist;          ///&lt; if event valid
++  std::string _script; ///&lt; python function name to run on event 
+  public:
+-  GameEvent();
+-  virtual ~GameEvent();
++  TGameEvent();
++  virtual ~TGameEvent();
+   int getID(){return id;};
+   virtual void die(){exist = false;};
+   virtual bool calculate(){return false;};
+   virtual bool exists(){return exist;}
++  virtual int type(){return TGameEventType::UNKNOWN;}
++  /// Activate trigger for event
++  virtual void trigger();
+ };
+ 
+-typedef GameEvent EventTimeBase;
+-class EventTime : public GameEvent
++
++typedef TGameEvent TOneTimeEventBase;
++/// This event happend one time then die
++class TOneTimeEvent : public TOneTimeEventBase
+ {
++ public:
++  virtual void trigger();
++};
++
++typedef TGameEvent TEventTimeBase;
++
++/// Time based event
++class TEventTime : public TGameEvent
++{
+  protected:
+-  int _spot_time;
+-  std::string _script;
++  int _spot_time;      ///&lt; when in game time event accure
+  public:
+-  EventTime();
+-  virtual ~EventTime();
+-  virtual void die();
++  TEventTime();
++  virtual ~TEventTime();
+   virtual bool calculate();
++  /// setup event
++  /// 
++  /// @param time when event accure
++  /// @param script script to execute
++  /// @return event id
+   virtual int setUp(int time, const std::string&amp; script);
+ };
+ 
+-typedef EventTime EventSingleTimeBase;
+-class EventSingleTime : public EventSingleTimeBase
++typedef TEventTime TEventSingleTimeBase;
++/// This event accure only once and then die
++class TEventSingleTime : public TEventSingleTimeBase
+ {
+  public:
+-  EventSingleTime();
+-  virtual ~EventSingleTime();
++  TEventSingleTime();
++  virtual ~TEventSingleTime();
+   virtual bool calculate();
++  virtual int type(){return TGameEventType::SINGLE_TIME;}
+ };
+ 
+-typedef EventTime EventRepeatableTimeBase;
+-class EventRepeatableTime : public EventRepeatableTimeBase
++typedef TEventTime TEventRepeatableTimeBase;
++/// Repeat event in time
++class TEventRepeatableTime : public TEventRepeatableTimeBase
+ {
+-  int interval;
++  int interval;///&lt;interval time between 
+  public:
+-  EventRepeatableTime();
+-  virtual ~EventRepeatableTime();
++  TEventRepeatableTime();
++  virtual ~TEventRepeatableTime();
+   virtual bool calculate();
++  /// setup event
++  ///
++  /// @param time between calling script
++  /// @param script function to call
++  /// @return event id
+   virtual int setUp(int time, const std::string&amp; script);
++  virtual int type(){return TGameEventType::REPEATABLE_TIME;}
+ };
+ 
++
++typedef TOneTimeEvent TEventShipDeathByNameBase;
++/// Unsupported event 
++class TEventShipDeathByName : public TEventShipDeathByNameBase
++{
++ public:
++  virtual ~TEventShipDeathByName();
++  /// setup event 
++  ///
++  /// @param script function to call
++  /// @return event id
++  virtual int setUp(const std::string&amp; script);
++  virtual int type(){return TGameEventType::SHIP_DEATH_BY_NAME;}
++};
++
++typedef TGameEvent TEventShipDeathByTypeBase;
++/// Called when ship with specified type die
++class TEventShipDeathByType : public TEventShipDeathByTypeBase
++{
++  std::string _type;
++ public:
++  TEventShipDeathByType();
++  ~TEventShipDeathByType();
++  virtual int setUp(const std::string type, const std::string&amp; script);
++  virtual bool calculate(Ship* s);  
++  virtual int type(){return TGameEventType::SHIP_DEATH_BY_TYPE;}
++};
++
++
++typedef TOneTimeEvent TEventDistanceBase;
++
++/// Base of all distance event
++class TEventDistance : public TEventDistanceBase
++{
++ protected:
++  SpaceLocation* m_location;
++  SpaceLocation* m_location2; 
++  double m_dist;
++ protected:
++  virtual bool check(){return true;};
++ public:
++  TEventDistance();
++  virtual ~TEventDistance();
++  virtual bool calculate();
++  virtual bool check_less(); ///&lt; check if distance between objects less then then dist
++  virtual bool check_more(); ///&lt; check if distance between objects more then then dist
++  virtual int type(){return TGameEventType::DISTANCE;}
++};
++
++typedef TEventDistance TEventDistanceMoreThen1ObjBase;
++
++/// Distance between location and point more then dist
++class TEventDistanceMoreThen1Obj : public TEventDistanceMoreThen1ObjBase
++{
++ protected:
++  virtual bool check(); ///&lt; Check if event condition true
++ public:
++  TEventDistanceMoreThen1Obj();
++  virtual ~TEventDistanceMoreThen1Obj();
++  virtual int setUp(SpaceLocation* l, Vector2 pos, double dist, const std::string&amp; script);
++};
++
++
++typedef TEventDistanceMoreThen1Obj TEventDistanceLessThen1ObjBase;
++/// Distance between location and point less then dist
++class TEventDistanceLessThen1Obj : public TEventDistanceLessThen1ObjBase
++{
++ protected:
++  virtual bool check(); ///&lt; Check if event condition true
++ public:
++  TEventDistanceLessThen1Obj();
++  virtual ~TEventDistanceLessThen1Obj();
++};
++
++
++typedef TEventDistance TEventDistanceMoreThen2ObjBase;
++/// Distance between 2 locations more then dist
++class TEventDistanceMoreThen2Obj : public TEventDistanceMoreThen2ObjBase
++{
++ protected:
++  virtual bool check(); ///&lt; Check if event condition true
++ public:
++  TEventDistanceMoreThen2Obj();
++  virtual ~TEventDistanceMoreThen2Obj();
++  virtual int setUp(SpaceLocation* l1, SpaceLocation* l2, double dist, const std::string&amp; script);
++};
++
++typedef TEventDistanceMoreThen2Obj TEventDistanceLessThen2ObjBase;
++/// Distance between 2 locations less then dist
++class TEventDistanceLessThen2Obj : public TEventDistanceLessThen2ObjBase
++{
++ protected:
++  virtual bool check(); ///&lt; Check if event condition true
++ public:
++  TEventDistanceLessThen2Obj();
++  virtual ~TEventDistanceLessThen2Obj();
++};
++
++
++
++
+ #endif
+
+Modified: trunk/source/util/base.h
+===================================================================
+--- trunk/source/util/base.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/util/base.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -71,5 +71,7 @@
+ 	virtual int _get_size() const {return sizeof(*this);}
+ };
+ 
++
++
+ #endif
+ #endif // __BASE_H__
+
+Modified: trunk/source/util/vector2.h
+===================================================================
+--- trunk/source/util/vector2.h	2005-05-09 18:48:02 UTC (rev 160)
++++ trunk/source/util/vector2.h	2005-05-10 16:28:22 UTC (rev 161)
+@@ -1,6 +1,8 @@
+ #ifndef __VECTOR2_H__
+ #define __VECTOR2_H__
+ 
++#include &quot;base.h&quot;
++
+ class Vector2;
+ class Vector2i;
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000106.html">[Tw-light-svn] r160 - in trunk: . gamedata/python gamedata/test_game mingw-libs/include mingw-libs/include/boost mingw-libs/include/boost/bind mingw-libs/include/boost/compatibility mingw-libs/include/boost/compatibility/cpp_c_headers mingw-libs/include/boost/config mingw-libs/include/boost/config/abi mingw-libs/include/boost/config/compiler mingw-libs/include/boost/config/platform mingw-libs/include/boost/config/stdlib mingw-libs/include/boost/date_time mingw-libs/include/boost/date_time/gregorian mingw-libs/include/boost/date_time/posix_time mingw-libs/include/boost/detail mingw-libs/include/boost/filesystem mingw-libs/include/boost/format mingw-libs/include/boost/format/detail mingw-libs/include/boost/function mingw-libs/include/boost/function/detail mingw-libs/include/boost/graph mingw-libs/include/boost/graph/detail mingw-libs/include/boost/integer mingw-libs/include/boost/io mingw-libs/include/boost/iterator mingw-libs/include/boost/iterator/detail mingw-libs/include/boost/l! ambda mingw-libs/include/boost/lambda/detail mingw-libs/include/boost/math mingw-libs/include/boost/math/special_functions mingw-libs/include/boost/mpl mingw-libs/include/boost/mpl/aux_ mingw-libs/include/boost/mpl/aux_/config mingw-libs/include/boost/mpl/aux_/preprocessed mingw-libs/include/boost/mpl/aux_/preprocessed/bcc mingw-libs/include/boost/mpl/aux_/preprocessed/bcc551 mingw-libs/include/boost/mpl/aux_/preprocessed/gcc mingw-libs/include/boost/mpl/aux_/preprocessed/msvc60 mingw-libs/include/boost/mpl/aux_/preprocessed/msvc70 mingw-libs/include/boost/mpl/aux_/preprocessed/mwcw mingw-libs/include/boost/mpl/aux_/preprocessed/no_ctps mingw-libs/include/boost/mpl/aux_/preprocessed/no_ttp mingw-libs/include/boost/mpl/aux_/preprocessed/plain mingw-libs/include/boost/mpl/aux_/preprocessor mingw-libs/include/boost/mpl/aux_/range_c mingw-libs/include/boost/mpl/aux_/test mingw-libs/include/boost/mpl/limits mingw-libs/include/boost/mpl/list mingw-libs/include/boost/mpl/list/aux_! mingw-libs/include/boost/mpl/list/aux_/preprocessed mingw-lib! s/includ
+</A></li>
+	<LI>Next message: <A HREF="000108.html">[Tw-light-svn] r162 - in trunk: . gamedata/default_ini/ships gamedata/images/ships gamedata/images/ships/shpsamat gamedata/python gamedata/ships gamedata/sound/ships gamedata/sound/ships/shpsamat source/ais source/games source/generated source/python source/tml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#107">[ date ]</a>
+              <a href="thread.html#107">[ thread ]</a>
+              <a href="subject.html#107">[ subject ]</a>
+              <a href="author.html#107">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

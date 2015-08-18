@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r72 - in trunk: source source/libraries/raknet web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r72%20-%20in%20trunk%3A%20source%20source/libraries/raknet%20web&In-Reply-To=%3C200409291840.i8TIe5up017927%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000019.html">
+   <LINK REL="Next"  HREF="000021.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r72 - in trunk: source source/libraries/raknet web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r72%20-%20in%20trunk%3A%20source%20source/libraries/raknet%20web&In-Reply-To=%3C200409291840.i8TIe5up017927%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r72 - in trunk: source source/libraries/raknet web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Wed Sep 29 20:40:05 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000019.html">[Tw-light-svn] r71 - in branches/multiplayer-branch: . Util Util/deditor doc gamedata gamedata/default_ini gamedata/default_ini/ships gamedata/images gamedata/images/ships/shpalabc gamedata/images/ships/shpandgu gamedata/images/ships/shparisk gamedata/images/ships/shpbahbu gamedata/images/ships/shpbipka gamedata/images/ships/shpchebr gamedata/images/ships/shpchmav gamedata/images/ships/shpchoex gamedata/images/ships/shpconca gamedata/images/ships/shpconho gamedata/images/ships/shpdragr gamedata/images/ships/shpdruma gamedata/images/ships/shpearc3 gamedata/images/ships/shpearcr gamedata/images/ships/shpforsh gamedata/images/ships/shpgarty gamedata/images/ships/shpilwav gamedata/images/ships/shpilwsp gamedata/images/ships/shpkahbo gamedata/images/ships/shpkohma gamedata/images/ships/shpkzedr gamedata/images/ships/shpmeltr gamedata/images/ships/shpmmrxf gamedata/images/ships/shpmycpo gamedata/images/ships/shporzne gamedata/images/ships/shppkufu gamedata/images/ships/shprogsq gamedata! /images/ships/shpshosc gamedata/images/ships/shpslypr gamedata/images/ships/shpspael gamedata/images/ships/shpstaba gamedata/images/ships/shpsupbl gamedata/images/ships/shpsyrpe gamedata/images/ships/shptauar gamedata/images/ships/shptauda gamedata/images/ships/shptausl gamedata/images/ships/shptauto gamedata/images/ships/shpthrto gamedata/images/ships/shpumgdr gamedata/images/ships/shputwju gamedata/images/ships/shpvuxin gamedata/images/ships/shpyehte gamedata/images/ships/shpzeksh gamedata/images/ships/shpzfpst gamedata/music gamedata/music/ditty gamedata/ships gamedata/sound gamedata/sound/ships/shpalabc gamedata/sound/ships/shpandgu gamedata/sound/ships/shparisk gamedata/sound/ships/shpbahbu gamedata/sound/ships/shpbipka gamedata/sound/ships/shpchebr gamedata/sound/ships/shpchmav gamedata/sound/ships/shpchoex gamedata/sound/ships/shpconca gamedata/sound/ships/shpconho gamedata/sound/ships/shpdragr gamedata/sound/ships/shpdruma gamedata/sound/ships/shpearc3 gamedata/soun! d/ships/shpearcr gamedata/sound/ships/shpforsh gamedata/sound/! ships/sh
+</A></li>
+        <LI>Next message: <A HREF="000021.html">[Tw-light-svn] r73 - trunk/web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#20">[ date ]</a>
+              <a href="thread.html#20">[ thread ]</a>
+              <a href="subject.html#20">[ subject ]</a>
+              <a href="author.html#20">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-09-29 20:40:02 +0200 (Wed, 29 Sep 2004)
+New Revision: 72
+
+Modified:
+   trunk/source/libraries/raknet/Queue.h
+   trunk/source/scp.cpp
+   trunk/web/downloads.html
+   trunk/web/index.html
+   trunk/web/update.sh
+Log:
+Fixed bug #104, in raknet library
+
+
+Modified: trunk/source/libraries/raknet/Queue.h
+===================================================================
+--- trunk/source/libraries/raknet/Queue.h	2004-09-28 19:53:03 UTC (rev 71)
++++ trunk/source/libraries/raknet/Queue.h	2004-09-29 18:40:02 UTC (rev 72)
+@@ -209,7 +209,7 @@
+ 		array = new queue_type [original_copy.size()+1];
+ 
+ 		for (unsigned long counter=0L; counter &lt; original_copy.size(); ++counter)
+-			array[counter] = original_copy.array[(original_copy.head + counter)%(orignal_copy.allocation_size)];
++			array[counter] = original_copy.array[(original_copy.head + counter)%(original_copy.allocation_size)];
+ 			
+ 		head=0L;
+ 		tail=original_copy.size();
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2004-09-28 19:53:03 UTC (rev 71)
++++ trunk/source/scp.cpp	2004-09-29 18:40:02 UTC (rev 72)
+@@ -651,6 +651,8 @@
+     
+     videosystem-&gt;set_resolution(screen_width, screen_height, screen_bpp, fullscreen);
+     register_bitmap_file_type(&quot;jpg&quot;, load_jpg, NULL);
++    showLoadingScreen();
++    
+     if(!theme)
+ 	theme = agup_theme_by_name(&quot;Photon&quot;);
+     agup_init(theme);    
+@@ -668,8 +670,6 @@
+     tw_sound-&gt;set_sound_volume(tw_sound-&gt;load_sound_volume());
+     tw_sound-&gt;set_music_volume(tw_sound-&gt;load_music_volume());
+     
+-    showLoadingScreen();
+-    
+     View *v = NULL;
+     v = get_view ( get_config_string(&quot;View&quot;, &quot;View&quot;, NULL) , NULL );
+     if (!v) v = get_view ( &quot;Hero&quot;, NULL );
+
+Modified: trunk/web/downloads.html
+===================================================================
+--- trunk/web/downloads.html	2004-09-28 19:53:03 UTC (rev 71)
++++ trunk/web/downloads.html	2004-09-29 18:40:02 UTC (rev 72)
+@@ -27,7 +27,7 @@
+   &lt;h2&gt;Downloads&lt;/h2&gt;
+   
+ &lt;p class=&quot;indented&quot;&gt;
+-The latest version is &lt;b&gt;0.2r16&lt;/b&gt;. You can download it &lt;a href=&quot;<A HREF="http://developer.berlios.de/project/showfiles.php?group_id=2082&amp;release_id=3153">http://developer.berlios.de/project/showfiles.php?group_id=2082&amp;release_id=3153</A>&quot;&gt;here.&lt;/a&gt;
++The latest version is &lt;b&gt;0.3r69&lt;/b&gt;. You can download it &lt;a href=&quot;<A HREF="http://developer.berlios.de/project/showfiles.php?group_id=2082&amp;release_id=3480">http://developer.berlios.de/project/showfiles.php?group_id=2082&amp;release_id=3480</A>&quot;&gt;here.&lt;/a&gt;
+ 
+ &lt;p class=&quot;indented&quot;&gt;
+ To successfully compile the sources and play the game on Linux/Unix you first need 
+
+Modified: trunk/web/index.html
+===================================================================
+--- trunk/web/index.html	2004-09-28 19:53:03 UTC (rev 71)
++++ trunk/web/index.html	2004-09-29 18:40:02 UTC (rev 72)
+@@ -25,13 +25,11 @@
+ 
+ &lt;div class=&quot;main&quot;&gt;
+   &lt;h3 class=&quot;important&quot;&gt;TW-Light&lt;/h3&gt;
+-  &lt;p class=&quot;indented&quot;&gt;
++&lt;p class=&quot;indented&quot;&gt;
+   TW-Light is an open source clone/sequel to the epic cross-genre game
+  Star Control II. Currently it includes only a combat portion, although
+  epic adventure part that is called TW:Legacies is actively developed
+- now. TW-Light is derivative work from Star Control: Timewarp
+-  
+-&lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>&quot;&gt;Star Control: Timewarp&lt;/a&gt;
++ now. TW-Light is derivative work from &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>&quot;&gt;Star Control: Timewarp&lt;/a&gt;
+ &lt;/p&gt;
+ 
+ &lt;p class=&quot;indented&quot;&gt;
+@@ -40,6 +38,10 @@
+ us has access to such hardware)
+ &lt;/p&gt;
+ 
++&lt;p class=&quot;indented&quot;&gt;
++Subscribe to our &lt;a href=&quot;<A HREF="https://developer.berlios.de/mail/?group_id=2082">https://developer.berlios.de/mail/?group_id=2082</A>&quot;&gt;mailing lists&lt;/a&gt; if you want to always know the latest news about TW-Light.
++&lt;/p&gt;
++
+ &lt;br /&gt;
+ 
+ &lt;h2&gt;News&lt;/h2&gt;
+@@ -70,7 +72,7 @@
+ &lt;!--
+ &lt;br&gt;
+ &lt;br&gt;
+-Subscribe to our &lt;a href=&quot;<A HREF="http://sourceforge.net/mail/?group_id=13354">http://sourceforge.net/mail/?group_id=13354</A>&quot;&gt;mailing lists&lt;/a&gt; if you want to always know the latest news about TimeWarp.
++Subscribe to our &lt;a href=&quot;<A HREF="http://sourceforge.net/mail/?group_id=13354">http://sourceforge.net/mail/?group_id=13354</A>&quot;&gt;mailing lists&lt;/a&gt; if you want to always know the latest news about TW-Light.
+ --&gt;
+ 
+ &lt;p align=&quot;left&quot;&gt;&lt;font size=&quot;3&quot;&gt;&lt;strong&gt;this page is hosted by&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+Modified: trunk/web/update.sh
+===================================================================
+--- trunk/web/update.sh	2004-09-28 19:53:03 UTC (rev 71)
++++ trunk/web/update.sh	2004-09-29 18:40:02 UTC (rev 72)
+@@ -1,2 +1,2 @@
+ #!/bin/bash
+-pscp 3dlogo.jpg background.jpg downloads.html index.html info.html links.html team.html style.css <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
++pscp siglogo.jpeg <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000019.html">[Tw-light-svn] r71 - in branches/multiplayer-branch: . Util Util/deditor doc gamedata gamedata/default_ini gamedata/default_ini/ships gamedata/images gamedata/images/ships/shpalabc gamedata/images/ships/shpandgu gamedata/images/ships/shparisk gamedata/images/ships/shpbahbu gamedata/images/ships/shpbipka gamedata/images/ships/shpchebr gamedata/images/ships/shpchmav gamedata/images/ships/shpchoex gamedata/images/ships/shpconca gamedata/images/ships/shpconho gamedata/images/ships/shpdragr gamedata/images/ships/shpdruma gamedata/images/ships/shpearc3 gamedata/images/ships/shpearcr gamedata/images/ships/shpforsh gamedata/images/ships/shpgarty gamedata/images/ships/shpilwav gamedata/images/ships/shpilwsp gamedata/images/ships/shpkahbo gamedata/images/ships/shpkohma gamedata/images/ships/shpkzedr gamedata/images/ships/shpmeltr gamedata/images/ships/shpmmrxf gamedata/images/ships/shpmycpo gamedata/images/ships/shporzne gamedata/images/ships/shppkufu gamedata/images/ships/shprogsq gamedata! /images/ships/shpshosc gamedata/images/ships/shpslypr gamedata/images/ships/shpspael gamedata/images/ships/shpstaba gamedata/images/ships/shpsupbl gamedata/images/ships/shpsyrpe gamedata/images/ships/shptauar gamedata/images/ships/shptauda gamedata/images/ships/shptausl gamedata/images/ships/shptauto gamedata/images/ships/shpthrto gamedata/images/ships/shpumgdr gamedata/images/ships/shputwju gamedata/images/ships/shpvuxin gamedata/images/ships/shpyehte gamedata/images/ships/shpzeksh gamedata/images/ships/shpzfpst gamedata/music gamedata/music/ditty gamedata/ships gamedata/sound gamedata/sound/ships/shpalabc gamedata/sound/ships/shpandgu gamedata/sound/ships/shparisk gamedata/sound/ships/shpbahbu gamedata/sound/ships/shpbipka gamedata/sound/ships/shpchebr gamedata/sound/ships/shpchmav gamedata/sound/ships/shpchoex gamedata/sound/ships/shpconca gamedata/sound/ships/shpconho gamedata/sound/ships/shpdragr gamedata/sound/ships/shpdruma gamedata/sound/ships/shpearc3 gamedata/soun! d/ships/shpearcr gamedata/sound/ships/shpforsh gamedata/sound/! ships/sh
+</A></li>
+	<LI>Next message: <A HREF="000021.html">[Tw-light-svn] r73 - trunk/web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#20">[ date ]</a>
+              <a href="thread.html#20">[ thread ]</a>
+              <a href="subject.html#20">[ subject ]</a>
+              <a href="author.html#20">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

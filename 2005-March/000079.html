@@ -1,0 +1,509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r133 - in trunk/source: . games melee other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-March/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r133%20-%20in%20trunk/source%3A%20.%20games%20melee%20other&In-Reply-To=%3C200503072210.j27MAxjC003412%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000078.html">
+   <LINK REL="Next"  HREF="000080.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r133 - in trunk/source: . games melee other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r133%20-%20in%20trunk/source%3A%20.%20games%20melee%20other&In-Reply-To=%3C200503072210.j27MAxjC003412%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r133 - in trunk/source: . games melee other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Mon Mar  7 23:10:59 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000078.html">[Tw-light-svn] r132 - in trunk: gamedata gamedata/images gamedata/music source source/melee source/util
+</A></li>
+        <LI>Next message: <A HREF="000080.html">[Tw-light-svn] r134 - trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#79">[ date ]</a>
+              <a href="thread.html#79">[ thread ]</a>
+              <a href="subject.html#79">[ subject ]</a>
+              <a href="author.html#79">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-03-07 23:10:58 +0100 (Mon, 07 Mar 2005)
+New Revision: 133
+
+Modified:
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mhelpers.cpp
+   trunk/source/melee/mhelpers.h
+   trunk/source/melee/moptions.cpp
+   trunk/source/other/dialogs.cpp
+   trunk/source/other/dialogs.h
+   trunk/source/scp.cpp
+   trunk/source/scp.h
+Log:
+Slightly changed UI.
+Jumping between planet is implemented as copying 
+item and presence not as creating new subgames (only little proto for 
+now)
+
+
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/games/ggob.cpp	2005-03-07 22:10:58 UTC (rev 133)
+@@ -122,6 +122,24 @@
+     return GobGameBase::setGameDone(done);
+ }
+ 
++
++void GobGame::switch_system(const std::string&amp; name)
++{
++  // remove ship from current system
++  item.remove(maingame-&gt;gobplayer.ship);
++
++  // Save current game
++  _galaxy[_name] = std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt;(item,presence);
++  
++  // Load 
++  item = _galaxy[name].first;
++  presence = _galaxy[name].second;
++  
++  // add player ship
++  item.remove(maingame-&gt;gobplayer.ship);
++  item.push_back(maingame-&gt;gobplayer.ship);
++}
++
+ void GobGame::add_gobplayer(Control *control) 
+ {
+   STACKTRACE;
+@@ -209,7 +227,6 @@
+ 
+   enemy_team = new_team();
+ 	       
+-   //  for (i = 0; i &lt; 19; i += 1) add(new GobAsteroid());
+ 
+   int server_players;
+   tw_set_config_file(&quot;client.ini&quot;);
+@@ -231,6 +248,9 @@
+ 		       0,1
+ 		       );
+ 
++  _galaxy[&quot;Arix&quot;] = std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt;(item,presence);
++  _galaxy[&quot;Beta&quot;] = std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt;(item,presence);
++
+   return;
+ }
+ 
+@@ -392,6 +412,18 @@
+     {
+     case KEY_J: 
+       {
++	if(_name==&quot;Arix&quot;)
++	  {
++	    switch_system(&quot;Beta&quot;);
++	    _name = &quot;Beta&quot;;
++	  }
++	else
++	  {
++	    switch_system(&quot;Arix&quot;);
++	    _name = &quot;Arix&quot;;
++
++	  }
++	/*
+ 	setGameDone(GAME_STATE_SUSPENDED);
+ 	maingame-&gt;gobplayer._teleport = 1;
+ 	maingame-&gt;gobplayer.ship-&gt;die();
+@@ -403,6 +435,7 @@
+ 	  {
+ 	    maingame-&gt;setActiveGame(&quot;Arix&quot;);
+ 	  }
++	*/
+ 	return true;
+       }
+       break;
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/games/ggob.h	2005-03-07 22:10:58 UTC (rev 133)
+@@ -100,8 +100,12 @@
+ /// GOB class adventure game
+ class GobGame : public  GobGameBase
+ {
+-  //  int _player_channel;
++
++  std::map&lt;std::string, std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt; &gt; _galaxy;
++
+  public:
++  virtual void switch_system(const std::string&amp; name);
++
+   GobGame();
+   virtual ~GobGame();
+ 
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/melee/mframe.h	2005-03-07 22:10:58 UTC (rev 133)
+@@ -71,7 +71,6 @@
+   friend struct Query;
+   
+   std::list&lt;SpaceLocation*&gt; item;
+-  
+   std::list&lt;Presence*&gt; presence;
+   
+   /// add space location to universe
+
+Modified: trunk/source/melee/mhelpers.cpp
+===================================================================
+--- trunk/source/melee/mhelpers.cpp	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/melee/mhelpers.cpp	2005-03-07 22:10:58 UTC (rev 133)
+@@ -608,7 +608,7 @@
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ 
+-void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr)
++void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr, const std::string&amp; align, int speed)
+ {
+   BITMAP* d_buf = create_bitmap(SCREEN_W, SCREEN_H);
+   clear(d_buf);
+@@ -627,13 +627,30 @@
+       for (unsigned int i = 0;i!=text.size();i++)
+ 	{
+ 	  text_mode(-1);
+-	  textout_centre(d_buf, font, text[i].c_str(), screen-&gt;w/2, screen-&gt;h+40-q/3+i*30,-1);
++	  if(align == &quot;c&quot;)
++	    {
++	      textout_centre(d_buf, font, text[i].c_str(), screen-&gt;w/2, screen-&gt;h+20-q/3+i*30,-1);
++	    }
++	  else if(align == &quot;l&quot;)
++	    {
++	      textout(d_buf, font, text[i].c_str(), 30, screen-&gt;h+20-q/3+i*30,-1);
++	    }
++	  else if(align == &quot;r&quot;)
++	    {
++	      textout_right(d_buf, font, text[i].c_str(), screen-&gt;w-30, screen-&gt;h+20-q/3+i*30,-1);
++	    }
+ 	}
+       copy_buf();
+       
+-      HAVE_A_WAIT(30);
+-      q+=2;
++      HAVE_A_WAIT(10);
++      q+=speed;
+       
++      while (keypressed())
++	{ 
++	  int k = readkey(); 
++	  if(k&gt;&gt;8 == KEY_ESC) 
++	    return; 
++	} 
+       if (q/3 &gt;= text.size()*30+screen-&gt;h+140)
+ 	break;
+     }
+
+Modified: trunk/source/melee/mhelpers.h
+===================================================================
+--- trunk/source/melee/mhelpers.h	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/melee/mhelpers.h	2005-03-07 22:10:58 UTC (rev 133)
+@@ -24,7 +24,7 @@
+ 
+ // Show scrolling text
+ 
+-void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr);
++void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr, const std::string&amp; align, int speed);
+ 
+ 
+ #endif 
+
+Modified: trunk/source/melee/moptions.cpp
+===================================================================
+--- trunk/source/melee/moptions.cpp	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/melee/moptions.cpp	2005-03-07 22:10:58 UTC (rev 133)
+@@ -107,11 +107,11 @@
+ 	    config_menu(game);
+ 	  }
+ 	  break;
+-	case DIALOG_OPTIONS_PHYSICS: 
++	case DIALOG_OPTIONS_TEAMS: 
+ 	  {
+-	    physics_menu(game);
++	    change_teams();
++	    videosystem-&gt;redraw();
+ 	  }
+-	  break;
+ 	case DIALOG_OPTIONS_DEFAULT: 
+ 	  {
+ 	  }
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/other/dialogs.cpp	2005-03-07 22:10:58 UTC (rev 133)
+@@ -161,12 +161,12 @@
+ 
+ DIALOG options_dialog[] = {
+   // (dialog proc)     (x)   (y)   (w)   (h)   (fg) (bg) (key) (flags)  (d1)  (d2)  (dp)
+-  { d_agup_box_proc,        40,    30,  190,  190,   255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+-  { my_d_button_proc,  70,    40,  110,   40,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Done&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,    90,  170,   30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Video Mode&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,   130,  170,   30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Audio Settings&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,   170,  170,   30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Game &amp;&amp; Rendering&quot;, NULL, NULL },
+-//  { my_d_button_proc,  50,   210,  170,   30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Physics Settings&quot;, NULL, NULL },
++  { d_agup_box_proc,   40,    30,  190,  135,   255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { my_d_button_proc,  70,    40,  110,   20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Done&quot;, NULL, NULL },
++  { my_d_button_proc,  50,    65,  170,   20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Video Mode&quot;, NULL, NULL },
++  { my_d_button_proc,  50,    90,  170,   20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Audio Settings&quot;, NULL, NULL },
++  { my_d_button_proc,  50,   115,  170,   20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Game &amp;&amp; Rendering&quot;, NULL, NULL },
++  { my_d_button_proc,  50,   140,  170,   20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Teams&quot;, NULL, NULL },
+ //  { my_d_button_proc,  50,   250,  170,   40,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Restore Defaults&quot;, NULL, NULL },
+   { d_tw_yield_proc,        0,    0,    0,    0,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+   { NULL,              0,    0,     0,    0,    255,  0,    0,    0,       1,    0,    NULL, NULL, NULL }
+@@ -250,13 +250,16 @@
+ 
+ DIALOG mainDialog[] = {
+   // (dialog proc)     (x)   (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
+-  { d_agup_shadow_box_proc, 40,   40,   180,  215,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+-  { my_d_button_proc,  45,   45,   170,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Melee&quot; , NULL, NULL },
+-  { my_d_button_proc,  45,   80,   170,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Extras&quot; , NULL, NULL },
+-  { my_d_button_proc,  45,   115,  170,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Teams&quot; , NULL, NULL },
+-  { my_d_button_proc,  45,   150,  170,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Options&quot;, NULL, NULL },
+-  { my_d_button_proc,  45,   185,  170,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Help&quot;, NULL, NULL },
+-  { my_d_button_proc,  45,   220,  170,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Exit&quot;, NULL, NULL },
++  { d_agup_shadow_box_proc, 40,   40,   140,  230,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { my_d_button_proc,  45,   45,   130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;New Game&quot; , NULL, NULL },
++  { my_d_button_proc,  45,   70,   130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Load Game&quot; , NULL, NULL },
++  { my_d_button_proc,  45,   95,  130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Melee&quot; , NULL, NULL },
++  { my_d_button_proc,  45,   120,  130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Multiplayer&quot;, NULL, NULL },
++  { my_d_button_proc,  45,   145,  130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Extras&quot;, NULL, NULL },
++  { my_d_button_proc,  45,   170,  130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Preferences&quot;, NULL, NULL },
++  { my_d_button_proc,  45,   195,  130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Help&quot;, NULL, NULL },
++  { my_d_button_proc,  45,   220,  130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;About&quot;, NULL, NULL },
++  { my_d_button_proc,  45,   245,  130,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Exit&quot;, NULL, NULL },
+   { d_tw_yield_proc,   0,    0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+   { NULL,              0,    0,    0,    0,    255,  0,    0,    0,       1,    0,    NULL, NULL, NULL }
+ };
+
+Modified: trunk/source/other/dialogs.h
+===================================================================
+--- trunk/source/other/dialogs.h	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/other/dialogs.h	2005-03-07 22:10:58 UTC (rev 133)
+@@ -112,7 +112,7 @@
+     DIALOG_OPTIONS_VIDEO,
+     DIALOG_OPTIONS_AUDIO,
+     DIALOG_OPTIONS_CONFIG,
+-    DIALOG_OPTIONS_PHYSICS,
++    DIALOG_OPTIONS_TEAMS,
+     DIALOG_OPTIONS_DEFAULT
+   };
+ 
+@@ -186,11 +186,14 @@
+ enum 
+   {
+     MAIN_DIALOG_BOX = 0,
++    MAIN_DIALOG_NEW_GAME,
++    MAIN_DIALOG_LOAD,
+     MAIN_DIALOG_MELEE,
++    MAIN_DIALOG_MULTIPLAYER,
+     MAIN_DIALOG_MELEE_EXTENDED,
+-    MAIN_DIALOG_TEAMS,
+-    MAIN_DIALOG_OPTIONS,
++    MAIN_DIALOG_PREFERENCES,
+     MAIN_DIALOG_HELP,
++    MAIN_DIALOG_ABOUT,
+     MAIN_DIALOG_EXIT,
+   };
+ 
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/scp.cpp	2005-03-07 22:10:58 UTC (rev 133)
+@@ -73,7 +73,7 @@
+ 
+ DATAFILE* g_game_data = NULL;
+ 
+-void intro();
++void GOBIntro();
+ 
+ ///the server port to connect to in client mode.  
+ unsigned serverPort = DEFAULT_SERVER_PORT;
+@@ -148,9 +148,6 @@
+ ///  (SHIPVIEW dialog) You can also test key jamming from this dialog.
+ void extended_menu(int i = -1);
+ 
+-/// TEAMS dialog - from here you can select controllers for each player, and access their respective fleets. (FLEET dialog)
+-void change_teams();
+-
+ /// FLEET dialog - manages fleet compositions for an individual player.
+ ///  \param player Player index indicating which player's fleet to edit.
+ void edit_fleet(int player);
+@@ -690,17 +687,75 @@
+ 	extended_menu();
+ 	enable();
+ 	break;
+-      case MAIN_DIALOG_OPTIONS:
++      case MAIN_DIALOG_PREFERENCES:
+ 	showTitle();
+ 	options_menu(NULL);
+ 	break;
+       case MAIN_DIALOG_HELP:
+ 	show_file(data_full_path(&quot;ingame.txt&quot;).c_str());
+ 	break;
+-      case MAIN_DIALOG_TEAMS:
+-	change_teams();
+-	showTitle();
+-	break;
++      case MAIN_DIALOG_NEW_GAME:
++	{
++	  // Show Intro
++	  RGB tmpPal[256];
++	  memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
++	  set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
++      
++	  GOBIntro();
++	  videosystem-&gt;set_palette(tmpPal);
++
++	  disable();
++	  play_game(&quot;GOB&quot;, &quot;&quot;, NULL);
++	  enable();
++	  break;
++	}
++	case MAIN_DIALOG_ABOUT:
++	{
++	  // Show Intro
++	  RGB tmpPal[256];
++	  memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
++	  set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
++
++	  std::vector&lt;std::string&gt; about;
++	  about.push_back(&quot;Team&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;Programmers:&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;  * Yura Semashko (Yurand)&quot;);
++	  about.push_back(&quot;  * Paul Forest (youBastrd)&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;Content and Plot manager:&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;  * Asaf Hamtzany (UAF)&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;Dialog Writers&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;  * Pelorki&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;Graphic Designers&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;  * Rick Bushie (Firehazurd)&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;Music&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;  * Robeter Productions (www.robeterproductions.com)&quot;);
++	  about.push_back(&quot;  * Mark Forest (Abe Froman)&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;Special Thanks:&quot;);
++	  about.push_back(&quot;&quot;);
++	  about.push_back(&quot;  * Tau&quot;);
++	  about.push_back(&quot;  * GeomanNL&quot;);
++	  about.push_back(&quot;  * Officer Flubbo&quot;);
++	  about.push_back(&quot;  * Captain Maim&quot;);
++	  about.push_back(&quot;  * Jumping Peppers&quot;);
++	  about.push_back(&quot;  * Robeter Productions&quot;);
++
++	  ScrollText(about,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;, &quot;l&quot;, 3);
++
++	  videosystem-&gt;set_palette(tmpPal);
++	  videosystem-&gt;redraw();
++	  break;
++	}
+       }
+     } while((mainRet != MAIN_DIALOG_EXIT) &amp;&amp; (mainRet != -1));
+   
+@@ -932,17 +987,8 @@
+       tw_sound = &sound;
+       tw_sound-&gt;set_sound_volume(tw_sound-&gt;load_sound_volume());
+       tw_sound-&gt;set_music_volume(tw_sound-&gt;load_music_volume());
+-    
++          
+ 
+-      // Show Intro
+-      RGB tmpPal[256];
+-      memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
+-      set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
+-      
+-      intro();
+-      videosystem-&gt;set_palette(tmpPal);
+-      
+-
+       View *v = NULL;
+       v = get_view ( get_config_string(&quot;View&quot;, &quot;View&quot;, NULL) , NULL );
+       if (!v) v = get_view ( &quot;Hero&quot;, NULL );
+@@ -1995,7 +2041,7 @@
+ 
+ 
+ 
+-void intro()
++void GOBIntro()
+ {
+   BITMAP* d_buf;
+   std::vector&lt;std::string&gt; intro_text;
+@@ -2049,7 +2095,7 @@
+   copy_buf();
+   HAVE_A_WAIT(2500);
+   
+-  ScrollText(intro_text,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;);
++  ScrollText(intro_text,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;, &quot;c&quot;, 2);
+ 
+ 
+   clear(d_buf);
+
+Modified: trunk/source/scp.h
+===================================================================
+--- trunk/source/scp.h	2005-03-07 14:47:14 UTC (rev 132)
++++ trunk/source/scp.h	2005-03-07 22:10:58 UTC (rev 133)
+@@ -28,7 +28,9 @@
+ 
+ std::string tw_version();
+ 
++/// TEAMS dialog - from here you can select controllers for each player, and access their respective fleets. (FLEET dialog)
+ void change_teams();
++
+ void edit_fleet(int player) ;
+ 
+ int connect_menu(VideoWindow *window, char **address, int *port) ;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000078.html">[Tw-light-svn] r132 - in trunk: gamedata gamedata/images gamedata/music source source/melee source/util
+</A></li>
+	<LI>Next message: <A HREF="000080.html">[Tw-light-svn] r134 - trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#79">[ date ]</a>
+              <a href="thread.html#79">[ thread ]</a>
+              <a href="subject.html#79">[ subject ]</a>
+              <a href="author.html#79">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r209 - in trunk: gamedata gamedata/games/test_game/scripts/systems gamedata/images gamedata/images/stations source source/games source/generated source/melee source/tml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r209%20-%20in%20trunk%3A%20gamedata%20gamedata/games/test_game/scripts/systems%20gamedata/images%20gamedata/images/stations%20source%20source/games%20source/generated%20source/melee%20source/tml&In-Reply-To=%3C200605081242.k48CgJJt023559%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000154.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r209 - in trunk: gamedata gamedata/games/test_game/scripts/systems gamedata/images gamedata/images/stations source source/games source/generated source/melee source/tml</H1>
+    <B>yurand at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r209%20-%20in%20trunk%3A%20gamedata%20gamedata/games/test_game/scripts/systems%20gamedata/images%20gamedata/images/stations%20source%20source/games%20source/generated%20source/melee%20source/tml&In-Reply-To=%3C200605081242.k48CgJJt023559%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r209 - in trunk: gamedata gamedata/games/test_game/scripts/systems gamedata/images gamedata/images/stations source source/games source/generated source/melee source/tml">yurand at berlios.de
+       </A><BR>
+    <I>Mon May  8 14:42:19 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000154.html">[Tw-light-svn] r208 - in trunk: gamedata gamedata/images/stars gamedata/python source/generated source/melee
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#155">[ date ]</a>
+              <a href="thread.html#155">[ thread ]</a>
+              <a href="subject.html#155">[ subject ]</a>
+              <a href="author.html#155">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2006-05-08 14:41:42 +0200 (Mon, 08 May 2006)
+New Revision: 209
+
+Added:
+   trunk/gamedata/images/defender.bmp
+   trunk/gamedata/images/stations/
+   trunk/gamedata/images/stations/station0picture.bmp
+   trunk/gamedata/images/stations/station0sprite.bmp
+   trunk/gamedata/images/stations/station1picture.bmp
+   trunk/gamedata/images/stations/station1sprite.bmp
+   trunk/gamedata/images/stations/station2picture.bmp
+   trunk/gamedata/images/stations/station2sprite.bmp
+Removed:
+   trunk/gamedata/gob.dat
+Modified:
+   trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py
+   trunk/gamedata/games/test_game/scripts/systems/ixis.py
+   trunk/gamedata/games/test_game/scripts/systems/narike.py
+   trunk/source/games/gdefender.cpp
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/melee.h
+   trunk/source/melee/msprite.cpp
+   trunk/source/tml/gameaction.cpp
+   trunk/source/tml/gameaction.h
+Log:
+removed gob.dat
+
+Modified: trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py	2006-05-08 12:41:42 UTC (rev 209)
+@@ -9,9 +9,8 @@
+ 
+ gflag.gamaonyx_drax_station = tml.GameAction.add_orbiter_station('Gama Onyx',
+                            'I',
+-                           'gob.dat',
+-                           'station0sprite',
+-                           'gob.dat#station0picture.bmp',
++                           'images/stations/station0sprite.bmp',
++                           'images/stations/station0picture.bmp',
+                            'dragr',
+                            'dialogs/drax.xml')
+ 
+
+Modified: trunk/gamedata/games/test_game/scripts/systems/ixis.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/systems/ixis.py	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/gamedata/games/test_game/scripts/systems/ixis.py	2006-05-08 12:41:42 UTC (rev 209)
+@@ -11,17 +11,15 @@
+ 
+ gflag.ixis_mining_station = tml.GameAction.add_orbiter_station('Ixis',
+                                                              'I',
+-                                                             'gob.dat',
+-                                                             'station0sprite',
+-                                                             'gob.dat#station0picture.bmp',
++                                                             'images/stations/station0sprite.bmp',
++                                                             'images/stations/station0picture.bmp',
+                                                              'earcr',
+                                                              'dialogs/ixis_mining_station_commander.xml')
+ 
+ gflag.ixis_chorali_station = tml.GameAction.add_orbiter_station('Ixis',
+                                                              '2',
+-                                                             'gob.dat',
+-                                                             'station0sprite',
+-                                                             'gob.dat#station0picture.bmp',
++                                                             'images/stations/station0sprite.bmp',
++                                                             'images/stations/station0picture.bmp',
+                                                              'choex',
+                                                              'dialogs/chorali_commander.xml')
+ for i in xrange(20):
+
+Modified: trunk/gamedata/games/test_game/scripts/systems/narike.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/systems/narike.py	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/gamedata/games/test_game/scripts/systems/narike.py	2006-05-08 12:41:42 UTC (rev 209)
+@@ -7,9 +7,8 @@
+ tml.GameAction.add_planet('Narike','Silcuu', 0, 0)
+ gflag.ixis_mining_station = tml.GameAction.add_orbiter_station('Narike',
+                                                              'Silcuu',
+-                                                             'gob.dat',
+-                                                             'station0sprite',
+-                                                             'gob.dat#station0picture.bmp',
++                                                             'images/stations/station0sprite.bmp',
++                                                             'images/stations/station0picture.bmp',
+                                                              'earcr',
+                                                              'dialogs/welcomecommander.xml')
+ for i in xrange(20):
+
+Deleted: trunk/gamedata/gob.dat
+===================================================================
+(Binary files differ)
+
+Added: trunk/gamedata/images/defender.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/defender.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/stations/station0picture.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/stations/station0picture.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/stations/station0sprite.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/stations/station0sprite.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/stations/station1picture.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/stations/station1picture.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/stations/station1sprite.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/stations/station1sprite.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/stations/station2picture.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/stations/station2picture.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/stations/station2sprite.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/stations/station2sprite.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/games/gdefender.cpp	2006-05-08 12:41:42 UTC (rev 209)
+@@ -269,13 +269,8 @@
+   player = create_control ( channel_server, &quot;Human&quot; );
+   add_focus(player);
+   
+-  DATAFILE *tmpdata; 
+-  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;station0sprite&quot;);
+-  if (!tmpdata) 
+-    tw_error( &quot;couldn't find gob.dat#station0sprite&quot;);
+-  stationsprite = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED, 64);
++  stationsprite = new SpaceSprite(&quot;images/stations/station0sprite.bmp&quot;, SpaceSprite::MASKED, 64);
+   stationsprite-&gt;permanent_phase_shift(8);
+-  unload_datafile_object(tmpdata);
+ 
+   this-&gt;change_view(&quot;Hero&quot;);  
+   restart();
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/games/ggob.cpp	2006-05-08 12:41:42 UTC (rev 209)
+@@ -278,17 +278,10 @@
+   */
+ }
+ 
+-SpaceSprite* GobGame::LoadStationSprite(std::string datafile, std::string name)
++SpaceSprite* GobGame::LoadStationSprite(std::string name)
+ {
+   STACKTRACE;
+-  DATAFILE *tmpdata; 
+-  tmpdata = load_datafile_object(datafile.c_str(), name.c_str());
+-  if (!tmpdata) 
+-    {
+-      tw_error( (std::string(&quot;couldn't find &quot;) + datafile +  &quot; &quot; + name).c_str() );
+-    }
+-  SpaceSprite* ss = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED, 64);
+-  unload_datafile_object(tmpdata);
++  SpaceSprite* ss = new SpaceSprite(name, SpaceSprite::MASKED | SpaceSprite::MIPMAPED, 64);
+   ss-&gt;permanent_phase_shift(8);  
+   return ss;
+ }
+@@ -353,14 +346,7 @@
+ GobGame::GobGame()
+ {
+   STACKTRACE;
+-  DATAFILE *tmpdata; 
+-  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;defender&quot;);
+-  if (!tmpdata) 
+-    tw_error (&quot;couldn't find gob.dat#defender&quot;);
+-  defenderSprite = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED);
+-  unload_datafile_object(tmpdata);  
+-
+-  //  num_planets = 0;
++  defenderSprite = new SpaceSprite(&quot;images/defender.bmp&quot;, SpaceSprite::MASKED | SpaceSprite::MIPMAPED);
+ }
+ 
+ GobGame::~GobGame() {
+@@ -406,7 +392,6 @@
+ 
+ int GobGame::add_orbiter_station(const std::string&amp; system, 
+                  const std::string&amp; planet, 
+-                 const std::string&amp; gatafile,
+                  const std::string&amp; station_sprite,
+                  const std::string&amp; background_picture,
+                  const std::string&amp; buildtype,
+@@ -418,7 +403,7 @@
+     {
+       tw_error(&quot;Unable to find planet!!!&quot;);
+     }
+-  SpaceSprite *s_sprite = LoadStationSprite(data_full_path(gatafile), station_sprite);
++  SpaceSprite *s_sprite = LoadStationSprite(station_sprite);
+   GobStation *gs = new GobStation(s_sprite, p, buildtype.c_str(), background_picture.c_str());
+   gs-&gt;collide_flag_sameship = ALL_LAYERS;
+   gs-&gt;collide_flag_sameteam = ALL_LAYERS;
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/games/ggob.h	2006-05-08 12:41:42 UTC (rev 209)
+@@ -191,7 +191,7 @@
+   SpaceSprite *defenderSprite;
+ 
+  protected:
+-  SpaceSprite* LoadStationSprite(std::string datafile, std::string name);
++  SpaceSprite* LoadStationSprite(std::string name);
+   virtual bool handle_key(int k);
+ 
+   /// Save game 
+@@ -204,7 +204,6 @@
+  public:
+   int add_orbiter_station(const std::string&amp; system, 
+                const std::string&amp; planet, 
+-               const std::string&amp; gatafile,
+                const std::string&amp; station_sprite,
+                const std::string&amp; background_picture,
+                const std::string&amp; buildtype,
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/generated/tml_wrap.cpp	2006-05-08 12:41:42 UTC (rev 209)
+@@ -4303,7 +4303,6 @@
+   std::string *arg4 = 0 ;
+   std::string *arg5 = 0 ;
+   std::string *arg6 = 0 ;
+-  std::string *arg7 = 0 ;
+   int result;
+   int res1 = SWIG_OLDOBJ ;
+   int res2 = SWIG_OLDOBJ ;
+@@ -4311,16 +4310,14 @@
+   int res4 = SWIG_OLDOBJ ;
+   int res5 = SWIG_OLDOBJ ;
+   int res6 = SWIG_OLDOBJ ;
+-  int res7 = SWIG_OLDOBJ ;
+   PyObject * obj0 = 0 ;
+   PyObject * obj1 = 0 ;
+   PyObject * obj2 = 0 ;
+   PyObject * obj3 = 0 ;
+   PyObject * obj4 = 0 ;
+   PyObject * obj5 = 0 ;
+-  PyObject * obj6 = 0 ;
+   
+-  if (!PyArg_ParseTuple(args,(char *)&quot;OOOOOOO:GameAction_add_orbiter_station&quot;,&amp;obj0,&amp;obj1,&amp;obj2,&amp;obj3,&amp;obj4,&amp;obj5,&amp;obj6)) SWIG_fail;
++  if (!PyArg_ParseTuple(args,(char *)&quot;OOOOOO:GameAction_add_orbiter_station&quot;,&amp;obj0,&amp;obj1,&amp;obj2,&amp;obj3,&amp;obj4,&amp;obj5)) SWIG_fail;
+   {
+     std::string *ptr = (std::string *)0;
+     res1 = SWIG_AsPtr_std_string(obj0, &amp;ptr);
+@@ -4387,18 +4384,7 @@
+     }
+     arg6 = ptr;
+   }
+-  {
+-    std::string *ptr = (std::string *)0;
+-    res7 = SWIG_AsPtr_std_string(obj6, &amp;ptr);
+-    if (!SWIG_IsOK(res7)) {
+-      SWIG_exception_fail(SWIG_ArgError(res7), &quot;in method '&quot; &quot;GameAction_add_orbiter_station&quot; &quot;', argument &quot; &quot;7&quot;&quot; of type '&quot; &quot;std::string const &amp;&quot;&quot;'&quot;); 
+-    }
+-    if (!ptr) {
+-      SWIG_exception_fail(SWIG_ValueError, &quot;invalid null reference &quot; &quot;in method '&quot; &quot;GameAction_add_orbiter_station&quot; &quot;', argument &quot; &quot;7&quot;&quot; of type '&quot; &quot;std::string const &amp;&quot;&quot;'&quot;); 
+-    }
+-    arg7 = ptr;
+-  }
+-  result = (int)GameAction::add_orbiter_station((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,(std::string const &amp;)*arg3,(std::string const &amp;)*arg4,(std::string const &amp;)*arg5,(std::string const &amp;)*arg6,(std::string const &amp;)*arg7);
++  result = (int)GameAction::add_orbiter_station((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,(std::string const &amp;)*arg3,(std::string const &amp;)*arg4,(std::string const &amp;)*arg5,(std::string const &amp;)*arg6);
+   resultobj = SWIG_From_int(static_cast&lt; int &gt;(result));
+   if (SWIG_IsNewObj(res1)) delete arg1;
+   if (SWIG_IsNewObj(res2)) delete arg2;
+@@ -4406,7 +4392,6 @@
+   if (SWIG_IsNewObj(res4)) delete arg4;
+   if (SWIG_IsNewObj(res5)) delete arg5;
+   if (SWIG_IsNewObj(res6)) delete arg6;
+-  if (SWIG_IsNewObj(res7)) delete arg7;
+   return resultobj;
+ fail:
+   if (SWIG_IsNewObj(res1)) delete arg1;
+@@ -4415,7 +4400,6 @@
+   if (SWIG_IsNewObj(res4)) delete arg4;
+   if (SWIG_IsNewObj(res5)) delete arg5;
+   if (SWIG_IsNewObj(res6)) delete arg6;
+-  if (SWIG_IsNewObj(res7)) delete arg7;
+   return NULL;
+ }
+ 
+
+Modified: trunk/source/melee/msprite.cpp
+===================================================================
+--- trunk/source/melee/msprite.cpp	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/melee/msprite.cpp	2006-05-08 12:41:42 UTC (rev 209)
+@@ -644,8 +644,7 @@
+ }
+ 
+ 
+-
+-SpaceSprite::SpaceSprite(std::vector&lt;std::string&gt; bmplist, int sprite_count, int _attributes, int rotations)
++void SpaceSprite::create_sprite(std::vector&lt;std::string&gt; bmplist, int sprite_count, int _attributes, int rotations)
+ {
+   STACKTRACE;
+   int i, j, obpp=0;
+@@ -734,21 +733,6 @@
+       return;//end of irregular/masked 
+     }
+   
+-  /*
+-  for(i = 1; i &lt; sprite_count; i++) 
+-    {
+-      if ((w != ((BITMAP *)images[i].dat)-&gt;w) || 
+-	  (h != ((BITMAP *)images[i].dat)-&gt;h) ) 
+-	{
+-	  tw_error(&quot;SpaceSprite - size changed&quot;);
+-	}
+-      if (bitmap_color_depth((BITMAP *)images[i].dat) != obpp) 
+-	{
+-	  tw_error(&quot;SpaceSprite - changing source color depth not yet allowed&quot;);
+-	}
+-    }
+-  */
+-
+   m = new PMASK*[count];
+   b[0] = new BITMAP*    [count];
+   attributes  = new char [count];
+@@ -808,6 +792,20 @@
+   return;//end of normal/masked/autorotated
+ }
+ 
++SpaceSprite::SpaceSprite(std::string bmp, int _attributes, int rotations)
++{
++  STACKTRACE;
++  std::vector&lt;std::string&gt; s;
++  s.push_back(bmp);
++  create_sprite(s, 1, _attributes, rotations);
++}
++
++SpaceSprite::SpaceSprite(std::vector&lt;std::string&gt; bmplist, int sprite_count, int _attributes, int rotations)
++{
++  STACKTRACE;
++  create_sprite(bmplist, sprite_count, _attributes, rotations);
++}
++
+ void SpaceSprite::lock() 
+ {
+   STACKTRACE;
+
+Modified: trunk/source/melee.h
+===================================================================
+--- trunk/source/melee.h	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/melee.h	2006-05-08 12:41:42 UTC (rev 209)
+@@ -452,6 +452,10 @@
+   /// (int)size.abs()*1000 + index  - key for bitmap
+   std::map&lt;int,BITMAP*&gt; _cache;
+ 
++  void create_sprite(std::vector&lt;std::string&gt; bmplist, int sprite_count,  
++	       int _attributes = -1, 
++	       int rotations =1);
++	       
+   int references;
+   char *attributes;
+   enum 
+@@ -478,7 +482,8 @@
+   SpaceSprite(BITMAP *image, int _attributes = -1);
+   SpaceSprite(SpaceSprite &amp;old);
+  
+-  SpaceSprite( std::vector&lt;std::string&gt; bmplist, int sprite_count,  
++  SpaceSprite(std::string bmplist, int _attributes = -1, int rotations =1);
++  SpaceSprite(std::vector&lt;std::string&gt; bmplist, int sprite_count,  
+ 	       int _attributes = -1, 
+ 	       int rotations =1);
+   virtual ~SpaceSprite();
+
+Modified: trunk/source/tml/gameaction.cpp
+===================================================================
+--- trunk/source/tml/gameaction.cpp	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/tml/gameaction.cpp	2006-05-08 12:41:42 UTC (rev 209)
+@@ -54,14 +54,13 @@
+ 
+ int GameAction::add_orbiter_station(const std::string&amp; system, 
+ 			     const std::string&amp; planet, 
+-			     const std::string&amp; gatafile,
+ 			     const std::string&amp; station_sprite,
+ 			     const std::string&amp; background_picture,
+ 			     const std::string&amp; buildtype,
+ 			     const std::string&amp; commander_dialog)
+ {
+   STACKTRACE;
+-  return gobgame-&gt;add_orbiter_station(system, planet, gatafile,station_sprite, background_picture, buildtype,commander_dialog);
++  return gobgame-&gt;add_orbiter_station(system, planet, station_sprite, background_picture, buildtype,commander_dialog);
+ }
+ 
+ int GameAction::add_asteroid(const std::string&amp; system, double x, double y, double oangle, double speed)
+
+Modified: trunk/source/tml/gameaction.h
+===================================================================
+--- trunk/source/tml/gameaction.h	2006-05-08 11:32:42 UTC (rev 208)
++++ trunk/source/tml/gameaction.h	2006-05-08 12:41:42 UTC (rev 209)
+@@ -58,7 +58,6 @@
+   /// @return station id
+   static int add_orbiter_station(const std::string&amp; system, 
+ 			     const std::string&amp; planet, 
+-			     const std::string&amp; gatafile,
+ 			     const std::string&amp; station_sprite,
+ 			     const std::string&amp; background_picture,
+ 			     const std::string&amp; buildtype,
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000154.html">[Tw-light-svn] r208 - in trunk: gamedata gamedata/images/stars gamedata/python source/generated source/melee
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#155">[ date ]</a>
+              <a href="thread.html#155">[ thread ]</a>
+              <a href="subject.html#155">[ subject ]</a>
+              <a href="author.html#155">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

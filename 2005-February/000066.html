@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r120 - in trunk: . source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r120%20-%20in%20trunk%3A%20.%20source/games&In-Reply-To=%3C200502191215.j1JCF2ai031116%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000065.html">
+   <LINK REL="Next"  HREF="000067.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r120 - in trunk: . source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r120%20-%20in%20trunk%3A%20.%20source/games&In-Reply-To=%3C200502191215.j1JCF2ai031116%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r120 - in trunk: . source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Feb 19 13:15:02 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000065.html">[Tw-light-svn] r119 - in trunk: . source/libraries
+</A></li>
+        <LI>Next message: <A HREF="000067.html">[Tw-light-svn] r121 - in trunk: . source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#66">[ date ]</a>
+              <a href="thread.html#66">[ thread ]</a>
+              <a href="subject.html#66">[ subject ]</a>
+              <a href="author.html#66">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-19 13:14:45 +0100 (Sat, 19 Feb 2005)
+New Revision: 120
+
+Added:
+   trunk/source/games/gamehierarchy.cpp
+   trunk/source/games/gamehierarchy.h
+Modified:
+   trunk/sources.lst
+Log:
+Adding gamehierarchy code based on Geoman TW code
+
+Added: trunk/source/games/gamehierarchy.cpp
+===================================================================
+--- trunk/source/games/gamehierarchy.cpp	2005-02-16 20:38:59 UTC (rev 119)
++++ trunk/source/games/gamehierarchy.cpp	2005-02-19 12:14:45 UTC (rev 120)
+@@ -0,0 +1,223 @@
++/*
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
++
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
++
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
++*/
++
++
++#include &lt;allegro.h&gt;
++#include &lt;stdio.h&gt;
++#include &lt;string.h&gt;
++
++#include &quot;melee.h&quot;
++
++#include &quot;melee/mlog.h&quot;
++#include &quot;melee/mcontrol.h&quot;
++#include &quot;melee/mframe.h&quot;
++#include &quot;melee/mview.h&quot;
++#include &quot;melee/mitems.h&quot;
++
++#include &quot;scp.h&quot;
++#include &quot;util/history.h&quot;
++
++
++#include &quot;gamehierarchy.h&quot;
++
++
++void SubGame::play()
++{
++  prepare();
++  Game::play();
++};
++
++void SubGame::stop()
++{
++};
++
++
++SubGame::SubGame()
++{
++ 
++}
++
++SubGame::~SubGame()
++{
++
++}
++
++void SubGame::init(Log *_log, const std::string&amp; save)
++{
++  STACKTRACE;
++
++  game_done = false;
++  log = _log;
++  if (!log) {
++    log = new Log();
++    log-&gt;init();
++  }
++
++  lag_frames = 0;
++  show_fps = 0;
++  game_time = 0;
++  frame_time = 1;
++  frame_number = 0;
++  hiccup_margin = 100;
++  next_tic_time = get_time();
++  next_render_time = game_time;
++  next_fps_time = game_time;
++  view_locked = false;
++  local_checksum = client_checksum = server_checksum = 0;
++
++  Physics::init();
++  prepare();
++
++  if (!window) {
++    window = new VideoWindow();
++    window-&gt;preinit();
++  }
++
++  //set_config_file(&quot;client.ini&quot;);
++  change_view(get_config_string(&quot;View&quot;, &quot;View&quot;, &quot;Hero&quot;)); 
++
++  //window-&gt;add_callback(this);				// so .. a window can handle &gt;2 games ??
++
++
++  if (!is_paused()) pause();
++
++  text_mode(-1);
++	
++
++	
++  msecs_per_fps		= maingame-&gt;msecs_per_fps;
++  msecs_per_render	= maingame-&gt;msecs_per_render;
++  frame_time				= maingame-&gt;frame_time;
++  normal_turbo			= maingame-&gt;normal_turbo;
++  f4_turbo				= maingame-&gt;f4_turbo;
++  turbo = normal_turbo;
++  friendly_fire			= maingame-&gt;friendly_fire;
++  shot_relativity			= maingame-&gt;shot_relativity;
++
++  
++  lag_frames = maingame-&gt;lag_frames;
++
++  tic_history = new Histograph(128);
++  render_history = new Histograph(128);
++
++  prepare();
++
++  return;
++}
++
++void MainGame::addsubgame(SubGame *asubgame)
++{
++  STACKTRACE;
++
++  asubgame-&gt;maingame = this;
++
++  asubgame-&gt;preinit();
++  asubgame-&gt;window = new VideoWindow;
++  asubgame-&gt;window-&gt;preinit();
++  asubgame-&gt;window-&gt;init(&amp;videosystem-&gt;window);
++  asubgame-&gt;window-&gt;locate(0,0,0,0,0,1,0,1);
++
++  asubgame-&gt;init(log, &quot;&quot;);	// all subgames share the same log (is this ok?)
++  // this init should reference the already-initialized melee-data of the maingame
++
++  subgame.insert(asubgame);
++}
++
++
++void MainGame::removesubgame(SubGame* g)
++{
++  STACKTRACE;
++
++  subgame.erase(g);
++  g-&gt;log-&gt;deinit();	// this is empty, dunno why
++  
++  game = NULL;
++
++  delete g;	// this _must_ be deleted completely, otherwise the gamedata aren't removed  
++}
++
++
++void MainGame::play()
++{
++  STACKTRACE;
++
++  set_resolution(window-&gt;w, window-&gt;h);
++
++  prepare();
++  if (is_paused()) unpause();
++
++
++  while(!isGameDone())
++    {
++      //unsigned int time = get_time();
++      poll_input();
++      
++      videosystem-&gt;poll_redraw();
++
++      for (std::set&lt;SubGame*&gt;::iterator i = subgame.begin();
++	   i!= subgame.end(); i++)
++	{
++	  (*i)-&gt;play();
++	}
++      break;
++    }
++	
++}
++
++
++
++
++#include &quot;melee/mgame.h&quot;    //Game stuff
++#include &quot;melee/mcbodies.h&quot; //asteroids &amp; planets
++#include &quot;melee/mship.h&quot;    //ships
++#include &quot;melee/mlog.h&quot;     //networking / demo recording / demo playback
++#include &quot;melee/mcontrol.h&quot; //controllers &amp; AIs
++#include &quot;melee/mview.h&quot;    //Views &amp; text messages
++#include &quot;melee/mshppan.h&quot;  //ship panels...
++#include &quot;melee/mitems.h&quot;   //indicators...
++#include &quot;melee/mfleet.h&quot;   //fleets...
++
++class TestGame1 : public SubGame
++{
++public:
++  virtual void 	init (Log *log, const std::string&amp; save);
++};
++
++void TestGame1::init (Log *log, const std::string&amp; save)
++{
++  //you need to call Game::init very early on, to set stuff up... rarely do you want to do anything before that
++  SubGame::init(log, save);
++
++  //add the starscape background
++  add(new Stars());
++  add(new Asteroid()); //this adds an asteroid to the game
++}
++
++REGISTER_GAME(TestGame1, &quot;TestGame1&quot;);
++
++class TestGame : public MainGame
++{
++public:
++  virtual void 	init (Log *log, const std::string&amp; save)
++  {
++    MainGame::init(log,save);
++    addsubgame(new TestGame1);
++    addsubgame(new TestGame1);
++  }	
++};
++
++REGISTER_GAME(TestGame,&quot;TestGame&quot;);
++
+
+Added: trunk/source/games/gamehierarchy.h
+===================================================================
+--- trunk/source/games/gamehierarchy.h	2005-02-16 20:38:59 UTC (rev 119)
++++ trunk/source/games/gamehierarchy.h	2005-02-19 12:14:45 UTC (rev 120)
+@@ -0,0 +1,65 @@
++/*
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
++
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
++
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
++*/
++
++#ifndef __TW_LIGHT_GAME_HIERARCHY_H__
++#define __TW_LIGHT_GAME_HIERARCHY_H__
++
++#include &quot;melee/mgame.h&quot;
++#include &lt;set&gt;
++
++
++
++class MainGame;
++
++/// an extended game class, which can be embedded in a sequence
++/// of initiated games ...
++class SubGame : public Game
++{
++ public:
++
++  MainGame	*maingame;		///&lt; the first game (contains the melee data ?)
++
++  SubGame();
++  ~SubGame();
++
++  virtual void init(Log *_log, const std::string&amp; save);
++  virtual void play();
++  /// Suspend game (return to maingame)
++  virtual void stop();
++};
++
++
++
++
++///  This class should allow you to start, play, end a game from within a game (while the
++///  other games are also running in the background). Games and their physics are independent.
++class MainGame : public Game
++{
++ public:
++  
++  std::set&lt;SubGame*&gt; subgame;
++  
++
++  virtual void addsubgame(SubGame *asubgame);
++  virtual void removesubgame(SubGame* g);
++
++  virtual void play();
++};
++
++
++#endif
++
++
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-02-16 20:38:59 UTC (rev 119)
++++ trunk/sources.lst	2005-02-19 12:14:45 UTC (rev 120)
+@@ -18,6 +18,7 @@
+ source/util/endian.cpp
+ source/util/pmask.c
+ source/util/base.cpp
++source/games/gamehierarchy.cpp
+ source/games/ggob.cpp
+ source/games/gflmelee.cpp
+ source/games/gdefender.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000065.html">[Tw-light-svn] r119 - in trunk: . source/libraries
+</A></li>
+	<LI>Next message: <A HREF="000067.html">[Tw-light-svn] r121 - in trunk: . source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#66">[ date ]</a>
+              <a href="thread.html#66">[ thread ]</a>
+              <a href="subject.html#66">[ subject ]</a>
+              <a href="author.html#66">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

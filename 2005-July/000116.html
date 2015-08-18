@@ -1,0 +1,712 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r170 - in trunk: . source source/ais source/melee source/other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r170%20-%20in%20trunk%3A%20.%20source%20source/ais%20source/melee%20source/other&In-Reply-To=%3C200507221715.j6MHFKVc018987%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000115.html">
+   <LINK REL="Next"  HREF="000117.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r170 - in trunk: . source source/ais source/melee source/other</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r170%20-%20in%20trunk%3A%20.%20source%20source/ais%20source/melee%20source/other&In-Reply-To=%3C200507221715.j6MHFKVc018987%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r170 - in trunk: . source source/ais source/melee source/other">youbastrd at berlios.de
+       </A><BR>
+    <I>Fri Jul 22 19:15:20 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000115.html">[Tw-light-svn] r169 - in trunk/source: melee other
+</A></li>
+        <LI>Next message: <A HREF="000117.html">[Tw-light-svn] r171 - in trunk: . msvc-libs msvc-libs/include msvc-libs/include/SDL msvc-libs/include/allegro msvc-libs/include/allegro/inline msvc-libs/include/allegro/internal msvc-libs/include/allegro/platform msvc-libs/include/boost msvc-libs/include/boost/config msvc-libs/include/boost/config/abi msvc-libs/include/boost/config/compiler msvc-libs/include/boost/config/platform msvc-libs/include/boost/config/stdlib msvc-libs/include/boost/detail msvc-libs/lib source/games source/generated source/libraries/agup source/melee source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#116">[ date ]</a>
+              <a href="thread.html#116">[ thread ]</a>
+              <a href="subject.html#116">[ subject ]</a>
+              <a href="author.html#116">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2005-07-22 19:15:01 +0200 (Fri, 22 Jul 2005)
+New Revision: 170
+
+Added:
+   trunk/source/melee/WarpOutTrail.cpp
+   trunk/source/melee/WarpOutTrail.h
+Modified:
+   trunk/source/ais.h
+   trunk/source/ais/c_input.cpp
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mship.h
+   trunk/source/other/dialogs.cpp
+   trunk/source/other/dialogs.h
+   trunk/sources.lst
+Log:
+(Fix bug # 41)Adding source/melee/WarpOutTrail.h and .cpp ; updating mship.cpp's ship::calculate() method to check for the warp out event ; Updated input config dialog so that you can assign the warpout effect to a key.  
+
+Modified: trunk/source/ais/c_input.cpp
+===================================================================
+--- trunk/source/ais/c_input.cpp	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/ais/c_input.cpp	2005-07-22 17:15:01 UTC (rev 170)
+@@ -190,6 +190,7 @@
+   closest = get_config_int(inisection, &quot;Closest_Target&quot;, 0);
+   chat    = get_config_int(inisection, &quot;Chat&quot;,           0);
+   suicide = get_config_int(inisection, &quot;Suicide&quot;,        0);
++  warpOut = get_config_int(inisection, &quot;WarpOut&quot;,        0);
+   return;
+ }
+ 
+@@ -213,6 +214,7 @@
+   set_config_int(inisection, &quot;Closest_Target&quot;, closest);
+   set_config_int(inisection, &quot;Chat&quot;,           chat);
+   set_config_int(inisection, &quot;Suicide&quot;,        suicide);
++  set_config_int(inisection, &quot;WarpOut&quot;,        warpOut);
+   return;
+ }
+ 
+@@ -240,6 +242,7 @@
+   if (key_pressed(closest)) r |= keyflag::closest;
+   if (key_pressed(chat))    r |= keyflag::chat;
+   if (key_pressed(suicide)) r |= keyflag::suicide;
++  if (key_pressed(warpOut)) r |= keyflag::warpOut;
+   return r;
+ }
+ 
+@@ -305,6 +308,7 @@
+   key_to_description(closest, desc);sprintf ( line, &quot;  Closest: %s\n&quot;, desc);strcat(text, line);
+   key_to_description(chat, desc);   sprintf ( line, &quot;  Chat: %s\n&quot;, desc);strcat(text, line);
+   key_to_description(suicide, desc);sprintf ( line, &quot;  Suicide: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(warpOut, desc);sprintf ( line, &quot;  Warp Out: %s\n&quot;, desc);strcat(text, line);
+ }
+ 
+ /*! \brief setap players keys */
+@@ -362,7 +366,11 @@
+       key_to_description ( suicide, s );
+       
+       s = dialog_string[index]; index += 1;
++      s += sprintf ( s, &quot;Warp Out:        &quot;);
++      key_to_description ( warpOut, s );
+       
++      s = dialog_string[index]; index += 1;
++      
+       int maxlen = 0;
+       for (i = 1; i &lt; KEY_DIALOG_OK; i += 1) 
+ 	{
+@@ -402,6 +410,7 @@
+ 	case 10: closest = t; break;
+ 	case 11: chat = t; break;
+ 	case 12: suicide = t; break;
++	case 13: warpOut = t; break;
+ 	case KEY_DIALOG_OK:  save(&quot;scp.ini&quot;, getDescription()); return;
+ 	case KEY_DIALOG_CANCEL: load(&quot;scp.ini&quot;, getDescription()); return;
+ 	case KEY_DIALOG_CALIBRATE: calibrate_joysticks(); break;
+
+Modified: trunk/source/ais.h
+===================================================================
+--- trunk/source/ais.h	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/ais.h	2005-07-22 17:15:01 UTC (rev 170)
+@@ -41,6 +41,7 @@
+   int closest;
+   int chat;
+   int suicide;
++  int warpOut;
+  public:
+   virtual void load(const char* inifile, const char* inisection);
+   virtual void save(const char* inifile, const char* inisection);
+
+Added: trunk/source/melee/WarpOutTrail.cpp
+===================================================================
+--- trunk/source/melee/WarpOutTrail.cpp	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/melee/WarpOutTrail.cpp	2005-07-22 17:15:01 UTC (rev 170)
+@@ -0,0 +1,137 @@
++
++#include &quot;util/sound.h&quot;
++
++#include &lt;allegro.h&gt;
++#include &lt;string.h&gt;
++#include &lt;stdio.h&gt;
++
++#include &quot;melee.h&quot;
++#include &quot;id.h&quot;
++#include &quot;frame.h&quot;
++
++#include &quot;mcbodies.h&quot;
++#include &quot;mgame.h&quot;
++#include &quot;mcontrol.h&quot;
++#include &quot;mship.h&quot;
++#include &quot;mshot.h&quot;
++#include &quot;manim.h&quot;
++#include &quot;mview.h&quot;
++#include &quot;other/twconfig.h&quot;
++#include &quot;scp.h&quot;
++#include &quot;mitems.h&quot;
++#include &quot;tml/gameconfig.h&quot;
++#include &quot;tml/eventmanager.h&quot;
++#include &quot;tml/gameevent.h&quot;
++
++#include &quot;../util/errors.h&quot;
++#include &quot;WarpOutTrail.h&quot;
++
++
++#define INVERSE_HOT_COLORS 23
++
++/**
++ * These are colours used when the ship warps out.  They are in the 
++ * inverse order as the ones used to warp in.
++ */ 
++int inverse_hot_color[INVERSE_HOT_COLORS] =
++  {
++    47, 47, 45, 44, 43, 42,
++    127, 126, 125, 124, 123, 122,
++    123, 124, 125, 126, 127,
++    42,  43,  44,  45,  46,  47
++  };
++
++
++
++WarpOutTrail::WarpOutTrail(
++	       SpaceLocation *creator, Vector2 opos, Vector2 _rpos, 
++	       Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
++	       int onum_colors, int ofsize, int steps, int step_size) :
++  SpaceObject(creator, opos, 0.0, sprite),
++  rel_pos(_rpos),
++  ship(ship),
++  sprite_index(osprite_index),
++  colors(ocolors),
++  num_colors(onum_colors),
++  color_index(0),
++  frame_size(ofsize),
++  frame_step(ofsize),
++  phaser_step_position(0),
++  phaser_steps(steps),
++  phaser_step_size(step_size)
++{
++  STACKTRACE;
++  layer = LAYER_HOTSPOTS;
++  set_depth(DEPTH_HOTSPOTS);
++  collide_flag_anyone = 0;
++  mass = 0;
++
++  attributes |= ATTRIB_UNDETECTABLE;
++  
++  //destroy the ship
++  ship-&gt;state = 0;
++
++  // extra check
++  // note that if this happens, there's something wrong in the ships' constructor...
++  if (sprite_index &gt;= sprite-&gt;frames())
++    sprite_index = 0;
++
++  return;
++}
++
++void WarpOutTrail::animate(Frame *space) {
++  STACKTRACE;
++  sprite-&gt;animate_character(pos, 
++			    sprite_index, pallete_color[colors[color_index]], space);
++  return;
++}
++
++void WarpOutTrail::calculate() {
++  STACKTRACE;
++  if (!exists())
++    return;
++  frame_step -= frame_time;
++
++  while (frame_step &lt; 0) {
++    frame_step += frame_size;
++    color_index++;
++    if (color_index == num_colors)
++      state = 0;
++  }
++
++  if (phaser_step_position &lt; phaser_step_size) {
++    //if (ship &amp;&amp; !ship-&gt;exists())
++      //ship = NULL;
++    phaser_step_position += frame_time;
++    if (phaser_step_position &gt;= phaser_step_size) {
++      if (phaser_steps &gt; 1) {
++         Vector2 d = rel_pos / phaser_steps;
++         game-&gt;add(new WarpOutTrail(this, pos + d, rel_pos-d, ship, sprite, 
++                sprite_index, colors, num_colors, frame_size, phaser_steps-1, 
++                phaser_step_size));
++      }
++    }
++  }
++  SpaceObject::calculate();
++}
++
++
++WarpOutTrail * WarpOutTrail::getWarpOutTrail(Ship * ship) {
++  STACKTRACE;
++  if (!ship) {
++  	tw_error(&quot;In getWarpOutTrail(), parameter ship was null&quot;);
++  	return NULL;
++  }
++  return new WarpOutTrail(ship,
++		    ship-&gt;pos + unit_vector(ship-&gt;get_angle()) * 0 * ship-&gt;get_size().x,
++		    unit_vector(ship-&gt;get_angle()) * PHASE_MAX * ship-&gt;get_size().x,
++		    ship, 
++		    ship-&gt;get_sprite(), 
++		    ship-&gt;get_sprite_index(), 
++		    inverse_hot_color, 
++		    INVERSE_HOT_COLORS,
++		    PHASE_DELAY, 
++		    PHASE_MAX, 
++		    PHASE_DELAY
++		    );
++}
+
+Added: trunk/source/melee/WarpOutTrail.h
+===================================================================
+--- trunk/source/melee/WarpOutTrail.h	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/melee/WarpOutTrail.h	2005-07-22 17:15:01 UTC (rev 170)
+@@ -0,0 +1,98 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef WARPOUTTRAIL_HEADER
++#define WARPOUTTRAIL_HEADER
++
++#include &quot;melee.h&quot; // for hot_color
++#include &quot;mframe.h&quot;
++
++
++
++/**
++ * This creates a warp-in animated effect that lasts a few milliseconds; after
++ * which, the ship is considered in play.
++ * 
++ * The visual effect is that the ship is warping into Truespace from Hyperspace.
++ * The ship's outline is drawn as a trail in red-ish yellow colour.  
++ */
++class WarpOutTrail : public SpaceObject 
++{
++ protected:
++  Vector2 rel_pos;
++  Ship *ship;
++  int sprite_index;
++  int *colors;
++  int num_colors;
++  int color_index;
++  int frame_size;
++  int frame_step;
++  int phaser_step_position;
++  int phaser_steps;
++  int phaser_step_size;
++  
++ public:
++	/**
++	 * Removes a ship from play and displays a warp-out effect.  At the 
++	 * beginning of the effect, the ship is not longer in play.  The effect
++	 * lasts a few milliseconds afterwards.  
++	 * 
++	 * Typically, this constructor is called with the method
++	 * Ship::get_ship_phaser()
++	 * 
++	 * @see Ship::get_ship_phaser()
++	 *  
++	 * @param creator 
++	 * @param opos 
++	 * @param _rpos 
++	 * @param ship 
++	 * @param sprite 
++	 * @param osprite_index 
++	 * @param ocolors 
++	 * @param onum_colors 
++	 * @param ofsize 
++	 * @param steps 
++	 * @param step_size 
++	 */
++  WarpOutTrail::WarpOutTrail(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
++		 Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
++		 int onum_colors, int ofsize, int steps, int step_time) ;
++  
++  /**
++   * Draws the warp-out effect
++   * 
++   */
++  virtual void animate(Frame *space);
++
++  /**
++   * Updates the WarpOutTrail's status by:
++   * * Cycling the ship's warp trail colour
++   * * Moving the drawn effect along its vector
++   * * If there are remaining steps to draw, a new WarpOutTrail is created to continue
++   *   the remaining steps
++   */
++  virtual void calculate();
++  
++  
++  /**
++   * Creates a new warp-out effect for this ship.  At the start of the effect,
++   * the ship is removed from play.  
++   * @param ship the ship to warp out and remove from play
++   */ 
++  static WarpOutTrail * getWarpOutTrail(Ship * ship);
++};
++
++#endif
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/melee/mship.cpp	2005-07-22 17:15:01 UTC (rev 170)
+@@ -38,6 +38,8 @@
+ #include &quot;tml/eventmanager.h&quot;
+ #include &quot;tml/gameevent.h&quot;
+ 
++#include &quot;melee/WarpOutTrail.h&quot;
++
+ /*------------------------------*
+  *		Ship Class Registration *
+  *------------------------------*/
+@@ -630,6 +632,10 @@
+ 	      attributes &amp;= ~ATTRIB_NOTIFY_ON_DEATH;
+             }
+         }
++      if (nextkeys &amp; keyflag::warpOut) 
++	{
++	  game-&gt;add( WarpOutTrail::getWarpOutTrail(this) );
++        }
+       this-&gt;nextkeys = control-&gt;keys;
+       
+       if (!control-&gt;exists()) 
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/melee/mship.h	2005-07-22 17:15:01 UTC (rev 170)
+@@ -37,6 +37,7 @@
+     closest    =	(1&lt;&lt;9),
+     chat       =	(1&lt;&lt;10),
+     suicide    =	(1&lt;&lt;11),
++    warpOut    =	(1&lt;&lt;12)
+   };
+ };
+ 
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/other/dialogs.cpp	2005-07-22 17:15:01 UTC (rev 170)
+@@ -72,6 +72,7 @@
+   { my_d_button_proc,  60,   360,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[10], NULL, NULL },
+   { my_d_button_proc,  60,   390,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[11], NULL, NULL },
+   { my_d_button_proc,  60,   420,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[12], NULL, NULL },
++  { my_d_button_proc,  60,   420,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[13], NULL, NULL },
+   { my_d_button_proc,  180,  20,   180,  25,   255,  0,    0,    D_EXIT,  0,    0,    (void*)&quot;Accept Changes&quot;, NULL, NULL },
+   { my_d_button_proc,     180,  50,   180,  25,   255,  0,    0,    D_EXIT,  0,    0,    (void*)&quot;Cancel&quot;, NULL, NULL },
+   { my_d_button_proc,  360,  35,   200,  25,   255,  0,    0,    D_EXIT,  0,    0,    (void*)&quot;Calibrate Joysticks&quot;, NULL, NULL },
+
+Modified: trunk/source/other/dialogs.h
+===================================================================
+--- trunk/source/other/dialogs.h	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/source/other/dialogs.h	2005-07-22 17:15:01 UTC (rev 170)
+@@ -78,7 +78,7 @@
+ enum 
+ {
+   KEY_DIALOG_MODIFY = 0,
+-  KEY_DIALOG_OK = 13,
++  KEY_DIALOG_OK = 14,
+   KEY_DIALOG_CANCEL,   
+   KEY_DIALOG_CALIBRATE,
+ };
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-07-19 04:33:30 UTC (rev 169)
++++ trunk/sources.lst	2005-07-22 17:15:01 UTC (rev 170)
+@@ -1,138 +1,140 @@
++source/ais/c_input.cpp
++source/ais/c_other.cpp
+ source/ais/c_wussie.cpp
+-source/ais/c_other.cpp
+-source/ais/c_input.cpp
++source/doxygen.cpp
+ source/frame.cpp
+-source/util/net_tcp.cpp
+-source/util/random.cpp
+-source/util/vector2.cpp
+-source/util/round.c
+-source/util/history.cpp
+-source/util/types.cpp
+-source/util/aautil.c
+-source/util/sound.cpp
+-source/util/get_time.c
+-source/util/aarot.c
+-source/util/aastr.c
+-source/util/errors.cpp
+-source/util/errors_c.c
+-source/util/endian.cpp
+-source/util/pmask.c
+-source/util/base.cpp
+ source/games/gamehierarchy.cpp
++source/games/gdefender.cpp
++source/games/gflmelee.cpp
+ source/games/ggob.cpp
+-source/games/gflmelee.cpp
+-source/games/gdefender.cpp
++source/generated/tml_wrap.cpp
++source/gui.cpp
++source/input.cpp
++source/libraries/agup/aalg.c
++source/libraries/agup/aase.c
++source/libraries/agup/abeos.c
++source/libraries/agup/abitmap.c
++source/libraries/agup/agtk.c
++source/libraries/agup/agup.c
++source/libraries/agup/ans.c
++source/libraries/agup/aphoton.c
++source/libraries/agup/awin95.c
++source/libraries/jpgalleg/decode.c
++source/libraries/jpgalleg/encode.c
++source/libraries/jpgalleg/io.c
++source/libraries/jpgalleg/jpgalleg.c
++source/melee/manim.cpp
++source/melee/mcbodies.cpp
++source/melee/mcontrol.cpp
++source/melee/mfleet.cpp
++source/melee/mframe.cpp
++source/melee/mgame.cpp
++source/melee/mhelpers.cpp
++source/melee/mitems.cpp
+ source/melee/mlog.cpp
+-source/melee/mitems.cpp
++source/melee/mmain.cpp
++source/melee/mmath.cpp
+ source/melee/mnet1.cpp
+ source/melee/moptions.cpp
+-source/melee/mgame.cpp
+-source/melee/mhelpers.cpp
+-source/melee/mfleet.cpp
+-source/melee/mview.cpp
+ source/melee/mship.cpp
+-source/melee/mcontrol.cpp
+-source/melee/manim.cpp
+-source/melee/mframe.cpp
+ source/melee/mshot.cpp
+ source/melee/mshpdata.cpp
+ source/melee/mshppan.cpp
+ source/melee/msprite.cpp
+-source/melee/mcbodies.cpp
+-source/melee/mmain.cpp
+ source/melee/mtarget.cpp
+-source/melee/mmath.cpp
+-source/other/orbit.cpp
++source/melee/mview.cpp
++source/melee/WarpOutTrail.cpp
+ source/other/configrw.cpp
+-source/other/shippart.cpp
++source/other/dialogs.cpp
+ source/other/fontmorph.cpp
+-source/other/vtarget.cpp
+-source/other/twconfig.cpp
+-source/other/vbodies.cpp
+ source/other/gup.cpp
++source/other/nullphas.cpp
+ source/other/objanim.cpp
+-source/other/nullphas.cpp
++source/other/orbit.cpp
+ source/other/planet3d.cpp
+ source/other/radar.cpp
+-source/other/dialogs.cpp
++source/other/shippart.cpp
+ source/other/starmap.cpp
+-source/ships/shptauar.cpp
+-source/ships/shpbogce.cpp
+-source/ships/shpaktgu.cpp
+-source/ships/shptauda.cpp
+-source/ships/shpforsh.cpp
+-source/ships/shptaume.cpp
+-source/ships/shpdragr.cpp
+-source/ships/shptausl.cpp
+-source/ships/shptaust.cpp
+-source/ships/shptauto.cpp
+-source/ships/shpgarty.cpp
+-source/ships/shprogsq.cpp
+-source/ships/shpzeksh.cpp
+-source/ships/shpconca.cpp
+-source/ships/shpchoex.cpp
+-source/ships/shpconho.cpp
+-source/ships/shpilwsp.cpp
+-source/ships/shpalabc.cpp
+-source/ships/shpyusra.cpp
+-source/ships/shpbahbu.cpp
+-source/ships/shpbipka.cpp
+-source/ships/shpwolmi.cpp
+-source/ships/shpearc3.cpp
+-source/ships/shpkahbo.cpp
+-source/ships/shpstaba.cpp
+-source/ships/shpsamat.cpp
+-source/tests/testmain.cpp
+-source/tests/testdatapath.cpp
+-source/tests/gameconfigtest.cpp
+-source/libraries/agup/aphoton.c
+-source/libraries/agup/ans.c
+-source/libraries/agup/awin95.c
+-source/libraries/agup/aalg.c
+-source/libraries/agup/aase.c
+-source/libraries/agup/agtk.c
+-source/libraries/agup/agup.c
+-source/libraries/agup/abeos.c
+-source/libraries/agup/abitmap.c
+-source/libraries/jpgalleg/io.c
+-source/libraries/jpgalleg/encode.c
+-source/libraries/jpgalleg/decode.c
+-source/libraries/jpgalleg/jpgalleg.c
+-source/scp.cpp
+-source/doxygen.cpp
+-source/generated/tml_wrap.cpp
+-source/input.cpp
++source/other/twconfig.cpp
++source/other/vbodies.cpp
++source/other/vtarget.cpp
++source/python/fileops.cpp
++source/python/game.cpp
++source/python/python_class.cpp
++source/sc1ships/shpandgu.cpp
++source/sc1ships/shparisk.cpp
++source/sc1ships/shpchebr.cpp
+ source/sc1ships/shpearcr.cpp
+-source/sc1ships/shpchebr.cpp
+-source/sc1ships/shpandgu.cpp
+ source/sc1ships/shpilwav.cpp
+ source/sc1ships/shpkzedr.cpp
+-source/sc1ships/shpyehte.cpp
++source/sc1ships/shpmmrxf.cpp
++source/sc1ships/shpmycpo.cpp
++source/sc1ships/shpshosc.cpp
++source/sc1ships/shpspael.cpp
+ source/sc1ships/shpsyrpe.cpp
+-source/sc1ships/shpspael.cpp
++source/sc1ships/shpumgdr.cpp
+ source/sc1ships/shpvuxin.cpp
+-source/sc1ships/shpumgdr.cpp
+-source/sc1ships/shparisk.cpp
+-source/sc1ships/shpmycpo.cpp
+-source/sc1ships/shpmmrxf.cpp
+-source/sc1ships/shpshosc.cpp
+-source/sc2ships/shpthrto.cpp
+-source/sc2ships/shporzne.cpp
++source/sc1ships/shpyehte.cpp
++source/sc2ships/shpchmav.cpp
+ source/sc2ships/shpdruma.cpp
++source/sc2ships/shpkohma.cpp
+ source/sc2ships/shpmeltr.cpp
+-source/sc2ships/shpchmav.cpp
+-source/sc2ships/shpkohma.cpp
+-source/sc2ships/shputwju.cpp
+-source/sc2ships/shpsupbl.cpp
++source/sc2ships/shporzne.cpp
+ source/sc2ships/shppkufu.cpp
+ source/sc2ships/shpslypr.cpp
++source/sc2ships/shpsupbl.cpp
++source/sc2ships/shpthrto.cpp
++source/sc2ships/shputwju.cpp
+ source/sc2ships/shpzfpst.cpp
+-source/gui.cpp
+-source/tml/gamedialog.cpp
++source/scp.cpp
++source/ships/shpaktgu.cpp
++source/ships/shpalabc.cpp
++source/ships/shpbahbu.cpp
++source/ships/shpbipka.cpp
++source/ships/shpbogce.cpp
++source/ships/shpchoex.cpp
++source/ships/shpconca.cpp
++source/ships/shpconho.cpp
++source/ships/shpdragr.cpp
++source/ships/shpearc3.cpp
++source/ships/shpforsh.cpp
++source/ships/shpgarty.cpp
++source/ships/shpilwsp.cpp
++source/ships/shpkahbo.cpp
++source/ships/shprogsq.cpp
++source/ships/shpsamat.cpp
++source/ships/shpstaba.cpp
++source/ships/shptauar.cpp
++source/ships/shptauda.cpp
++source/ships/shptaume.cpp
++source/ships/shptausl.cpp
++source/ships/shptaust.cpp
++source/ships/shptauto.cpp
++source/ships/shpwolmi.cpp
++source/ships/shpyusra.cpp
++source/ships/shpzeksh.cpp
++source/tests/gameconfigtest.cpp
++source/tests/testdatapath.cpp
++source/tests/TestFleetEditor.cpp
++source/tests/testmain.cpp
+ source/tml/eventmanager.cpp
++source/tml/gameaction.cpp
+ source/tml/gameconfig.cpp
+-source/tml/gameaction.cpp
++source/tml/gamedialog.cpp
+ source/tml/gameevent.cpp
+-source/python/game.cpp
+-source/python/python_class.cpp
+-source/python/fileops.cpp
++source/util/aarot.c
++source/util/aastr.c
++source/util/aautil.c
++source/util/base.cpp
++source/util/endian.cpp
++source/util/errors.cpp
++source/util/errors_c.c
++source/util/get_time.c
++source/util/history.cpp
++source/util/net_tcp.cpp
++source/util/pmask.c
++source/util/random.cpp
++source/util/round.c
++source/util/sound.cpp
++source/util/types.cpp
++source/util/vector2.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000115.html">[Tw-light-svn] r169 - in trunk/source: melee other
+</A></li>
+	<LI>Next message: <A HREF="000117.html">[Tw-light-svn] r171 - in trunk: . msvc-libs msvc-libs/include msvc-libs/include/SDL msvc-libs/include/allegro msvc-libs/include/allegro/inline msvc-libs/include/allegro/internal msvc-libs/include/allegro/platform msvc-libs/include/boost msvc-libs/include/boost/config msvc-libs/include/boost/config/abi msvc-libs/include/boost/config/compiler msvc-libs/include/boost/config/platform msvc-libs/include/boost/config/stdlib msvc-libs/include/boost/detail msvc-libs/lib source/games source/generated source/libraries/agup source/melee source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#116">[ date ]</a>
+              <a href="thread.html#116">[ thread ]</a>
+              <a href="subject.html#116">[ subject ]</a>
+              <a href="author.html#116">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

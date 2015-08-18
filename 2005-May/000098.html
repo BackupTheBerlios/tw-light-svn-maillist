@@ -1,0 +1,558 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r152 - trunk/Util/deditor
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r152%20-%20trunk/Util/deditor&In-Reply-To=%3C200505070850.j478ojqC005336%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000097.html">
+   <LINK REL="Next"  HREF="000099.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r152 - trunk/Util/deditor</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r152%20-%20trunk/Util/deditor&In-Reply-To=%3C200505070850.j478ojqC005336%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r152 - trunk/Util/deditor">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat May  7 10:50:45 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000097.html">[Tw-light-svn] r151 - trunk/gamedata/python
+</A></li>
+        <LI>Next message: <A HREF="000099.html">[Tw-light-svn] r153 - trunk/gamedata/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#98">[ date ]</a>
+              <a href="thread.html#98">[ thread ]</a>
+              <a href="subject.html#98">[ subject ]</a>
+              <a href="author.html#98">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-07 10:50:23 +0200 (Sat, 07 May 2005)
+New Revision: 152
+
+Removed:
+   trunk/Util/deditor/moc_application.cpp
+   trunk/Util/deditor/moc_maindialog.cpp
+   trunk/Util/deditor/moc_node.cpp
+Log:
+Remiving unnececery generated stuff from deditor
+
+
+Deleted: trunk/Util/deditor/moc_application.cpp
+===================================================================
+--- trunk/Util/deditor/moc_application.cpp	2005-05-07 07:15:32 UTC (rev 151)
++++ trunk/Util/deditor/moc_application.cpp	2005-05-07 08:50:23 UTC (rev 152)
+@@ -1,153 +0,0 @@
+-/****************************************************************************
+-** ApplicationWindow meta object code from reading C++ file 'application.h'
+-**
+-** Created: Wed Sep 1 19:55:28 2004
+-**      by: The Qt MOC ($Id: //depot/qt/main/src/moc/moc.y#178 $)
+-**
+-** WARNING! All changes made in this file will be lost!
+-*****************************************************************************/
+-
+-#define Q_MOC_ApplicationWindow
+-#if !defined(Q_MOC_OUTPUT_REVISION)
+-#define Q_MOC_OUTPUT_REVISION 8
+-#elif Q_MOC_OUTPUT_REVISION != 8
+-#error &quot;Moc format conflict - please regenerate all moc files&quot;
+-#endif
+-
+-#include &quot;application.h&quot;
+-#include &lt;qmetaobject.h&gt;
+-#include &lt;qapplication.h&gt;
+-
+-#if defined(Q_SPARCWORKS_FUNCP_BUG)
+-#define Q_AMPERSAND
+-#else
+-#define Q_AMPERSAND &amp;
+-#endif
+-
+-
+-const char *ApplicationWindow::className() const
+-{
+-    return &quot;ApplicationWindow&quot;;
+-}
+-
+-QMetaObject *ApplicationWindow::metaObj = 0;
+-
+-void ApplicationWindow::initMetaObject()
+-{
+-    if ( metaObj )
+-	return;
+-    if ( strcmp(QMainWindow::className(), &quot;QMainWindow&quot;) != 0 )
+-	badSuperclassWarning(&quot;ApplicationWindow&quot;,&quot;QMainWindow&quot;);
+-    (void) staticMetaObject();
+-}
+-
+-#ifndef QT_NO_TRANSLATION
+-QString ApplicationWindow::tr(const char* s)
+-{
+-    return ((QNonBaseApplication*)qApp)-&gt;translate(&quot;ApplicationWindow&quot;,s);
+-}
+-
+-#endif // QT_NO_TRANSLATION
+-QMetaObject* ApplicationWindow::staticMetaObject()
+-{
+-    if ( metaObj )
+-	return metaObj;
+-    (void) QMainWindow::staticMetaObject();
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    typedef void(ApplicationWindow::*m1_t0)();
+-    typedef void(ApplicationWindow::*m1_t1)();
+-    typedef void(ApplicationWindow::*m1_t2)(QString);
+-    typedef void(ApplicationWindow::*m1_t3)();
+-    typedef void(ApplicationWindow::*m1_t4)();
+-    typedef void(ApplicationWindow::*m1_t5)();
+-    typedef void(ApplicationWindow::*m1_t6)();
+-    typedef void(ApplicationWindow::*m1_t7)();
+-    typedef void(ApplicationWindow::*m1_t8)();
+-    typedef void(ApplicationWindow::*m1_t9)();
+-    typedef void(ApplicationWindow::*m1_t10)();
+-    typedef void(ApplicationWindow::*m1_t11)();
+-    typedef void(ApplicationWindow::*m1_t12)();
+-    typedef void(ApplicationWindow::*m1_t13)();
+-    typedef void(ApplicationWindow::*m1_t14)();
+-    typedef void(ApplicationWindow::*m1_t15)();
+-    m1_t0 v1_0 = Q_AMPERSAND ApplicationWindow::newDoc;
+-    m1_t1 v1_1 = Q_AMPERSAND ApplicationWindow::load;
+-    m1_t2 v1_2 = Q_AMPERSAND ApplicationWindow::load;
+-    m1_t3 v1_3 = Q_AMPERSAND ApplicationWindow::save;
+-    m1_t4 v1_4 = Q_AMPERSAND ApplicationWindow::saveAs;
+-    m1_t5 v1_5 = Q_AMPERSAND ApplicationWindow::AddNewNodeSlot;
+-    m1_t6 v1_6 = Q_AMPERSAND ApplicationWindow::RemoveNodeSlot;
+-    m1_t7 v1_7 = Q_AMPERSAND ApplicationWindow::SetAlienTextSlot;
+-    m1_t8 v1_8 = Q_AMPERSAND ApplicationWindow::AddNewPlayerAnswerSlot;
+-    m1_t9 v1_9 = Q_AMPERSAND ApplicationWindow::RemovePlayerAnswerSlot;
+-    m1_t10 v1_10 = Q_AMPERSAND ApplicationWindow::SetPlayerAnswerTextSlot;
+-    m1_t11 v1_11 = Q_AMPERSAND ApplicationWindow::answerUpSlot;
+-    m1_t12 v1_12 = Q_AMPERSAND ApplicationWindow::answerDownSlot;
+-    m1_t13 v1_13 = Q_AMPERSAND ApplicationWindow::hideNotAllowedAnswersSlot;
+-    m1_t14 v1_14 = Q_AMPERSAND ApplicationWindow::evaluateAnswerSlot;
+-    m1_t15 v1_15 = Q_AMPERSAND ApplicationWindow::about;
+-    QMetaData *slot_tbl = QMetaObject::new_metadata(16);
+-    QMetaData::Access *slot_tbl_access = QMetaObject::new_metaaccess(16);
+-    slot_tbl[0].name = &quot;newDoc()&quot;;
+-    slot_tbl[0].ptr = *((QMember*)&amp;v1_0);
+-    slot_tbl_access[0] = QMetaData::Private;
+-    slot_tbl[1].name = &quot;load()&quot;;
+-    slot_tbl[1].ptr = *((QMember*)&amp;v1_1);
+-    slot_tbl_access[1] = QMetaData::Private;
+-    slot_tbl[2].name = &quot;load(QString)&quot;;
+-    slot_tbl[2].ptr = *((QMember*)&amp;v1_2);
+-    slot_tbl_access[2] = QMetaData::Private;
+-    slot_tbl[3].name = &quot;save()&quot;;
+-    slot_tbl[3].ptr = *((QMember*)&amp;v1_3);
+-    slot_tbl_access[3] = QMetaData::Private;
+-    slot_tbl[4].name = &quot;saveAs()&quot;;
+-    slot_tbl[4].ptr = *((QMember*)&amp;v1_4);
+-    slot_tbl_access[4] = QMetaData::Private;
+-    slot_tbl[5].name = &quot;AddNewNodeSlot()&quot;;
+-    slot_tbl[5].ptr = *((QMember*)&amp;v1_5);
+-    slot_tbl_access[5] = QMetaData::Private;
+-    slot_tbl[6].name = &quot;RemoveNodeSlot()&quot;;
+-    slot_tbl[6].ptr = *((QMember*)&amp;v1_6);
+-    slot_tbl_access[6] = QMetaData::Private;
+-    slot_tbl[7].name = &quot;SetAlienTextSlot()&quot;;
+-    slot_tbl[7].ptr = *((QMember*)&amp;v1_7);
+-    slot_tbl_access[7] = QMetaData::Private;
+-    slot_tbl[8].name = &quot;AddNewPlayerAnswerSlot()&quot;;
+-    slot_tbl[8].ptr = *((QMember*)&amp;v1_8);
+-    slot_tbl_access[8] = QMetaData::Private;
+-    slot_tbl[9].name = &quot;RemovePlayerAnswerSlot()&quot;;
+-    slot_tbl[9].ptr = *((QMember*)&amp;v1_9);
+-    slot_tbl_access[9] = QMetaData::Private;
+-    slot_tbl[10].name = &quot;SetPlayerAnswerTextSlot()&quot;;
+-    slot_tbl[10].ptr = *((QMember*)&amp;v1_10);
+-    slot_tbl_access[10] = QMetaData::Private;
+-    slot_tbl[11].name = &quot;answerUpSlot()&quot;;
+-    slot_tbl[11].ptr = *((QMember*)&amp;v1_11);
+-    slot_tbl_access[11] = QMetaData::Private;
+-    slot_tbl[12].name = &quot;answerDownSlot()&quot;;
+-    slot_tbl[12].ptr = *((QMember*)&amp;v1_12);
+-    slot_tbl_access[12] = QMetaData::Private;
+-    slot_tbl[13].name = &quot;hideNotAllowedAnswersSlot()&quot;;
+-    slot_tbl[13].ptr = *((QMember*)&amp;v1_13);
+-    slot_tbl_access[13] = QMetaData::Private;
+-    slot_tbl[14].name = &quot;evaluateAnswerSlot()&quot;;
+-    slot_tbl[14].ptr = *((QMember*)&amp;v1_14);
+-    slot_tbl_access[14] = QMetaData::Private;
+-    slot_tbl[15].name = &quot;about()&quot;;
+-    slot_tbl[15].ptr = *((QMember*)&amp;v1_15);
+-    slot_tbl_access[15] = QMetaData::Private;
+-    metaObj = QMetaObject::new_metaobject(
+-	&quot;ApplicationWindow&quot;, &quot;QMainWindow&quot;,
+-	slot_tbl, 16,
+-	0, 0,
+-#ifndef QT_NO_PROPERTIES
+-	0, 0,
+-	0, 0,
+-#endif // QT_NO_PROPERTIES
+-	0, 0 );
+-    metaObj-&gt;set_slot_access( slot_tbl_access );
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    return metaObj;
+-}
+
+Deleted: trunk/Util/deditor/moc_maindialog.cpp
+===================================================================
+--- trunk/Util/deditor/moc_maindialog.cpp	2005-05-07 07:15:32 UTC (rev 151)
++++ trunk/Util/deditor/moc_maindialog.cpp	2005-05-07 08:50:23 UTC (rev 152)
+@@ -1,103 +0,0 @@
+-/****************************************************************************
+-** DialogEditorGenerated meta object code from reading C++ file 'maindialog.h'
+-**
+-** Created: Wed Sep 1 19:55:28 2004
+-**      by: The Qt MOC ($Id: //depot/qt/main/src/moc/moc.y#178 $)
+-**
+-** WARNING! All changes made in this file will be lost!
+-*****************************************************************************/
+-
+-#define Q_MOC_DialogEditorGenerated
+-#if !defined(Q_MOC_OUTPUT_REVISION)
+-#define Q_MOC_OUTPUT_REVISION 8
+-#elif Q_MOC_OUTPUT_REVISION != 8
+-#error &quot;Moc format conflict - please regenerate all moc files&quot;
+-#endif
+-
+-#include &quot;maindialog.h&quot;
+-#include &lt;qmetaobject.h&gt;
+-#include &lt;qapplication.h&gt;
+-
+-#if defined(Q_SPARCWORKS_FUNCP_BUG)
+-#define Q_AMPERSAND
+-#else
+-#define Q_AMPERSAND &amp;
+-#endif
+-
+-
+-const char *DialogEditorGenerated::className() const
+-{
+-    return &quot;DialogEditorGenerated&quot;;
+-}
+-
+-QMetaObject *DialogEditorGenerated::metaObj = 0;
+-
+-void DialogEditorGenerated::initMetaObject()
+-{
+-    if ( metaObj )
+-	return;
+-    if ( strcmp(QWidget::className(), &quot;QWidget&quot;) != 0 )
+-	badSuperclassWarning(&quot;DialogEditorGenerated&quot;,&quot;QWidget&quot;);
+-    (void) staticMetaObject();
+-}
+-
+-#ifndef QT_NO_TRANSLATION
+-QString DialogEditorGenerated::tr(const char* s)
+-{
+-    return ((QNonBaseApplication*)qApp)-&gt;translate(&quot;DialogEditorGenerated&quot;,s);
+-}
+-
+-#endif // QT_NO_TRANSLATION
+-QMetaObject* DialogEditorGenerated::staticMetaObject()
+-{
+-    if ( metaObj )
+-	return metaObj;
+-    (void) QWidget::staticMetaObject();
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    typedef void(DialogEditorGenerated::*m1_t0)(QListViewItem*);
+-    typedef void(DialogEditorGenerated::*m1_t1)(int);
+-    typedef void(DialogEditorGenerated::*m1_t2)(QListViewItem*);
+-    typedef void(DialogEditorGenerated::*m1_t3)(QListViewItem*);
+-    typedef void(DialogEditorGenerated::*m1_t4)();
+-    typedef void(DialogEditorGenerated::*m1_t5)();
+-    m1_t0 v1_0 = Q_AMPERSAND DialogEditorGenerated::answerChangedSlot;
+-    m1_t1 v1_1 = Q_AMPERSAND DialogEditorGenerated::answerPositionChanged;
+-    m1_t2 v1_2 = Q_AMPERSAND DialogEditorGenerated::nodeChangedSlot;
+-    m1_t3 v1_3 = Q_AMPERSAND DialogEditorGenerated::processAnswerSlot;
+-    m1_t4 v1_4 = Q_AMPERSAND DialogEditorGenerated::saveAnswer;
+-    m1_t5 v1_5 = Q_AMPERSAND DialogEditorGenerated::saveNodeInfo;
+-    QMetaData *slot_tbl = QMetaObject::new_metadata(6);
+-    QMetaData::Access *slot_tbl_access = QMetaObject::new_metaaccess(6);
+-    slot_tbl[0].name = &quot;answerChangedSlot(QListViewItem*)&quot;;
+-    slot_tbl[0].ptr = *((QMember*)&amp;v1_0);
+-    slot_tbl_access[0] = QMetaData::Public;
+-    slot_tbl[1].name = &quot;answerPositionChanged(int)&quot;;
+-    slot_tbl[1].ptr = *((QMember*)&amp;v1_1);
+-    slot_tbl_access[1] = QMetaData::Public;
+-    slot_tbl[2].name = &quot;nodeChangedSlot(QListViewItem*)&quot;;
+-    slot_tbl[2].ptr = *((QMember*)&amp;v1_2);
+-    slot_tbl_access[2] = QMetaData::Public;
+-    slot_tbl[3].name = &quot;processAnswerSlot(QListViewItem*)&quot;;
+-    slot_tbl[3].ptr = *((QMember*)&amp;v1_3);
+-    slot_tbl_access[3] = QMetaData::Public;
+-    slot_tbl[4].name = &quot;saveAnswer()&quot;;
+-    slot_tbl[4].ptr = *((QMember*)&amp;v1_4);
+-    slot_tbl_access[4] = QMetaData::Public;
+-    slot_tbl[5].name = &quot;saveNodeInfo()&quot;;
+-    slot_tbl[5].ptr = *((QMember*)&amp;v1_5);
+-    slot_tbl_access[5] = QMetaData::Public;
+-    metaObj = QMetaObject::new_metaobject(
+-	&quot;DialogEditorGenerated&quot;, &quot;QWidget&quot;,
+-	slot_tbl, 6,
+-	0, 0,
+-#ifndef QT_NO_PROPERTIES
+-	0, 0,
+-	0, 0,
+-#endif // QT_NO_PROPERTIES
+-	0, 0 );
+-    metaObj-&gt;set_slot_access( slot_tbl_access );
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    return metaObj;
+-}
+
+Deleted: trunk/Util/deditor/moc_node.cpp
+===================================================================
+--- trunk/Util/deditor/moc_node.cpp	2005-05-07 07:15:32 UTC (rev 151)
++++ trunk/Util/deditor/moc_node.cpp	2005-05-07 08:50:23 UTC (rev 152)
+@@ -1,211 +0,0 @@
+-/****************************************************************************
+-** PlayerAnswer meta object code from reading C++ file 'node.h'
+-**
+-** Created: Wed Sep 1 19:55:28 2004
+-**      by: The Qt MOC ($Id: //depot/qt/main/src/moc/moc.y#178 $)
+-**
+-** WARNING! All changes made in this file will be lost!
+-*****************************************************************************/
+-
+-#define Q_MOC_PlayerAnswer
+-#if !defined(Q_MOC_OUTPUT_REVISION)
+-#define Q_MOC_OUTPUT_REVISION 8
+-#elif Q_MOC_OUTPUT_REVISION != 8
+-#error &quot;Moc format conflict - please regenerate all moc files&quot;
+-#endif
+-
+-#include &quot;node.h&quot;
+-#include &lt;qmetaobject.h&gt;
+-#include &lt;qapplication.h&gt;
+-
+-#if defined(Q_SPARCWORKS_FUNCP_BUG)
+-#define Q_AMPERSAND
+-#else
+-#define Q_AMPERSAND &amp;
+-#endif
+-
+-
+-const char *PlayerAnswer::className() const
+-{
+-    return &quot;PlayerAnswer&quot;;
+-}
+-
+-QMetaObject *PlayerAnswer::metaObj = 0;
+-
+-void PlayerAnswer::initMetaObject()
+-{
+-    if ( metaObj )
+-	return;
+-    if ( strcmp(QObject::className(), &quot;QObject&quot;) != 0 )
+-	badSuperclassWarning(&quot;PlayerAnswer&quot;,&quot;QObject&quot;);
+-    (void) staticMetaObject();
+-}
+-
+-#ifndef QT_NO_TRANSLATION
+-QString PlayerAnswer::tr(const char* s)
+-{
+-    return ((QNonBaseApplication*)qApp)-&gt;translate(&quot;PlayerAnswer&quot;,s);
+-}
+-
+-#endif // QT_NO_TRANSLATION
+-QMetaObject* PlayerAnswer::staticMetaObject()
+-{
+-    if ( metaObj )
+-	return metaObj;
+-    (void) QObject::staticMetaObject();
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    typedef void(PlayerAnswer::*m1_t0)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t1)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t2)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t3)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t4)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t5)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t6)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t7)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t8)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t9)(const QString&amp;);
+-    typedef void(PlayerAnswer::*m1_t10)(const QString&amp;);
+-    m1_t0 v1_0 = Q_AMPERSAND PlayerAnswer::setCondition1Line;
+-    m1_t1 v1_1 = Q_AMPERSAND PlayerAnswer::setCondition2Line;
+-    m1_t2 v1_2 = Q_AMPERSAND PlayerAnswer::setCondition3Line;
+-    m1_t3 v1_3 = Q_AMPERSAND PlayerAnswer::setCondition4Line;
+-    m1_t4 v1_4 = Q_AMPERSAND PlayerAnswer::setCondition5Line;
+-    m1_t5 v1_5 = Q_AMPERSAND PlayerAnswer::setAction1Line;
+-    m1_t6 v1_6 = Q_AMPERSAND PlayerAnswer::setAction2Line;
+-    m1_t7 v1_7 = Q_AMPERSAND PlayerAnswer::setAction3Line;
+-    m1_t8 v1_8 = Q_AMPERSAND PlayerAnswer::setAction4Line;
+-    m1_t9 v1_9 = Q_AMPERSAND PlayerAnswer::setAction5Line;
+-    m1_t10 v1_10 = Q_AMPERSAND PlayerAnswer::setAppearCondition;
+-    QMetaData *slot_tbl = QMetaObject::new_metadata(11);
+-    QMetaData::Access *slot_tbl_access = QMetaObject::new_metaaccess(11);
+-    slot_tbl[0].name = &quot;setCondition1Line(const QString&amp;)&quot;;
+-    slot_tbl[0].ptr = *((QMember*)&amp;v1_0);
+-    slot_tbl_access[0] = QMetaData::Public;
+-    slot_tbl[1].name = &quot;setCondition2Line(const QString&amp;)&quot;;
+-    slot_tbl[1].ptr = *((QMember*)&amp;v1_1);
+-    slot_tbl_access[1] = QMetaData::Public;
+-    slot_tbl[2].name = &quot;setCondition3Line(const QString&amp;)&quot;;
+-    slot_tbl[2].ptr = *((QMember*)&amp;v1_2);
+-    slot_tbl_access[2] = QMetaData::Public;
+-    slot_tbl[3].name = &quot;setCondition4Line(const QString&amp;)&quot;;
+-    slot_tbl[3].ptr = *((QMember*)&amp;v1_3);
+-    slot_tbl_access[3] = QMetaData::Public;
+-    slot_tbl[4].name = &quot;setCondition5Line(const QString&amp;)&quot;;
+-    slot_tbl[4].ptr = *((QMember*)&amp;v1_4);
+-    slot_tbl_access[4] = QMetaData::Public;
+-    slot_tbl[5].name = &quot;setAction1Line(const QString&amp;)&quot;;
+-    slot_tbl[5].ptr = *((QMember*)&amp;v1_5);
+-    slot_tbl_access[5] = QMetaData::Public;
+-    slot_tbl[6].name = &quot;setAction2Line(const QString&amp;)&quot;;
+-    slot_tbl[6].ptr = *((QMember*)&amp;v1_6);
+-    slot_tbl_access[6] = QMetaData::Public;
+-    slot_tbl[7].name = &quot;setAction3Line(const QString&amp;)&quot;;
+-    slot_tbl[7].ptr = *((QMember*)&amp;v1_7);
+-    slot_tbl_access[7] = QMetaData::Public;
+-    slot_tbl[8].name = &quot;setAction4Line(const QString&amp;)&quot;;
+-    slot_tbl[8].ptr = *((QMember*)&amp;v1_8);
+-    slot_tbl_access[8] = QMetaData::Public;
+-    slot_tbl[9].name = &quot;setAction5Line(const QString&amp;)&quot;;
+-    slot_tbl[9].ptr = *((QMember*)&amp;v1_9);
+-    slot_tbl_access[9] = QMetaData::Public;
+-    slot_tbl[10].name = &quot;setAppearCondition(const QString&amp;)&quot;;
+-    slot_tbl[10].ptr = *((QMember*)&amp;v1_10);
+-    slot_tbl_access[10] = QMetaData::Public;
+-    metaObj = QMetaObject::new_metaobject(
+-	&quot;PlayerAnswer&quot;, &quot;QObject&quot;,
+-	slot_tbl, 11,
+-	0, 0,
+-#ifndef QT_NO_PROPERTIES
+-	0, 0,
+-	0, 0,
+-#endif // QT_NO_PROPERTIES
+-	0, 0 );
+-    metaObj-&gt;set_slot_access( slot_tbl_access );
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    return metaObj;
+-}
+-
+-
+-const char *NodeItem::className() const
+-{
+-    return &quot;NodeItem&quot;;
+-}
+-
+-QMetaObject *NodeItem::metaObj = 0;
+-
+-void NodeItem::initMetaObject()
+-{
+-    if ( metaObj )
+-	return;
+-    if ( strcmp(QObject::className(), &quot;QObject&quot;) != 0 )
+-	badSuperclassWarning(&quot;NodeItem&quot;,&quot;QObject&quot;);
+-    (void) staticMetaObject();
+-}
+-
+-#ifndef QT_NO_TRANSLATION
+-QString NodeItem::tr(const char* s)
+-{
+-    return ((QNonBaseApplication*)qApp)-&gt;translate(&quot;NodeItem&quot;,s);
+-}
+-
+-#endif // QT_NO_TRANSLATION
+-QMetaObject* NodeItem::staticMetaObject()
+-{
+-    if ( metaObj )
+-	return metaObj;
+-    (void) QObject::staticMetaObject();
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    typedef void(NodeItem::*m1_t0)(const QString&amp;);
+-    typedef void(NodeItem::*m1_t1)(const QString&amp;);
+-    typedef void(NodeItem::*m1_t2)(const QString&amp;);
+-    typedef void(NodeItem::*m1_t3)(const QString&amp;);
+-    typedef void(NodeItem::*m1_t4)(const QString&amp;);
+-    typedef void(NodeItem::*m1_t5)(const QString&amp;);
+-    typedef void(NodeItem::*m1_t6)(const QString&amp;);
+-    m1_t0 v1_0 = Q_AMPERSAND NodeItem::setID;
+-    m1_t1 v1_1 = Q_AMPERSAND NodeItem::setName;
+-    m1_t2 v1_2 = Q_AMPERSAND NodeItem::setMusic;
+-    m1_t3 v1_3 = Q_AMPERSAND NodeItem::setPicture;
+-    m1_t4 v1_4 = Q_AMPERSAND NodeItem::setAlienText;
+-    m1_t5 v1_5 = Q_AMPERSAND NodeItem::setTextLocation;
+-    m1_t6 v1_6 = Q_AMPERSAND NodeItem::setFont;
+-    QMetaData *slot_tbl = QMetaObject::new_metadata(7);
+-    QMetaData::Access *slot_tbl_access = QMetaObject::new_metaaccess(7);
+-    slot_tbl[0].name = &quot;setID(const QString&amp;)&quot;;
+-    slot_tbl[0].ptr = *((QMember*)&amp;v1_0);
+-    slot_tbl_access[0] = QMetaData::Public;
+-    slot_tbl[1].name = &quot;setName(const QString&amp;)&quot;;
+-    slot_tbl[1].ptr = *((QMember*)&amp;v1_1);
+-    slot_tbl_access[1] = QMetaData::Public;
+-    slot_tbl[2].name = &quot;setMusic(const QString&amp;)&quot;;
+-    slot_tbl[2].ptr = *((QMember*)&amp;v1_2);
+-    slot_tbl_access[2] = QMetaData::Public;
+-    slot_tbl[3].name = &quot;setPicture(const QString&amp;)&quot;;
+-    slot_tbl[3].ptr = *((QMember*)&amp;v1_3);
+-    slot_tbl_access[3] = QMetaData::Public;
+-    slot_tbl[4].name = &quot;setAlienText(const QString&amp;)&quot;;
+-    slot_tbl[4].ptr = *((QMember*)&amp;v1_4);
+-    slot_tbl_access[4] = QMetaData::Public;
+-    slot_tbl[5].name = &quot;setTextLocation(const QString&amp;)&quot;;
+-    slot_tbl[5].ptr = *((QMember*)&amp;v1_5);
+-    slot_tbl_access[5] = QMetaData::Public;
+-    slot_tbl[6].name = &quot;setFont(const QString&amp;)&quot;;
+-    slot_tbl[6].ptr = *((QMember*)&amp;v1_6);
+-    slot_tbl_access[6] = QMetaData::Public;
+-    metaObj = QMetaObject::new_metaobject(
+-	&quot;NodeItem&quot;, &quot;QObject&quot;,
+-	slot_tbl, 7,
+-	0, 0,
+-#ifndef QT_NO_PROPERTIES
+-	0, 0,
+-	0, 0,
+-#endif // QT_NO_PROPERTIES
+-	0, 0 );
+-    metaObj-&gt;set_slot_access( slot_tbl_access );
+-#ifndef QT_NO_PROPERTIES
+-#endif // QT_NO_PROPERTIES
+-    return metaObj;
+-}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000097.html">[Tw-light-svn] r151 - trunk/gamedata/python
+</A></li>
+	<LI>Next message: <A HREF="000099.html">[Tw-light-svn] r153 - trunk/gamedata/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#98">[ date ]</a>
+              <a href="thread.html#98">[ thread ]</a>
+              <a href="subject.html#98">[ subject ]</a>
+              <a href="author.html#98">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

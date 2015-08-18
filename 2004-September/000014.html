@@ -1,0 +1,3589 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r66 - in trunk: gamedata/default_ini/ships source
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r66%20-%20in%20trunk%3A%20gamedata/default_ini/ships%20source&In-Reply-To=%3C200409261831.i8QIVlYp006988%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000013.html">
+   <LINK REL="Next"  HREF="000015.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r66 - in trunk: gamedata/default_ini/ships source</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r66%20-%20in%20trunk%3A%20gamedata/default_ini/ships%20source&In-Reply-To=%3C200409261831.i8QIVlYp006988%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r66 - in trunk: gamedata/default_ini/ships source">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Sep 26 20:31:47 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000013.html">[Tw-light-svn] r65 - in trunk: . doc gamedata source source/games
+</A></li>
+        <LI>Next message: <A HREF="000015.html">[Tw-light-svn] r67 - trunk/web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#14">[ date ]</a>
+              <a href="thread.html#14">[ thread ]</a>
+              <a href="subject.html#14">[ subject ]</a>
+              <a href="author.html#14">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-09-26 20:31:46 +0200 (Sun, 26 Sep 2004)
+New Revision: 66
+
+Modified:
+   trunk/gamedata/default_ini/ships/shpalabc.ini
+   trunk/gamedata/default_ini/ships/shpandgu.ini
+   trunk/gamedata/default_ini/ships/shparisk.ini
+   trunk/gamedata/default_ini/ships/shpbahbu.ini
+   trunk/gamedata/default_ini/ships/shpbipka.ini
+   trunk/gamedata/default_ini/ships/shpchebr.ini
+   trunk/gamedata/default_ini/ships/shpchmav.ini
+   trunk/gamedata/default_ini/ships/shpchoex.ini
+   trunk/gamedata/default_ini/ships/shpconca.ini
+   trunk/gamedata/default_ini/ships/shpconho.ini
+   trunk/gamedata/default_ini/ships/shpdragr.ini
+   trunk/gamedata/default_ini/ships/shpdruma.ini
+   trunk/gamedata/default_ini/ships/shpearc3.ini
+   trunk/gamedata/default_ini/ships/shpearcr.ini
+   trunk/gamedata/default_ini/ships/shpforsh.ini
+   trunk/gamedata/default_ini/ships/shpgarty.ini
+   trunk/gamedata/default_ini/ships/shpilwav.ini
+   trunk/gamedata/default_ini/ships/shpilwsp.ini
+   trunk/gamedata/default_ini/ships/shpkahbo.ini
+   trunk/gamedata/default_ini/ships/shpkohma.ini
+   trunk/gamedata/default_ini/ships/shpkzedr.ini
+   trunk/gamedata/default_ini/ships/shpmeltr.ini
+   trunk/gamedata/default_ini/ships/shpmmrxf.ini
+   trunk/gamedata/default_ini/ships/shpmycpo.ini
+   trunk/gamedata/default_ini/ships/shporzne.ini
+   trunk/gamedata/default_ini/ships/shppkufu.ini
+   trunk/gamedata/default_ini/ships/shprogsq.ini
+   trunk/gamedata/default_ini/ships/shpshosc.ini
+   trunk/gamedata/default_ini/ships/shpslypr.ini
+   trunk/gamedata/default_ini/ships/shpspael.ini
+   trunk/gamedata/default_ini/ships/shpstaba.ini
+   trunk/gamedata/default_ini/ships/shpsupbl.ini
+   trunk/gamedata/default_ini/ships/shpsyrpe.ini
+   trunk/gamedata/default_ini/ships/shptauar.ini
+   trunk/gamedata/default_ini/ships/shptauda.ini
+   trunk/gamedata/default_ini/ships/shptausl.ini
+   trunk/gamedata/default_ini/ships/shptauto.ini
+   trunk/gamedata/default_ini/ships/shpthrto.ini
+   trunk/gamedata/default_ini/ships/shpumgdr.ini
+   trunk/gamedata/default_ini/ships/shputwju.ini
+   trunk/gamedata/default_ini/ships/shpvuxin.ini
+   trunk/gamedata/default_ini/ships/shpyehte.ini
+   trunk/gamedata/default_ini/ships/shpzeksh.ini
+   trunk/gamedata/default_ini/ships/shpzfpst.ini
+   trunk/source/scp.cpp
+Log:
+Old incapable ship ini files will be replaced with new in user ini folder.
+
+
+Modified: trunk/gamedata/default_ini/ships/shpalabc.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpalabc.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpalabc.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -1,27 +1,28 @@
+ [Info]
+-TWCost  = 90
++TWCost = 90
+ Name1 = Alary
+ Name2 = BattleCruiser
+ Origin = TWs
+ Coders = Tau
+ code = AlaryBC
++Version = 65M
+ 
+ [Ship]
+-Crew           = 42
+-CrewMax        = 42
+-Batt           = 42
+-BattMax        = 42
+-SpeedMax       = 20
+-AccelRate      = 4
+-TurnRate       = 8
++Crew = 42
++CrewMax = 42
++Batt = 42
++BattMax = 42
++SpeedMax = 20
++AccelRate = 4
++TurnRate = 8
+ RechargeAmount = 1
+-RechargeRate   = 2
+-WeaponDrain    = 24
+-WeaponRate     = 18
+-SpecialDrain   = 2
+-SpecialRate    = 6
+-HotspotRate    = 5
+-Mass           = 75
++RechargeRate = 2
++WeaponDrain = 24
++WeaponRate = 18
++SpecialDrain = 2
++SpecialRate = 6
++HotspotRate = 5
++Mass = 75
+ EnginesArmour = 12
+ 
+ [Weapon]
+@@ -29,7 +30,7 @@
+ Accel = 8
+ TurnRate = 17
+ Lifetime = 5200
+-Armour   = 3
++Armour = 3
+ Proximity = 15
+ WarheadRange = 39.5
+ WarheadVelocity = 62
+@@ -104,16 +105,16 @@
+ 
+ 
+ [Objects]
+-ShipSprites      = 1r128
+-WeaponSprites    = 1r +alpha
+-WeaponSamples    = 3
+-WeaponExplosion  = 10 +alpha
+-SpecialSprites   = 1r +alpha
+-SpecialSamples   = 2
++ShipSprites = 1r128
++WeaponSprites = 1r +alpha
++WeaponSamples = 3
++WeaponExplosion = 10 +alpha
++SpecialSprites = 1r +alpha
++SpecialSamples = 2
+ SpecialExplosion = 10 +alpha
+-ExtraSprites     = 1r +alpha
+-ExtraSamples     = 2
+-ExtraExplosion   = 10 +alpha
++ExtraSprites = 1r +alpha
++ExtraSamples = 2
++ExtraExplosion = 10 +alpha
+ ExtraExtraSprites0_ = 1r128 +alpha
+ ExtraExtraSprites1_ = 1r128 +alpha
+ ExtraExtraSprites2_ = 4 +alpha
+@@ -123,19 +124,19 @@
+ ExtraExtraSprites6_ = 2 +alpha
+ ExtraExtraSprites7_ = 12 +alpha
+ ExtraExtraSprites8_ = 12 +alpha
+-PanelBitmaps     = 15
++PanelBitmaps = 15
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpalabc/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpalabc/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpalabc/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpalabc/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpalabc/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpalabc/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpalabc/SHIP_P06_PCX.bmp
+-PanelBitmaps7  = images/ships/shpalabc/ship_p10.bmp
+-PanelBitmaps8  = images/ships/shpalabc/ship_p11.bmp
+-PanelBitmaps9  = images/ships/shpalabc/ship_p12.bmp
++PanelBitmaps0 = images/ships/shpalabc/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpalabc/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpalabc/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpalabc/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpalabc/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpalabc/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpalabc/SHIP_P06_PCX.bmp
++PanelBitmaps7 = images/ships/shpalabc/ship_p10.bmp
++PanelBitmaps8 = images/ships/shpalabc/ship_p11.bmp
++PanelBitmaps9 = images/ships/shpalabc/ship_p12.bmp
+ PanelBitmaps10 = images/ships/shpalabc/ship_p13.bmp
+ PanelBitmaps11 = images/ships/shpalabc/ship_p20.bmp
+ PanelBitmaps12 = images/ships/shpalabc/ship_p21.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpandgu.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpandgu.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpandgu.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Code = AndrosynthGuardian
+ Coders = The Fly
++Version = 65M
+ 
+ [Ship]
+ Crew = 20
+@@ -84,29 +85,29 @@
+ [Sound]
+ WeaponSample0 = sound/ships/shpandgu/WAVE_A01_WAV.wav
+ 
+-SpecialSample0 =sound/ships/shpandgu/WAVE_B01_WAV.wav
++SpecialSample0 = sound/ships/shpandgu/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r11 +alpha
+-WeaponSamples    = 1
+-WeaponExplosion  = 6 +alpha
+-SpecialSprites   = 1r +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r11 +alpha
++WeaponSamples = 1
++WeaponExplosion = 6 +alpha
++SpecialSprites = 1r +alpha
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 1
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 1
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpandgu/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpandgu/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpandgu/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpandgu/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpandgu/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpandgu/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpandgu/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpandgu/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpandgu/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpandgu/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpandgu/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpandgu/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpandgu/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpandgu/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpandgu/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shparisk.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shparisk.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shparisk.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -8,6 +8,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = ArilouSkiff
++Version = 65M
+ 
+ [Ship]
+ Crew = 6
+@@ -67,29 +68,29 @@
+ [Sound]
+ WeaponSample0 = sound/ships/shparisk/WAVE_A01_WAV.wav
+ 
+-SpecialSample0 =sound/ships/shparisk/WAVE_B01_WAV.wav
++SpecialSample0 = sound/ships/shparisk/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 0
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 40 +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 0
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 40 +alpha
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shparisk/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shparisk/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shparisk/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shparisk/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shparisk/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shparisk/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shparisk/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shparisk/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shparisk/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shparisk/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shparisk/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shparisk/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shparisk/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shparisk/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shparisk/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpbahbu.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpbahbu.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpbahbu.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -1,44 +1,45 @@
+ [Info]
+ Origin = TW
+-TWCost  = 20
++TWCost = 20
+ Name = Bahoid Buzzsaw
+ Name1 = Bahoid
+ Name2 = Buzzsaw
+ Coders = Reddish
+ Code = BahaoidBuzzsaw
++Version = 65M
+ 
+ [Ship]
+-Crew           = 24
+-CrewMax        = 24
+-Batt           = 20
+-BattMax        = 20
+-SpeedMax       = 25
+-AccelRate      = 6
+-TurnRate       = 4
++Crew = 24
++CrewMax = 24
++Batt = 20
++BattMax = 20
++SpeedMax = 25
++AccelRate = 6
++TurnRate = 4
+ RechargeAmount = 1
+-RechargeRate   = 4
+-WeaponDrain    = 0
+-WeaponRate     = 0
+-SpecialDrain   = 4
+-SpecialRate    = 10
+-HotspotRate    = 2
+-Mass           = 12
++RechargeRate = 4
++WeaponDrain = 0
++WeaponRate = 0
++SpecialDrain = 4
++SpecialRate = 10
++HotspotRate = 2
++Mass = 12
+ 
+ [Weapon]
+-Range    = 2
+-Damage   = 1
+-Speed    = .8
+-Color    = 10
++Range = 2
++Damage = 1
++Speed = .8
++Color = 10
+ 
+ [Special]
+-Range    = 20
++Range = 20
+ Velocity = 10
+-Damage   = 6
+-Armour   = 10
+-Timer    = 13000
+-Radius   = 8
+-Seek     = 5.5
+-VelSeek  = 120
++Damage = 6
++Armour = 10
++Timer = 13000
++Radius = 8
++Seek = 5.5
++VelSeek = 120
+ Number = 2
+ 
+ [AI3_Default]
+@@ -57,29 +58,29 @@
+ WeaponSample0 = sound/ships/shpbahbu/WAVE_A01_WAV.wav
+ WeaponSample1 = sound/ships/shpbahbu/WAVE_A02_WAV.wav
+ 
+-SpecialSample0 =sound/ships/shpbahbu/WAVE_B01_WAV.wav
++SpecialSample0 = sound/ships/shpbahbu/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 0
+-WeaponSamples    = 2
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 0
++WeaponSamples = 2
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpbahbu/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpbahbu/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpbahbu/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpbahbu/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpbahbu/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpbahbu/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpbahbu/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpbahbu/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpbahbu/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpbahbu/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpbahbu/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpbahbu/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpbahbu/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpbahbu/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpbahbu/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpbipka.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpbipka.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpbipka.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -8,6 +8,7 @@
+ Sfx = Forevian
+ Ditty = Forevian
+ Code = BipoleKatamaran
++Version = 65M
+ 
+ [Ship]
+ Crew = 12
+@@ -65,31 +66,31 @@
+ WeaponSample9 = sound/ships/shpbipka/WAVE_A10_WAV.wav
+ WeaponSample10 = sound/ships/shpbipka/WAVE_A11_WAV.wav
+ 
+-SpecialSample0 =sound/ships/shpbipka/WAVE_B01_WAV.wav
++SpecialSample0 = sound/ships/shpbipka/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 11
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 11
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 9
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 9
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpbipka/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpbipka/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpbipka/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpbipka/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpbipka/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpbipka/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpbipka/SHIP_P06_PCX.bmp
+-PanelBitmaps7  = images/ships/shpbipka/SHIP_P07_PCX.bmp
+-PanelBitmaps8  = images/ships/shpbipka/SHIP_P08_PCX.bmp
++PanelBitmaps0 = images/ships/shpbipka/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpbipka/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpbipka/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpbipka/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpbipka/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpbipka/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpbipka/SHIP_P06_PCX.bmp
++PanelBitmaps7 = images/ships/shpbipka/SHIP_P07_PCX.bmp
++PanelBitmaps8 = images/ships/shpbipka/SHIP_P08_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpbipka/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpchebr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpchebr.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpchebr.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = ChenjesuBroodhome
++Version = 65M
+ 
+ [Ship]
+ Crew = 36
+@@ -82,26 +83,26 @@
+ 
+ [Objects]
+ 
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 20 +alpha
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 20 +alpha
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 20 +alpha
+-ExtraSprites     = 1r
+-ExtraSamples     = 3
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 1r
++ExtraSamples = 3
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpchebr/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpchebr/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpchebr/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpchebr/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpchebr/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpchebr/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpchebr/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpchebr/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpchebr/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpchebr/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpchebr/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpchebr/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpchebr/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpchebr/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpchebr/SHIP_S_00_TGA.bmp
+@@ -152,4 +153,4 @@
+ SpecialExplosion18 = images/ships/shpchebr/SHOT_D_18_TGA.bmp
+ SpecialExplosion19 = images/ships/shpchebr/SHOT_D_19_TGA.bmp
+ 
+-ExtraSprites0 = images/ships/shpchebr/SHOT_E_00_TGA.bmp
+\ No newline at end of file
++ExtraSprites0 = images/ships/shpchebr/SHOT_E_00_TGA.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpchmav.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpchmav.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpchmav.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = ChmmrAvatar
++Version = 65M
+ 
+ [Ship]
+ Crew = 42
+@@ -75,26 +76,26 @@
+ 
+ [Objects]
+ 
+-ShipSprites      = 1r
+-WeaponSprites    = 0
+-WeaponSamples    = 1
+-WeaponExplosion  = 40 +alpha
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 0
++WeaponSamples = 1
++WeaponExplosion = 40 +alpha
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 64
+-ExtraSamples     = 1
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 64
++ExtraSamples = 1
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpchmav/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpchmav/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpchmav/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpchmav/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpchmav/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpchmav/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpchmav/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpchmav/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpchmav/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpchmav/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpchmav/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpchmav/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpchmav/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpchmav/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpchmav/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpchoex.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpchoex.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpchoex.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -1,56 +1,57 @@
+ [Info]
+-TWCost  = 14
++TWCost = 14
+ Name1 = Chorali
+ Name2 = Extractor
+ Origin = TW
+ Coder = Culture20
+ Code = ChoraliExtractor
++Version = 65M
+ 
+ [Ship]
+-Crew           = 18
+-CrewMax        = 18
+-Batt           = 20
+-BattMax        = 20
+-SpeedMax       = 46	; 40
+-AccelRate      = 10
+-TurnRate       = 2
++Crew = 18
++CrewMax = 18
++Batt = 20
++BattMax = 20
++SpeedMax = 46	; 40
++AccelRate = 10
++TurnRate = 2
+ RechargeAmount = 1
+-RechargeRate   = 3
+-WeaponDrain    = 8
+-WeaponRate     = 4
+-SpecialDrain   = 1
+-SpecialRate    = 0
+-HotspotRate    = 4
+-Mass           = 14
++RechargeRate = 3
++WeaponDrain = 8
++WeaponRate = 4
++SpecialDrain = 1
++SpecialRate = 0
++HotspotRate = 4
++Mass = 14
+ 
+ [Weapon]
+-Frames   = 6000
+-Damage   = 1
++Frames = 6000
++Damage = 1
+ 
+ [AsteroidMissile]
+-Range    = 40	; 60
++Range = 40	; 60
+ Velocity = 55	; 80
+-Damage   = 2
+-Armour   = 1
++Damage = 2
++Armour = 1
+ TurnRate = 2
+ 
+ [Special]
+-Force    = 255
++Force = 255
+ 
+ [Tractor]
+-Range    = 6
+-PushForce= 14
+-PullForce= 1.5	; 1.0
+-MaxColorR   = 0
+-MaxColorG   = 160
+-MaxColorB   = 255
+-MinColorR   = 0
+-MinColorG   = 0
+-MinColorB   = 160
+-Rate     = 1
+-Damage   = 0
++Range = 6
++PushForce = 14
++PullForce = 1.5	; 1.0
++MaxColorR = 0
++MaxColorG = 160
++MaxColorB = 255
++MinColorR = 0
++MinColorG = 0
++MinColorB = 160
++Rate = 1
++Damage = 0
+ MaxBeams = 3
+-Spread   = 60
++Spread = 60
+ 
+ [AI3_Default]
+ Weapon_Range = 9
+@@ -79,26 +80,26 @@
+ ExtraSample1 = sound/ships/shpchoex/WAVE_C01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 10
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 10
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 1r
+-ExtraSamples     = 2
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 1r
++ExtraSamples = 2
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpchoex/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpchoex/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpchoex/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpchoex/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpchoex/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpchoex/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpchoex/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpchoex/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpchoex/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpchoex/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpchoex/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpchoex/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpchoex/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpchoex/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpchoex/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpconca.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpconca.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpconca.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -5,6 +5,7 @@
+ Origin = TW
+ Coders = Corona688
+ Code = ConfedCargotran
++Version = 65M
+ 
+ [Ship]
+ Crew = 6
+@@ -50,26 +51,26 @@
+ 
+ [Objects]
+ 
+-ShipSprites      = 1r
+-WeaponSprites    = 3r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 2
++ShipSprites = 1r
++WeaponSprites = 3r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 2
+ SpecialExplosion = 0
+-ExtraSprites     = 3r
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 3r
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpconca/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpconca/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpconca/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpconca/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpconca/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpconca/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpconca/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpconca/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpconca/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpconca/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpconca/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpconca/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpconca/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpconca/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpconca/SHIP_X00_BMP.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpconho.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpconho.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpconho.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = TW
+ Coders = Slag-786B
+ Code = ConfederationHornet
++Version = 65M
+ 
+ [Ship]
+ Crew = 1
+@@ -66,36 +67,36 @@
+ SpecialSample0 = sound/ships/shpconho/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 17
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 17
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpconho/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpconho/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpconho/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpconho/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpconho/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpconho/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpconho/SHIP_P06_PCX.bmp
+-PanelBitmaps7  = images/ships/shpconho/SHIP_P07_PCX.bmp
+-PanelBitmaps8  = images/ships/shpconho/SHIP_P08_PCX.bmp
+-PanelBitmaps9  = images/ships/shpconho/SHIP_P09_PCX.bmp
+-PanelBitmaps10  = images/ships/shpconho/SHIP_P10_PCX.bmp
+-PanelBitmaps11  = images/ships/shpconho/SHIP_P11_PCX.bmp
+-PanelBitmaps12  = images/ships/shpconho/SHIP_P12_PCX.bmp
+-PanelBitmaps13  = images/ships/shpconho/SHIP_P13_PCX.bmp
+-PanelBitmaps14  = images/ships/shpconho/SHIP_P14_PCX.bmp
+-PanelBitmaps15  = images/ships/shpconho/SHIP_P15_PCX.bmp
+-PanelBitmaps16  = images/ships/shpconho/SHIP_P16_PCX.bmp
++PanelBitmaps0 = images/ships/shpconho/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpconho/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpconho/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpconho/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpconho/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpconho/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpconho/SHIP_P06_PCX.bmp
++PanelBitmaps7 = images/ships/shpconho/SHIP_P07_PCX.bmp
++PanelBitmaps8 = images/ships/shpconho/SHIP_P08_PCX.bmp
++PanelBitmaps9 = images/ships/shpconho/SHIP_P09_PCX.bmp
++PanelBitmaps10 = images/ships/shpconho/SHIP_P10_PCX.bmp
++PanelBitmaps11 = images/ships/shpconho/SHIP_P11_PCX.bmp
++PanelBitmaps12 = images/ships/shpconho/SHIP_P12_PCX.bmp
++PanelBitmaps13 = images/ships/shpconho/SHIP_P13_PCX.bmp
++PanelBitmaps14 = images/ships/shpconho/SHIP_P14_PCX.bmp
++PanelBitmaps15 = images/ships/shpconho/SHIP_P15_PCX.bmp
++PanelBitmaps16 = images/ships/shpconho/SHIP_P16_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpconho/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpdragr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpdragr.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpdragr.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -5,6 +5,7 @@
+ Origin = TW
+ Coders = Launchpad
+ Code = DraxGryphon
++Version = 65M
+ 
+ [Ship]
+ Crew = 24
+@@ -64,26 +65,26 @@
+ 
+ [Objects]
+ 
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 2
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 2
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpdragr/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpdragr/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpdragr/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpdragr/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpdragr/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpdragr/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpdragr/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpdragr/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpdragr/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpdragr/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpdragr/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpdragr/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpdragr/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpdragr/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpdragr/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpdruma.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpdruma.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpdruma.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = DruugeMauler
++Version = 65M
+ 
+ [Ship]
+ Crew = 14
+@@ -64,26 +65,26 @@
+ SpecialSample0 = sound/ships/shpdruma/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 5
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 5
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpdruma/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpdruma/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpdruma/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpdruma/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpdruma/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpdruma/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpdruma/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpdruma/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpdruma/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpdruma/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpdruma/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpdruma/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpdruma/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpdruma/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpdruma/SHIP_S00_PCX.bmp
+ 
+
+Modified: trunk/gamedata/default_ini/ships/shpearc3.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpearc3.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpearc3.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -5,6 +5,7 @@
+ Origin = TW
+ Coders = Tau
+ Code = EarthlingCruiserMk3
++Version = 65M
+ 
+ [Ship]
+ Crew = 24
+@@ -74,27 +75,27 @@
+ ExtraSample0 = sound/ships/shpearc3/WAVE_C00_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 33 +alpha
+-WeaponSamples    = 2
+-WeaponExplosion  = 20 +alpha
+-SpecialSprites   = 1 +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 33 +alpha
++WeaponSamples = 2
++WeaponExplosion = 20 +alpha
++SpecialSprites = 1 +alpha
++SpecialSamples = 1
+ SpecialExplosion = 1 +alpha
+-ExtraSprites     = 0
+-ExtraSamples     = 1
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 1
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpearc3/ship_p00.bmp
+-PanelBitmaps1  = images/ships/shpearc3/ship_p01.bmp
+-PanelBitmaps2  = images/ships/shpearc3/ship_p02.bmp
+-PanelBitmaps3  = images/ships/shpearc3/ship_p03.bmp
+-PanelBitmaps4  = images/ships/shpearc3/ship_p04.bmp
+-PanelBitmaps5  = images/ships/shpearc3/ship_p05.bmp
+-PanelBitmaps6  = images/ships/shpearc3/ship_p06.bmp
++PanelBitmaps0 = images/ships/shpearc3/ship_p00.bmp
++PanelBitmaps1 = images/ships/shpearc3/ship_p01.bmp
++PanelBitmaps2 = images/ships/shpearc3/ship_p02.bmp
++PanelBitmaps3 = images/ships/shpearc3/ship_p03.bmp
++PanelBitmaps4 = images/ships/shpearc3/ship_p04.bmp
++PanelBitmaps5 = images/ships/shpearc3/ship_p05.bmp
++PanelBitmaps6 = images/ships/shpearc3/ship_p06.bmp
+ 
+ ShipSprites0 = images/ships/shpearc3/SHIP_S0_00_BMP.bmp
+ 
+
+Modified: trunk/gamedata/default_ini/ships/shpearcr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpearcr.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpearcr.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = EarthlingCruiser
++Version = 65M
+ 
+ [Ship]
+ Crew = 18
+@@ -71,26 +72,26 @@
+ SpecialSample0 = sound/ships/shpearcr/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 10 +alpha
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 10 +alpha
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpearcr/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpearcr/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpearcr/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpearcr/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpearcr/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpearcr/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpearcr/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpearcr/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpearcr/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpearcr/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpearcr/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpearcr/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpearcr/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpearcr/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpearcr/SHIP_S01_PCX.bmp
+ 
+
+Modified: trunk/gamedata/default_ini/ships/shpforsh.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpforsh.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpforsh.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -4,6 +4,7 @@
+ Name2 = Shocker
+ Origin = TW
+ Code = ForevianShocker
++Version = 65M
+ 
+ [Ship]
+ Crew = 42
+@@ -57,27 +58,27 @@
+ SpecialSample2 = sound/ships/shpforsh/WAVE_B03_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 32
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 10
+-SpecialSamples   = 3
++ShipSprites = 1r
++WeaponSprites = 32
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 10
++SpecialSamples = 3
+ SpecialExplosion = 0
+-ExtraSprites     = 32
+-ExtraSamples     = 0
+-ExtraExplosion   = 32
+-PanelBitmaps     = 7
++ExtraSprites = 32
++ExtraSamples = 0
++ExtraExplosion = 32
++PanelBitmaps = 7
+ 
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpforsh/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpforsh/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpforsh/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpforsh/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpforsh/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpforsh/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpforsh/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpforsh/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpforsh/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpforsh/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpforsh/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpforsh/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpforsh/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpforsh/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpforsh/SHIP_SS_000_BMP.bmp
+ 
+@@ -158,36 +159,36 @@
+ ExtraSprites30 = images/ships/shpforsh/SHOT_ER_PRIMARY0031_BMP.bmp
+ ExtraSprites31 = images/ships/shpforsh/SHOT_ER_PRIMARY0032_BMP.bmp
+ 
+-ExtraExplosion0 = images/ships/shpforsh/SHOT_FR_LIGHTNING0000_BMP.bmp 
+-ExtraExplosion1 = images/ships/shpforsh/SHOT_FR_LIGHTNING0001_BMP.bmp 
+-ExtraExplosion2 = images/ships/shpforsh/SHOT_FR_LIGHTNING0002_BMP.bmp 
+-ExtraExplosion3 = images/ships/shpforsh/SHOT_FR_LIGHTNING0003_BMP.bmp 
+-ExtraExplosion4 = images/ships/shpforsh/SHOT_FR_LIGHTNING0004_BMP.bmp 
+-ExtraExplosion5 = images/ships/shpforsh/SHOT_FR_LIGHTNING0005_BMP.bmp 
+-ExtraExplosion6 = images/ships/shpforsh/SHOT_FR_LIGHTNING0006_BMP.bmp 
+-ExtraExplosion7 = images/ships/shpforsh/SHOT_FR_LIGHTNING0007_BMP.bmp 
+-ExtraExplosion8 = images/ships/shpforsh/SHOT_FR_LIGHTNING0008_BMP.bmp 
+-ExtraExplosion9 = images/ships/shpforsh/SHOT_FR_LIGHTNING0009_BMP.bmp 
+-ExtraExplosion10 = images/ships/shpforsh/SHOT_FR_LIGHTNING0010_BMP.bmp 
+-ExtraExplosion11 = images/ships/shpforsh/SHOT_FR_LIGHTNING0011_BMP.bmp 
+-ExtraExplosion12 = images/ships/shpforsh/SHOT_FR_LIGHTNING0012_BMP.bmp 
+-ExtraExplosion13 = images/ships/shpforsh/SHOT_FR_LIGHTNING0013_BMP.bmp 
+-ExtraExplosion14 = images/ships/shpforsh/SHOT_FR_LIGHTNING0014_BMP.bmp 
+-ExtraExplosion15 = images/ships/shpforsh/SHOT_FR_LIGHTNING0015_BMP.bmp 
+-ExtraExplosion16 = images/ships/shpforsh/SHOT_FR_LIGHTNING0016_BMP.bmp 
+-ExtraExplosion17 = images/ships/shpforsh/SHOT_FR_LIGHTNING0017_BMP.bmp 
+-ExtraExplosion18 = images/ships/shpforsh/SHOT_FR_LIGHTNING0018_BMP.bmp 
+-ExtraExplosion19 = images/ships/shpforsh/SHOT_FR_LIGHTNING0019_BMP.bmp 
+-ExtraExplosion20 = images/ships/shpforsh/SHOT_FR_LIGHTNING0020_BMP.bmp 
+-ExtraExplosion21 = images/ships/shpforsh/SHOT_FR_LIGHTNING0021_BMP.bmp 
+-ExtraExplosion22 = images/ships/shpforsh/SHOT_FR_LIGHTNING0022_BMP.bmp 
+-ExtraExplosion23 = images/ships/shpforsh/SHOT_FR_LIGHTNING0023_BMP.bmp 
+-ExtraExplosion24 = images/ships/shpforsh/SHOT_FR_LIGHTNING0024_BMP.bmp 
+-ExtraExplosion25 = images/ships/shpforsh/SHOT_FR_LIGHTNING0025_BMP.bmp 
+-ExtraExplosion26 = images/ships/shpforsh/SHOT_FR_LIGHTNING0026_BMP.bmp 
+-ExtraExplosion27 = images/ships/shpforsh/SHOT_FR_LIGHTNING0027_BMP.bmp 
+-ExtraExplosion28 = images/ships/shpforsh/SHOT_FR_LIGHTNING0028_BMP.bmp 
+-ExtraExplosion29 = images/ships/shpforsh/SHOT_FR_LIGHTNING0029_BMP.bmp 
+-ExtraExplosion30 = images/ships/shpforsh/SHOT_FR_LIGHTNING0030_BMP.bmp 
+-ExtraExplosion31 = images/ships/shpforsh/SHOT_FR_LIGHTNING0031_BMP.bmp 
+-              
+\ No newline at end of file
++ExtraExplosion0 = images/ships/shpforsh/SHOT_FR_LIGHTNING0000_BMP.bmp
++ExtraExplosion1 = images/ships/shpforsh/SHOT_FR_LIGHTNING0001_BMP.bmp
++ExtraExplosion2 = images/ships/shpforsh/SHOT_FR_LIGHTNING0002_BMP.bmp
++ExtraExplosion3 = images/ships/shpforsh/SHOT_FR_LIGHTNING0003_BMP.bmp
++ExtraExplosion4 = images/ships/shpforsh/SHOT_FR_LIGHTNING0004_BMP.bmp
++ExtraExplosion5 = images/ships/shpforsh/SHOT_FR_LIGHTNING0005_BMP.bmp
++ExtraExplosion6 = images/ships/shpforsh/SHOT_FR_LIGHTNING0006_BMP.bmp
++ExtraExplosion7 = images/ships/shpforsh/SHOT_FR_LIGHTNING0007_BMP.bmp
++ExtraExplosion8 = images/ships/shpforsh/SHOT_FR_LIGHTNING0008_BMP.bmp
++ExtraExplosion9 = images/ships/shpforsh/SHOT_FR_LIGHTNING0009_BMP.bmp
++ExtraExplosion10 = images/ships/shpforsh/SHOT_FR_LIGHTNING0010_BMP.bmp
++ExtraExplosion11 = images/ships/shpforsh/SHOT_FR_LIGHTNING0011_BMP.bmp
++ExtraExplosion12 = images/ships/shpforsh/SHOT_FR_LIGHTNING0012_BMP.bmp
++ExtraExplosion13 = images/ships/shpforsh/SHOT_FR_LIGHTNING0013_BMP.bmp
++ExtraExplosion14 = images/ships/shpforsh/SHOT_FR_LIGHTNING0014_BMP.bmp
++ExtraExplosion15 = images/ships/shpforsh/SHOT_FR_LIGHTNING0015_BMP.bmp
++ExtraExplosion16 = images/ships/shpforsh/SHOT_FR_LIGHTNING0016_BMP.bmp
++ExtraExplosion17 = images/ships/shpforsh/SHOT_FR_LIGHTNING0017_BMP.bmp
++ExtraExplosion18 = images/ships/shpforsh/SHOT_FR_LIGHTNING0018_BMP.bmp
++ExtraExplosion19 = images/ships/shpforsh/SHOT_FR_LIGHTNING0019_BMP.bmp
++ExtraExplosion20 = images/ships/shpforsh/SHOT_FR_LIGHTNING0020_BMP.bmp
++ExtraExplosion21 = images/ships/shpforsh/SHOT_FR_LIGHTNING0021_BMP.bmp
++ExtraExplosion22 = images/ships/shpforsh/SHOT_FR_LIGHTNING0022_BMP.bmp
++ExtraExplosion23 = images/ships/shpforsh/SHOT_FR_LIGHTNING0023_BMP.bmp
++ExtraExplosion24 = images/ships/shpforsh/SHOT_FR_LIGHTNING0024_BMP.bmp
++ExtraExplosion25 = images/ships/shpforsh/SHOT_FR_LIGHTNING0025_BMP.bmp
++ExtraExplosion26 = images/ships/shpforsh/SHOT_FR_LIGHTNING0026_BMP.bmp
++ExtraExplosion27 = images/ships/shpforsh/SHOT_FR_LIGHTNING0027_BMP.bmp
++ExtraExplosion28 = images/ships/shpforsh/SHOT_FR_LIGHTNING0028_BMP.bmp
++ExtraExplosion29 = images/ships/shpforsh/SHOT_FR_LIGHTNING0029_BMP.bmp
++ExtraExplosion30 = images/ships/shpforsh/SHOT_FR_LIGHTNING0030_BMP.bmp
++ExtraExplosion31 = images/ships/shpforsh/SHOT_FR_LIGHTNING0031_BMP.bmp
++              
+
+Modified: trunk/gamedata/default_ini/ships/shpgarty.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpgarty.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpgarty.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Original = Idea = Kwon
+ Coders = Tamaraw
+ Code = GarashTyrant
++Version = 65M
+ 
+ [Ship]
+ Crew = 42
+@@ -76,26 +77,26 @@
+ ExtraSample0 = sound/ships/shpgarty/WAVE_C03_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 3r
+-WeaponSamples    = 1
+-WeaponExplosion  = 7
+-SpecialSprites   = 7
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 3r
++WeaponSamples = 1
++WeaponExplosion = 7
++SpecialSprites = 7
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 1r
+-ExtraSamples     = 3
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 1r
++ExtraSamples = 3
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpgarty/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpgarty/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpgarty/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpgarty/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpgarty/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpgarty/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpgarty/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpgarty/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpgarty/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpgarty/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpgarty/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpgarty/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpgarty/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpgarty/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpgarty/SHIP_S01_PCX.bmp
+ 
+@@ -119,4 +120,4 @@
+ SpecialSprites5 = images/ships/shpgarty/SHOT_C06_PCX.bmp
+ SpecialSprites6 = images/ships/shpgarty/SHOT_C07_PCX.bmp
+ 
+-ExtraSprites0 = images/ships/shpgarty/SHOT_D01_PCX.bmp
+\ No newline at end of file
++ExtraSprites0 = images/ships/shpgarty/SHOT_D01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpilwav.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpilwav.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpilwav.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = IlwrathAvenger
++Version = 65M
+ 
+ [Ship]
+ Crew = 22
+@@ -65,26 +66,26 @@
+ SpecialSample1 = sound/ships/shpilwav/WAVE_B02_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 50
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 0
+-SpecialSamples   = 2
++ShipSprites = 1r
++WeaponSprites = 50
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 0
++SpecialSamples = 2
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpilwav/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpilwav/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpilwav/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpilwav/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpilwav/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpilwav/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpilwav/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpilwav/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpilwav/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpilwav/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpilwav/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpilwav/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpilwav/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpilwav/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpilwav/SHIP_S01_PCX.bmp
+ 
+
+Modified: trunk/gamedata/default_ini/ships/shpilwsp.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpilwsp.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpilwsp.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -8,6 +8,7 @@
+ Gfx = Forevian
+ Ditty = Forevian
+ Code = IlwrathSpider
++Version = 65M
+ 
+ [Ship]
+ Crew = 22
+@@ -57,26 +58,26 @@
+ ExtraSample0 = sound/ships/shpilwsp/WAVE_C01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 10
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 32
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 10
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 32
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 20
+-ExtraSamples     = 1
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 20
++ExtraSamples = 1
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpilwsp/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpilwsp/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpilwsp/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpilwsp/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpilwsp/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpilwsp/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpilwsp/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpilwsp/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpilwsp/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpilwsp/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpilwsp/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpilwsp/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpilwsp/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpilwsp/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpilwsp/SHIP_S01_PCX.bmp
+ 
+
+Modified: trunk/gamedata/default_ini/ships/shpkahbo.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpkahbo.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpkahbo.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -5,6 +5,7 @@
+ Origin = TW
+ Coders = Launchpad
+ Code = KahrBoomerang
++Version = 65M
+ 
+ [Ship]
+ Crew = 18
+@@ -91,29 +92,29 @@
+ SpecialSample0 = sound/ships/shpkahbo/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 1r
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 10
++ExtraSprites = 1r
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 10
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpkahbo/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpkahbo/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpkahbo/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpkahbo/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpkahbo/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpkahbo/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpkahbo/SHIP_P06_PCX.bmp
+-PanelBitmaps7  = images/ships/shpkahbo/SHIP_P07_PCX.bmp
+-PanelBitmaps8  = images/ships/shpkahbo/SHIP_P08_PCX.bmp
+-PanelBitmaps9  = images/ships/shpkahbo/SHIP_P09_PCX.bmp
++PanelBitmaps0 = images/ships/shpkahbo/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpkahbo/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpkahbo/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpkahbo/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpkahbo/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpkahbo/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpkahbo/SHIP_P06_PCX.bmp
++PanelBitmaps7 = images/ships/shpkahbo/SHIP_P07_PCX.bmp
++PanelBitmaps8 = images/ships/shpkahbo/SHIP_P08_PCX.bmp
++PanelBitmaps9 = images/ships/shpkahbo/SHIP_P09_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpkahbo/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpkohma.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpkohma.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpkohma.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = KohrAhMarauder
++Version = 65M
+ 
+ [Ship]
+ Crew = 42
+@@ -75,26 +76,26 @@
+ SpecialSample0 = sound/ships/shpkohma/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 10
+-WeaponSamples    = 1
+-WeaponExplosion  = 20
+-SpecialSprites   = 20 +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 10
++WeaponSamples = 1
++WeaponExplosion = 20
++SpecialSprites = 20 +alpha
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpkohma/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpkohma/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpkohma/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpkohma/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpkohma/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpkohma/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpkohma/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpkohma/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpkohma/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpkohma/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpkohma/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpkohma/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpkohma/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpkohma/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpkohma/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpkzedr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpkzedr.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpkzedr.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -8,6 +8,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = KzerZaDreadnought
++Version = 65M
+ 
+ [Ship]
+ Crew = 42
+@@ -71,30 +72,30 @@
+ 
+ SpecialSample0 = sound/ships/shpkzedr/WAVE_B01_WAV.wav
+ 
+-ExtraSample0 = sound/ships/shpkzedr/WAVE_C01_WAV.wav 
+-ExtraSample1 = sound/ships/shpkzedr/WAVE_C02_WAV.wav 
++ExtraSample0 = sound/ships/shpkzedr/WAVE_C01_WAV.wav
++ExtraSample1 = sound/ships/shpkzedr/WAVE_C02_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 20 +alpha
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 20 +alpha
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 2
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 2
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpkzedr/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpkzedr/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpkzedr/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpkzedr/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpkzedr/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpkzedr/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpkzedr/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpkzedr/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpkzedr/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpkzedr/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpkzedr/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpkzedr/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpkzedr/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpkzedr/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpkzedr/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpmeltr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpmeltr.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpmeltr.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = MelnormeTrader
++Version = 65M
+ 
+ [Ship]
+ Crew = 20
+@@ -75,26 +76,26 @@
+ SpecialSample0 = sound/ships/shpmeltr/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 40 +alpha
+-WeaponSamples    = 1
+-WeaponExplosion  = 80 +alpha
+-SpecialSprites   = 20 +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 40 +alpha
++WeaponSamples = 1
++WeaponExplosion = 80 +alpha
++SpecialSprites = 20 +alpha
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 20
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 20
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpmeltr/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpmeltr/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpmeltr/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpmeltr/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpmeltr/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpmeltr/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpmeltr/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpmeltr/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpmeltr/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpmeltr/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpmeltr/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpmeltr/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpmeltr/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpmeltr/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpmeltr/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpmmrxf.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpmmrxf.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpmmrxf.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = MmrnmhrmXForm
++Version = 65M
+ 
+ [Ship]
+ Crew = 20
+@@ -96,26 +97,26 @@
+ SpecialSample0 = sound/ships/shpmmrxf/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 2
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 2
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpmmrxf/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpmmrxf/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpmmrxf/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpmmrxf/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpmmrxf/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpmmrxf/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpmmrxf/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpmmrxf/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpmmrxf/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpmmrxf/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpmmrxf/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpmmrxf/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpmmrxf/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpmmrxf/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpmmrxf/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpmycpo.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpmycpo.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpmycpo.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = MyconPodship
++Version = 65M
+ 
+ [Ship]
+ Crew = 20
+@@ -66,26 +67,26 @@
+ SpecialSample0 = sound/ships/shpmycpo/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 64 +alpha
+-WeaponSamples    = 1
+-WeaponExplosion  = 20 +alpha
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 64 +alpha
++WeaponSamples = 1
++WeaponExplosion = 20 +alpha
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpmycpo/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpmycpo/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpmycpo/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpmycpo/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpmycpo/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpmycpo/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpmycpo/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpmycpo/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpmycpo/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpmycpo/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpmycpo/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpmycpo/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpmycpo/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpmycpo/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpmycpo/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shporzne.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shporzne.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shporzne.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = OrzNemesis
++Version = 65M
+ 
+ [Ship]
+ Crew = 16
+@@ -77,31 +78,31 @@
+ SpecialSample0 = sound/ships/shporzne/WAVE_B01_WAV.wav
+ SpecialSample1 = sound/ships/shporzne/WAVE_B02_WAV.wav
+ 
+-ExtraSample0 = sound/ships/shporzne/WAVE_C01_WAV.wav 
+-ExtraSample1 = sound/ships/shporzne/WAVE_C02_WAV.wav 
+-ExtraSample2 = sound/ships/shporzne/WAVE_C03_WAV.wav 
++ExtraSample0 = sound/ships/shporzne/WAVE_C01_WAV.wav
++ExtraSample1 = sound/ships/shporzne/WAVE_C02_WAV.wav
++ExtraSample2 = sound/ships/shporzne/WAVE_C03_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r +alpha
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 10 +alpha
+-SpecialSprites   = 2
+-SpecialSamples   = 1
++ShipSprites = 1r +alpha
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 10 +alpha
++SpecialSprites = 2
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 1r +alpha
+-ExtraSamples     = 3
+-ExtraExplosion   = 10 +alpha
+-PanelBitmaps     = 7
++ExtraSprites = 1r +alpha
++ExtraSamples = 3
++ExtraExplosion = 10 +alpha
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shporzne/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shporzne/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shporzne/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shporzne/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shporzne/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shporzne/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shporzne/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shporzne/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shporzne/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shporzne/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shporzne/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shporzne/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shporzne/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shporzne/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shporzne/SHIP_S_00_TGA.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shppkufu.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shppkufu.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shppkufu.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = PkunkFury
++Version = 65M
+ 
+ [Ship]
+ Crew = 8
+@@ -76,26 +77,26 @@
+ SpecialSample13 = sound/ships/shppkufu/WAVE_B14_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 10 +alpha
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 0
+-SpecialSamples   = 14
++ShipSprites = 1r
++WeaponSprites = 10 +alpha
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 0
++SpecialSamples = 14
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 1
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 1
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shppkufu/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shppkufu/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shppkufu/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shppkufu/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shppkufu/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shppkufu/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shppkufu/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shppkufu/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shppkufu/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shppkufu/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shppkufu/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shppkufu/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shppkufu/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shppkufu/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shppkufu/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shprogsq.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shprogsq.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shprogsq.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -4,8 +4,9 @@
+ Name1 = Rogue
+ Name2 = Squadron
+ Coders = GeomanNL
+-; idea: this version, GeomanNL, but similar ideas were given by many people as well.
++; = idea: this version, GeomanNL, but similar ideas were given by many people as well.
+ Code = RogueSquadron
++Version = 65M
+ 
+ [Ship]
+ Crew = 11
+@@ -25,11 +26,11 @@
+ Mass = 10
+ 
+ [Weapon]
+-Range    = 40
+-Damage   = 1
++Range = 40
++Damage = 1
+ Velocity = 100
+-Color    = 0x0FFFF00	; yellow
+-Length   = 20.0
++Color = 0x0FFFF00	; yellow
++Length = 20.0
+ 
+ [Fighter]
+ Crew = 2
+@@ -41,7 +42,7 @@
+ EvadeRotationPerSec = 720	; can do 2 turn / second to evade some object
+ SuicideDamage = 1
+ 
+-; rest is equal to mothership
++; = rest is equal to mothership
+ 
+ [AI3_Default]
+ Weapon = Missile
+@@ -49,36 +50,36 @@
+ SpecialFreq = 10
+ 
+ [Formations]
+-; assume the leader heads upward
+-; each formation needs CrewMax entries
+-; if you've casualties only the first Crew entries are used, so the order in which
+-;     you define the positions is important.
+-; position (0,0) is for the leader; should always be there.
++; = assume the leader heads upward
++; = each formation needs CrewMax entries
++; = if you've casualties only the first Crew entries are used, so the order in which
++; = you define the positions is important.
++; = position (0,0) is for the leader; should always be there.
+ 
+ Nformations = 5
+ 
+-; formation 1:
+-;   ( x y ) sets
++; = formation 1:
++; = ( x y ) sets
+ 
+-; column
++; = column
+ Formation01 = 0 0  0 -100  0 -200  0 -300  0 -400  0 -500  0 -600  0 -700  0 -800  0 -900  0 -1000
+ 
+-; row
+-Formation02 =  0 0  -100 0  100 0  -200 0  200 0  -300 0  300 0  -400 0  400 0  -500 0  500 0
++; = row
++Formation02 = 0 0  -100 0  100 0  -200 0  200 0  -300 0  300 0  -400 0  400 0  -500 0  500 0
+ 
+-; V
++; = V
+ Formation03 = 0 0  -50 -50  50 -50  -100 -100  100 -100  -150 -150  150 -150  -200 -200  200 -200  -250 -250  250 -250
+ 
+-; Circle (disabled)
++; = Circle (disabled)
+ ;Formation04 = 0 0  -182 -117  198 -229  -57 -392  -151 -331  108 -32  -108 -32  57 -392  -198 -229  182 -117  151 -331
+ 
+-; Box
++; = Box
+ Formation04 = 0 0  -100 -100  0 -100  100 -100  -100 -200  0 -200  100 -200  -100 -300  0 -300  100 -300  0 -400
+ 
+-; Tightly packed Box
++; = Tightly packed Box
+ Formation05 = 0 0  -50 -50  0 -50  50 -50  -50 -100  0 -100  50 -100  -50 -150  0 -150  50 -150  0 -200
+ 
+-; Two Rows (disabled)
++; = Two Rows (disabled)
+ ;Formation06 = -150 0  -150 100  150 100  -150 200  150 200  -150 300  150 300  -150 400  150 400  -150 500  150 500
+ 
+ [Names]
+@@ -99,26 +100,26 @@
+ SpecialSample0 = sound/ships/shprogsq/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shprogsq/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shprogsq/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shprogsq/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shprogsq/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shprogsq/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shprogsq/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shprogsq/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shprogsq/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shprogsq/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shprogsq/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shprogsq/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shprogsq/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shprogsq/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shprogsq/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shprogsq/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpshosc.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpshosc.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpshosc.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = ShofixtiScout
++Version = 65M
+ 
+ [Ship]
+ Crew = 6
+@@ -70,27 +71,27 @@
+ SpecialSample0 = sound/ships/shpshosc/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 30 +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 30 +alpha
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 8
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 8
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpshosc/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpshosc/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpshosc/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpshosc/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpshosc/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpshosc/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpshosc/SHIP_P06_PCX.bmp
+-PanelBitmaps7  = images/ships/shpshosc/SHIP_P07_PCX.bmp
++PanelBitmaps0 = images/ships/shpshosc/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpshosc/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpshosc/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpshosc/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpshosc/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpshosc/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpshosc/SHIP_P06_PCX.bmp
++PanelBitmaps7 = images/ships/shpshosc/SHIP_P07_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpshosc/SHIP_S01_PCX.bmp
+ 
+
+Modified: trunk/gamedata/default_ini/ships/shpslypr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpslypr.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpslypr.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly (weapon update: GeomanNL)
+ Code = SlylandroProbe
++Version = 65M
+ 
+ [Ship]
+ Crew = 12
+@@ -51,26 +52,26 @@
+ SpecialSample0 = sound/ships/shpslypr/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 64
+-WeaponSprites    = 0
+-WeaponSamples    = 1
+-WeaponExplosion  = 1
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 64
++WeaponSprites = 0
++WeaponSamples = 1
++WeaponExplosion = 1
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpslypr/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpslypr/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpslypr/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpslypr/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpslypr/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpslypr/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpslypr/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpslypr/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpslypr/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpslypr/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpslypr/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpslypr/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpslypr/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpslypr/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shpslypr/SHIP_S01_PCX.bmp
+ ShipSprites1 = images/ships/shpslypr/SHIP_S02_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpspael.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpspael.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpspael.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = SpathiEluder
++Version = 65M
+ 
+ [Ship]
+ Crew = 30
+@@ -71,26 +72,26 @@
+ SpecialSample0 = sound/ships/shpspael/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpspael/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpspael/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpspael/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpspael/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpspael/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpspael/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpspael/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpspael/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpspael/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpspael/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpspael/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpspael/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpspael/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpspael/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpspael/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpstaba.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpstaba.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpstaba.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Coders = UAF :) sort off, thanks to the creators of the other ships I
+ ; = used their code for this ship :)
+ Code = StarBase
++Version = 65M
+ 
+ [Ship]
+ Crew = 42
+@@ -43,9 +44,9 @@
+ HealColor = 1
+ Range = 7
+ 
+-[AI3_Default] 
+-Special = Defense 
+-SpecialFreq = 3 
++[AI3_Default]
++Special = Defense
++SpecialFreq = 3
+ Reserve_Battery = 10
+ Weapon = Sides
+ 
+@@ -58,26 +59,26 @@
+ SpecialSample0 = sound/ships/shpstaba/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpstaba/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpstaba/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpstaba/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpstaba/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpstaba/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpstaba/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpstaba/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpstaba/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpstaba/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpstaba/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpstaba/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpstaba/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpstaba/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpstaba/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpstaba/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpsupbl.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpsupbl.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpsupbl.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = SupoxBlade
++Version = 65M
+ 
+ [Ship]
+ Crew = 12
+@@ -59,26 +60,26 @@
+ WeaponSample0 = sound/ships/shpsupbl/WAVE_A01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 10
+-SpecialSprites   = 0
+-SpecialSamples   = 0
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 10
++SpecialSprites = 0
++SpecialSamples = 0
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpsupbl/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpsupbl/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpsupbl/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpsupbl/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpsupbl/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpsupbl/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpsupbl/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpsupbl/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpsupbl/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpsupbl/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpsupbl/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpsupbl/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpsupbl/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpsupbl/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpsupbl/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpsyrpe.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpsyrpe.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpsyrpe.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = SyreenPenetrator
++Version = 65M
+ 
+ [Ship]
+ Crew = 12
+@@ -71,26 +72,26 @@
+ ExtraSample0 = sound/ships/shpsyrpe/WAVE_C01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r32 +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 1r32 +alpha
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 1
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 1
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpsyrpe/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpsyrpe/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpsyrpe/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpsyrpe/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpsyrpe/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpsyrpe/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpsyrpe/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpsyrpe/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpsyrpe/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpsyrpe/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpsyrpe/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpsyrpe/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpsyrpe/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpsyrpe/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpsyrpe/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shptauar.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shptauar.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shptauar.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -1,27 +1,28 @@
+ [Info]
+-TWCost  = 30
++TWCost = 30
+ Name1 = Tau
+ Name2 = Archon
+ Origin = TW
+ Coders = Tau (and Jad)
+ Code = TauArchon
++Version = 65M
+ 
+ [Ship]
+-Crew           = 42
+-CrewMax        = 42
+-Batt           = 42
+-BattMax        = 42
+-SpeedMax       = 30
+-AccelRate      = 5.7
+-TurnRate       = 4.2
++Crew = 42
++CrewMax = 42
++Batt = 42
++BattMax = 42
++SpeedMax = 30
++AccelRate = 5.7
++TurnRate = 4.2
+ RechargeAmount = 1
+-RechargeRate   = 2.5
+-WeaponDrain    = 3
+-WeaponRate     = -0.5
+-SpecialDrain   = 5
+-SpecialRate    = 0
+-HotspotRate    = 5
+-Mass           = 23
++RechargeRate = 2.5
++WeaponDrain = 3
++WeaponRate = -0.5
++SpecialDrain = 5
++SpecialRate = 0
++HotspotRate = 5
++Mass = 23
+ 
+ CoolDownThenCharge = 1
+ 
+@@ -37,11 +38,11 @@
+ SoundTimer = 250
+ DoReactiveDamage = 1
+ 
+-; The steps the ship takes to damage a ship
+-; set DamageSteps to 0 to return to original (all batt first) style
++; = The steps the ship takes to damage a ship
++; = set DamageSteps to 0 to return to original (all batt first) style
+ DamageSteps = 2
+ 
+-; Batt = 1, Crew = 0.
++; = Batt = 1, Crew = 0.
+ Step1 = 1
+ Step2 = 0
+ 
+@@ -74,123 +75,123 @@
+ ExtraSample3 = sound/ships/shptauar/WAVE_C04_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r +alpha
+-WeaponSprites    = 81 +alpha
+-WeaponSamples    = 6
+-WeaponExplosion  = 10 +alpha
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r +alpha
++WeaponSprites = 81 +alpha
++WeaponSamples = 6
++WeaponExplosion = 10 +alpha
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 12
+-ExtraSamples     = 4
+-ExtraExplosion   = 20 +alpha
++ExtraSprites = 12
++ExtraSamples = 4
++ExtraExplosion = 20 +alpha
+ ExtraExtraSprites0_ = 1r +alpha
+-PanelBitmaps     = 7
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shptauar/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shptauar/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shptauar/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shptauar/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shptauar/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shptauar/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shptauar/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shptauar/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shptauar/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shptauar/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shptauar/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shptauar/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shptauar/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shptauar/SHIP_P06_PCX.bmp
+ 
+ ShipSprites0 = images/ships/shptauar/SHIP_S0_00_TGA.bmp
+ 
+-WeaponSprites0 = images/ships/shptauar/SHOT_A0_00_TGA.bmp 
+-WeaponSprites1 = images/ships/shptauar/SHOT_A0_01_TGA.bmp 
+-WeaponSprites2 = images/ships/shptauar/SHOT_A0_02_TGA.bmp 
+-WeaponSprites3 = images/ships/shptauar/SHOT_A0_03_TGA.bmp 
+-WeaponSprites4 = images/ships/shptauar/SHOT_A0_04_TGA.bmp 
+-WeaponSprites5 = images/ships/shptauar/SHOT_A0_05_TGA.bmp 
+-WeaponSprites6 = images/ships/shptauar/SHOT_A0_06_TGA.bmp 
+-WeaponSprites7 = images/ships/shptauar/SHOT_A0_07_TGA.bmp 
+-WeaponSprites8 = images/ships/shptauar/SHOT_A0_08_TGA.bmp 
+-WeaponSprites9 = images/ships/shptauar/SHOT_A0_09_TGA.bmp 
+-WeaponSprites10 = images/ships/shptauar/SHOT_A0_10_TGA.bmp 
+-WeaponSprites11 = images/ships/shptauar/SHOT_A0_11_TGA.bmp 
+-WeaponSprites12 = images/ships/shptauar/SHOT_A0_12_TGA.bmp 
+-WeaponSprites13 = images/ships/shptauar/SHOT_A0_13_TGA.bmp 
+-WeaponSprites14 = images/ships/shptauar/SHOT_A0_14_TGA.bmp 
+-WeaponSprites15 = images/ships/shptauar/SHOT_A0_15_TGA.bmp 
+-WeaponSprites16 = images/ships/shptauar/SHOT_A0_16_TGA.bmp 
+-WeaponSprites17 = images/ships/shptauar/SHOT_A0_17_TGA.bmp 
+-WeaponSprites18 = images/ships/shptauar/SHOT_A0_18_TGA.bmp 
+-WeaponSprites19 = images/ships/shptauar/SHOT_A0_19_TGA.bmp 
+-WeaponSprites20 = images/ships/shptauar/SHOT_A1_00_TGA.bmp 
+-WeaponSprites21 = images/ships/shptauar/SHOT_A1_01_TGA.bmp 
+-WeaponSprites22 = images/ships/shptauar/SHOT_A1_02_TGA.bmp 
+-WeaponSprites23 = images/ships/shptauar/SHOT_A1_03_TGA.bmp 
+-WeaponSprites24 = images/ships/shptauar/SHOT_A1_04_TGA.bmp 
+-WeaponSprites25 = images/ships/shptauar/SHOT_A1_05_TGA.bmp 
+-WeaponSprites26 = images/ships/shptauar/SHOT_A1_06_TGA.bmp 
+-WeaponSprites27 = images/ships/shptauar/SHOT_A1_07_TGA.bmp 
+-WeaponSprites28 = images/ships/shptauar/SHOT_A1_08_TGA.bmp 
+-WeaponSprites29 = images/ships/shptauar/SHOT_A1_09_TGA.bmp 
+-WeaponSprites30 = images/ships/shptauar/SHOT_A1_10_TGA.bmp 
+-WeaponSprites31 = images/ships/shptauar/SHOT_A1_11_TGA.bmp 
+-WeaponSprites32 = images/ships/shptauar/SHOT_A1_12_TGA.bmp 
+-WeaponSprites33 = images/ships/shptauar/SHOT_A1_13_TGA.bmp 
+-WeaponSprites34 = images/ships/shptauar/SHOT_A1_14_TGA.bmp 
+-WeaponSprites35 = images/ships/shptauar/SHOT_A1_15_TGA.bmp 
+-WeaponSprites36 = images/ships/shptauar/SHOT_A1_16_TGA.bmp 
+-WeaponSprites37 = images/ships/shptauar/SHOT_A1_17_TGA.bmp 
+-WeaponSprites38 = images/ships/shptauar/SHOT_A1_18_TGA.bmp 
+-WeaponSprites39 = images/ships/shptauar/SHOT_A1_19_TGA.bmp 
+-WeaponSprites40 = images/ships/shptauar/SHOT_A2_00_TGA.bmp 
+-WeaponSprites41 = images/ships/shptauar/SHOT_A2_01_TGA.bmp 
+-WeaponSprites42 = images/ships/shptauar/SHOT_A2_02_TGA.bmp 
+-WeaponSprites43 = images/ships/shptauar/SHOT_A2_03_TGA.bmp 
+-WeaponSprites44 = images/ships/shptauar/SHOT_A2_04_TGA.bmp 
+-WeaponSprites45 = images/ships/shptauar/SHOT_A2_05_TGA.bmp 
+-WeaponSprites46 = images/ships/shptauar/SHOT_A2_06_TGA.bmp 
+-WeaponSprites47 = images/ships/shptauar/SHOT_A2_07_TGA.bmp 
+-WeaponSprites48 = images/ships/shptauar/SHOT_A2_08_TGA.bmp 
+-WeaponSprites49 = images/ships/shptauar/SHOT_A2_09_TGA.bmp 
+-WeaponSprites50 = images/ships/shptauar/SHOT_A2_10_TGA.bmp 
+-WeaponSprites51 = images/ships/shptauar/SHOT_A2_11_TGA.bmp 
+-WeaponSprites52 = images/ships/shptauar/SHOT_A2_12_TGA.bmp 
+-WeaponSprites53 = images/ships/shptauar/SHOT_A2_13_TGA.bmp 
+-WeaponSprites54 = images/ships/shptauar/SHOT_A2_14_TGA.bmp 
+-WeaponSprites55 = images/ships/shptauar/SHOT_A2_15_TGA.bmp 
+-WeaponSprites56 = images/ships/shptauar/SHOT_A2_16_TGA.bmp 
+-WeaponSprites57 = images/ships/shptauar/SHOT_A2_17_TGA.bmp 
+-WeaponSprites58 = images/ships/shptauar/SHOT_A2_18_TGA.bmp 
+-WeaponSprites59 = images/ships/shptauar/SHOT_A2_19_TGA.bmp 
+-WeaponSprites60 = images/ships/shptauar/SHOT_A3_00_TGA.bmp 
+-WeaponSprites61 = images/ships/shptauar/SHOT_A3_01_TGA.bmp 
+-WeaponSprites62 = images/ships/shptauar/SHOT_A3_02_TGA.bmp 
+-WeaponSprites63 = images/ships/shptauar/SHOT_A3_03_TGA.bmp 
+-WeaponSprites64 = images/ships/shptauar/SHOT_A3_04_TGA.bmp 
+-WeaponSprites65 = images/ships/shptauar/SHOT_A3_05_TGA.bmp 
+-WeaponSprites66 = images/ships/shptauar/SHOT_A3_06_TGA.bmp 
+-WeaponSprites67 = images/ships/shptauar/SHOT_A3_07_TGA.bmp 
+-WeaponSprites68 = images/ships/shptauar/SHOT_A3_08_TGA.bmp 
+-WeaponSprites69 = images/ships/shptauar/SHOT_A3_09_TGA.bmp 
+-WeaponSprites70 = images/ships/shptauar/SHOT_A3_10_TGA.bmp 
+-WeaponSprites71 = images/ships/shptauar/SHOT_A3_11_TGA.bmp 
+-WeaponSprites72 = images/ships/shptauar/SHOT_A3_12_TGA.bmp 
+-WeaponSprites73 = images/ships/shptauar/SHOT_A3_13_TGA.bmp 
+-WeaponSprites74 = images/ships/shptauar/SHOT_A3_14_TGA.bmp 
+-WeaponSprites75 = images/ships/shptauar/SHOT_A3_15_TGA.bmp 
+-WeaponSprites76 = images/ships/shptauar/SHOT_A3_16_TGA.bmp 
+-WeaponSprites77 = images/ships/shptauar/SHOT_A3_17_TGA.bmp 
+-WeaponSprites78 = images/ships/shptauar/SHOT_A3_18_TGA.bmp 
+-WeaponSprites79 = images/ships/shptauar/SHOT_A3_19_TGA.bmp 
+-WeaponSprites80 = images/ships/shptauar/SHOT_AX_00_TGA.bmp 
++WeaponSprites0 = images/ships/shptauar/SHOT_A0_00_TGA.bmp
++WeaponSprites1 = images/ships/shptauar/SHOT_A0_01_TGA.bmp
++WeaponSprites2 = images/ships/shptauar/SHOT_A0_02_TGA.bmp
++WeaponSprites3 = images/ships/shptauar/SHOT_A0_03_TGA.bmp
++WeaponSprites4 = images/ships/shptauar/SHOT_A0_04_TGA.bmp
++WeaponSprites5 = images/ships/shptauar/SHOT_A0_05_TGA.bmp
++WeaponSprites6 = images/ships/shptauar/SHOT_A0_06_TGA.bmp
++WeaponSprites7 = images/ships/shptauar/SHOT_A0_07_TGA.bmp
++WeaponSprites8 = images/ships/shptauar/SHOT_A0_08_TGA.bmp
++WeaponSprites9 = images/ships/shptauar/SHOT_A0_09_TGA.bmp
++WeaponSprites10 = images/ships/shptauar/SHOT_A0_10_TGA.bmp
++WeaponSprites11 = images/ships/shptauar/SHOT_A0_11_TGA.bmp
++WeaponSprites12 = images/ships/shptauar/SHOT_A0_12_TGA.bmp
++WeaponSprites13 = images/ships/shptauar/SHOT_A0_13_TGA.bmp
++WeaponSprites14 = images/ships/shptauar/SHOT_A0_14_TGA.bmp
++WeaponSprites15 = images/ships/shptauar/SHOT_A0_15_TGA.bmp
++WeaponSprites16 = images/ships/shptauar/SHOT_A0_16_TGA.bmp
++WeaponSprites17 = images/ships/shptauar/SHOT_A0_17_TGA.bmp
++WeaponSprites18 = images/ships/shptauar/SHOT_A0_18_TGA.bmp
++WeaponSprites19 = images/ships/shptauar/SHOT_A0_19_TGA.bmp
++WeaponSprites20 = images/ships/shptauar/SHOT_A1_00_TGA.bmp
++WeaponSprites21 = images/ships/shptauar/SHOT_A1_01_TGA.bmp
++WeaponSprites22 = images/ships/shptauar/SHOT_A1_02_TGA.bmp
++WeaponSprites23 = images/ships/shptauar/SHOT_A1_03_TGA.bmp
++WeaponSprites24 = images/ships/shptauar/SHOT_A1_04_TGA.bmp
++WeaponSprites25 = images/ships/shptauar/SHOT_A1_05_TGA.bmp
++WeaponSprites26 = images/ships/shptauar/SHOT_A1_06_TGA.bmp
++WeaponSprites27 = images/ships/shptauar/SHOT_A1_07_TGA.bmp
++WeaponSprites28 = images/ships/shptauar/SHOT_A1_08_TGA.bmp
++WeaponSprites29 = images/ships/shptauar/SHOT_A1_09_TGA.bmp
++WeaponSprites30 = images/ships/shptauar/SHOT_A1_10_TGA.bmp
++WeaponSprites31 = images/ships/shptauar/SHOT_A1_11_TGA.bmp
++WeaponSprites32 = images/ships/shptauar/SHOT_A1_12_TGA.bmp
++WeaponSprites33 = images/ships/shptauar/SHOT_A1_13_TGA.bmp
++WeaponSprites34 = images/ships/shptauar/SHOT_A1_14_TGA.bmp
++WeaponSprites35 = images/ships/shptauar/SHOT_A1_15_TGA.bmp
++WeaponSprites36 = images/ships/shptauar/SHOT_A1_16_TGA.bmp
++WeaponSprites37 = images/ships/shptauar/SHOT_A1_17_TGA.bmp
++WeaponSprites38 = images/ships/shptauar/SHOT_A1_18_TGA.bmp
++WeaponSprites39 = images/ships/shptauar/SHOT_A1_19_TGA.bmp
++WeaponSprites40 = images/ships/shptauar/SHOT_A2_00_TGA.bmp
++WeaponSprites41 = images/ships/shptauar/SHOT_A2_01_TGA.bmp
++WeaponSprites42 = images/ships/shptauar/SHOT_A2_02_TGA.bmp
++WeaponSprites43 = images/ships/shptauar/SHOT_A2_03_TGA.bmp
++WeaponSprites44 = images/ships/shptauar/SHOT_A2_04_TGA.bmp
++WeaponSprites45 = images/ships/shptauar/SHOT_A2_05_TGA.bmp
++WeaponSprites46 = images/ships/shptauar/SHOT_A2_06_TGA.bmp
++WeaponSprites47 = images/ships/shptauar/SHOT_A2_07_TGA.bmp
++WeaponSprites48 = images/ships/shptauar/SHOT_A2_08_TGA.bmp
++WeaponSprites49 = images/ships/shptauar/SHOT_A2_09_TGA.bmp
++WeaponSprites50 = images/ships/shptauar/SHOT_A2_10_TGA.bmp
++WeaponSprites51 = images/ships/shptauar/SHOT_A2_11_TGA.bmp
++WeaponSprites52 = images/ships/shptauar/SHOT_A2_12_TGA.bmp
++WeaponSprites53 = images/ships/shptauar/SHOT_A2_13_TGA.bmp
++WeaponSprites54 = images/ships/shptauar/SHOT_A2_14_TGA.bmp
++WeaponSprites55 = images/ships/shptauar/SHOT_A2_15_TGA.bmp
++WeaponSprites56 = images/ships/shptauar/SHOT_A2_16_TGA.bmp
++WeaponSprites57 = images/ships/shptauar/SHOT_A2_17_TGA.bmp
++WeaponSprites58 = images/ships/shptauar/SHOT_A2_18_TGA.bmp
++WeaponSprites59 = images/ships/shptauar/SHOT_A2_19_TGA.bmp
++WeaponSprites60 = images/ships/shptauar/SHOT_A3_00_TGA.bmp
++WeaponSprites61 = images/ships/shptauar/SHOT_A3_01_TGA.bmp
++WeaponSprites62 = images/ships/shptauar/SHOT_A3_02_TGA.bmp
++WeaponSprites63 = images/ships/shptauar/SHOT_A3_03_TGA.bmp
++WeaponSprites64 = images/ships/shptauar/SHOT_A3_04_TGA.bmp
++WeaponSprites65 = images/ships/shptauar/SHOT_A3_05_TGA.bmp
++WeaponSprites66 = images/ships/shptauar/SHOT_A3_06_TGA.bmp
++WeaponSprites67 = images/ships/shptauar/SHOT_A3_07_TGA.bmp
++WeaponSprites68 = images/ships/shptauar/SHOT_A3_08_TGA.bmp
++WeaponSprites69 = images/ships/shptauar/SHOT_A3_09_TGA.bmp
++WeaponSprites70 = images/ships/shptauar/SHOT_A3_10_TGA.bmp
++WeaponSprites71 = images/ships/shptauar/SHOT_A3_11_TGA.bmp
++WeaponSprites72 = images/ships/shptauar/SHOT_A3_12_TGA.bmp
++WeaponSprites73 = images/ships/shptauar/SHOT_A3_13_TGA.bmp
++WeaponSprites74 = images/ships/shptauar/SHOT_A3_14_TGA.bmp
++WeaponSprites75 = images/ships/shptauar/SHOT_A3_15_TGA.bmp
++WeaponSprites76 = images/ships/shptauar/SHOT_A3_16_TGA.bmp
++WeaponSprites77 = images/ships/shptauar/SHOT_A3_17_TGA.bmp
++WeaponSprites78 = images/ships/shptauar/SHOT_A3_18_TGA.bmp
++WeaponSprites79 = images/ships/shptauar/SHOT_A3_19_TGA.bmp
++WeaponSprites80 = images/ships/shptauar/SHOT_AX_00_TGA.bmp
+ 
+ 
+-WeaponExplosion0 = images/ships/shptauar/SHOT_B_00_TGA.bmp 
+-WeaponExplosion1 = images/ships/shptauar/SHOT_B_01_TGA.bmp 
+-WeaponExplosion2 = images/ships/shptauar/SHOT_B_02_TGA.bmp 
+-WeaponExplosion3 = images/ships/shptauar/SHOT_B_03_TGA.bmp 
+-WeaponExplosion4 = images/ships/shptauar/SHOT_B_04_TGA.bmp 
+-WeaponExplosion5 = images/ships/shptauar/SHOT_B_05_TGA.bmp 
+-WeaponExplosion6 = images/ships/shptauar/SHOT_B_06_TGA.bmp 
+-WeaponExplosion7 = images/ships/shptauar/SHOT_B_07_TGA.bmp 
+-WeaponExplosion8 = images/ships/shptauar/SHOT_B_08_TGA.bmp 
+-WeaponExplosion9 = images/ships/shptauar/SHOT_B_09_TGA.bmp 
++WeaponExplosion0 = images/ships/shptauar/SHOT_B_00_TGA.bmp
++WeaponExplosion1 = images/ships/shptauar/SHOT_B_01_TGA.bmp
++WeaponExplosion2 = images/ships/shptauar/SHOT_B_02_TGA.bmp
++WeaponExplosion3 = images/ships/shptauar/SHOT_B_03_TGA.bmp
++WeaponExplosion4 = images/ships/shptauar/SHOT_B_04_TGA.bmp
++WeaponExplosion5 = images/ships/shptauar/SHOT_B_05_TGA.bmp
++WeaponExplosion6 = images/ships/shptauar/SHOT_B_06_TGA.bmp
++WeaponExplosion7 = images/ships/shptauar/SHOT_B_07_TGA.bmp
++WeaponExplosion8 = images/ships/shptauar/SHOT_B_08_TGA.bmp
++WeaponExplosion9 = images/ships/shptauar/SHOT_B_09_TGA.bmp
+ 
+ SpecialSprites0 = images/ships/shptauar/SHOT_C0_00_TGA.bmp
+ SpecialSprites1 = images/ships/shptauar/SHOT_C1_00_TGA.bmp
+@@ -216,18 +217,18 @@
+ SpecialExplosion18 = images/ships/shptauar/SHOT_D_18_TGA.bmp
+ SpecialExplosion19 = images/ships/shptauar/SHOT_D_19_TGA.bmp
+ 
+-ExtraSprites0 = images/ships/shptauar/SHOT_C01_PCX.bmp 
+-ExtraSprites1 = images/ships/shptauar/SHOT_C02_PCX.bmp 
+-ExtraSprites2 = images/ships/shptauar/SHOT_C03_PCX.bmp 
+-ExtraSprites3 = images/ships/shptauar/SHOT_C04_PCX.bmp 
+-ExtraSprites4 = images/ships/shptauar/SHOT_C05_PCX.bmp 
+-ExtraSprites5 = images/ships/shptauar/SHOT_C06_PCX.bmp 
+-ExtraSprites6 = images/ships/shptauar/SHOT_C07_PCX.bmp 
+-ExtraSprites7 = images/ships/shptauar/SHOT_C08_PCX.bmp 
+-ExtraSprites8 = images/ships/shptauar/SHOT_C09_PCX.bmp 
+-ExtraSprites9 = images/ships/shptauar/SHOT_C10_PCX.bmp 
+-ExtraSprites10 = images/ships/shptauar/SHOT_C11_PCX.bmp 
+-ExtraSprites11 = images/ships/shptauar/SHOT_C12_PCX.bmp 
++ExtraSprites0 = images/ships/shptauar/SHOT_C01_PCX.bmp
++ExtraSprites1 = images/ships/shptauar/SHOT_C02_PCX.bmp
++ExtraSprites2 = images/ships/shptauar/SHOT_C03_PCX.bmp
++ExtraSprites3 = images/ships/shptauar/SHOT_C04_PCX.bmp
++ExtraSprites4 = images/ships/shptauar/SHOT_C05_PCX.bmp
++ExtraSprites5 = images/ships/shptauar/SHOT_C06_PCX.bmp
++ExtraSprites6 = images/ships/shptauar/SHOT_C07_PCX.bmp
++ExtraSprites7 = images/ships/shptauar/SHOT_C08_PCX.bmp
++ExtraSprites8 = images/ships/shptauar/SHOT_C09_PCX.bmp
++ExtraSprites9 = images/ships/shptauar/SHOT_C10_PCX.bmp
++ExtraSprites10 = images/ships/shptauar/SHOT_C11_PCX.bmp
++ExtraSprites11 = images/ships/shptauar/SHOT_C12_PCX.bmp
+ 
+ ExtraExplosion0 = images/ships/shptauar/SHOT_F_00_TGA.bmp
+ ExtraExplosion1 = images/ships/shptauar/SHOT_F_01_TGA.bmp
+@@ -250,4 +251,4 @@
+ ExtraExplosion18 = images/ships/shptauar/SHOT_F_18_TGA.bmp
+ ExtraExplosion19 = images/ships/shptauar/SHOT_F_19_TGA.bmp
+ 
+-ExtraExtraSprites0_0 = images/ships/shptauar/SHOT_X0_00_BMP.bmp 
++ExtraExtraSprites0_0 = images/ships/shptauar/SHOT_X0_00_BMP.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shptauda.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shptauda.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shptauda.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -1,27 +1,28 @@
+ [Info]
+-TWCost  = 12
++TWCost = 12
+ Name1 = Tau
+ Name2 = Dagger
+ Origin = TW
+ Coders = Tau
+ Code = TauDagger
++Version = 65M
+ 
+ [Ship]
+-Crew           = 8
+-CrewMax        = 8
+-Batt           = 12
+-BattMax        = 12
+-SpeedMax       = 47
+-AccelRate      = 13
+-TurnRate       = 1
++Crew = 8
++CrewMax = 8
++Batt = 12
++BattMax = 12
++SpeedMax = 47
++AccelRate = 13
++TurnRate = 1
+ RechargeAmount = 1
+-RechargeRate   = 3
+-WeaponDrain    = 6
+-WeaponRate     = 11
+-SpecialDrain   = 12
+-SpecialRate    = 0
+-HotspotRate    = 1
+-Mass           = 6
++RechargeRate = 3
++WeaponDrain = 6
++WeaponRate = 11
++SpecialDrain = 12
++SpecialRate = 0
++HotspotRate = 1
++Mass = 6
+ 
+ [Weapon]
+ Range = 4.5
+@@ -45,26 +46,26 @@
+ SpecialSample1 = sound/ships/shptauda/WAVE_B02_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r +alpha
+-WeaponSprites    = 0
+-WeaponSamples    = 1
+-WeaponExplosion  = 1 +alpha
+-SpecialSprites   = 2r +alpha
+-SpecialSamples   = 2
++ShipSprites = 1r +alpha
++WeaponSprites = 0
++WeaponSamples = 1
++WeaponExplosion = 1 +alpha
++SpecialSprites = 2r +alpha
++SpecialSamples = 2
+ SpecialExplosion = 20 +alpha
+-ExtraSprites     = 10 +alpha
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 10 +alpha
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shptauda/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shptauda/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shptauda/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shptauda/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shptauda/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shptauda/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shptauda/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shptauda/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shptauda/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shptauda/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shptauda/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shptauda/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shptauda/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shptauda/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shptauda/SHIP_S_00_TGA.bmp
+@@ -95,13 +96,13 @@
+ SpecialExplosion18 = images/ships/shptauda/SHOT_D_18_TGA.bmp
+ SpecialExplosion19 = images/ships/shptauda/SHOT_D_19_TGA.bmp
+ 
+-ExtraSprites0 = images/ships/shptauda/SHOT_E_00_TGA.bmp 
+-ExtraSprites1 = images/ships/shptauda/SHOT_E_01_TGA.bmp 
+-ExtraSprites2 = images/ships/shptauda/SHOT_E_02_TGA.bmp 
+-ExtraSprites3 = images/ships/shptauda/SHOT_E_03_TGA.bmp 
+-ExtraSprites4 = images/ships/shptauda/SHOT_E_04_TGA.bmp 
+-ExtraSprites5 = images/ships/shptauda/SHOT_E_05_TGA.bmp 
+-ExtraSprites6 = images/ships/shptauda/SHOT_E_06_TGA.bmp 
+-ExtraSprites7 = images/ships/shptauda/SHOT_E_07_TGA.bmp 
+-ExtraSprites8 = images/ships/shptauda/SHOT_E_08_TGA.bmp 
+-ExtraSprites9 = images/ships/shptauda/SHOT_E_09_TGA.bmp 
++ExtraSprites0 = images/ships/shptauda/SHOT_E_00_TGA.bmp
++ExtraSprites1 = images/ships/shptauda/SHOT_E_01_TGA.bmp
++ExtraSprites2 = images/ships/shptauda/SHOT_E_02_TGA.bmp
++ExtraSprites3 = images/ships/shptauda/SHOT_E_03_TGA.bmp
++ExtraSprites4 = images/ships/shptauda/SHOT_E_04_TGA.bmp
++ExtraSprites5 = images/ships/shptauda/SHOT_E_05_TGA.bmp
++ExtraSprites6 = images/ships/shptauda/SHOT_E_06_TGA.bmp
++ExtraSprites7 = images/ships/shptauda/SHOT_E_07_TGA.bmp
++ExtraSprites8 = images/ships/shptauda/SHOT_E_08_TGA.bmp
++ExtraSprites9 = images/ships/shptauda/SHOT_E_09_TGA.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shptausl.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shptausl.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shptausl.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -1,32 +1,33 @@
+ [Info]
+ Origin = TW
+-TWCost  = 20
++TWCost = 20
+ Name1 = Tau
+ Name2 = Slider
+ Coders = Tau
+ Code = TauSlider
++Version = 65M
+ 
+ [Ship]
+-Crew           = 22
+-CrewMax        = 22
+-Batt           = 22
+-BattMax        = 22
+-SpeedMax       = 42
+-AccelRate      = 9
+-TurnRate       = 1
++Crew = 22
++CrewMax = 22
++Batt = 22
++BattMax = 22
++SpeedMax = 42
++AccelRate = 9
++TurnRate = 1
+ RechargeAmount = 1
+-RechargeRate   = 2
+-WeaponDrain    = 3
+-WeaponRate     = 1
+-SpecialDrain   = 3
+-SpecialRate    = 4
+-HotspotRate    = 3
+-Mass           = 16
++RechargeRate = 2
++WeaponDrain = 3
++WeaponRate = 1
++SpecialDrain = 3
++SpecialRate = 4
++HotspotRate = 3
++Mass = 16
+ 
+ [Weapon]
+-Range    = 15
++Range = 15
+ Velocity = 110
+-Length  = 10
++Length = 10
+ 
+ [Special]
+ Range0 = 0
+@@ -52,26 +53,26 @@
+ SpecialSample1 = sound/ships/shptausl/WAVE_B03_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 0
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 0
+-SpecialSamples   = 3
++ShipSprites = 1r
++WeaponSprites = 0
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 0
++SpecialSamples = 3
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shptausl/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shptausl/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shptausl/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shptausl/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shptausl/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shptausl/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shptausl/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shptausl/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shptausl/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shptausl/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shptausl/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shptausl/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shptausl/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shptausl/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shptausl/SHIP_S00_BMP.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shptauto.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shptauto.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shptauto.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -1,40 +1,41 @@
+ [Info]
+ Origin = TW
+-TWCost  = 22
++TWCost = 22
+ Name1 = Tau
+ Name2 = Torrent
+ Coders = Tau
+-Ditty  = Lestat
++Ditty = Lestat
+ Code = TauTor
++Version = 65M
+ 
+ [Ship]
+-Crew           = 20
+-CrewMax        = 20
+-Batt           = 20
+-BattMax        = 20
+-SpeedMax       = 50
+-AccelRate      = 5
+-TurnRate       = 3
++Crew = 20
++CrewMax = 20
++Batt = 20
++BattMax = 20
++SpeedMax = 50
++AccelRate = 5
++TurnRate = 3
+ RechargeAmount = 1
+-RechargeRate   = 3
+-WeaponDrain    = 10
+-WeaponRate     = 20
+-SpecialDrain   = 1
+-SpecialRate    = 1
+-HotspotRate    = 1
+-Mass           = 21
++RechargeRate = 3
++WeaponDrain = 10
++WeaponRate = 20
++SpecialDrain = 1
++SpecialRate = 1
++HotspotRate = 1
++Mass = 21
+ 
+ [Weapon]
+-Range    = 50
++Range = 50
+ Velocity = 130
+-Damage   = 6
+-Armour   = 999
++Damage = 6
++Armour = 999
+ 
+ [Special]
+-Range    = 14
++Range = 14
+ Velocity = 80
+-Damage   = 2
+-Armour   = 1
++Damage = 2
++Armour = 1
+ 
+ [Extra]
+ StartDrain = 6
+@@ -61,26 +62,26 @@
+ ExtraSample1 = sound/ships/shptauto/WAVE_C02_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 6
+-WeaponSamples    = 2
+-WeaponExplosion  = 12
+-SpecialSprites   = 6
+-SpecialSamples   = 0
++ShipSprites = 1r
++WeaponSprites = 6
++WeaponSamples = 2
++WeaponExplosion = 12
++SpecialSprites = 6
++SpecialSamples = 0
+ SpecialExplosion = 12
+-ExtraSprites     = 12
+-ExtraSamples     = 2
+-ExtraExplosion   = 1r
+-PanelBitmaps     = 7
++ExtraSprites = 12
++ExtraSamples = 2
++ExtraExplosion = 1r
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shptauto/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shptauto/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shptauto/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shptauto/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shptauto/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shptauto/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shptauto/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shptauto/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shptauto/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shptauto/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shptauto/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shptauto/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shptauto/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shptauto/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shptauto/SHIP_S00_BMP.bmp
+@@ -125,17 +126,17 @@
+ SpecialExplosion10 = images/ships/shptauto/SHOT_D10_BMP.bmp
+ SpecialExplosion11 = images/ships/shptauto/SHOT_D11_BMP.bmp
+ 
+-ExtraSprites0 = images/ships/shptauto/SHOT_E0000_BMP.bmp 
+-ExtraSprites1 = images/ships/shptauto/SHOT_E0001_BMP.bmp 
+-ExtraSprites2 = images/ships/shptauto/SHOT_E0002_BMP.bmp 
+-ExtraSprites3 = images/ships/shptauto/SHOT_E0003_BMP.bmp 
+-ExtraSprites4 = images/ships/shptauto/SHOT_E0004_BMP.bmp 
+-ExtraSprites5 = images/ships/shptauto/SHOT_E0005_BMP.bmp 
+-ExtraSprites6 = images/ships/shptauto/SHOT_E0006_BMP.bmp 
+-ExtraSprites7 = images/ships/shptauto/SHOT_E0007_BMP.bmp 
+-ExtraSprites8 = images/ships/shptauto/SHOT_E0008_BMP.bmp 
+-ExtraSprites9 = images/ships/shptauto/SHOT_E0009_BMP.bmp 
+-ExtraSprites10 = images/ships/shptauto/SHOT_E0010_BMP.bmp 
+-ExtraSprites11 = images/ships/shptauto/SHOT_E0011_BMP.bmp 
++ExtraSprites0 = images/ships/shptauto/SHOT_E0000_BMP.bmp
++ExtraSprites1 = images/ships/shptauto/SHOT_E0001_BMP.bmp
++ExtraSprites2 = images/ships/shptauto/SHOT_E0002_BMP.bmp
++ExtraSprites3 = images/ships/shptauto/SHOT_E0003_BMP.bmp
++ExtraSprites4 = images/ships/shptauto/SHOT_E0004_BMP.bmp
++ExtraSprites5 = images/ships/shptauto/SHOT_E0005_BMP.bmp
++ExtraSprites6 = images/ships/shptauto/SHOT_E0006_BMP.bmp
++ExtraSprites7 = images/ships/shptauto/SHOT_E0007_BMP.bmp
++ExtraSprites8 = images/ships/shptauto/SHOT_E0008_BMP.bmp
++ExtraSprites9 = images/ships/shptauto/SHOT_E0009_BMP.bmp
++ExtraSprites10 = images/ships/shptauto/SHOT_E0010_BMP.bmp
++ExtraSprites11 = images/ships/shptauto/SHOT_E0011_BMP.bmp
+ 
+ ExtraExplosion0 = images/ships/shptauto/SHOT_F00_BMP.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpthrto.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpthrto.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpthrto.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = ThraddashTorch
++Version = 65M
+ 
+ [Ship]
+ Crew = 8
+@@ -68,26 +69,26 @@
+ SpecialSample0 = sound/ships/shpthrto/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 39 +alpha
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 39 +alpha
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpthrto/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpthrto/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpthrto/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpthrto/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpthrto/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpthrto/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpthrto/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpthrto/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpthrto/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpthrto/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpthrto/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpthrto/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpthrto/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpthrto/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpthrto/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpumgdr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpumgdr.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpumgdr.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = UmgahDrone
++Version = 65M
+ 
+ [Ship]
+ Crew = 10
+@@ -65,26 +66,26 @@
+ SpecialSample0 = sound/ships/shpumgdr/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 6r +noaa
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 6r +noaa
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpumgdr/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpumgdr/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpumgdr/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpumgdr/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpumgdr/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpumgdr/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpumgdr/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpumgdr/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpumgdr/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpumgdr/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpumgdr/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpumgdr/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpumgdr/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpumgdr/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpumgdr/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shputwju.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shputwju.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shputwju.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = UtwigJugger
++Version = 65M
+ 
+ [Ship]
+ Crew = 20
+@@ -62,26 +63,26 @@
+ SpecialSample0 = sound/ships/shputwju/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 0
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 0
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shputwju/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shputwju/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shputwju/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shputwju/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shputwju/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shputwju/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shputwju/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shputwju/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shputwju/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shputwju/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shputwju/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shputwju/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shputwju/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shputwju/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shputwju/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpvuxin.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpvuxin.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpvuxin.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = VuxIntruder
++Version = 65M
+ 
+ [Ship]
+ Crew = 20
+@@ -71,26 +72,26 @@
+ SpecialSample1 = sound/ships/shpvuxin/WAVE_B02_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 3r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 11
+-SpecialSamples   = 2
++ShipSprites = 1r
++WeaponSprites = 3r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 11
++SpecialSamples = 2
+ SpecialExplosion = 0
+-ExtraSprites     = 3r
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 3r
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpvuxin/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpvuxin/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpvuxin/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpvuxin/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpvuxin/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpvuxin/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpvuxin/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpvuxin/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpvuxin/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpvuxin/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpvuxin/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpvuxin/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpvuxin/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpvuxin/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpvuxin/SHIP_S00_PCX.bmp
+@@ -111,7 +112,7 @@
+ SpecialSprites9 = images/ships/shpvuxin/SHOT_A10_PCX.bmp
+ SpecialSprites10 = images/ships/shpvuxin/SHOT_A11_PCX.bmp
+               
+-ExtraSprites0  = images/ships/shpvuxin/SHOT_E00_PCX.bmp
+-ExtraSprites1  = images/ships/shpvuxin/SHOT_E01_PCX.bmp
+-ExtraSprites2  = images/ships/shpvuxin/SHOT_E02_PCS.bmp
++ExtraSprites0 = images/ships/shpvuxin/SHOT_E00_PCX.bmp
++ExtraSprites1 = images/ships/shpvuxin/SHOT_E01_PCX.bmp
++ExtraSprites2 = images/ships/shpvuxin/SHOT_E02_PCS.bmp
+ 
+
+Modified: trunk/gamedata/default_ini/ships/shpyehte.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpyehte.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpyehte.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -7,6 +7,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = YehatTerminator
++Version = 65M
+ 
+ [Ship]
+ Crew = 20
+@@ -66,26 +67,26 @@
+ SpecialSample0 = sound/ships/shpyehte/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 1r
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 1r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 1r
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 1r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpyehte/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpyehte/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpyehte/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpyehte/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpyehte/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpyehte/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpyehte/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpyehte/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpyehte/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpyehte/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpyehte/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpyehte/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpyehte/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpyehte/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpyehte/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpzeksh.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpzeksh.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpzeksh.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -5,6 +5,7 @@
+ Origin = TW
+ Coders = Richardyzo
+ Code = ZekfahanShocker
++Version = 65M
+ 
+ [Ship]
+ Crew = 42
+@@ -47,26 +48,26 @@
+ SpecialSample2 = sound/ships/shpzeksh/WAVE_B03_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 5
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 6
+-SpecialSamples   = 3
++ShipSprites = 1r
++WeaponSprites = 5
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 6
++SpecialSamples = 3
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+-PanelBitmaps0  = images/ships/shpzeksh/SHIP_P00_PCX.bmp
+-PanelBitmaps1  = images/ships/shpzeksh/SHIP_P01_PCX.bmp
+-PanelBitmaps2  = images/ships/shpzeksh/SHIP_P02_PCX.bmp
+-PanelBitmaps3  = images/ships/shpzeksh/SHIP_P03_PCX.bmp
+-PanelBitmaps4  = images/ships/shpzeksh/SHIP_P04_PCX.bmp
+-PanelBitmaps5  = images/ships/shpzeksh/SHIP_P05_PCX.bmp
+-PanelBitmaps6  = images/ships/shpzeksh/SHIP_P06_PCX.bmp
++PanelBitmaps0 = images/ships/shpzeksh/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpzeksh/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpzeksh/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpzeksh/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpzeksh/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpzeksh/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpzeksh/SHIP_P06_PCX.bmp
+ 
+ 
+ ShipSprites0 = images/ships/shpzeksh/SHIP_S01_PCX.bmp
+
+Modified: trunk/gamedata/default_ini/ships/shpzfpst.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpzfpst.ini	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/gamedata/default_ini/ships/shpzfpst.ini	2004-09-26 18:31:46 UTC (rev 66)
+@@ -6,6 +6,7 @@
+ Origin = UQM
+ Coders = The Fly
+ Code = ZoqFotPikStinger
++Version = 65M
+ 
+ [Ship]
+ Crew = 10
+@@ -33,7 +34,7 @@
+ [Special]
+ Damage = 12		;4
+ Licking = 0		;1
+-; 0 makes it use &quot;flat&quot; damage
++; = 0 makes it use &quot;flat&quot; damage
+ 
+ [AI3_Default]
+ Tactic = Direct
+@@ -70,17 +71,17 @@
+ SpecialSample0 = sound/ships/shpzfpst/WAVE_B01_WAV.wav
+ 
+ [Objects]
+-ShipSprites      = 1r
+-WeaponSprites    = 6
+-WeaponSamples    = 1
+-WeaponExplosion  = 0
+-SpecialSprites   = 6r
+-SpecialSamples   = 1
++ShipSprites = 1r
++WeaponSprites = 6
++WeaponSamples = 1
++WeaponExplosion = 0
++SpecialSprites = 6r
++SpecialSamples = 1
+ SpecialExplosion = 0
+-ExtraSprites     = 0
+-ExtraSamples     = 0
+-ExtraExplosion   = 0
+-PanelBitmaps     = 7
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 7
+ 
+ [Graphic]
+ PanelBitmaps0 = images/ships/shpzfpst/SHIP_P00_PCX.bmp
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2004-09-26 13:47:54 UTC (rev 65)
++++ trunk/source/scp.cpp	2004-09-26 18:31:46 UTC (rev 66)
+@@ -60,8 +60,12 @@
+ 
+ 
+ /// Get SVN revision number from version file (this function work if user does not have subversion)
+-std::string GetSVNFromVersionFile()
++std::string GetSVNVersion()
+ {
++  std::string tw_svn_version = TW_SVNVERSION;
++  if(!(tw_svn_version==&quot;exported&quot;||tw_svn_version == &quot;&quot;))
++    return tw_svn_version;
++  
+   int i;
+   char buffy [16000] = {0};
+   PACKFILE *f;
+@@ -93,12 +97,9 @@
+   STACKTRACE;
+   std::string tw_version_string;
+ 
+-  std::string tw_svn_version = TW_SVNVERSION;
+-  if(tw_svn_version==&quot;exported&quot;||tw_svn_version == &quot;&quot;)
+-    tw_svn_version = GetSVNFromVersionFile();
+   tw_version_string += std::string(APPLICATION_NAME) + &quot; &quot;  + std::string(TW_MAJOR_VERSION) 
+     + &quot;r&quot; 
+-    + tw_svn_version
++    + GetSVNVersion()
+     + &quot; Built: &quot;
+     + __DATE__
+     + &quot; &quot;
+@@ -1651,6 +1652,16 @@
+   std::string home_file = home_ini_full_path(std::string(&quot;ships/&quot;) + ship_name);
+   if(!exists(home_file.c_str()))
+      CopyFile(filename, home_file.c_str());
++  
++  tw_set_config_file(home_file);
++  int version = get_config_int(&quot;Info&quot;, &quot;Version&quot;, -1);
++  if(version&lt;64)
++    {
++      CopyFile(filename, home_file.c_str());
++      tw_set_config_file(home_file);
++      std::string ver = GetSVNVersion();
++      set_config_string(&quot;Info&quot;, &quot;Version&quot;, ver.c_str());
++    }
+ }
+ 
+ #ifdef WIN32
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000013.html">[Tw-light-svn] r65 - in trunk: . doc gamedata source source/games
+</A></li>
+	<LI>Next message: <A HREF="000015.html">[Tw-light-svn] r67 - trunk/web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#14">[ date ]</a>
+              <a href="thread.html#14">[ thread ]</a>
+              <a href="subject.html#14">[ subject ]</a>
+              <a href="author.html#14">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

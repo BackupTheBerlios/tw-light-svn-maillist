@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r67 - trunk/web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r67%20-%20trunk/web&In-Reply-To=%3C200409272014.i8RKEUPS010426%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000014.html">
+   <LINK REL="Next"  HREF="000016.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r67 - trunk/web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r67%20-%20trunk/web&In-Reply-To=%3C200409272014.i8RKEUPS010426%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r67 - trunk/web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Mon Sep 27 22:14:30 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000014.html">[Tw-light-svn] r66 - in trunk: gamedata/default_ini/ships source
+</A></li>
+        <LI>Next message: <A HREF="000016.html">[Tw-light-svn] r68 - in trunk: . doc gamedata gamedata/default_ini source source/games source/melee source/other source/sc1ships source/sc2ships source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#15">[ date ]</a>
+              <a href="thread.html#15">[ thread ]</a>
+              <a href="subject.html#15">[ subject ]</a>
+              <a href="author.html#15">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-09-27 22:14:25 +0200 (Mon, 27 Sep 2004)
+New Revision: 67
+
+Modified:
+   trunk/web/info.html
+   trunk/web/links.html
+   trunk/web/team.html
+   trunk/web/update.sh
+Log:
+Web update
+
+
+Modified: trunk/web/info.html
+===================================================================
+--- trunk/web/info.html	2004-09-26 18:31:46 UTC (rev 66)
++++ trunk/web/info.html	2004-09-27 20:14:25 UTC (rev 67)
+@@ -52,7 +52,7 @@
+   and a bunch of powerful friends at your side! Or so you believe...
+   &lt;/p&gt;
+   &lt;p class=&quot;indented&quot;&gt;
+-  TWX:Legacies will start right after StarControl II.
++  TW:Legacies will start right after StarControl II.
+   &lt;/p&gt;
+   
+   &lt;p class=&quot;indented&quot;&gt;
+
+Modified: trunk/web/links.html
+===================================================================
+--- trunk/web/links.html	2004-09-26 18:31:46 UTC (rev 66)
++++ trunk/web/links.html	2004-09-27 20:14:25 UTC (rev 67)
+@@ -38,6 +38,11 @@
+     &lt;li&gt;&lt;a href=&quot;<A HREF="http://twx.sourceforge.net">http://twx.sourceforge.net</A>&quot;&gt;TWX&lt;/a&gt; &lt;/li&gt;
+ &lt;/ul&gt;
+ 
++&lt;h3&gt;Other links&lt;/h3&gt;
++&lt;ul&gt;
++    &lt;li&gt;&lt;a href=&quot;<A HREF="http://www.classicgaming.com/starcontrol/">http://www.classicgaming.com/starcontrol/</A>&quot;&gt;The Pages of Now and Forever&lt;/a&gt;&lt;/li&gt;
++    &lt;li&gt;&lt;a href=&quot;<A HREF="http://s93020567.onlinehome.us/scrpg2k3_play.htm">http://s93020567.onlinehome.us/scrpg2k3_play.htm</A>&quot;&gt;StarConRPG&lt;/a&gt;&lt;/li&gt;
++&lt;/ul&gt;
+ &lt;/div&gt;
+ 
+ &lt;p align=&quot;left&quot;&gt;&lt;font size=&quot;3&quot;&gt;&lt;strong&gt;this page is hosted by&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+Modified: trunk/web/team.html
+===================================================================
+--- trunk/web/team.html	2004-09-26 18:31:46 UTC (rev 66)
++++ trunk/web/team.html	2004-09-27 20:14:25 UTC (rev 67)
+@@ -33,7 +33,7 @@
+   &lt;h4&gt;Content and Plot manager:&lt;/h4&gt;
+ 
+   &lt;ul&gt;
+-    &lt;li&gt;Asaf Hamtzany &lt;a href=&quot;&quot;&gt;(UAF)&lt;/a&gt;&lt;/li&gt;
++    &lt;li&gt;Asaf Hamtzany &lt;a href=&quot;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">uaf at users.berlios.de</A>&quot;&gt;(UAF)&lt;/a&gt;&lt;/li&gt;
+   &lt;/ul&gt;
+   
+   &lt;h4&gt;Dialog Writers&lt;/h4&gt;
+@@ -42,9 +42,15 @@
+     &lt;li&gt;Pelorki&lt;/li&gt;
+   &lt;/ul&gt;
+   
++  &lt;h4&gt;Graphic Designers&lt;/h&gt;
++  &lt;ul&gt;
++    &lt;li&gt;Rick Bushie &lt;a href=&quot;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">firehazurd at yahoo.com</A>&quot;&gt;(Firehazurd)&lt;/a&gt;&lt;/li&gt;
++  &lt;/ul&gt;
++  
+   &lt;h4&gt;Special Thanks:&lt;/h4&gt;
+   &lt;ul&gt;
+     &lt;li&gt;Tau&lt;/li&gt;
++    &lt;li&gt;GeomanNL&lt;/li&gt;
+     &lt;li&gt;Officer Flubbo&lt;/li&gt;
+     &lt;li&gt;Captain Maim&lt;/li&gt;
+     &lt;li&gt;Jumping Peppers&lt;/li&gt;
+
+Modified: trunk/web/update.sh
+===================================================================
+--- trunk/web/update.sh	2004-09-26 18:31:46 UTC (rev 66)
++++ trunk/web/update.sh	2004-09-27 20:14:25 UTC (rev 67)
+@@ -1,2 +1,2 @@
+ #!/bin/bash
+-pscp 3dlogo.jpg background.jpg dialog-editor-win32-62.zip downloads.html index.html info.html links.html team.html style.css <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
++pscp 3dlogo.jpg background.jpg downloads.html index.html info.html links.html team.html style.css <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000014.html">[Tw-light-svn] r66 - in trunk: gamedata/default_ini/ships source
+</A></li>
+	<LI>Next message: <A HREF="000016.html">[Tw-light-svn] r68 - in trunk: . doc gamedata gamedata/default_ini source source/games source/melee source/other source/sc1ships source/sc2ships source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#15">[ date ]</a>
+              <a href="thread.html#15">[ thread ]</a>
+              <a href="subject.html#15">[ subject ]</a>
+              <a href="author.html#15">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,841 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r65 - in trunk: . doc gamedata source source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r65%20-%20in%20trunk%3A%20.%20doc%20gamedata%20source%20source/games&In-Reply-To=%3C200409261347.i8QDlxj1027517%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000012.html">
+   <LINK REL="Next"  HREF="000014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r65 - in trunk: . doc gamedata source source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r65%20-%20in%20trunk%3A%20.%20doc%20gamedata%20source%20source/games&In-Reply-To=%3C200409261347.i8QDlxj1027517%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r65 - in trunk: . doc gamedata source source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Sep 26 15:47:59 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000012.html">[Tw-light-svn] r64 - in trunk: . gamedata gamedata/ships source source/games source/libraries source/libraries/lua source/libraries/lua/lib source/other
+</A></li>
+        <LI>Next message: <A HREF="000014.html">[Tw-light-svn] r66 - in trunk: gamedata/default_ini/ships source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-09-26 15:47:54 +0200 (Sun, 26 Sep 2004)
+New Revision: 65
+
+Added:
+   trunk/source/games/gdefender.cpp
+Modified:
+   trunk/doc/Doxyfile
+   trunk/gamedata/ingame.txt
+   trunk/source/doxygen.cpp
+   trunk/source/scp.cpp
+   trunk/sources.lst
+Log:
+Defender game type added
+Documentation updated
+
+
+Modified: trunk/doc/Doxyfile
+===================================================================
+--- trunk/doc/Doxyfile	2004-09-26 08:30:59 UTC (rev 64)
++++ trunk/doc/Doxyfile	2004-09-26 13:47:54 UTC (rev 65)
+@@ -4,7 +4,7 @@
+ # General configuration options
+ #---------------------------------------------------------------------------
+ PROJECT_NAME           = TW-Light
+-PROJECT_NUMBER         = 0.1b2
++PROJECT_NUMBER         = 0.3b64
+ OUTPUT_DIRECTORY       = ./
+ OUTPUT_LANGUAGE        = English
+ USE_WINDOWS_ENCODING   = YES
+
+Modified: trunk/gamedata/ingame.txt
+===================================================================
+--- trunk/gamedata/ingame.txt	2004-09-26 08:30:59 UTC (rev 64)
++++ trunk/gamedata/ingame.txt	2004-09-26 13:47:54 UTC (rev 65)
+@@ -1,98 +1,113 @@
+ Global keys:
+-        F1 brings up the help screen
+-        F2 brings up the options menu
+-        F3 switches camera focus
+-        F4 is fast-forward (speeds up in-game time greatly)
+-        F5 displays fleet status
+-        F7 changes game tic rate (physics quality)
+-        F8 changes camera mode
+-        F10 quits (so does ESCAPE)
+-        F11 saves screenshots
+-        F12 displays framerates / performance data
+-        - zooms out on some viewing modes.
+-        + (or =) zooms in on some viewing modes.
+-        0 and 9 also effect the camera in some viewing modes.
+-        ctrl+T = toggle team indicators on/off
+-        ctrl+H = toggle healthbar indicators on/off
++  F1 brings up the help screen
++  F2 brings up the options menu
++  F3 switches camera focus
++  F4 is fast-forward (speeds up in-game time greatly)
++  F5 displays fleet status
++  F7 changes game tic rate (physics quality)
++  F8 changes camera mode
++  F10 quits (so does ESCAPE)
++  F11 saves screenshots
++  F12 displays framerates / performance data
++  - zooms out on some viewing modes.
++  + (or =) zooms in on some viewing modes.
++  0 and 9 also effect the camera in some viewing modes.
++  ctrl+T = toggle team indicators on/off
++  ctrl+H = toggle healthbar indicators on/off
+ 
+ Melee:  
++  Starts a battle with the current team settings.
+ 
+-	Starts a battle with the current team settings.
+-
+ Extras Menu:
+ 
+-	Play Game:
+-               Select different gametypes.  For this version, only Melee is available.
+-	Key Tester:
+-               Use this utility to check keys combination for conflicts.
+-	Show License:
+-		Shows the license of this program.
+-	Ship Info:
+-		Here you can get detail information about every 
+-             ship in the game.  Disabled in this release, sorry!
+-	Diagnostic:
+-                Show comlile options and version information. 
+-	Main Menu:
+-                This returns to the main menu.
+-		
++  Play Game:
++    Select different gametypes.  Currently:
++    1) Melee - simple starfleet combat
++    2) GOB - Game goals:
++              Avoid dieing.  
++              Try to get as bad-ass a ship as you can.  
++              Kill lots of enemies.
+ 
++       If you survive for long enough and accumulate 
++       enough wealth, you will eventually be able to 
++       purchase the &quot;Hyper Dynamo&quot; upgrade.  Once you
++       get that, you can basically consider yourself 
++       to have won the game. Try to win Gob with as 
++       many different ships as you can.  
++
++    3) Defender - protect starbase as long as you can
++
++  Key Tester:
++    Use this utility to check keys combination for conflicts.
++  Show License:
++    Shows the license of this program.
++  Ship Info:
++    Here you can get detail information about every 
++    ship in the game.  
++  Diagnostic:
++    Show comlile options and version information. 
++  Main Menu:
++    This returns to the main menu.	
++
+ Teams:
+ 
+-        Select Controller:
+-                Select the player (i.e. &quot;Player 1&quot; or &quot;Player 2&quot;)
+-              you wish to alter from the list on the left, and
+-              the controller (i.e. &quot;Keyboard&quot;, &quot;MoronBot&quot;) you
+-              want to control that player from the list on the
+-              left.  Then either click on the &quot;Select
+-              Controller&quot; button or double click on the
+-              controller name.
+-	Change Team #: 
+-	        This switches the player allys. 
+-	      Note that team 0 mean no allys.
+-        Change Config #:
+-                 This switches the configuration used by the
+-               currently highlighted controller.  
+-        Edit Configuration:
+-                 This is used to setup up keys when the currently
+-               highlighted player is using the keyboard.  It
+-               may eventually allow the configuration of AIs
+-               and calibration of joysticks.
+-        Edit Fleet:
+-                 This button brings up the fleet selection menu for
+-               the currently highlighted player.  
+-        Main Menu:
+-                 This returns to the main menu.
++  Select Controller:
++    Select the player (i.e. &quot;Player 1&quot; or &quot;Player 2&quot;)
++    you wish to alter from the list on the left, and
++    the controller (i.e. &quot;Keyboard&quot;, &quot;MoronBot&quot;) you
++    want to control that player from the list on the
++    left.  Then either click on the &quot;Select
++    Controller&quot; button or double click on the
++    controller name.
++  Change Team #: 
++    This switches the player allys. 
++    Note that team 0 mean no allys.
++  Change Config #:
++    This switches the configuration used by the
++    currently highlighted controller.  
++  Edit Configuration:
++    This is used to setup up keys when the currently
++    highlighted player is using the keyboard.  It
++    may eventually allow the configuration of AIs
++    and calibration of joysticks.
++  Edit Fleet:
++    This button brings up the fleet selection menu for
++    the currently highlighted player.  
++  Main Menu:
++    This returns to the main menu.
+ 
+ Options:
+ 
+-        Most things on this menu are self-explanatory, but a few
+-          need special mention.
++  Most things on this menu are self-explanatory, but a few
++  need special mention.
+ 
+-        Gamma correction:
+-                This makes things brighter during combat.  This
+-                  should not be changed from the middle of combat,
+-                  or colors could get weird.  
+-        Antialiasing:
+-                If this box is checked then TimeWarp will use
+-                  higher quality graphics, but run slower.  
+-        Color Depth:
+-                You cannot change this from the middle of combat.  
+-        Camera Mode:
+-                This allows you to control what is shown on your
+-                  screen in combat.  
++  Gamma correction:
++    This makes things brighter during combat.  This
++    should not be changed from the middle of combat,
++    or colors could get weird.  
++  Antialiasing:
++    If this box is checked then TimeWarp will use
++    higher quality graphics, but run slower.  
++  Color Depth:
++    You cannot change this from the middle of combat.  
++  Camera Mode:
++    This allows you to control what is shown on your
++    screen in combat.  
+ 
+-                &quot;Enemy_Discrete&quot;
+-                  is just like Star Control on the PC, where
+-                  the camera moved to keep both you and your
+-                  enemy onscreen, and zoomed in by factors of
+-                  2.
+-                &quot;Enemy&quot;
+-                  is like Star Control on the Genesis or 3DO,
+-                  where the camera zoomed in smoothly.
+-                &quot;Hero&quot;
+-                  makes the camera stay focused on Player 1,
+-                  and zoom in/out when + and - are pressed.
+-                &quot;Everything&quot;
+-                  makes the camera stay on the planet and zoom
+-                  way out so that everything is visible.  This
+-                  mode is slightly buggy (visual artifacts).  
++    &quot;Enemy_Discrete&quot;
++       is just like Star Control on the PC, where
++       the camera moved to keep both you and your
++       enemy onscreen, and zoomed in by factors of 2.
++
++     &quot;Enemy&quot;
++       is like Star Control on the Genesis or 3DO,
++       where the camera zoomed in smoothly.
++
++     &quot;Hero&quot;
++       makes the camera stay focused on Player 1,
++       and zoom in/out when + and - are pressed.
++
++     &quot;Everything&quot;
++       makes the camera stay on the planet and zoom
++       way out so that everything is visible.  This
++       mode is slightly buggy (visual artifacts).  
+
+Modified: trunk/source/doxygen.cpp
+===================================================================
+--- trunk/source/doxygen.cpp	2004-09-26 08:30:59 UTC (rev 64)
++++ trunk/source/doxygen.cpp	2004-09-26 13:47:54 UTC (rev 65)
+@@ -1,7 +1,6 @@
+-/* $Id: doxygen.cpp,v 1.3 2004/08/07 13:10:51 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -19,9 +18,9 @@
+  * 
+  *  \section overview_sec Overview: What is TW-Light?
+  *  
+- *  TW-Light is lightweighted version of Star Control: TimeWarp. Currently it includes only a combat 
+- *  portion with the best TW ships but without network support. There are some plans to expand it to 
+- *  include an epic adventure. 
++ *  TW-Light is an open source clone/sequel to the epic cross-genre game Star Control II. 
++ *  Currently it includes only a combat portion, although epic adventure part that is 
++ *  called TW:Legacies is actively developed now. 
+  *
+  *  \section getting_started_sec Getting Started
+  * 
+@@ -39,7 +38,7 @@
+  *       - F12 displays framerates / performance data
+  *       - - zooms out on some viewing modes.
+  *       - + (or =) zooms in on some viewing modes.
+- *       - 0 and 9 also effect the camera in some viewing modes.
++ *       - 0 also effect the camera in some viewing modes.
+  *       - ctrl+T = toggle team indicators on/off
+  *       - ctrl+H = toggle healthbar indicators on/off
+  *       - Also, if some controllers are set to keyboard, customizable
+@@ -48,94 +47,20 @@
+  *               - left:   Keypad 4
+  *               - thrust: Keypad 8
+  *               - right:  Keypad 6
+- *               - fire:   Quote (&quot;)
+- *               -  special:Semicolon (;)
++ *               - fire:   Enter 
++ *               -  special:Ctrl 
+  *               - next:   Closebrace (])
+  *               - prev:   Openbrace ([)
+  *               - near:   P
+- *       - Config 1:
+- *               - left:   A
+- *               - thrust: S
+- *               - right:  D
+- *               - fire:   B
+- *               - special:V
+- *               - next:   F
+- *               - prev:   G
+- *               - near:   H
+- * - Extended Menu:
+- *	- Play Game:
+- *              - Same as &quot;Melee&quot; now
+- *      - Key Tester:
+- *              - Use this utility to check keys combination for conflicts.
+- *	- Ship Info:
+- *		- Here you can get detail information about every ship in the game.
+- * 	- Diagnostic:
+- *              - Show comlile options and version information. 
+- *	- Main Menu:
+- *              - This returns to the main menu.
+- *		
+- * - Teams:
+- *      - Select Controller:
+- *             - Select the player (i.e. &quot;Player 1&quot; or &quot;Player 2&quot;)
+- *              you wish to alter from the list on the left, and
+- *              the controller (i.e. &quot;Keyboard&quot;, &quot;MoronBot&quot;) you
+- *              want to control that player from the list on the
+- *             left.  Then either click on the &quot;Select
+- *             Controller&quot; button or double click on the
+- *             controller name.
+- *	- Change Team #: 
+- *	       - This switches the player allys. 
+- *	      Note that team 0 mean no allys.
+- *      - Change Config #:
+- *             -   This switches the configuration used by the
+- *              currently highlighted controller.  
+- *      - Edit Configuration:
+- *             -   This is used to setup up keys when the currently
+- *              highlighted player is using the keyboard.  It
+- *              may eventually allow the configuration of AIs
+- *              and calibration of joysticks.
+- *      - Edit Fleet:
+- *             -   This button brings up the fleet selection menu for
+- *              the currently highlighted player.  
+- *      - Main Menu:
+- *             -   This returns to the main menu.
+- * - Options:
+- *      -  Most things on this menu are self-explanatory, but a few
+- *         need special mention.
+- *
+- *      - Gamma correction:
+- *             -  This makes things brighter during combat.  This
+- *                 should not be changed from the middle of combat,
+- *                 or colors could get weird.  
+- *      - Antialiasing:
+- *             -  If this box is checked then TimeWarp will use
+- *                higher quality graphics, but run slower.  
+- *      - Color Depth:
+- *             -  You cannot change this from the middle of combat.  
+- *      -  Camera Mode:
+- *             -  This allows you to control what is shown on your
+- *                 screen in combat.  
+- *
+- *             - &quot;Enemy_Discrete&quot;
+- *                 is just like Star Control on the PC, where
+- *                 the camera moved to keep both you and your
+- *                 enemy onscreen, and zoomed in by factors of
+- *                 2.
+- *             -  &quot;Enemy&quot;
+- *                 is like Star Control on the Genesis or 3DO,
+- *                 where the camera zoomed in smoothly.
+- *             -  &quot;Hero&quot;
+- *                 makes the camera stay focused on Player 1,
+- *                 and zoom in/out when + and - are pressed.
+- *             -  &quot;Everything&quot;
+- *                 makes the camera stay on the planet and zoom
+- *                 way out so that everything is visible.  This
+- *                 mode is slightly buggy (visual artifacts).  
+- *
++ * 
++ *   See ingame help for controls description.
++ *  
+  * \section development Development
+  * 
++ * Full developer documentation can be produced using doxygen tool.
++ * 
+  * Following documents describes some of the issues concerning contributing 
+- * to Timewarp
++ * to TW-Light
+  * 		- \ref coding_page
+  * 		- \ref howto_document
+  *  
+@@ -156,13 +81,10 @@
+  *   - The Chorali Extractor
+  *   - Confed Cargotran
+  *   - Confederation Hornet
+- *   - Djinni Lancer
+  *   - Drax Griffon
+- *   - Earthling Crusader MK2
+  *   - Earthling Crusader MK3
+  *   - Zekfahan Shocker
+  *   - Garash Tyrant
+- *   - Hydrovar
+  *   - Ilwrath Spider
+  *   - Kahr Boomerang
+  *   - Re-Koj Assassin
+@@ -175,7 +97,7 @@
+  *
+  * \subsection simplyfy_subsec Simplify and fix melee engine
+  * 
+- *  We are working on it.
++ *  Almost done.
+  * 
+  * \subsection TML_subsec Add TimeWarp Markup Language (TML) support
+  * 
+@@ -183,7 +105,7 @@
+  * 
+  * \subsection plot_subsec Write plot
+  * 
+- *  No progress.
++ *  The Plot is fully writen.
+  *
+  * \subsection plot_impl_subsec  Implement plot with TML
+  * 
+@@ -206,8 +128,10 @@
+  *
+  * \section credits_sec Credits
+  *
+- * TW-Light is derivative work from &lt;a href=&quot;timewarp.sourceforge.net&quot;&gt;Star Control: TimeWarp&lt;/a&gt;
+-
++ * - TW-Light is derivative work from &lt;a href=&quot;timewarp.sourceforge.net&quot;&gt;Star Control: TimeWarp&lt;/a&gt;
++ * - Some code and documents were taken from &lt;a href=&quot;www.wesnoth.org&quot;&gt;Battle for Wesnoth&lt;/a&gt;
++ * - UQM Ships description were taken from Ultronomicon (<A HREF="http://uqm.stack.nl/wiki/">http://uqm.stack.nl/wiki/</A>)
++ * - Some battle music were written by Robeter Productions Inc. 
+  */
+ 
+  /*! \page coding_page A guide to a few of the wierder issues with programming for TW-Light.  
+@@ -252,23 +176,15 @@
+  * \section trivial_conventions_sec Trivial Conventions
+  * 
+  * It would be nice if the following conventions were followed in TW-Light code:
+- * -#  The proper indentation amount is 1 tab.  If you don't like that (or if
+- * your editor produces spaces when you hit tab), then try 2 spaces instead.
+- * If you don't like that either, AT LEAST BE INTERNALLY CONSISTENT IN YOUR
+- * INDENTATION POLICY!  YES, THIS MEANS YOU!!!
+- * -#  In the same vein, do not use an editor that transparently replaces N
+- * spaces with the &quot;equivalent&quot; tabs.  Or, if you must do so, make sure that
+- * your indentation amount exactly matches the tab size.  Otherwise your
+- * indentation will apear totally fucked up on other editors with different tab
+- * sizes.  And don't use an editor that replaces tabs with spaces either.  
+- * Don't use strange characters in file names.  To be specific, the 26 
++ * -#  The proper indentation amount is 2 spaces. If you don't like it, AT LEAST 
++ * BE INTERNALLY CONSISTENT IN YOUR INDENTATION POLICY!  YES, THIS MEANS YOU!!!
++ * -#  Don't use strange characters in file names.  To be specific, the 26 
+  * english characters and underscores and up to one period per file name 
+  * are okay.  I guess numbers would be ok too.  Use lower case letters, 
+  * never upper case.  
+  * -# Don't name two source files exactly the same thing, even if they're in 
+  * different directories. The same rule applies to headers.  
+- * -# All source files should have extensions of either .cpp or .h .  No .c 
+- * or .cc files.  Exception: .c files are permitted in the util directory.  
++ * -# All source files should have extensions of either .c .cpp or .h .  No .cc files.    
+  * 
+  * \section collisions_sec Collisions
+  * 
+@@ -300,10 +216,11 @@
+  * \section report_error_sec Reporting Errors
+  * 
+  * If you wish to report an error condition, you can say something like:
++ * //simple error message&lt;br&gt;
+  * tw_error(&quot;Oh no! an error occured!&quot;);
+- * //simple error message
++ * //error message using more complex printf-style stuff&lt;br&gt;
+  * tw_error(&quot;This error was brought to you by the letter %c and the number %d&quot;, 'g', 3);
+- * //error message using more complex printf-style stuff
++ * 
+  * When you report an error in this manner, a box will pop up and tell
+  * the user your message, and the source file and line number from which
+  * tw_error() was called.  The user will be presented with a number of buttons,
+
+Added: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2004-09-26 08:30:59 UTC (rev 64)
++++ trunk/source/games/gdefender.cpp	2004-09-26 13:47:54 UTC (rev 65)
+@@ -0,0 +1,246 @@
++
++
++#include &lt;stdio.h&gt;   //standard io libary (needed for sprintf)
++#include &lt;allegro.h&gt; //allegro library header
++
++#include &quot;melee.h&quot;          //used by all TW source files.  well, mostly. 
++#include &quot;melee/mgame.h&quot;    //Game stuff
++#include &quot;melee/mcbodies.h&quot; //asteroids &amp; planets
++#include &quot;melee/mship.h&quot;    //ships
++#include &quot;melee/mshot.h&quot;   //shots, missiles, lasers
++#include &quot;melee/mlog.h&quot;     //networking / demo recording / demo playback
++#include &quot;melee/mcontrol.h&quot; //controllers &amp; AIs
++#include &quot;melee/mview.h&quot;    //Views &amp; messages
++#include &quot;melee/mshppan.h&quot;  //ship panels...
++
++#include &quot;melee/mitems.h&quot;  //ship panels...
++#include &quot;melee/manim.h&quot;  //ship panels...
++#include &quot;scp.h&quot;
++#include &quot;other/dialogs.h&quot;
++
++
++// Defender of the Starbase
++
++/// define the starbase
++class DefenderStation : public Orbiter {
++public:
++  double health, maxhealth; ///&lt; current and maximum starbase health
++  int healtime, nexthealtime;   ///&lt; rate &amp; phase of ship healing
++  int regentime, nextregentime; ///&lt; rate &amp; phase of self healing
++  /// handle_damage lets the starbase be hurt &amp; die
++  virtual int handle_damage(SpaceLocation *source, double normal, double direct = 0);
++  /// calculate does the continuous things like regeneration
++  virtual void calculate ();
++  //the constructor.  all game items must have constructors
++  //this one just sets up values for health, etc.
++  DefenderStation ( SpaceSprite *sprite, SpaceLocation *orbit );
++};
++
++
++/// DefenderGame 
++///
++/// Idea:
++///
++/// defend a starbase
++///
++/// Current status:
++///
++/// Seems to be working, but needs more work perhaps I should add a 
++/// high-score table?
++class DefenderGame : public Game 
++{
++public:
++  TeamCode player_team, enemy_team;
++  SpaceSprite *stationsprite; ///&lt; this holds the graphics for the space station
++  
++  ///initialize all pointers to NULL, so that the destructor won't 
++  ///crash if it's called early for some reason
++  virtual void preinit ();
++  
++  virtual ~DefenderGame();
++  
++  virtual void init ( Log *_log ) ;
++
++  //begin the game
++  void restart();
++
++  /// here we check to see if the player lost the game and we add new enemies if it's time for that
++  virtual void calculate ( ) ;
++  /// this is used to display the starbases current health
++  virtual void fps();
++	
++  /// a pointer at the player
++  Control *player;
++
++  /// a pointer at the starbase  
++  DefenderStation *starbase;
++
++  /// rate of enemy ships spawning
++  int time_for_next_attack;
++  /// phase of enemy ships spawning
++  int time_between_attacks;
++
++};
++
++#define defendergame ((DefenderGame*)game)
++
++int DefenderStation::handle_damage ( SpaceLocation *source, double normal, double direct) 
++{
++  double old = health;
++  health -= normal;
++  health -= direct;
++  if (health &lt;= 0) 
++    {
++      add ( new Animation ( this, pos, meleedata.kaboomSprite, 0, 
++			    meleedata.kaboomSprite-&gt;frames(), 50, DEPTH_EXPLOSIONS) );
++      state = 0;
++    }
++  return iround(old-health);
++}
++
++DefenderStation::DefenderStation( SpaceSprite *sprite, SpaceLocation *orbit)
++: Orbiter ( sprite, orbit, 600 ) 
++{
++  health = maxhealth = 30;
++  regentime = 6000;
++  nextregentime = 0;
++  healtime = 2000;
++  nexthealtime = 0;
++}
++
++void DefenderStation::calculate ( ) 
++{
++  Orbiter::calculate();
++  if ( (health &lt; maxhealth) &amp;&amp; (nextregentime &lt;= game-&gt;game_time) ) 
++    {
++      health += 1;
++      nextregentime = game-&gt;game_time + regentime;
++    }
++  Ship *ship = defendergame-&gt;player-&gt;ship;
++  if ( ship &amp;&amp; (distance(ship) &lt; 300) &amp;&amp; (nexthealtime &lt;= game-&gt;game_time) &amp;&amp; 
++       (ship-&gt;crew &lt; ship-&gt;crew_max) &amp;&amp; (magnitude_sqr(ship-&gt;get_vel() - vel) &lt; 0.01) ) 
++    {
++      ship-&gt;handle_damage(this, -1);
++      nexthealtime = game-&gt;game_time + healtime;
++      SpaceLocation *l = new PointLaser ( this, palette_color[10], 0, 150, this, ship, 0);
++      game-&gt;add ( l );
++      l-&gt;set_depth(DEPTH_SHIPS + 0.2);
++    }
++  accelerate(this, trajectory_angle(center), 0.00005, MAX_SPEED);
++  return;
++}
++
++static int num_ships = 4;
++static const char *someships[] = { &quot;thrto&quot;, &quot;supbl&quot;, &quot;syrpe&quot;, &quot;shosc&quot;, NULL };
++
++void DefenderGame::calculate ( ) 
++{
++  Game::calculate();
++  static bool first = true;
++  if ((!starbase || !starbase-&gt;exists())&amp;&amp; first) 
++    {
++      first = false;
++      starbase = NULL;
++      char buffy[1024];
++      sprintf(buffy, &quot;You lost after %d seconds&quot;, game_time/1000);
++      message.print(9999000, 15, buffy);
++    }
++  else if (game_time &gt;= time_for_next_attack) 
++    {
++      time_for_next_attack += time_between_attacks + (random(10000)) - 4000;
++      time_between_attacks -= 10;
++      time_between_attacks = iround(time_between_attacks * 0.975);
++      time_between_attacks += 10;
++      SpaceObject *whatever = create_ship ( channel_none, someships[random(num_ships)], &quot;WussieBot&quot;, Vector2(0, 2000), 0, enemy_team);
++      add (whatever);
++    }
++  return;
++}
++
++void DefenderGame::preinit() 
++{
++  Game::preinit();
++  //because the desctructor deals with stationsprite, we have to initialize it here
++  //just in case the normal init() function doesn't get called
++  stationsprite = NULL;
++}
++
++DefenderGame::~DefenderGame() 
++{
++  //we have to manually unload space station graphics since they aren't part of a ship
++  if (stationsprite) 
++    delete stationsprite;
++}
++
++void DefenderGame::fps() 
++{
++  int s = 0;
++  if (starbase) 
++    s = iround(starbase-&gt;health);
++  message.print((int)msecs_per_fps, 15, &quot;Current Time: %d&quot;, game-&gt;game_time / 1000);
++  message.print((int)msecs_per_fps, 12, &quot;Starbase Health: %d&quot;, s);
++  int p = 0;
++  if (player-&gt;ship) 
++    p = iround(player-&gt;ship-&gt;getCrew());
++  message.print((int)msecs_per_fps, 12, &quot;Your Health: %d&quot;, p);
++}
++
++void DefenderGame::restart() 
++{  
++  for(std::list&lt;SpaceLocation*&gt;::iterator i = item.begin();
++      i != item.end(); i++)
++    {
++      if ((*i)-&gt;exists()) 
++	(*i)-&gt;die();
++    }
++  game_time = 0;
++	
++  Ship *ship = create_ship(&quot;supbl&quot;, player, Vector2(500, 200), 270);
++  add(ship);
++  
++  Planet *planet = new Planet ( 0, meleedata.planetSprite, random(3) );
++  add ( planet );
++  
++  starbase =  new DefenderStation ( stationsprite, planet);
++  add ( starbase );
++  starbase-&gt;change_owner ( ship );
++  gametargets.add(starbase);
++  
++  time_for_next_attack = game_time + 3 * 1000; // first attack in 3 seconds from now
++  time_between_attacks = 24 * 1000; //24 seconds between attacks
++
++
++  message.out(&quot;Defend the starbase!&quot;, 30000);
++
++}
++
++void DefenderGame::init( Log * _log) 
++{
++  Game::init(_log);
++  
++  prepare();
++  add ( new Stars() );
++  
++  player = create_control ( channel_server, &quot;Human&quot; );
++  add_focus(player);
++  
++  DATAFILE *tmpdata; 
++  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;station0sprite&quot;);
++  if (!tmpdata) 
++    tw_error( &quot;couldn't find gob.dat#station0sprite&quot;);
++  stationsprite = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED, 64);
++  stationsprite-&gt;permanent_phase_shift(8);
++  unload_datafile_object(tmpdata);
++
++  this-&gt;change_view(&quot;Hero&quot;);  
++  restart();
++  
++  message.out(&quot;An enemy ship will attack it every 20-30 seconds&quot;, 20000, 7);
++  message.out(&quot;The starbase will heal you if you fly close to&quot;, 20000, 7);
++  message.out(&quot;  it and match its velocity&quot;, 20000, 7);
++  message.out(&quot;It can also heal itself, but slowly&quot;, 20000, 7);
++  return;
++}
++
++REGISTER_GAME ( DefenderGame, &quot;Defender&quot; )
++
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2004-09-26 08:30:59 UTC (rev 64)
++++ trunk/source/scp.cpp	2004-09-26 13:47:54 UTC (rev 65)
+@@ -58,14 +58,47 @@
+ #include &quot;melee/mship.h&quot; //remove
+ #include &quot;melee/mfleet.h&quot;
+ 
++
++/// Get SVN revision number from version file (this function work if user does not have subversion)
++std::string GetSVNFromVersionFile()
++{
++  int i;
++  char buffy [16000] = {0};
++  PACKFILE *f;
++  
++  f = pack_fopen (data_full_path(&quot;version.txt&quot;).c_str(), F_READ);
++  if (!f)
++    {
++      tw_error(&quot;Unable to retrive version information&quot;);
++    }
++  else 
++    {
++      i = pack_fread (buffy, 15999, f);
++      pack_fclose(f);
++      buffy[i] = 0;
++    }
++  char *s = strchr(buffy, 'r');
++  if(!s)
++    {
++      return &quot;&quot;;
++    }
++
++  char ver[30] = {0};
++  sscanf(s+1, &quot;%s&quot;, ver);
++  return ver;
++}
++
+ std::string tw_version() 
+ {
+   STACKTRACE;
+   std::string tw_version_string;
+-	
++
++  std::string tw_svn_version = TW_SVNVERSION;
++  if(tw_svn_version==&quot;exported&quot;||tw_svn_version == &quot;&quot;)
++    tw_svn_version = GetSVNFromVersionFile();
+   tw_version_string += std::string(APPLICATION_NAME) + &quot; &quot;  + std::string(TW_MAJOR_VERSION) 
+     + &quot;r&quot; 
+-    + std::string(TW_SVNVERSION)
++    + tw_svn_version
+     + &quot; Built: &quot;
+     + __DATE__
+     + &quot; &quot;
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2004-09-26 08:30:59 UTC (rev 64)
++++ trunk/sources.lst	2004-09-26 13:47:54 UTC (rev 65)
+@@ -19,6 +19,7 @@
+ source/util/base.cpp
+ source/games/ggob.cpp
+ source/games/gflmelee.cpp
++source/games/gdefender.cpp
+ source/melee/mlog.cpp
+ source/melee/mitems.cpp
+ source/melee/mnet1.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000012.html">[Tw-light-svn] r64 - in trunk: . gamedata gamedata/ships source source/games source/libraries source/libraries/lua source/libraries/lua/lib source/other
+</A></li>
+	<LI>Next message: <A HREF="000014.html">[Tw-light-svn] r66 - in trunk: gamedata/default_ini/ships source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

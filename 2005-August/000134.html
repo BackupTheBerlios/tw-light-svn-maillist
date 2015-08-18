@@ -1,0 +1,1812 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r188 - in trunk: . gamedata/images/ships/shpconho gamedata/images/ships/shptauda source source/games source/python source/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r188%20-%20in%20trunk%3A%20.%20gamedata/images/ships/shpconho%20gamedata/images/ships/shptauda%20source%20source/games%20source/python%20source/util&In-Reply-To=%3C200508221756.j7MHuVSE015300%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000133.html">
+   <LINK REL="Next"  HREF="000135.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r188 - in trunk: . gamedata/images/ships/shpconho gamedata/images/ships/shptauda source source/games source/python source/util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r188%20-%20in%20trunk%3A%20.%20gamedata/images/ships/shpconho%20gamedata/images/ships/shptauda%20source%20source/games%20source/python%20source/util&In-Reply-To=%3C200508221756.j7MHuVSE015300%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r188 - in trunk: . gamedata/images/ships/shpconho gamedata/images/ships/shptauda source source/games source/python source/util">yurand at berlios.de
+       </A><BR>
+    <I>Mon Aug 22 19:56:31 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000133.html">[Tw-light-svn] r187 - trunk/source/games
+</A></li>
+        <LI>Next message: <A HREF="000135.html">[Tw-light-svn] r189 - in trunk: gamedata/images/ships/shpconca source/melee source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-08-22 19:56:30 +0200 (Mon, 22 Aug 2005)
+New Revision: 188
+
+Removed:
+   trunk/source/python/fileops.cpp
+   trunk/source/python/fileops.h
+   trunk/source/python/types.h
+Modified:
+   trunk/SConstruct
+   trunk/gamedata/images/ships/shpconho/SHIP_P01_PCX.bmp
+   trunk/gamedata/images/ships/shpconho/SHIP_P02_PCX.bmp
+   trunk/gamedata/images/ships/shpconho/SHIP_P03_PCX.bmp
+   trunk/gamedata/images/ships/shpconho/SHIP_P04_PCX.bmp
+   trunk/gamedata/images/ships/shpconho/SHIP_P05_PCX.bmp
+   trunk/gamedata/images/ships/shpconho/SHIP_P06_PCX.bmp
+   trunk/gamedata/images/ships/shptauda/SHIP_P01_PCX.bmp
+   trunk/gamedata/images/ships/shptauda/SHIP_P02_PCX.bmp
+   trunk/gamedata/images/ships/shptauda/SHIP_P03_PCX.bmp
+   trunk/gamedata/images/ships/shptauda/SHIP_P04_PCX.bmp
+   trunk/gamedata/images/ships/shptauda/SHIP_P05_PCX.bmp
+   trunk/gamedata/images/ships/shptauda/SHIP_P06_PCX.bmp
+   trunk/source/games/gamehierarchy.cpp
+   trunk/source/games/gamehierarchy.h
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/python/game.h
+   trunk/source/python/python_class.cpp
+   trunk/source/python/python_class.h
+   trunk/source/scp.cpp
+   trunk/source/scp.h
+   trunk/source/util/sound.cpp
+   trunk/source/util/sound.h
+   trunk/sources.lst
+Log:
+Here are new ship captain icons for the Confed Hornet and Tau Dagger. They are all tested and should work fine.
+
+Deeko 
+
+Modified: trunk/SConstruct
+===================================================================
+--- trunk/SConstruct	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/SConstruct	2005-08-22 17:56:30 UTC (rev 188)
+@@ -68,7 +68,6 @@
+   source/other/twconfig.cpp
+   source/other/vbodies.cpp
+   source/other/vtarget.cpp
+-  source/python/fileops.cpp
+   source/python/game.cpp
+   source/python/python_class.cpp
+   source/sc1ships/shpandgu.cpp
+@@ -159,7 +158,6 @@
+ source/util/endian.h
+ source/util/errors.h
+ source/tml/eventmanager.h
+-source/python/fileops.h
+ source/other/fontmorph.h
+ source/frame.h
+ source/python/game.h
+@@ -215,7 +213,6 @@
+ source/other/starmap.h
+ source/tests/testmain.h
+ source/other/twconfig.h
+-source/python/types.h
+ source/util/types.h
+ source/other/vbodies.h
+ source/util/vector2.h
+@@ -232,6 +229,7 @@
+ 
+ if str(Platform()) == &quot;win32&quot;:
+     env = Environment()
++    env.Append(CPPDEFINES=['WIN32'])
+     if env[&quot;CC&quot;] == &quot;cl&quot;:
+         env['PDB'] = 'tw-light.pdb'
+         env.AppendENVPath('PATH', os.environ['PATH'])
+
+Modified: trunk/gamedata/images/ships/shpconho/SHIP_P01_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconho/SHIP_P02_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconho/SHIP_P03_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconho/SHIP_P04_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconho/SHIP_P05_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconho/SHIP_P06_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shptauda/SHIP_P01_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shptauda/SHIP_P02_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shptauda/SHIP_P03_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shptauda/SHIP_P04_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shptauda/SHIP_P05_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shptauda/SHIP_P06_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/source/games/gamehierarchy.cpp
+===================================================================
+--- trunk/source/games/gamehierarchy.cpp	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/games/gamehierarchy.cpp	2005-08-22 17:56:30 UTC (rev 188)
+@@ -14,7 +14,6 @@
+   GNU General Public License for more details.
+ */
+ 
+-
+ #include &lt;allegro.h&gt;
+ #include &lt;stdio.h&gt;
+ #include &lt;string.h&gt;
+@@ -26,96 +25,102 @@
+ #include &quot;melee/mframe.h&quot;
+ #include &quot;melee/mview.h&quot;
+ #include &quot;melee/mitems.h&quot;
++#include &quot;melee/mhelpers.h&quot;
+ 
+ #include &quot;scp.h&quot;
+ #include &quot;util/history.h&quot;
++#include &quot;util/sound.h&quot;
+ 
+-
+ #include &quot;gamehierarchy.h&quot;
+ #include &quot;ggob.h&quot;
+ 
+ #include &lt;algorithm&gt;
+ 
+-MainGame* g_maingame = NULL;
++MainGame::MainGame(const std::string&amp; game_path)
++{
++}
+ 
+-
+-MainGame::MainGame()
+-{
+-  STACKTRACE;
+-  g_maingame = this;
+-  _active_subgame = &quot;&quot;;
++int MainGame::Load(const std::string&amp; save)
++{
++	return 0;
+ }
+ 
+-void MainGame::addsubgame(Game *asubgame, const std::string&amp; name)
+-{
+-  STACKTRACE;
++//################################################################################################
++//  Intro
+ 
+-  asubgame-&gt;_name = name;
+-  ((SubGame&lt;MainGame&gt;*)asubgame)-&gt;maingame = this;
++void MainGame::intro()
++{
++  BITMAP* d_buf;
++  std::vector&lt;std::string&gt; intro_text;
+ 
+-  asubgame-&gt;preinit();
+-  asubgame-&gt;window = new VideoWindow;
+-  asubgame-&gt;window-&gt;preinit();
+-  asubgame-&gt;window-&gt;init(&amp;videosystem-&gt;window);
+-  asubgame-&gt;window-&gt;locate(0,0,0,0,0,1,0,1);
++  intro_text.push_back(&quot;The Ur-quan are defeated - the destruction&quot;);
++  intro_text.push_back(&quot;of the Sa-matra threw them into chaos,&quot;);
++  intro_text.push_back(&quot;making them easy prey for&quot;);
++  intro_text.push_back(&quot;the New Alliance of Free Stars.&quot;);
++  intro_text.push_back(&quot;Within weeks the NAFS forces managed&quot;);
++  intro_text.push_back(&quot;to destroy most of the fleets of the two &quot;);
++  intro_text.push_back(&quot;races who terrorized the galaxy&quot;);
++  intro_text.push_back(&quot;for the past 20,000 years!&quot;);
++  intro_text.push_back(&quot;&quot;);
++  intro_text.push_back(&quot;Thanks to captain Zelnick, hope is given&quot;);
++  intro_text.push_back(&quot;to the entire galaxy, and especially to&quot;);
++  intro_text.push_back(&quot;the human race. Now free from their prison&quot;);
++  intro_text.push_back(&quot;under a Slaveshield it's Humanity's time&quot;);
++  intro_text.push_back(&quot;to rebuild.&quot;);
++  intro_text.push_back(&quot;&quot;);
++  intro_text.push_back(&quot;However, it seems there are more troubles&quot;);
++  intro_text.push_back(&quot;ahead. It is time for great space&quot;);
++  intro_text.push_back(&quot;exploration, colonization and piracy.&quot;);
++  intro_text.push_back(&quot;You have to live in this world,&quot;);
++  intro_text.push_back(&quot;young earth captain!!!&quot;);
+ 
+-  asubgame-&gt;init(log, &quot;&quot;);	// all subgames share the same log (is this ok?)
++  d_buf = create_bitmap(SCREEN_W, SCREEN_H);
++  clear(d_buf);
++  copy_buf();
+ 
+-  _subgame[name]=asubgame;
+-}
++  tw_sound-&gt;play_music(data_full_path(&quot;music/intro.xm&quot;), -1);
++  clear(d_buf);
++  BITMAP* logo = load_bitmap(data_full_path(&quot;images/3dlogo.jpg&quot;).c_str(), NULL);
++  stretch_blit(logo, d_buf, 0, 0, logo-&gt;w, logo-&gt;h, 0, 0, screen-&gt;w, screen-&gt;h);
++  destroy_bitmap(logo);
+ 
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;TimeWarp development team&quot;, screen-&gt;w/2, screen-&gt;h-50, -1);
++  copy_buf();
++  HAVE_A_WAIT(2500);
++ 
++  clear(d_buf);
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;somewhat proudly&quot;, screen-&gt;w/2, screen-&gt;h/2, -1);
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;present&quot;, screen-&gt;w/2, screen-&gt;h/2+40, -1);
++  copy_buf();
++  HAVE_A_WAIT(2500);
++  clear(d_buf);
+ 
+-void MainGame::removesubgame(Game* g)
+-{
+-  STACKTRACE;
++  BITMAP* pkunk = load_bitmap(data_full_path(&quot;images/PkunkQueen.jpg&quot;).c_str(), NULL);
++  blit(pkunk, d_buf, 0, 0,  (screen-&gt;w-pkunk-&gt;w)/2, 20, pkunk-&gt;w, pkunk-&gt;h);
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;TW-Light : Legacies&quot;, screen-&gt;w/2, pkunk-&gt;h+60, -1);
++  destroy_bitmap(pkunk);
++  copy_buf();
++  HAVE_A_WAIT(2500);
++  
++  ScrollText(intro_text,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;, &quot;c&quot;, 2);
+ 
+-  _subgame.erase(_subgame.find(g-&gt;_name));
+-  g-&gt;log-&gt;deinit();	// this is empty, dunno why
+-  game = NULL;
+-  delete g;	// this _must_ be deleted completely, otherwise the gamedata aren't removed  
++
++  clear(d_buf);
++  copy_buf();	
++  destroy_bitmap(d_buf);
+ }
+ 
+-
+ int MainGame::play()
+-{
+-  STACKTRACE;
+-
+-  // Nothing to play
+-  if(!_subgame.size())
+-    return GAME_STATE_FINISHED;
+-
+-  set_resolution(window-&gt;w, window-&gt;h);
+-  prepare();
+-  if (is_paused()) unpause();
+-  
+-  while(isGameDone() == GAME_STATE_PLAYING)
+-    {
+-      poll_input(); 
+-      videosystem-&gt;poll_redraw();     
+-      if(!switch_to(_active_subgame))
+-	{
+-	  tw_error((&quot;Unknown sybgame: &quot; + _active_subgame).c_str());
+-	}
+-      (_subgame[_active_subgame])-&gt;play();
+-    }
+-  return isGameDone();
++{
++	// Show Intro
++	RGB tmpPal[256];
++	memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
++	set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
++      
++	intro();
++	videosystem-&gt;set_palette(tmpPal);
++	play_game(&quot;GOB&quot;, &quot;&quot;, NULL);
++	
++	return 0;
+ }
+ 
+-void MainGame::setActiveGame(const std::string&amp; name)
+-{
+-  STACKTRACE;
+-  _active_subgame = name;
+-}
+-
+-bool MainGame::switch_to(const std::string&amp; name)
+-{
+-  STACKTRACE;
+-  if(_subgame.find(name)!=_subgame.end())
+-    {
+-      setActiveGame(name);
+-      (_subgame[_active_subgame])-&gt;prepare();
+-      (_subgame[_active_subgame])-&gt;setGameDone(GAME_STATE_PLAYING);
+-      return true;
+-    }
+-  return false;
+-}
+
+Modified: trunk/source/games/gamehierarchy.h
+===================================================================
+--- trunk/source/games/gamehierarchy.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/games/gamehierarchy.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -24,115 +24,17 @@
+ 
+ #include &quot;util/history.h&quot;
+ 
+-class MainGame;
+-
+-
+-/// an extended game class, which can be embedded in a sequence
+-/// of initiated games ...
+-template&lt;class TMainGame&gt;
+-class SubGame : public Game
+-{
+- public:
+-
+-  TMainGame	*maingame;		///&lt; Main game handle multiple game subgames
+-
+-  SubGame()
+-  {
+-  }
+-  
+-  ~SubGame()
+-  {
+-  }
+-
+-  /// This init is cutted so it can be called safe several times by different subgames
+-  virtual void init(Log *_log, const std::string&amp; save)
+-    {
+-      STACKTRACE;
+-      
+-      log = _log;
+-      if (!log) 
+-	{
+-	  log = new Log();
+-	  log-&gt;init();
+-	}
+-  
+-      lag_frames = 0;
+-      show_fps = 0;
+-      game_time = 0;
+-      frame_time = 1;
+-      frame_number = 0;
+-      hiccup_margin = 100;
+-      next_tic_time = get_time();
+-      next_render_time = game_time;
+-      next_fps_time = game_time;
+-      view_locked = false;
+-      local_checksum = client_checksum = server_checksum = 0;
+-      
+-      Physics::init();
+-      prepare();
+-      
+-      if (!window) 
+-	{
+-	  window = new VideoWindow();
+-	  window-&gt;preinit();
+-	}
+-      
+-      change_view(get_config_string(&quot;View&quot;, &quot;View&quot;, &quot;Hero&quot;)); 
+-      
+-      
+-      if (!is_paused()) pause();
+-      
+-      text_mode(-1);
+-      
+-      
+-      msecs_per_fps	= maingame-&gt;msecs_per_fps;
+-      msecs_per_render	= maingame-&gt;msecs_per_render;
+-      frame_time	= maingame-&gt;frame_time;
+-      normal_turbo	= maingame-&gt;normal_turbo;
+-      f4_turbo		= maingame-&gt;f4_turbo;
+-      turbo             = normal_turbo;
+-      friendly_fire	= maingame-&gt;friendly_fire;
+-      shot_relativity	= maingame-&gt;shot_relativity;
+-      
+-      
+-      lag_frames = maingame-&gt;lag_frames;
+-      
+-      tic_history = new Histograph(128);
+-      render_history = new Histograph(128);
+-      
+-      prepare();
+-      
+-      return;
+-      }
+- protected:
+-  
+-};
+-
+-
+-
+-
+ ///  This class should allow you to start, play, end a game from within a game (while the
+ ///  other games are also running in the background). Games and their physics are independent.
+-class MainGame : public Game
++class MainGame
+ {
+- protected:
+-  std::string _active_subgame;
+-  std::map&lt;std::string,Game*&gt; _subgame;
+-  
+-    /// Switch to subgame by name
+-  bool switch_to(const std::string&amp; name);
+  public:
+-  
+-  MainGame();
+- 
+-  virtual void setActiveGame(const std::string&amp; name);
+-  virtual void addsubgame(Game *asubgame,  const std::string&amp; name);
+-  virtual void removesubgame(Game* g);
+-
++  MainGame(const std::string&amp; game_path);
++  virtual int Load(const std::string&amp; save);
++  virtual void intro();
+   virtual int play();
+ };
+ 
+-
+ #endif
+ 
+ 
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/games/ggob.cpp	2005-08-22 17:56:30 UTC (rev 188)
+@@ -371,11 +371,6 @@
+   delete s;
+   _exec_py_script(GameConfig::GetAbsolutePath(&quot;scripts/start.py&quot;).c_str(), 0, 0);
+   
+-  
+-  //add ( new RainbowRift() );
+-  
+-  next_add_new_enemy_time = 1000;
+-
+   this-&gt;change_view(&quot;Hero&quot;);
+   view-&gt;window-&gt;locate(
+                0,0,
+@@ -483,31 +478,8 @@
+ void GobGame::calculate() 
+ {
+   STACKTRACE;
+-  
+-  if (next_add_new_enemy_time &lt;= game_time) 
+-    {
+-      next_add_new_enemy_time = game_time;
+-      int t = 28;
+-      if ((random() % t) &lt; 4) add_new_enemy();
+-      int e = gobenemies;
+-      e -= random() % (1 + game_time / (250 * 1000));
+-      if (0) ;
+-      else if (e &gt;=12) 
+-    next_add_new_enemy_time += 15000;
+-      else if (e &gt;= 7) 
+-    next_add_new_enemy_time += 7000;
+-      else if (e &gt;= 4) 
+-    next_add_new_enemy_time += 5000;
+-      else if (e &gt;= 2) 
+-    next_add_new_enemy_time += 3000;
+-      else if (e &gt;= 1) 
+-    next_add_new_enemy_time += 2000;
+-      else 
+-    next_add_new_enemy_time += 1000;
+-    }
+   Game::calculate();
+   EventManager::calculate();
+-  return;
+ }
+ 
+ int GobGame::get_enemy_index(SpaceLocation *what) 
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/games/ggob.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -180,16 +180,13 @@
+ 
+   // For Python interface
+   void add_new_enemy();
+-  
+   int add_ship(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos, double team );
+-
+   void add_stars();
+-  int add_asteroid(const std::string system, Vector2 pos, double angle, int speed);
++  int  add_asteroid(const std::string system, Vector2 pos, double angle, int speed);
+   void add_system(std::string name, int x, int y);;
+-  int add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y);
+- 
+-  int next_add_new_enemy_time;
++  int  add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y);
+   
++
+   SpaceSprite *defenderSprite;
+ 
+  protected:
+@@ -262,6 +259,10 @@
+ };
+ 
+ 
++class GameManager
++{
++	public:
++};
+ 
+ #endif // TW_GOB_H_INCLUDES
+ 
+
+Deleted: trunk/source/python/fileops.cpp
+===================================================================
+--- trunk/source/python/fileops.cpp	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/python/fileops.cpp	2005-08-22 17:56:30 UTC (rev 188)
+@@ -1,404 +0,0 @@
+-/*
+-   $Id: fileops.cc,v 1.13 2003/01/24 22:15:43 ksterker Exp $
+-
+-   Copyright (C) 1999/2000/2001/2002/2003 Alexandre Courbot
+-   Part of the Adonthell Project <A HREF="http://adonthell.linuxgames.com">http://adonthell.linuxgames.com</A>
+-
+-   This program is free software; you can redistribute it and/or modify
+-   it under the terms of the GNU General Public License.
+-   This program is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY.
+-
+-   See the COPYING file for more details.
+-*/
+-
+-
+-
+-/**
+- * @file   fileops.cc
+- * @author Alexandre Courbot &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">alexandrecourbot at linuxgames.com</A>&gt;
+- * 
+- * @brief  Defines the igzstream, ogzstream and fileops classes.
+- * 
+- */
+-
+-#include &lt;stdio.h&gt;
+-#include &lt;iostream&gt;
+-#include &lt;SDL/SDL_endian.h&gt;
+-#include &quot;fileops.h&quot;
+-
+-
+-using namespace std;
+-
+-
+-gz_file::gz_file ()
+-{
+-    opened = false;
+-}
+-
+-gz_file::gz_file (const string &amp; fname, gz_type t)
+-{
+-    opened = false;
+-    open (fname, t);
+-}
+-
+-gz_file::~gz_file ()
+-{
+-    if (is_open ()) gzclose (file);
+-}
+-
+-bool gz_file::open (const string &amp; fname, gz_type t)
+-{
+-    if (t == READ) file = gzopen (fname.c_str (),&quot;rb6&quot;);
+-    else file = gzopen (fname.c_str (),&quot;wb6&quot;);
+-    if (!file) return false;
+-    opened = true;
+-    return true;
+-}
+-
+-void gz_file::close ()
+-{
+-    if (is_open ()) gzclose (file);
+-    opened = false;
+-}
+-
+-igzstream::igzstream () : gz_file ()
+-{
+-}
+-
+-igzstream::igzstream (const string &amp; fname) : gz_file (fname, READ)
+-{
+-}
+-
+-igzstream::~igzstream ()
+-{
+-}
+-
+-bool igzstream::open (const string &amp; fname)
+-{
+-    return gz_file::open (fname, READ);
+-}
+-
+-/// Reads a boolean.
+-bool&amp; operator &lt;&lt; (bool&amp; n, igzstream&amp; gfile)
+-{
+-    u_int8 b;
+-    gzread (gfile.file, &amp;b, sizeof (b));
+-    return (n = b);
+-}
+-
+-/// Reads a boolean.
+-bool igzstream::get_bool ()
+-{
+-    u_int8 b;
+-    gzread (file, &amp;b, sizeof (b));
+-    return b;
+-}
+-
+-/// Reads a char.
+-char&amp; operator &lt;&lt; (char&amp; n, igzstream&amp; gfile)
+-{
+-    gzread (gfile.file, &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Read a block of size chars
+-void igzstream::get_block (void * to, u_int32 size)
+-{
+-    gzread (file, to, size); 
+-}
+-
+-/// Reads a u_int8.
+-u_int8&amp; operator &lt;&lt; (u_int8&amp; n, igzstream&amp; gfile)
+-{
+-    gzread(gfile.file, &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Reads a u_int8.
+-u_int8 igzstream::get_uint8 ()
+-{
+-    u_int8 n;
+-    gzread (file, &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Reads a s_int8.
+-s_int8&amp; operator &lt;&lt; (s_int8&amp; n, igzstream&amp; gfile)
+-{
+-    gzread(gfile.file, &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Reads a s_int8.
+-s_int8 igzstream::get_sint8 ()
+-{
+-    s_int8 n;
+-    gzread (file, &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Reads a u_int16.
+-u_int16&amp; operator &lt;&lt; (u_int16&amp; n, igzstream&amp; gfile)
+-{
+-    gzread(gfile.file, &amp;n, sizeof (n));
+-    n = SDL_SwapLE16(n);
+-    return n;
+-}
+-
+-/// Reads a u_int16.
+-u_int16 igzstream::get_uint16 ()
+-{
+-    u_int16 n;
+-    gzread (file, &amp;n, sizeof (n));
+-    return SDL_SwapLE16(n);
+-}
+-
+-/// Reads a s_int16.
+-s_int16&amp; operator &lt;&lt; (s_int16&amp; n, igzstream&amp; gfile)
+-{
+-    gzread(gfile.file, &amp;n, sizeof (n));
+-    n = SDL_SwapLE16(n);
+-    return n;
+-}
+-
+-/// Reads a s_int16.
+-s_int16 igzstream::get_sint16 ()
+-{
+-    s_int16 n;
+-    gzread (file, &amp;n, sizeof (n));
+-    return SDL_SwapLE16(n);
+-}
+-
+-/// Reads a u_int32.
+-u_int32&amp; operator &lt;&lt; (u_int32&amp; n, igzstream&amp; gfile)
+-{
+-    gzread(gfile.file, &amp;n, sizeof (n));
+-    n = SDL_SwapLE32(n);
+-    return n;
+-}
+-
+-/// Reads a u_int32.
+-u_int32 igzstream::get_uint32 ()
+-{
+-    u_int32 n;
+-    gzread (file, &amp;n, sizeof (n));
+-    return SDL_SwapLE32(n);
+-}
+-
+-/// Reads a s_int32.
+-s_int32&amp; operator &lt;&lt; (s_int32&amp; n, igzstream&amp; gfile)
+-{
+-    gzread(gfile.file, &amp;n, sizeof (n));
+-    n = SDL_SwapLE32(n);
+-    return n;
+-}
+-
+-/// Reads a s_int32.
+-s_int32 igzstream::get_sint32 ()
+-{
+-    s_int32 n;
+-    gzread (file, &amp;n, sizeof (n));
+-    return SDL_SwapLE32(n);
+-}
+-
+-/// Reads a string.
+-string&amp; operator &lt;&lt; (string&amp; s, igzstream&amp; gfile)
+-{
+-    u_int16 strl;
+-    char c;
+-    s = &quot;&quot;; 
+-    strl &lt;&lt; gfile;
+-    while (strl)
+-    {
+-	c &lt;&lt; gfile;
+-	s += c;
+-	strl --;
+-    }
+-    return s;
+-}
+-
+-/// Reads a string.
+-string igzstream::get_string ()
+-{
+-    string s;
+-    s &lt;&lt; *this;
+-    return s;
+-}
+-
+-/// Reads a float.
+-float&amp; operator &lt;&lt; (float&amp; f, igzstream&amp; gfile)
+-{
+-    string sf;
+-    sf &lt;&lt; gfile;
+-    
+-    // floats saved as strings to remain independent of architecture
+-    sscanf (sf.c_str (), &quot;%f&quot;, &amp;f);
+-    
+-    return f;
+-}
+-
+-/// Reads a float.
+-float igzstream::get_float ()
+-{
+-    float f;
+-    f &lt;&lt; *this;
+-    return f;
+-}
+-
+-
+-ogzstream::ogzstream () : gz_file ()
+-{
+-}
+-
+-ogzstream::ogzstream (const string &amp; fname) : gz_file (fname, WRITE)
+-{
+-}
+-
+-ogzstream::~ogzstream ()
+-{
+-}
+-
+-bool ogzstream::open (const string &amp; fname)
+-{
+-    return gz_file::open (fname, WRITE);
+-}
+-
+-void ogzstream::put_block (void * to, u_int32 size)
+-{
+-    gzwrite (file, to, size); 
+-}
+-
+-/// Writes a boolean.
+-const bool&amp; operator &gt;&gt; (const bool&amp; n, ogzstream&amp; gfile)
+-{
+-    u_int8 b = n;
+-    gzwrite (gfile.file, &amp;b, sizeof (b));
+-    return n;
+-}
+-
+-/// Writes a char.
+-const char&amp; operator &gt;&gt; (const char&amp; n, ogzstream&amp; gfile)
+-{
+-    gzwrite (gfile.file, (char *) &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Writes a u_int8.
+-const u_int8&amp; operator &gt;&gt; (const u_int8&amp; n, ogzstream&amp; gfile)
+-{
+-    gzwrite(gfile.file, (u_int8 *) &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Writes a s_int8.
+-const s_int8&amp; operator &gt;&gt; (const s_int8&amp; n, ogzstream&amp; gfile)
+-{
+-    gzwrite(gfile.file, (s_int8 *) &amp;n, sizeof (n));
+-    return n;
+-}
+-
+-/// Writes a u_int16.
+-const u_int16&amp; operator &gt;&gt; (const u_int16&amp; n, ogzstream&amp; gfile)
+-{
+-    u_int16 s = SDL_SwapLE16(n);
+-    gzwrite(gfile.file, (u_int16 *) &amp;s, sizeof (n));
+-    return n;
+-}
+-
+-/// Writes a s_int16.
+-const s_int16&amp; operator &gt;&gt; (const s_int16&amp; n, ogzstream&amp; gfile)
+-{
+-    s_int16 s = SDL_SwapLE16(n);
+-    gzwrite(gfile.file, (s_int16 *) &amp;s, sizeof (n));
+-    return n;
+-}
+-
+-/// Writes a u_int32.
+-const u_int32&amp; operator &gt;&gt; (const u_int32&amp; n, ogzstream&amp; gfile)
+-{
+-    u_int32 s = SDL_SwapLE32(n);
+-    gzwrite(gfile.file, (u_int32 *) &amp;s, sizeof (n));
+-    return n;
+-}
+-
+-/// Writes a s_int32.
+-const s_int32&amp; operator &gt;&gt; (const s_int32&amp; n, ogzstream&amp; gfile)
+-{
+-    s_int32 s = SDL_SwapLE32(n);
+-    gzwrite(gfile.file, (s_int32 *) &amp;s, sizeof (n));
+-    return n;
+-}
+-
+-/// Writes a string.
+-string&amp; operator &gt;&gt; (const string&amp; s, ogzstream&amp; gfile)
+-{
+-    u_int16 strl = s.length ();
+-    string::iterator i; 
+-    strl &gt;&gt;  gfile;
+-    
+-    for (i = ((string&amp;) s).begin (); i != ((string&amp;) s).end (); i++) 
+-        (*i) &gt;&gt;  gfile;
+-    return (string&amp;) s;
+-}
+-
+-/// Writes a float.
+-const float&amp; operator &gt;&gt; (const float&amp; f, ogzstream&amp; gfile)
+-{
+-    char sf[16];
+-    
+-    // floats saved as strings to remain independent of architecture
+-    #ifdef _MSC_VER
+-    _snprintf (sf, 16, &quot;%f&quot;, f);
+-    #else
+-    snprintf (sf, 16, &quot;%f&quot;, f);
+-    #endif
+-    sf &gt;&gt; gfile;
+-    
+-    return f;
+-}
+-
+-void fileops::put_version (ogzstream&amp; file, u_int16 version)
+-{
+-    char c = 'v'; 
+-    c &gt;&gt; file;
+-    version &gt;&gt; file; 
+-}
+-
+-// read version info from file and check whether we can handle it
+-bool fileops::get_version (igzstream&amp; file, u_int16 min, u_int16 max, string name)
+-{
+-    char vinfo;
+-    u_int16 version;
+-
+-    vinfo &lt;&lt; file;
+-
+-    if (name == &quot;&quot;) name = &quot;&lt;unknown&gt;&quot;;
+-
+-    // file contains no version info
+-    if (vinfo != 'v')
+-    {
+-        cerr &lt;&lt; &quot;Version information missing in file \&quot;&quot; &lt;&lt; name &lt;&lt; endl;
+-        cerr &lt;&lt; &quot;You should get a more recent data package.\n&quot;;
+-        return false;
+-    }
+-    
+-    // check whether file has the version we expect
+-    version &lt;&lt; file;
+-
+-    if (version &lt; min || version &gt; max)
+-    {
+-        cerr &lt;&lt; &quot;File \&quot;&quot; &lt;&lt; name &lt;&lt; &quot;\&quot; has\nversion number &quot; &lt;&lt; version &lt;&lt; &quot;, &quot;;
+-        cerr &lt;&lt;  &quot;but I was expecting &quot; &lt;&lt; min &lt;&lt; &quot; &lt;= version &lt;= &quot; &lt;&lt; max &lt;&lt; endl;
+-	
+-        // file is newer than code
+-        if (version &gt; max)
+-            cerr &lt;&lt; &quot;You should get an up-to-date version of this program.\n\n&quot;;
+-        // file is older than code
+-        else
+-            cerr &lt;&lt; &quot;You should probably get a more recent data package.\n&quot;;
+-
+-        return false;
+-    } 
+-    return true;
+-}
+
+Deleted: trunk/source/python/fileops.h
+===================================================================
+--- trunk/source/python/fileops.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/python/fileops.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -1,338 +0,0 @@
+-/*
+-   $Id: fileops.h,v 1.17 2003/01/20 20:18:43 ksterker Exp $
+-
+-   Copyright (C) 2001/2003 Alexandre Courbot
+-   Part of the Adonthell Project <A HREF="http://adonthell.linuxgames.com">http://adonthell.linuxgames.com</A>
+-
+-   This program is free software; you can redistribute it and/or modify
+-   it under the terms of the GNU General Public License.
+-   This program is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY.
+-
+-   See the COPYING file for more details.
+-*/
+-
+-
+-
+-/**
+- * @file   fileops.h
+- * @author Alexandre Courbot &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">alexandrecourbot at linuxgames.com</A>&gt;
+- * 
+- * @brief  Declares the igzstream, ogzstream and fileops classes.
+- * 
+- */
+-
+-
+-
+-
+-#ifndef FILEOPS_H_
+-#define FILEOPS_H_
+-
+-#include &lt;zlib.h&gt;
+-#include &lt;string&gt;
+-#include &quot;types.h&quot;
+-
+-
+-#ifndef SWIG
+-//using namespace std; 
+-#endif
+-
+-
+-/**
+- * Enumeration to know whether a file is read or write opened.
+- * 
+- */ 
+-typedef enum { READ, WRITE } gz_type;
+-
+-
+-/**
+- * Base class for igzstream and ogzstream.
+- * 
+- */ 
+-class gz_file
+-{
+-public:
+-    /** 
+-     * Default constructor.
+-     * 
+-     */
+-    gz_file ();
+-
+-#ifndef SWIG
+-    /** 
+-     * 
+-     * 
+-     * @param fname name of the file to open.
+-     * @param t access (READ or WRITE).
+-     */
+-    gz_file (const std::string &amp; fname, gz_type t);
+-#endif
+-
+-    /** 
+-     * Destructor.
+-     * 
+-     */
+-    virtual ~gz_file ();
+-    
+-    /** 
+-     * Opens a file.
+-     * 
+-     * @param fname name of the file to open.
+-     * @param t access (READ or WRITE).
+-     * 
+-     * @return true if succeed, false otherwise.
+-     */
+-    bool open (const std::string &amp; fname, gz_type t);
+-
+-    /** 
+-     * Close the file that was opened.
+-     * 
+-     */
+-    void close ();
+-
+-    /** 
+-     * Returns whether the file is opened or not.
+-     * 
+-     * 
+-     * @return true if the file is opened, false otherwise.
+-     */
+-    bool is_open () { return opened; }
+-
+-    /** 
+-     * Returns whether the file is at it's end or not.
+-     * 
+-     * 
+-     * @return true if the end of file is reached, else otherwise.
+-     */
+-    bool eof () 
+-    {
+-        return gzeof (file); 
+-    }
+-    
+-protected:
+-    /** 
+-     * The actual gzFile.
+-     * 
+-     */ 
+-    gzFile file;
+-
+-private:
+-    /// NEVER pass this by value.
+-    gz_file (gz_file&amp; src); 
+-    
+-    /// Opened or not?
+-    bool opened; 
+-};
+-
+-
+-/** 
+- * Class to read data from a Gzip compressed file.
+- */ 
+-class igzstream : public gz_file
+-{
+-public:
+-    /**
+-     * Default constructor.
+-     * 
+-     */ 
+-    igzstream ();
+-
+-#ifndef SWIG
+-    /** 
+-     * Opens a file for read access.
+-     * 
+-     * @param fname name of the file to open.
+-     * 
+-     */ 
+-    igzstream (const std::string &amp; fname);
+-#endif
+-    
+-    /**
+-     * Destructor.
+-     * 
+-     */ 
+-    ~igzstream ();
+-
+-    /** 
+-     * Opens a file for read access.
+-     * 
+-     * @param fname name of the file to open.
+-     * 
+-     * @return true if succeed, false otherwise.
+-     */
+-    bool open (const std::string &amp; fname);
+-
+-    /** 
+-     * Reads a block of bytes from the file.
+-     * 
+-     * @param to pointer to the buffer where to read.
+-     * @param size number of bytes to read.
+-     */
+-    void get_block (void * to, u_int32 size); 
+-
+-#ifndef SWIG
+-    /// Reads a boolean.
+-    friend bool&amp; operator &lt;&lt; (bool&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a char.
+-    friend char&amp; operator &lt;&lt; (char&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a u_int8.
+-    friend u_int8&amp; operator &lt;&lt; (u_int8&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a s_int8.
+-    friend s_int8&amp; operator &lt;&lt; (s_int8&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a u_int16.
+-    friend u_int16&amp; operator &lt;&lt; (u_int16&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a s_int16.
+-    friend s_int16&amp; operator &lt;&lt; (s_int16&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a u_int32.
+-    friend u_int32&amp; operator &lt;&lt; (u_int32&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a s_int32.
+-    friend s_int32&amp; operator &lt;&lt; (s_int32&amp; n, igzstream&amp; gfile);
+-
+-    /// Reads a string.
+-    friend std::string&amp; operator &lt;&lt; (std::string&amp; s, igzstream&amp; gfile);
+-    
+-    /// Reads a float.
+-    friend float&amp; operator &lt;&lt; (float&amp; s, igzstream&amp; gfile);
+-#endif
+-
+-    bool get_bool ();
+-    u_int8 get_uint8 ();
+-    s_int8 get_sint8 ();
+-    u_int16 get_uint16 ();
+-    s_int16 get_sint16 ();
+-    u_int32 get_uint32 ();
+-    s_int32 get_sint32 ();
+-    std::string get_string ();
+-    float get_float ();
+-
+-private:
+-    /// NEVER pass this by value.
+-    igzstream (igzstream&amp; src);  
+-};
+-
+-/** 
+- * Class to write data from a Gzip compressed file.
+- */ 
+-class ogzstream : public gz_file
+-{
+-public:
+-    /**
+-     * Default constructor.
+-     * 
+-     */ 
+-    ogzstream ();
+-
+-#ifndef SWIG
+-    /** 
+-     * Opens a file for write access.
+-     * 
+-     * @param fname name of the file to open.
+-     * 
+-     */ 
+-    ogzstream (const std::string &amp; fname);
+-#endif
+-    
+-    /**
+-     * Destructor.
+-     * 
+-     */
+-    ~ogzstream ();
+-
+-    /** 
+-     * Opens a file for write access.
+-     * 
+-     * @param fname name of the file to open.
+-     * 
+-     * @return true if succeed, false otherwise.
+-     */
+-    bool open (const std::string &amp; fname);
+-
+-    /** 
+-     * Writes a block of bytes to the file.
+-     * 
+-     * @param to pointer to the buffer to write.
+-     * @param size number of bytes to write.
+-     */
+-    void put_block (void * to, u_int32 size); 
+-
+-#ifndef SWIG
+-    /// Writes a boolean.
+-    friend const bool&amp; operator &gt;&gt; (const bool&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a char.
+-    friend const char&amp; operator &gt;&gt; (const char&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a u_int8.
+-    friend const u_int8&amp; operator &gt;&gt; (const u_int8&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a s_int8.
+-    friend const s_int8&amp; operator &gt;&gt; (const s_int8&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a u_int16.
+-    friend const u_int16&amp; operator &gt;&gt; (const u_int16&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a s_int16.
+-    friend const s_int16&amp; operator &gt;&gt; (const s_int16&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a u_int32.
+-    friend const u_int32&amp; operator &gt;&gt; (const u_int32&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a s_int32.
+-    friend const s_int32&amp; operator &gt;&gt; (const s_int32&amp; n, ogzstream&amp; gfile);
+-
+-    /// Writes a string.
+-    friend std::string&amp; operator &gt;&gt; (const std::string&amp; s, ogzstream&amp; gfile);
+-    
+-    /// Writes a float.
+-    friend const float&amp; operator &gt;&gt; (const float&amp; s, ogzstream&amp; gfile);
+-#endif
+-
+-    void put_bool (const bool &amp;n)         { n &gt;&gt; *this; }
+-    void put_uint8 (const u_int8 &amp;n)      { n &gt;&gt; *this; }
+-    void put_sint8 (const s_int8 &amp;n)      { n &gt;&gt; *this; }
+-    void put_uint16 (const u_int16 &amp;n)    { n &gt;&gt; *this; }
+-    void put_sint16 (const s_int16 &amp;n)    { n &gt;&gt; *this; }
+-    void put_uint32 (const u_int32 &amp;n)    { n &gt;&gt; *this; }
+-    void put_sint32 (const s_int32 &amp;n)    { n &gt;&gt; *this; }
+-    void put_string (const std::string&amp; s)     { s &gt;&gt; *this; }
+-    void put_float (const float &amp;n)       { n &gt;&gt; *this; }
+-    
+-private:
+-    /// NEVER pass this by value.
+-    ogzstream (ogzstream&amp; src);   
+-};
+-
+-/// File version control class.
+-class fileops
+-{
+-public:
+-    /** 
+-     * Sets the version number of a file.
+-     * 
+-     * @param file file where to write the version number.
+-     * @param version version number to write.
+-     */
+-    static void put_version (ogzstream&amp; file, u_int16 version);  // Set version of a file
+-
+-    /** 
+-     * 
+-     * 
+-     * @param file file to check version.
+-     * @param min minimum expected version number.
+-     * @param max maximum expected version number.
+-     * @param name filename of the passed file.
+-     * 
+-     * @return true if 
+-     */
+-    static bool get_version (igzstream&amp; file, u_int16 min, u_int16 max, std::string name); // Check version
+-};
+-
+-
+-#endif // __FILEOPS_H__
+
+Modified: trunk/source/python/game.h
+===================================================================
+--- trunk/source/python/game.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/python/game.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -31,7 +31,7 @@
+ 
+ 
+ #include &lt;string&gt;
+-#include &quot;types.h&quot;
++//#include &quot;types.h&quot;
+ 
+ #ifndef SWIG 
+ //using std::string; 
+
+Modified: trunk/source/python/python_class.cpp
+===================================================================
+--- trunk/source/python/python_class.cpp	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/python/python_class.cpp	2005-08-22 17:56:30 UTC (rev 188)
+@@ -90,7 +90,7 @@
+ /*
+  * Execute the file given by 'filename'
+  */
+-bool python::exec_file (std::string filename)
++bool python::exec_file (const std::string&amp; filename)
+ {
+   std::string content;
+   FILE * f = fopen(GameConfig::GetAbsolutePath(filename).c_str(), &quot;rt&quot;);
+@@ -124,7 +124,7 @@
+ }
+ 
+ /* Import a module, return module ptr */
+-PyObject *python::import_module (std::string filename)
++PyObject *python::import_module (const std::string&amp; filename)
+ {
+     PyObject *result = PyImport_ImportModule ((char *) filename.c_str ());
+     
+@@ -171,10 +171,10 @@
+   if (pValue != NULL) 
+     {
+       if(PyInt_Check(pValue))
+-	{
+-	  if(PyInt_AsLong(pValue)!=0)
+-	    ret = true;
+-	}
++    {
++      if(PyInt_AsLong(pValue)!=0)
++        ret = true;
++    }
+       Py_DECREF(pValue);
+     }
+   else 
+
+Modified: trunk/source/python/python_class.h
+===================================================================
+--- trunk/source/python/python_class.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/python/python_class.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -29,11 +29,14 @@
+ #define PYTHON_CLASS_H__
+ 
+ #undef _POSIX_C_SOURCE
++
++#include &lt;string&gt;
++
+ #include &quot;Python.h&quot;
+ #include &quot;compile.h&quot;
+ #include &quot;eval.h&quot;
+ #include &quot;node.h&quot;
+-#include &quot;fileops.h&quot;
++//#include &quot;fileops.h&quot;
+ 
+ /**
+  * Grant simplified access to the Python interpreter.
+@@ -77,7 +80,7 @@
+      * 
+      * @return true in case of success, false otherwise.
+      */ 
+-    static bool exec_file (std::string filename);
++    static bool exec_file (const std::string&amp; filename);
+     
+     /** 
+      * Imports a Python module.
+@@ -86,7 +89,7 @@
+      * 
+      * @return pointer to the imported module.
+      */
+-    static PyObject *import_module (std::string filename);
++    static PyObject *import_module (const std::string&amp; filename);
+     
+     static bool exec_function(const std::string&amp; name);
+     
+
+Deleted: trunk/source/python/types.h
+===================================================================
+--- trunk/source/python/types.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/python/types.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -1,55 +0,0 @@
+-// $Id: types.h,v 1.16 2002/04/25 15:34:11 gnurou Exp $
+-/*
+-   Copyright (C) 1999/2000/2001 Alexandre Courbot.
+-
+-   This program is free software; you can redistribute it and/or modify
+-   it under the terms of the GNU General Public License.
+-   This program is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY.
+-   See the COPYING file for more details.
+-
+- */
+-
+-
+-/** @file types.h
+- *  @author Alexandre Courbot &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">alexandrecourbot at linuxgames.com</A>&gt;
+- *  @brief Declares some basic types.
+- */ 
+-
+- 
+-#ifndef TYPES_H__
+-#define TYPES_H__
+-
+-#include &quot;SDL.h&quot;
+-
+-// We should put ifdefs here to put the correct int values accordingly to the system type
+-
+-
+-/// 8 bits long unsigned integer
+-#define u_int8 unsigned char
+-
+-/// 16 bits long unsigned integer
+-#define u_int16 unsigned short
+-
+-/// 32 bits long unsigned integer
+-#define u_int32 unsigned int
+-
+-/// 8 bits long signed integer
+-#define s_int8 signed char
+-
+-/// 16 bits long signed integer
+-#define s_int16 signed short
+-
+-/// 32 bits long signed integer
+-#define s_int32 signed int
+-
+-
+-/* 
+-typedef Uint8 u_int8;
+-typedef Uint16 u_int16;
+-typedef Uint32 u_int32;
+-typedef Sint8 s_int8;
+-typedef Sint16 s_int16;
+-typedef Sint32 s_int32;
+-*/ 
+-#endif
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/scp.cpp	2005-08-22 17:56:30 UTC (rev 188)
+@@ -74,14 +74,12 @@
+ #include &quot;melee/mship.h&quot; //remove
+ #include &quot;melee/mfleet.h&quot;
+ #include &quot;tml/gameconfig.h&quot;
+-
++#include &quot;games/gamehierarchy.h&quot;
+ #include &quot;python/python_class.h&quot;
+ 
+ 
+ DATAFILE* g_game_data = NULL;
+ 
+-void GOBIntro();
+-
+ ///the server port to connect to in client mode.  
+ unsigned serverPort = DEFAULT_SERVER_PORT;
+ ///the server address to connect to in client mode.
+@@ -181,7 +179,6 @@
+ 
+ 
+ void play_demo(const char *file_name = &quot;demo.dmo&quot;) ;
+-void play_game(const char *_gametype_name, const std::string&amp; save, Log *_log = NULL) ;
+ void play_net1client ( const char * address = NULL, int port = -1 ) ;
+ void play_net1server ( int port = -1 ) ;
+ 
+@@ -411,9 +408,9 @@
+       
+       GameType *type = gametype(gametype_name);
+       if (type)
+-	new_game = type-&gt;new_game();
++		new_game = type-&gt;new_game();
+       else
+-	tw_error(&quot;wait a sec... I can't find that game type&quot;);
++		tw_error(&quot;wait a sec... I can't find that game type&quot;);
+     
+       new_game-&gt;preinit();
+       new_game-&gt;window = new VideoWindow;
+@@ -431,7 +428,6 @@
+       delete new_game;
+       game = NULL;
+     }
+-  
+   catch (int i) 
+     {
+       if (i == -1) 
+@@ -459,7 +455,7 @@
+       if (__error_flag &amp; 1) 
+ 	throw;
+     }
+-  
++
+   prepareTitleScreenAssets();
+   showTitle();
+   return;
+@@ -713,17 +709,10 @@
+ 	break;
+       case MAIN_DIALOG_NEW_GAME:
+ 	{
+-	  // Show Intro
+-	  RGB tmpPal[256];
+-	  memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
+-	  set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
+-      
+-	  GOBIntro();
+-	  videosystem-&gt;set_palette(tmpPal);
+-
+-	  disable();
+-	  play_game(&quot;GOB&quot;, &quot;&quot;, NULL);
+-	  enable();
++		disable();
++		std::auto_ptr&lt;MainGame&gt; maingame(new MainGame(&quot;&quot;));
++		maingame-&gt;play();
++		enable();
+ 	  break;
+ 	}
+ 	case MAIN_DIALOG_ABOUT:
+@@ -2090,75 +2079,3 @@
+   return 0;
+ }
+ 
+-
+-//################################################################################################
+-//  Intro
+-
+-
+-
+-
+-
+-void GOBIntro()
+-{
+-  BITMAP* d_buf;
+-  std::vector&lt;std::string&gt; intro_text;
+-
+-  intro_text.push_back(&quot;The Ur-quan are defeated - the destruction&quot;);
+-  intro_text.push_back(&quot;of the Sa-matra threw them into chaos,&quot;);
+-  intro_text.push_back(&quot;making them easy prey for&quot;);
+-  intro_text.push_back(&quot;the New Alliance of Free Stars.&quot;);
+-  intro_text.push_back(&quot;Within weeks the NAFS forces managed&quot;);
+-  intro_text.push_back(&quot;to destroy most of the fleets of the two &quot;);
+-  intro_text.push_back(&quot;races who terrorized the galaxy&quot;);
+-  intro_text.push_back(&quot;for the past 20,000 years!&quot;);
+-  intro_text.push_back(&quot;&quot;);
+-  intro_text.push_back(&quot;Thanks to captain Zelnick, hope is given&quot;);
+-  intro_text.push_back(&quot;to the entire galaxy, and especially to&quot;);
+-  intro_text.push_back(&quot;the human race. Now free from their prison&quot;);
+-  intro_text.push_back(&quot;under a Slaveshield it's Humanity's time&quot;);
+-  intro_text.push_back(&quot;to rebuild.&quot;);
+-  intro_text.push_back(&quot;&quot;);
+-  intro_text.push_back(&quot;However, it seems there are more troubles&quot;);
+-  intro_text.push_back(&quot;ahead. It is time for great space&quot;);
+-  intro_text.push_back(&quot;exploration, colonization and piracy.&quot;);
+-  intro_text.push_back(&quot;You have to live in this world,&quot;);
+-  intro_text.push_back(&quot;young earth captain!!!&quot;);
+-
+-  d_buf = create_bitmap(SCREEN_W, SCREEN_H);
+-  clear(d_buf);
+-  copy_buf();
+-
+-  tw_sound-&gt;play_music(data_full_path(&quot;music/intro.xm&quot;), -1);
+-  clear(d_buf);
+-  BITMAP* logo = load_bitmap(data_full_path(&quot;images/3dlogo.jpg&quot;).c_str(), NULL);
+-  stretch_blit(logo, d_buf, 0, 0, logo-&gt;w, logo-&gt;h, 0, 0, screen-&gt;w, screen-&gt;h);
+-  destroy_bitmap(logo);
+-
+-  textout_centre(d_buf, D_FONT_ENGLISH, &quot;TimeWarp development team&quot;, screen-&gt;w/2, screen-&gt;h-50, -1);
+-  copy_buf();
+-  HAVE_A_WAIT(2500);
+- 
+-  clear(d_buf);
+-  textout_centre(d_buf, D_FONT_ENGLISH, &quot;somewhat proudly&quot;, screen-&gt;w/2, screen-&gt;h/2, -1);
+-  textout_centre(d_buf, D_FONT_ENGLISH, &quot;present&quot;, screen-&gt;w/2, screen-&gt;h/2+40, -1);
+-  copy_buf();
+-  HAVE_A_WAIT(2500);
+-  clear(d_buf);
+-
+-  BITMAP* pkunk = load_bitmap(data_full_path(&quot;images/PkunkQueen.jpg&quot;).c_str(), NULL);
+-  blit(pkunk, d_buf, 0, 0,  (screen-&gt;w-pkunk-&gt;w)/2, 20, pkunk-&gt;w, pkunk-&gt;h);
+-  textout_centre(d_buf, D_FONT_ENGLISH, &quot;TW-Light : Legacies&quot;, screen-&gt;w/2, pkunk-&gt;h+60, -1);
+-  destroy_bitmap(pkunk);
+-  copy_buf();
+-  HAVE_A_WAIT(2500);
+-  
+-  ScrollText(intro_text,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;, &quot;c&quot;, 2);
+-
+-
+-  clear(d_buf);
+-  copy_buf();	
+-  destroy_bitmap(d_buf);
+-}
+-
+-
+-
+
+Modified: trunk/source/scp.h
+===================================================================
+--- trunk/source/scp.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/scp.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -25,9 +25,12 @@
+ 
+ #include &lt;string&gt;
+ class VideoWindow;
++class Log;
+ 
+ std::string tw_version();
+ 
++void play_game(const char *_gametype_name, const std::string&amp; save, Log *_log = NULL) ;
++
+ /// TEAMS dialog - from here you can select controllers for each player, and access their respective fleets. (FLEET dialog)
+ void change_teams();
+ 
+
+Modified: trunk/source/util/sound.cpp
+===================================================================
+--- trunk/source/util/sound.cpp	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/util/sound.cpp	2005-08-22 17:56:30 UTC (rev 188)
+@@ -22,6 +22,10 @@
+ #include &lt;iostream&gt;
+ #include &lt;map&gt;
+ 
++#ifdef main
++#undef main
++#endif
++
+ #include &lt;allegro.h&gt;
+ #include &quot;other/twconfig.h&quot;
+ #include &quot;errors.h&quot;
+@@ -29,6 +33,9 @@
+ 
+ SoundSystem* tw_sound = NULL;
+ 
++static std::map&lt;std::string,Mix_Chunk*&gt; sound_cache;
++static std::map&lt;std::string,Mix_Music*&gt; music_cache;
++
+ SoundSystem::SoundSystem(bool sound_on)
+ {
+   STACKTRACE;
+@@ -56,7 +63,7 @@
+ 
+   
+   int res = Mix_OpenAudio(MIX_DEFAULT_FREQUENCY,MIX_DEFAULT_FORMAT,2,buf_size_);
+-  //int res = Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,buf_size_);
++  
+   if(res &gt;= 0) 
+     {
+       mix_ok = true;
+@@ -121,15 +128,15 @@
+       const std::string&amp; filename = absolute_file;
+       
+       if(filename.empty()) 
+-	{
+-	  return;
+-	}
++    {
++      return;
++    }
+       
+       Mix_Music* const music = Mix_LoadMUS(filename.c_str());
+       if(music == NULL) {
+-	std::cerr &lt;&lt; &quot;Could not load music file '&quot; &lt;&lt; filename &lt;&lt; &quot;': &quot;
+-		  &lt;&lt; SDL_GetError() &lt;&lt; &quot;\n&quot;;
+-	return;
++    std::cerr &lt;&lt; &quot;Could not load music file '&quot; &lt;&lt; filename &lt;&lt; &quot;': &quot;
++          &lt;&lt; SDL_GetError() &lt;&lt; &quot;\n&quot;;
++    return;
+       }
+       
+       itor = music_cache.insert(std::pair&lt;std::string,Mix_Music*&gt;(file,music)).first;
+@@ -161,17 +168,17 @@
+       const std::string&amp; filename = file;
+       
+       if(filename.empty()) 
+-	{
+-	  return;
+-	}
++    {
++      return;
++    }
+       
+       Mix_Chunk* const sfx = Mix_LoadWAV(filename.c_str());
+       if(sfx == NULL) 
+-	{
+-	  std::cerr &lt;&lt; &quot;Could not load sound file '&quot; &lt;&lt; filename &lt;&lt; &quot;': &quot;
+-		    &lt;&lt; SDL_GetError() &lt;&lt; &quot;\n&quot;;
+-	  return;
+-	}
++    {
++      std::cerr &lt;&lt; &quot;Could not load sound file '&quot; &lt;&lt; filename &lt;&lt; &quot;': &quot;
++            &lt;&lt; SDL_GetError() &lt;&lt; &quot;\n&quot;;
++      return;
++    }
+       
+       itor = sound_cache.insert(std::pair&lt;std::string,Mix_Chunk*&gt;(file,sfx)).first;
+     }
+@@ -205,10 +212,10 @@
+     {
+       Mix_Chunk * chunk = Mix_GetChunk(i);
+       if(chunk == itor-&gt;second)
+-	{
+-	  Mix_HaltChannel(i);
+-	}
++    {
++      Mix_HaltChannel(i);
+     }
++    }
+ }
+ 
+ void SoundSystem::set_music_volume(double vol)
+@@ -236,10 +243,10 @@
+       const std::string music = current_music;
+       current_music = &quot;&quot;;
+       if(!music.empty()) 
+-	{
+-	  play_music(music);
+-	}
++    {
++      play_music(music);
+     }
++    }
+ }
+ 
+ void SoundSystem::set_sound_volume(double vol)
+
+Modified: trunk/source/util/sound.h
+===================================================================
+--- trunk/source/util/sound.h	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/source/util/sound.h	2005-08-22 17:56:30 UTC (rev 188)
+@@ -20,15 +20,10 @@
+ #include &lt;string&gt;
+ #include &lt;map&gt;
+ 
+-#include &quot;SDL_mixer.h&quot;
+-
+-
+ /// \brief All work with sound must be implemented using this class
+ class SoundSystem
+ {  
+   bool mix_ok;
+-  std::map&lt;std::string,Mix_Chunk*&gt; sound_cache;
+-  std::map&lt;std::string,Mix_Music*&gt; music_cache;
+   
+   std::string current_music;
+   
+@@ -36,7 +31,7 @@
+   bool sound_off;
+   
+   int frequency;
+-  Uint16 format;
++  unsigned short format;
+   int channels;
+ 
+   size_t buf_size_;
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-08-22 02:27:59 UTC (rev 187)
++++ trunk/sources.lst	2005-08-22 17:56:30 UTC (rev 188)
+@@ -1,5 +1,4 @@
+ source/python/python_class.cpp
+-source/python/fileops.cpp
+ source/python/game.cpp
+ source/other/starmap.cpp
+ source/other/planet3d.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000133.html">[Tw-light-svn] r187 - trunk/source/games
+</A></li>
+	<LI>Next message: <A HREF="000135.html">[Tw-light-svn] r189 - in trunk: gamedata/images/ships/shpconca source/melee source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

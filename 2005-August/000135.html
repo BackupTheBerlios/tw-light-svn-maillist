@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r189 - in trunk: gamedata/images/ships/shpconca source/melee source/ships
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r189%20-%20in%20trunk%3A%20gamedata/images/ships/shpconca%20source/melee%20source/ships&In-Reply-To=%3C200508261857.j7QIv29r020438%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000134.html">
+   <LINK REL="Next"  HREF="000136.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r189 - in trunk: gamedata/images/ships/shpconca source/melee source/ships</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r189%20-%20in%20trunk%3A%20gamedata/images/ships/shpconca%20source/melee%20source/ships&In-Reply-To=%3C200508261857.j7QIv29r020438%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r189 - in trunk: gamedata/images/ships/shpconca source/melee source/ships">yurand at berlios.de
+       </A><BR>
+    <I>Fri Aug 26 20:57:02 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000134.html">[Tw-light-svn] r188 - in trunk: . gamedata/images/ships/shpconho gamedata/images/ships/shptauda source source/games source/python source/util
+</A></li>
+        <LI>Next message: <A HREF="000136.html">[Tw-light-svn] r190 - trunk/source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-08-26 20:56:59 +0200 (Fri, 26 Aug 2005)
+New Revision: 189
+
+Modified:
+   trunk/gamedata/images/ships/shpconca/SHIP_P01_PCX.bmp
+   trunk/gamedata/images/ships/shpconca/SHIP_P02_PCX.bmp
+   trunk/gamedata/images/ships/shpconca/SHIP_P03_PCX.bmp
+   trunk/gamedata/images/ships/shpconca/SHIP_P04_PCX.bmp
+   trunk/gamedata/images/ships/shpconca/SHIP_P05_PCX.bmp
+   trunk/gamedata/images/ships/shpconca/SHIP_P06_PCX.bmp
+   trunk/source/melee/msprite.cpp
+   trunk/source/ships/shpconho.cpp
+Log:
+Fixed bug #67 Confed Hornet Icon Problems
+Inserted ship captain icons for the confed cargotran Darryl Koster
+
+Modified: trunk/gamedata/images/ships/shpconca/SHIP_P01_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconca/SHIP_P02_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconca/SHIP_P03_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconca/SHIP_P04_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconca/SHIP_P05_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpconca/SHIP_P06_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/source/melee/msprite.cpp
+===================================================================
+--- trunk/source/melee/msprite.cpp	2005-08-22 17:56:30 UTC (rev 188)
++++ trunk/source/melee/msprite.cpp	2005-08-26 18:56:59 UTC (rev 189)
+@@ -372,9 +372,11 @@
+ {
+   STACKTRACE;
+   int i, j, obpp=0;
+-  BITMAP *bmp = NULL, *tmp = NULL;
++  BITMAP *bmp = NULL;
++  BITMAP *tmp = NULL;
+   
+-  
++  //boost::shared_ptr&lt;BITMAP&gt; tmp;
++
+   if (_attributes == -1) 
+     _attributes = string_to_sprite_attributes(NULL);
+ 
+@@ -430,7 +432,8 @@
+   if (bpp == 0) 
+     bpp = obpp;
+   if (obpp != bpp) 
+-    tmp = create_bitmap_ex(obpp, w, h);
++	  tmp = create_bitmap_ex(obpp, w, h);
++
+   if (general_attributes &amp; ALPHA) 
+     {
+       if (bpp &lt;= 16) bpp = 16;
+@@ -485,38 +488,38 @@
+     {
+       bmp = create_bitmap_ex(bpp, w, h);
+       if (!tmp) 
+-	tmp = bmp;
++		tmp = bmp;
+       if (general_attributes &amp; MASKED) 
+-	clear_to_color(bmp, bitmap_mask_color(bmp));
++		clear_to_color(bmp, bitmap_mask_color(bmp));
+       if (tmp != bmp) 
+-	clear_to_color(tmp, bitmap_mask_color(tmp));
++		clear_to_color(tmp, bitmap_mask_color(tmp));
+       switch (originaltype) 
+-	{
+-	case DAT_RLE_SPRITE: 
+-	  {
+-	    draw_rle_sprite(tmp, (RLE_SPRITE *)(images[i].dat), 0, 0);
+-	    if (general_attributes &amp; ALPHA) 
+-	      handle_alpha_load(tmp);
+-	    if (tmp != bmp) 
+-	      convert_bitmap(tmp, bmp, (general_attributes &amp; MASKED) ? AA_MASKED : 0);
+-	  }
++		{
++		case DAT_RLE_SPRITE: 
++		{
++			draw_rle_sprite(tmp, (RLE_SPRITE *)(images[i].dat), 0, 0);
++			if (general_attributes &amp; ALPHA) 
++				handle_alpha_load(tmp);
++			if (tmp != bmp) 
++				convert_bitmap(tmp, bmp, (general_attributes &amp; MASKED) ? AA_MASKED : 0);
++		}
++		break;
++		case DAT_BITMAP: 
++		{
++			if (general_attributes &amp; ALPHA) handle_alpha_load((BITMAP *)(images[i].dat));
++			if (obpp != bpp) 
++			{
++				convert_bitmap((BITMAP *)(images[i].dat), bmp, (general_attributes &amp; MASKED) ? AA_MASKED : 0);
++			}
++			else 
++			{
++				if (general_attributes &amp; MASKED) draw_sprite(bmp, (BITMAP*)images[i].dat, 0, 0);
++				else blit((BITMAP*)images[i].dat, bmp, 0, 0, 0, 0, w, h);
++			}
++		}
+ 	  break;
+-	case DAT_BITMAP: 
+-	  {
+-	    if (general_attributes &amp; ALPHA) handle_alpha_load((BITMAP *)(images[i].dat));
+-	    if (obpp != bpp) 
+-	      {
+-		convert_bitmap((BITMAP *)(images[i].dat), bmp, (general_attributes &amp; MASKED) ? AA_MASKED : 0);
+-	      }
+-	    else 
+-	      {
+-		if (general_attributes &amp; MASKED) draw_sprite(bmp, (BITMAP*)images[i].dat, 0, 0);
+-		else blit((BITMAP*)images[i].dat, bmp, 0, 0, 0, 0, w, h);
+-	      }
+-	  }
+-	  break;
+ 	}
+-      color_correct_bitmap(bmp, general_attributes &amp; MASKED);
++    color_correct_bitmap(bmp, general_attributes &amp; MASKED);
+ 
+       if (tmp == bmp) 
+ 	tmp = NULL;
+@@ -917,9 +920,9 @@
+       tw_error(&quot;SpaceSprite::overlay - index2 %d &gt; count %d&quot;, index2, count);
+     }
+   
+-  for(y = 0; y &lt; h; y += 1) 
++  for(y = 0; y &lt; b[0][index1]-&gt;h; y += 1) 
+     {
+-      for(x = 0; x &lt; w; x += 1) 
++      for(x = 0; x &lt; b[0][index1]-&gt;w; x += 1) 
+ 	{
+ 	  if (getpixel(b[0][index1], x, y) != getpixel(b[0][index2], x, y)) 
+ 	    {
+
+Modified: trunk/source/ships/shpconho.cpp
+===================================================================
+--- trunk/source/ships/shpconho.cpp	2005-08-22 17:56:30 UTC (rev 188)
++++ trunk/source/ships/shpconho.cpp	2005-08-26 18:56:59 UTC (rev 189)
+@@ -151,32 +151,7 @@
+      regenrating = TRUE;
+      regenrateCount = regenrateFrames;
+    }
+-	/*
+-   if(shield != shield_old) {
+-     bar_x = 0;
+-     bar_y = 0;
+-     shield_panel = ((shield*8)/shield_max) + 8;
+-		 BITMAP *bmp = spritePanel-&gt;get_bitmap(0);
+-     blit(ship-&gt;spritePanel-&gt;get_bitmap(shield_panel), bmp, 0, 0, 13, 14, 50, 39);
+-     for(i = 0; i &lt; shield_max; i++) {
+-        if((i - shield) &lt; 0) {
+-         putpixel(bmp, shield_x + bar_x, shield_y + bar_y, pallete_color[shield_color]);
+-         putpixel(bmp, shield_x + bar_x + 1, shield_y + bar_y, pallete_color[shield_color]);
+-       } else {
+-         putpixel(bmp, shield_x + bar_x, shield_y + bar_y, 0);
+-         putpixel(bmp, shield_x + bar_x + 1, shield_y + bar_y, 0);
+-       }
+-       if((i % 2) == 0)
+-         bar_x = -3;
+-       else {
+-         bar_x = 0;
+-         bar_y -= 2;
+-       }
+-     }
+-     ship-&gt;update_panel = TRUE;
+-     shield_old = shield;
+-   }
+-   */
++
+    Ship::calculate();
+ 
+    crew = 1 + shield;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000134.html">[Tw-light-svn] r188 - in trunk: . gamedata/images/ships/shpconho gamedata/images/ships/shptauda source source/games source/python source/util
+</A></li>
+	<LI>Next message: <A HREF="000136.html">[Tw-light-svn] r190 - trunk/source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

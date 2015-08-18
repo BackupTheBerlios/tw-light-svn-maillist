@@ -1,0 +1,287 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r143 - in trunk/source: . games other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r143%20-%20in%20trunk/source%3A%20.%20games%20other&In-Reply-To=%3C200505011125.j41BPGV4001072%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000088.html">
+   <LINK REL="Next"  HREF="000090.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r143 - in trunk/source: . games other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r143%20-%20in%20trunk/source%3A%20.%20games%20other&In-Reply-To=%3C200505011125.j41BPGV4001072%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r143 - in trunk/source: . games other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun May  1 13:25:16 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000088.html">[Tw-light-svn] r142 - in trunk/source: . games python
+</A></li>
+        <LI>Next message: <A HREF="000090.html">[Tw-light-svn] r144 - in trunk: gamedata/python source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#89">[ date ]</a>
+              <a href="thread.html#89">[ thread ]</a>
+              <a href="subject.html#89">[ subject ]</a>
+              <a href="author.html#89">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-01 13:24:32 +0200 (Sun, 01 May 2005)
+New Revision: 143
+
+Modified:
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/other/dialogs.cpp
+   trunk/source/other/dialogs.h
+   trunk/source/scp.cpp
+Log:
+moving client/server buttons to multiplayer menu
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-05-01 10:34:09 UTC (rev 142)
++++ trunk/source/games/ggob.cpp	2005-05-01 11:24:32 UTC (rev 143)
+@@ -264,9 +264,7 @@
+   if(!python::exec_file(&quot;python/start.py&quot;))
+     {
+       tw_error(&quot;Load statrt script error&quot;);
+-      //      throw &quot;Load statrt script error&quot;;
+     }
+-  //  python::exec_file(&quot;start&quot;);
+   _galaxy._stars.remove(s);
+   delete s;
+   
+@@ -274,7 +272,6 @@
+   
+   next_add_new_enemy_time = 1000;
+ 
+-
+   this-&gt;change_view(&quot;Hero&quot;);
+   view-&gt;window-&gt;locate(
+ 		       0,0,
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-05-01 10:34:09 UTC (rev 142)
++++ trunk/source/games/ggob.h	2005-05-01 11:24:32 UTC (rev 143)
+@@ -40,8 +40,8 @@
+ {
+  public:
+   GobPlayer();
+-  ~GobPlayer()
+-;
++  ~GobPlayer();
++
+   Ship *ship;
+   pair *pair_list;
+   int num_pairs;
+@@ -89,7 +89,6 @@
+ /// GOB class adventure game
+ class GobGame : public  GobGameBase
+ {
+-  //  std::map&lt;std::string, std::list&lt;SpaceLocation*&gt; &gt; _galaxy;
+ 
+  public:
+   StarMap _galaxy;
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-05-01 10:34:09 UTC (rev 142)
++++ trunk/source/other/dialogs.cpp	2005-05-01 11:24:32 UTC (rev 143)
+@@ -275,6 +275,17 @@
+   { NULL,              0,    0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL }
+ };
+ 
++
++DIALOG melee_multiplayer_dialog[] = {
++  // (dialog proc)     (x)  (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
++  { d_shadow_box_proc, 40,  40,   240,  95,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { my_d_button_proc,  50,   50,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game/Net Server&quot; , NULL, NULL },
++  { my_d_button_proc,  50,   75,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game/Net Client&quot; , NULL, NULL },
++  { my_d_button_proc,  80,  100,  190,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Main Menu&quot; , NULL, NULL },
++  { d_tw_yield_proc,   0,   0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { NULL,              0,   0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL }
++};
++
+ /*
+  *** MELEE_EX dialog section - begin
+  */
+@@ -293,15 +304,13 @@
+ 
+ DIALOG melee_ex_dialog[] = {
+   // (dialog proc)     (x)  (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
+-  { d_shadow_box_proc, 40,  40,   240,  185,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { d_shadow_box_proc, 40,  40,   240,  175,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+   { my_d_button_proc,  50,   50,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game&quot; , NULL, NULL },
+-  { my_d_button_proc,  50,   75,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game/Net Server&quot; , NULL, NULL },
+-  { my_d_button_proc,  50,  100,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game/Net Client&quot; , NULL, NULL },
+-  { my_d_button_proc,  50,  125,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Key Tester&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,  150,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Ship Info&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,  175,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Show License&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,  200,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Diagnostics&quot;, NULL, NULL },
+-  { my_d_button_proc,  80,  225,  190,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Main Menu&quot;, NULL, NULL },
++  { my_d_button_proc,  50,   75,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Key Tester&quot; , NULL, NULL },
++  { my_d_button_proc,  50,  100,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Ship Info&quot; , NULL, NULL },
++  { my_d_button_proc,  50,  125,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Show License&quot;, NULL, NULL },
++  { my_d_button_proc,  50,  150,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Diagnostics&quot;, NULL, NULL },
++  { my_d_button_proc,  80,  175,  190,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Main Menu&quot;, NULL, NULL },
+   { d_tw_yield_proc,   0,   0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+   { NULL,              0,   0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL }
+ };
+
+Modified: trunk/source/other/dialogs.h
+===================================================================
+--- trunk/source/other/dialogs.h	2005-05-01 10:34:09 UTC (rev 142)
++++ trunk/source/other/dialogs.h	2005-05-01 11:24:32 UTC (rev 143)
+@@ -209,13 +209,23 @@
+ 
+ extern DIALOG select_game_dialog[];
+ 
++
++enum 
++  {
++    MELEE_MULTIPLAYER_DIALOG_BOX = 0,
++    MELEE_MULTIPLAYER_DIALOG_PLAY_NET1SERVER,
++    MELEE_MULTIPLAYER_DIALOG_PLAY_NET1CLIENT,
++    MELEE_MULTIPLAYER_DIALOG_EXIT
++};
++extern DIALOG melee_ex_dialog[];
++
++extern DIALOG melee_multiplayer_dialog[];
++
+ // MELEE_EX - dialog objects
+ enum 
+   {
+     MELEE_EX_DIALOG_BOX = 0,
+     MELEE_EX_DIALOG_PLAY_GAME,
+-    MELEE_EX_DIALOG_PLAY_NET1SERVER,
+-    MELEE_EX_DIALOG_PLAY_NET1CLIENT,
+     MELEE_EX_DIALOG_KEYTESTER,
+     MELEE_EX_DIALOG_SHIPINFO,
+     MELEE_EX_DIALOG_LICENSE,
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-05-01 10:34:09 UTC (rev 142)
++++ trunk/source/scp.cpp	2005-05-01 11:24:32 UTC (rev 143)
+@@ -150,6 +150,9 @@
+ /// Blits GUI background bitmap on to a video window
+ void showTitle(VideoWindow *window = &amp;videosystem-&gt;window);
+ 
++/// MELEE_EX dialog - selects multiplayer games as opposed to standard melee. 
++void multiplayer_menu(int i = -1);
++
+ /// MELEE_EX dialog - selects alternate games as opposed to standard melee. 
+ ///
+ ///  From here you can access diagnostics (DIAGNOSTICS dialog) and ship info. 
+@@ -690,6 +693,11 @@
+ 	play_game(&quot;Melee&quot;, &quot;&quot;, NULL);
+ 	enable();
+ 	break;
++      case MAIN_DIALOG_MULTIPLAYER:
++	disable();
++	multiplayer_menu();
++	enable();
++	break;
+       case MAIN_DIALOG_MELEE_EXTENDED:
+ 	disable();
+ 	extended_menu();
+@@ -796,9 +804,6 @@
+     }
+   
+   python::init();  
+-  //python::insert_path(DATAFILE_PATH&quot;/python&quot;);
+-  //init_ggob();
+-  //  python::module = python::import_module(&quot;ggob&quot;);
+ 
+   int i;
+   int auto_port = -1;
+@@ -1100,6 +1105,37 @@
+ }
+ 
+ // MELEE_EX - dialog function
++void multiplayer_menu(int i) 
++{
++  STACKTRACE;
++  
++  showTitle();
++  if (i == -1)
++    i = tw_popup_dialog(NULL, melee_multiplayer_dialog, MELEE_MULTIPLAYER_DIALOG_PLAY_NET1SERVER);
++  switch (i) 
++    {
++    case -1:
++    case MELEE_MULTIPLAYER_DIALOG_EXIT: 
++      {
++	return;
++      }
++      break;
++    case MELEE_MULTIPLAYER_DIALOG_PLAY_NET1SERVER: 
++      {
++	play_net1server();
++      }
++      break;
++    case MELEE_MULTIPLAYER_DIALOG_PLAY_NET1CLIENT: 
++      {
++	play_net1client();
++      }
++      break;
++    }
++      showTitle();
++      return;
++}
++
++// MELEE_EX - dialog function
+ void extended_menu(int i) {
+   STACKTRACE;
+   
+@@ -1120,14 +1156,6 @@
+ 	play_game(gname, &quot;&quot;, NULL);
+     }
+     break;
+-  case MELEE_EX_DIALOG_PLAY_NET1SERVER: {
+-    play_net1server();
+-  }
+-    break;
+-  case MELEE_EX_DIALOG_PLAY_NET1CLIENT: {
+-    play_net1client();
+-  }
+-    break;
+   case MELEE_EX_DIALOG_DIAGNOSTICS: {
+     show_diagnostics();
+   }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000088.html">[Tw-light-svn] r142 - in trunk/source: . games python
+</A></li>
+	<LI>Next message: <A HREF="000090.html">[Tw-light-svn] r144 - in trunk: gamedata/python source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#89">[ date ]</a>
+              <a href="thread.html#89">[ thread ]</a>
+              <a href="subject.html#89">[ subject ]</a>
+              <a href="author.html#89">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

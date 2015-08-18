@@ -1,0 +1,3527 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r102 - trunk/source/libraries/raknet
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-November/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r102%20-%20trunk/source/libraries/raknet&In-Reply-To=%3C200411281718.iASHIQlQ014943%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000049.html">
+   <LINK REL="Next"  HREF="000051.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r102 - trunk/source/libraries/raknet</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r102%20-%20trunk/source/libraries/raknet&In-Reply-To=%3C200411281718.iASHIQlQ014943%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r102 - trunk/source/libraries/raknet">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Nov 28 18:18:26 CET 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000049.html">[Tw-light-svn] r101 - trunk/source/libraries/raknet
+</A></li>
+        <LI>Next message: <A HREF="000051.html">[Tw-light-svn] r103 - trunk/source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#50">[ date ]</a>
+              <a href="thread.html#50">[ thread ]</a>
+              <a href="subject.html#50">[ subject ]</a>
+              <a href="author.html#50">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-11-28 18:18:25 +0100 (Sun, 28 Nov 2004)
+New Revision: 102
+
+Added:
+   trunk/source/libraries/raknet/BigTypes.h
+   trunk/source/libraries/raknet/RSACrypt.h
+   trunk/source/libraries/raknet/RakNetStatistics.cpp
+   trunk/source/libraries/raknet/RakNetStatistics.h
+   trunk/source/libraries/raknet/Types.h
+Log:
+Updating RakNet sources
+
+
+Added: trunk/source/libraries/raknet/BigTypes.h
+===================================================================
+--- trunk/source/libraries/raknet/BigTypes.h	2004-11-28 17:15:55 UTC (rev 101)
++++ trunk/source/libraries/raknet/BigTypes.h	2004-11-28 17:18:25 UTC (rev 102)
+@@ -0,0 +1,1609 @@
++/*
++	(128)2^7-bit to (32768)2^14-bit signed 2's complement &amp; unsigned extended arithmetic
++
++	catid(<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">cat02e at fsu.edu</A>)
++
++	7/30/2004	Fixed VS6 compat
++	7/28/2004	Fixed macros so they can be used outside of the big namespace
++				Now using pre-processor definitions from types.h for inline assembly
++	7/26/2004	Removed a lot of assembly, made add/sub assembly optional
++	7/25/2004	Merged the wrapper class Int&lt;T&gt; from older code
++	7/24/2004	Replaced trivial assembly code with std:: functions
++				Refined some assembly code with Art of Assembly chapter 9
++				Added binary ops
++	7/23/2004	Finished assembly coding
++				Removed Int&lt;T&gt; class, for now
++				Added old C++ code back in with USEASSEMBLY
++	7/22/2004	Signed arithmetic (needed for ext. Euclidean algo)
++				Cleaned up coding style
++				Began rewriting parts in assembly
++	7/21/2004	Began writing
++
++	Tabs: 4 spaces
++	Dist: public
++*/
++
++#ifndef BIGTYPES_H
++#define BIGTYPES_H
++
++#include &quot;Types.h&quot;
++
++//#define BIG_USES_STRINGS /* undefining this means you cannot convert bigs to strings or from strings */
++
++#ifdef BIG_USES_STRINGS
++#	include &lt;string&gt;
++#endif
++
++namespace big
++{
++	using namespace cat;
++
++	//// basic definitions ////
++
++	// word size
++	typedef u32 word; // assembly implementation is for 32-bit word size
++	const u32 WORDBITS = sizeof(word) * 8;
++	const u32 HALFWORDBITS = sizeof(word) * 8 / 2;
++	const word WORDHIGHBIT = (word)1 &lt;&lt; (WORDBITS - 1);
++	const word WORDALLBITS = (word)0 - 1;
++	const word WORDLOBITS = ((word)1 &lt;&lt; HALFWORDBITS) - 1;
++	const word WORDHIBITS = WORDALLBITS ^ WORDLOBITS;
++#define BIGHIGHBIT(n) ((n)[sizeof(n) / sizeof(big::word) - 1] &amp; WORDHIGHBIT)
++
++	// template operator parameter modes
++#define BIGONETYPE template&lt;class T&gt; /* supports only one class */
++#define BIGTWOTYPES template&lt;class T, class Bigger&gt; /* sizeof Bigger &gt;= sizeof T */
++#define BIGSMALLTYPE template&lt;class Smaller&gt; /* sizeof self &gt;= sizeof Smaller */
++
++
++	//// big types ////
++
++#define BIGWORDCOUNT_FROMBITCOUNT(bits) ((bits) / 8 / sizeof(big::word))
++#define BIGWORDCOUNT(T) (sizeof(T) / sizeof(big::word))
++#define BIGBITCOUNT(T) (sizeof(T) * 8)
++
++	// low words -- [0] &lt; [1] &lt; [2] &lt; [3] -- high words
++	typedef word u128[BIGWORDCOUNT_FROMBITCOUNT(128)];
++	typedef word u256[BIGWORDCOUNT_FROMBITCOUNT(256)];
++	typedef word u512[BIGWORDCOUNT_FROMBITCOUNT(512)];
++	typedef word u1024[BIGWORDCOUNT_FROMBITCOUNT(1024)];
++	typedef word u2048[BIGWORDCOUNT_FROMBITCOUNT(2048)];
++	typedef word u4096[BIGWORDCOUNT_FROMBITCOUNT(4096)];
++	typedef word u8192[BIGWORDCOUNT_FROMBITCOUNT(8192)];
++	typedef word u16384[BIGWORDCOUNT_FROMBITCOUNT(16384)];
++	typedef word u32768[BIGWORDCOUNT_FROMBITCOUNT(32768)];
++
++	// use these macros to create temporary variables when
++	// those variables are to be twice/half the size of another
++	// variable of varying size.
++#define BIGDOUBLESIZE(T, var_name) big::word (var_name)[BIGWORDCOUNT(T) * 2] /* WARNING: invalid w/ u32768 */
++#define BIGHALFSIZE(T, var_name) big::word (var_name)[BIGWORDCOUNT(T) / 2] /* WARNING: invalid w/ u128 */
++
++
++	//// library summary ////
++
++	// assignment
++	BIGONETYPE INLINE void zero(T &amp;n); // n = 0
++	BIGONETYPE INLINE void usetw(T &amp;a, word b); // a = b, zero-extend
++	BIGONETYPE INLINE void ssetw(T &amp;a, word b); // a = b, sign-extend
++	BIGONETYPE INLINE void set(T &amp;a, T &amp;b); // a = b
++	BIGTWOTYPES INLINE void usetlow(Bigger &amp;a, T &amp;b); // a_low = b (zero-extend)
++	BIGTWOTYPES INLINE void ssetlow(Bigger &amp;a, T &amp;b); // a_low = b (sign-extend)
++	BIGTWOTYPES INLINE void sethigh(Bigger &amp;a, T &amp;b); // a_high = b
++	BIGTWOTYPES INLINE void takelow(T &amp;a, Bigger &amp;b); // a = b_low
++	BIGTWOTYPES INLINE void takehigh(T &amp;a, Bigger &amp;b); // a = b_high
++
++	// comparison
++	BIGONETYPE bool ugreater(T &amp;a, T &amp;b); // a &gt; b (unsigned)
++	BIGONETYPE bool ugreaterOrEqual(T &amp;a, T &amp;b); // a &gt;= b (unsigned)
++	BIGONETYPE bool sgreater(T &amp;a, T &amp;b); // a &gt; b (signed)
++	BIGONETYPE bool sgreaterOrEqual(T &amp;a, T &amp;b); // a &gt;= b (signed)
++	BIGONETYPE INLINE bool equal(T &amp;a, T &amp;b); // a == b
++	BIGONETYPE INLINE bool isZero(T &amp;n); // a == 0
++
++	// binary
++	BIGONETYPE void bAND(T &amp;a, T &amp;b); // a &amp;= b
++	BIGONETYPE void bOR(T &amp;a, T &amp;b); // a |= b
++	BIGONETYPE void bXOR(T &amp;a, T &amp;b); // a ^= b
++	BIGONETYPE void bNOT(T &amp;n); // n = ~n
++
++	// shifting
++	BIGONETYPE void shiftLeft1(T &amp;n); // n &lt;&lt;= 1
++	BIGONETYPE void shiftLeft(T &amp;n, u32 s); // n &lt;&lt;= s (s &lt;= WORDBITS)
++	BIGONETYPE void ushiftRight1(T &amp;n); // n &gt;&gt;= 1 (unsigned)
++	BIGONETYPE void ushiftRight(T &amp;n, u32 s); // n &gt;&gt;= s (unsigned) (s &lt;= WORDBITS)
++	BIGONETYPE void sshiftRight1(T &amp;n); // n &gt;&gt;= 1 (signed)
++	BIGONETYPE void sshiftRight(T &amp;n, u32 s); // n &gt;&gt;= s (signed) (s &lt;= WORDBITS)
++
++	// addition/subtraction
++	BIGONETYPE void add(T &amp;a, T &amp;b); // a += b
++	BIGONETYPE void increment(T &amp;n); // ++n
++	BIGONETYPE void subtract(T &amp;a, T &amp;b); // a -= b
++	BIGONETYPE void decrement(T &amp;n); // --n
++
++	// negation
++	BIGONETYPE void negate(T &amp;n); // n = -n
++
++	// multiplication
++	BIGONETYPE void usquare(T &amp;a); // a *= a, signed
++	BIGTWOTYPES void umultiply(T &amp;a, T &amp;b, Bigger &amp;m); // m = a * b (&amp;a != &amp;b != &amp;m), unsigned
++	BIGTWOTYPES void umultiply(Bigger &amp;a, T &amp;b); // a *= b (&amp;a != &amp;b), unsigned
++	BIGONETYPE void ssquare(T &amp;a); // a *= a, signed
++	BIGTWOTYPES void smultiply(T &amp;a, T &amp;b, Bigger &amp;m); // m = a * b (&amp;a != &amp;b != &amp;m), signed
++	BIGTWOTYPES void smultiply(Bigger &amp;a, T &amp;b); // a *= b (&amp;a != &amp;b), signed
++
++	// division/remainder
++	BIGONETYPE void udivide(T &amp;a, T &amp;b, T &amp;q, T &amp;r); // {q, r} = a / b (&amp;q != &amp;r), unsigned
++	BIGONETYPE void umodulo(T &amp;a, T &amp;b, T &amp;r); // r = a Mod b, unsigned
++	BIGONETYPE void sdivide(T &amp;a, T &amp;b, T &amp;q, T &amp;r); // {q, r} = a / b (&amp;q != &amp;r), signed
++	BIGONETYPE void smodulo(T &amp;a, T &amp;b, T &amp;r); // r = a Mod b, signed
++
++#ifdef BIG_USES_STRINGS
++	// converting to/from strings
++	BIGONETYPE std::string toString(T &amp;n, bool sign, u16 radix); // n -&gt; string
++	BIGONETYPE void fromString(std::string s, T &amp;n, bool sign, u16 radix); // s -&gt; n
++#endif
++
++
++	//////// wrapper class ////////
++
++#define BIGINTFAST INLINE Int&lt;T&gt; &amp; /* operation is done to self, returns itself */
++#define BIGINTSLOW Int&lt;T&gt; /* new object is created and returned */
++
++	BIGONETYPE class Int
++	{
++	protected:
++		T raw;
++
++	public:
++		operator T &amp;(); // automatic casting to T: you may use BigInt classes as parameters to the functions
++
++	public:
++		Int();
++		Int(word n);
++#ifdef BIG_USES_STRINGS
++		Int(std::string &amp;s);
++#endif
++		Int(T &amp;n);
++
++	public:
++		BIGINTFAST zero();
++		BIGINTFAST operator=(word n);
++		BIGINTFAST operator=(T &amp;n);
++
++	public:
++		BIGINTFAST operator&lt;&lt;=(u32 s);
++		BIGINTSLOW operator&lt;&lt;(u32 s);
++		BIGINTFAST operator&gt;&gt;=(u32 s);
++		BIGINTSLOW operator&gt;&gt;(u32 s);
++
++	public:
++		BIGINTFAST operator+=(T &amp;n);
++		BIGINTSLOW operator+(T &amp;n);
++		BIGINTFAST operator-=(T &amp;n);
++		BIGINTSLOW operator-(T &amp;n);
++		BIGINTFAST operator++(); // prefix
++		BIGINTSLOW operator++(int); // postfix
++		BIGINTFAST operator--(); // prefix
++		BIGINTSLOW operator--(int); // postfix
++
++	public:
++		BIGINTSLOW operator-(int); // negation
++
++	public:
++		BIGSMALLTYPE BIGINTFAST operator*=(Smaller &amp;n)
++		{
++			smultiply(raw, n);
++			return *this;
++		}
++		BIGINTSLOW operator*(T &amp;n);
++		BIGINTFAST square();
++
++	public:
++		BIGINTFAST operator/=(T &amp;n);
++		BIGINTSLOW operator/(T &amp;n);
++		BIGINTFAST operator%=(T &amp;n);
++		BIGINTSLOW operator%(T &amp;n);
++
++	public:
++		/* fast */ bool operator&gt;(T &amp;n);
++		/* fast */ bool operator&gt;=(T &amp;n);
++		/* fast */ bool operator&lt;(T &amp;n);
++		/* fast */ bool operator&lt;=(T &amp;n);
++		/* fast */ bool operator==(T &amp;n);
++		/* fast */ bool operator!=(T &amp;n);
++		/* fast */ bool operator!();
++
++	public:
++#ifdef BIG_USES_STRINGS
++		/* fast */ std::string str();
++		BIGINTFAST operator=(std::string &amp;s);
++		BIGINTFAST operator=(const char *s);
++#endif
++	};
++
++
++	//////// assignment ////////
++
++	// n = 0
++	BIGONETYPE INLINE void zero(T &amp;n)
++	{
++		memset(n, 0, sizeof(T));
++	}
++
++	// a = b, zero-extend
++	BIGONETYPE INLINE void usetw(T &amp;a, word b)
++	{
++		a[0] = b;
++		memset(a + 1, 0, sizeof(T) - sizeof(word));
++	}
++
++	// a = b, sign-extend
++	BIGONETYPE INLINE void ssetw(T &amp;a, word b)
++	{
++		a[0] = b;
++		memset(a + 1, (b &amp; WORDHIGHBIT) ? WORDALLBITS : 0, sizeof(T) - sizeof(word));
++	}
++
++	// a = b
++	BIGONETYPE INLINE void set(T &amp;a, T &amp;b)
++	{
++		memcpy(a, b, sizeof(T));
++	}
++
++	// a_low = b (zero-extend)
++	BIGTWOTYPES INLINE void usetlow(Bigger &amp;a, T &amp;b)
++	{
++		memcpy(a, b, sizeof(T));
++		memset(a + BIGWORDCOUNT(T), 0, sizeof(Bigger) - sizeof(T));
++	}
++
++	// a_low = b (sign-extend)
++	BIGTWOTYPES INLINE void ssetlow(Bigger &amp;a, T &amp;b)
++	{
++		memcpy(a, b, sizeof(T));
++		memset(a + BIGWORDCOUNT(T), BIGHIGHBIT(b) ? WORDALLBITS : 0, sizeof(Bigger) - sizeof(T));
++	}
++
++	// a_high = b
++	BIGTWOTYPES INLINE void sethigh(Bigger &amp;a, T &amp;b)
++	{
++		memcpy(a + BIGWORDCOUNT(Bigger) - BIGWORDCOUNT(T), b, sizeof(T));
++		memset(a, 0, sizeof(Bigger) - sizeof(T));
++	}
++
++	// a = b_low
++	BIGTWOTYPES INLINE void takelow(T &amp;a, Bigger &amp;b)
++	{
++		memcpy(a, b, sizeof(T));
++	}
++
++	// a = b_high
++	BIGTWOTYPES INLINE void takehigh(T &amp;a, Bigger &amp;b)
++	{
++		memcpy(a, b + BIGWORDCOUNT(Bigger) - BIGWORDCOUNT(T), sizeof(T));
++	}
++
++
++	//////// comparison ////////
++
++	// a &gt; b
++	BIGONETYPE bool ugreater(T &amp;a, T &amp;b)
++	{
++		for (s32 ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++		{
++			if (a[ii] &gt; b[ii]) return true;
++			if (a[ii] &lt; b[ii]) return false;
++		}
++
++		return false;
++	}
++
++	// a &gt;= b
++	BIGONETYPE bool ugreaterOrEqual(T &amp;a, T &amp;b)
++	{
++		for (s32 ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++		{
++			if (a[ii] &gt; b[ii]) return true;
++			if (a[ii] &lt; b[ii]) return false;
++		}
++
++		return true;
++	}
++
++	// a &gt; b
++	BIGONETYPE bool sgreater(T &amp;a, T &amp;b)
++	{
++		for (s32 ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++		{
++			if (a[ii] &gt; b[ii]) return BIGHIGHBIT(a) == 0;
++			if (a[ii] &lt; b[ii]) return BIGHIGHBIT(b) != 0;
++		}
++		return false;
++	}
++
++	// a &gt;= b
++	BIGONETYPE bool sgreaterOrEqual(T &amp;a, T &amp;b)
++	{
++		for (s32 ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++		{
++			if (a[ii] &gt; b[ii]) return BIGHIGHBIT(a) == 0;
++			if (a[ii] &lt; b[ii]) return BIGHIGHBIT(b) != 0;
++		}
++		return true;
++	}
++
++	// a == b
++	BIGONETYPE INLINE bool equal(T &amp;a, T &amp;b)
++	{
++		return memcmp(a, b, sizeof(T)) == 0;
++	}
++
++	// a == 0
++	BIGONETYPE INLINE bool isZero(T &amp;n)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			if (n[ii]) return false;
++		return true;
++	}
++
++
++	//////// binary ////////
++
++	// a &amp;= b
++	BIGONETYPE void bAND(T &amp;a, T &amp;b)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			a[ii] &amp;= b[ii];
++	}
++
++	// a |= b
++	BIGONETYPE void bOR(T &amp;a, T &amp;b)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			a[ii] |= b[ii];
++	}
++
++	// a ^= b
++	BIGONETYPE void bXOR(T &amp;a, T &amp;b)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			a[ii] ^= b[ii];
++	}
++
++	// n = ~n
++	BIGONETYPE void bNOT(T &amp;n)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			n[ii] = ~n[ii];
++	}
++
++
++	//////// shifting ////////
++
++	// n &lt;&lt;= 1
++	BIGONETYPE void shiftLeft1(T &amp;n)
++	{
++		register word w_i, carry = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			w_i = n[ii];
++
++			n[ii] = (w_i &lt;&lt; 1) | carry;
++			carry = w_i &gt;&gt; (WORDBITS - 1);
++		}
++	}
++
++	// n &lt;&lt;= s (s &lt;= WORDBITS)
++	BIGONETYPE void shiftLeft(T &amp;n, u32 s)
++	{
++		register s32 ii;
++		register u32 bases = s / WORDBITS;
++		u32 bits = s % WORDBITS;
++
++		// move whole bases first
++		if (bases)
++		{
++			// shift bases
++			for (ii = BIGWORDCOUNT(T) - 1 - bases; ii &gt;= 0; --ii)
++				n[ii + bases] = n[ii];
++
++			// clear the original locii of those bases
++			memset(n, 0, bases * sizeof(word));
++		}
++
++		if (bits)
++		{
++			register word w_i, carry = 0;
++
++			for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			{
++				w_i = n[ii];
++
++				n[ii] = (w_i &lt;&lt; bits) | carry;
++				carry = w_i &gt;&gt; (WORDBITS - bits);
++			}
++		}
++	}
++
++	// n &gt;&gt;= 1 (unsigned)
++	BIGONETYPE void ushiftRight1(T &amp;n)
++	{
++		register word w_i, carry = 0;
++
++		for (s32 ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++		{
++			w_i = n[ii];
++
++			n[ii] = carry | (w_i &gt;&gt; 1);
++			carry = w_i &lt;&lt; (WORDBITS - 1);
++		}
++	}
++
++	// n &gt;&gt;= s (unsigned) (s &lt;= WORDBITS)
++	BIGONETYPE void ushiftRight(T &amp;n, u32 s)
++	{
++		register s32 ii;
++		register u32 bases = s / WORDBITS;
++		register u32 bits = s % WORDBITS;
++
++		// move whole bases first
++		if (bases)
++		{
++			// shift bases
++			for (ii = bases; ii &lt; BIGWORDCOUNT(T); ++ii)
++				n[ii - bases] = n[ii];
++
++			// clear the original locii of those bases
++			memset(n + BIGWORDCOUNT(T) - bases, 0, bases * sizeof(word));
++		}
++
++		if (bits)
++		{
++			register word w_i, carry = 0;
++
++			for (ii = BIGWORDCOUNT(T) - 1 - bases; ii &gt;= 0; --ii)
++			{
++				w_i = n[ii];
++
++				n[ii] = carry | (w_i &gt;&gt; bits);
++				carry = w_i &lt;&lt; (WORDBITS - bits);
++			}
++		}
++	}
++
++	// n &gt;&gt;= 1 (signed)
++	BIGONETYPE void sshiftRight1(T &amp;n)
++	{
++		register word w_i, carry = BIGHIGHBIT(n) ? 1 : 0;
++
++		for (s32 ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++		{
++			w_i = n[ii];
++
++			n[ii] = carry | (w_i &gt;&gt; 1);
++			carry = w_i &lt;&lt; (WORDBITS - 1);
++		}
++	}
++
++	// n &gt;&gt;= s (signed) (s &lt;= WORDBITS)
++	BIGONETYPE void sshiftRight(T &amp;n, u32 s)
++	{
++		register s32 ii;
++		register u32 bases = s / WORDBITS;
++		register u32 bits = s % WORDBITS;
++
++		word filler = BIGHIGHBIT(n) ? WORDALLBITS : 0;
++
++		// move whole bases first
++		if (bases)
++		{
++			// shift bases
++			for (ii = bases; ii &lt; BIGWORDCOUNT(T); ++ii)
++				n[ii - bases] = n[ii];
++
++			// clear the original locii of those bases
++			memset(n + BIGWORDCOUNT(T) - bases, filler, bases * sizeof(word));
++		}
++
++		if (bits)
++		{
++			register word w_i, carry = filler &lt;&lt; (WORDBITS - bits);
++
++			for (ii = BIGWORDCOUNT(T) - 1 - bases; ii &gt;= 0; --ii)
++			{
++				w_i = n[ii];
++
++				n[ii] = carry | (w_i &gt;&gt; bits);
++				carry = w_i &lt;&lt; (WORDBITS - bits);
++			}
++		}
++	}
++
++
++	//////// addition/subtraction ////////
++
++#if defined(NO_TEMPLATE_INLINE_ASSEMBLY) &amp;&amp; defined(ASSEMBLY_INTEL_SYNTAX)
++	void BorlandAdd(void *a, void *b, u32 c)
++	{
++		ASSEMBLY_BLOCK // BorlandC, x86, 32-bit words
++		{
++			mov esi, b
++			mov edi, a
++			mov ecx, c
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi]
++			xor edx, edx		// edx used later to index later words &gt;= 4
++			add [edi], eax		// and now we can use ADD instead of ADC on the first addition
++			mov eax, [esi + 4]
++			adc [edi + 4], eax
++			mov eax, [esi + 8]
++			adc [edi + 8], eax
++			mov eax, [esi + 12]
++			adc [edi + 12], eax
++
++			jecxz done_already
++
++next_word:	inc edx
++			inc edx
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi + edx * 8]
++			adc [edi + edx * 8], eax
++			mov eax, [esi + edx * 8 + 4]
++			adc [edi + edx * 8 + 4], eax
++			mov eax, [esi + edx * 8 + 8]
++			adc [edi + edx * 8 + 8], eax
++			mov eax, [esi + edx * 8 + 12]
++			adc [edi + edx * 8 + 12], eax
++
++			loop next_word
++done_already:
++		}
++	}
++#endif
++
++	// a += b
++	BIGONETYPE void add(T &amp;a, T &amp;b)
++	{
++#if defined(NO_TEMPLATE_INLINE_ASSEMBLY) &amp;&amp; defined(ASSEMBLY_INTEL_SYNTAX)
++		const u32 qc1 = BIGWORDCOUNT(T) / 4 - 1;
++
++		BorlandAdd(a, b, qc1);
++
++#elif defined(ASSEMBLY_INTEL_SYNTAX)
++		const u32 qc1 = BIGWORDCOUNT(T) / 4 - 1;
++
++		ASSEMBLY_BLOCK // VS.NET, x86, 32-bit words
++		{
++			mov esi, b
++			mov edi, a
++			mov ecx, qc1
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi]
++			xor edx, edx		// edx used later to index later words &gt;= 4
++			add [edi], eax		// and now we can use ADD instead of ADC on the first addition
++			mov eax, [esi + 4]
++			adc [edi + 4], eax
++			mov eax, [esi + 8]
++			adc [edi + 8], eax
++			mov eax, [esi + 12]
++			adc [edi + 12], eax
++
++			jecxz done_already
++
++next_word:	inc edx
++			inc edx
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi + edx * 8]
++			adc [edi + edx * 8], eax
++			mov eax, [esi + edx * 8 + 4]
++			adc [edi + edx * 8 + 4], eax
++			mov eax, [esi + edx * 8 + 8]
++			adc [edi + edx * 8 + 8], eax
++			mov eax, [esi + edx * 8 + 12]
++			adc [edi + edx * 8 + 12], eax
++
++			loop next_word
++done_already:
++		}
++#else
++		register word carry = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word a_i = a[ii];
++			word b_i = b[ii];
++			a[ii] += b_i + carry;
++
++			carry = ((a_i &amp; (WORDALLBITS &gt;&gt; 1)) + (b_i &amp; (WORDALLBITS &gt;&gt; 1)) + carry) &gt;&gt; (WORDBITS - 1);
++			carry += (a_i &gt;&gt; (WORDBITS - 1)) + (b_i &gt;&gt; (WORDBITS - 1));
++			carry &gt;&gt;= 1;
++		}
++#endif
++	}
++
++	// ++n
++	BIGONETYPE void increment(T &amp;n)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			if (++n[ii]) break;
++	}
++
++#if defined(NO_TEMPLATE_INLINE_ASSEMBLY) &amp;&amp; defined(ASSEMBLY_INTEL_SYNTAX)
++	void BorlandSubtract(void *a, void *b, u32 c)
++	{
++		ASSEMBLY_BLOCK // BorlandC, x86, 32-bit words
++		{
++			mov esi, b
++			mov edi, a
++			mov ecx, c
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi]
++			xor edx, edx		// edx used later to index later words &gt;= 4
++			add [edi], eax		// and now we can use ADD instead of ADC on the first addition
++			mov eax, [esi + 4]
++			adc [edi + 4], eax
++			mov eax, [esi + 8]
++			adc [edi + 8], eax
++			mov eax, [esi + 12]
++			adc [edi + 12], eax
++
++			jecxz done_already
++
++next_word:	inc edx
++			inc edx
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi + edx * 8]
++			adc [edi + edx * 8], eax
++			mov eax, [esi + edx * 8 + 4]
++			adc [edi + edx * 8 + 4], eax
++			mov eax, [esi + edx * 8 + 8]
++			adc [edi + edx * 8 + 8], eax
++			mov eax, [esi + edx * 8 + 12]
++			adc [edi + edx * 8 + 12], eax
++
++			loop next_word
++done_already:
++		}
++	}
++#endif
++
++	// a -= b
++	BIGONETYPE void subtract(T &amp;a, T &amp;b)
++	{
++#if defined(NO_TEMPLATE_INLINE_ASSEMBLY) &amp;&amp; defined(ASSEMBLY_INTEL_SYNTAX)
++		const u32 qc1 = BIGWORDCOUNT(T) / 4 - 1;
++
++		BorlandSubtract(a, b, qc1);
++
++#elif defined(ASSEMBLY_INTEL_SYNTAX)
++
++		const u32 qc1 = BIGWORDCOUNT(T) / 4 - 1;
++
++		ASSEMBLY_BLOCK // VS.NET, x86, 32-bit words
++		{
++			mov esi, b
++			mov edi, a
++			mov ecx, qc1
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi]
++			xor edx, edx		// edx used later to index later words &gt;= 4
++			sub [edi], eax		// first subtraction doesn't need to borrow
++			mov eax, [esi + 4]
++			sbb [edi + 4], eax
++			mov eax, [esi + 8]
++			sbb [edi + 8], eax
++			mov eax, [esi + 12]
++			sbb [edi + 12], eax
++
++			jecxz done_already
++
++next_word:	inc edx
++			inc edx
++
++			// unrolled loop since word count is a multiple of 4 &gt;= 4
++			mov eax, [esi + edx * 8]
++			sbb [edi + edx * 8], eax
++			mov eax, [esi + edx * 8 + 4]
++			sbb [edi + edx * 8 + 4], eax
++			mov eax, [esi + edx * 8 + 8]
++			sbb [edi + edx * 8 + 8], eax
++			mov eax, [esi + edx * 8 + 12]
++			sbb [edi + edx * 8 + 12], eax
++
++			loop next_word
++done_already:
++		}
++#else
++		register word borrow = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word a_i = a[ii];
++			word b_i = b[ii];
++			a[ii] -= b_i + borrow;
++
++			borrow = ((a_i &amp; (WORDALLBITS &gt;&gt; 1)) - (b_i &amp; (WORDALLBITS &gt;&gt; 1)) - borrow) &gt;&gt; (WORDBITS - 1);
++			borrow += (b_i &gt;&gt; (WORDBITS - 1)) - (a_i &gt;&gt; (WORDBITS - 1));
++			++borrow;
++			borrow &gt;&gt;= 1;
++		}
++#endif
++	}
++
++	// --n
++	BIGONETYPE void decrement(T &amp;n)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			if (n[ii]--) break;
++	}
++
++
++	//////// negation ////////
++
++	// n = -n
++	BIGONETYPE void negate(T &amp;n)
++	{
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++			n[ii] = ~n[ii];
++
++		increment(n);
++	}
++
++
++	//////// multiplication ////////
++
++	// a *= a, unsigned
++	BIGONETYPE void usquare(T &amp;a)
++	{
++		T a0, a1;
++
++		set(a0, a);
++		set(a1, a);
++		zero(a);
++
++		u32 shifts = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word w_i = a0[ii];
++
++			u16 ctr = WORDBITS;
++
++			while (w_i)
++			{
++				if (w_i &amp; 1)
++				{
++					if (shifts)
++					{
++						shiftLeft(a1, shifts);
++						shifts = 0;
++					}
++
++					add(a, a1);
++				}
++
++				w_i &gt;&gt;= 1;
++				++shifts;
++				--ctr;
++			}
++
++			shifts += ctr;
++		}
++	}
++
++	// m = a * b (&amp;a != &amp;b != &amp;m), unsigned
++	BIGTWOTYPES void umultiply(T &amp;a0, T &amp;b0, Bigger &amp;m)
++	{
++		Bigger a;
++		usetlow(a, a0);
++
++		zero(m);
++
++		u32 shifts = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word w_i = b0[ii];
++
++			u16 ctr = WORDBITS;
++
++			while (w_i)
++			{
++				if (w_i &amp; 1)
++				{
++					if (shifts)
++					{
++						shiftLeft(a, shifts);
++						shifts = 0;
++					}
++
++					add(m, a);
++				}
++
++				w_i &gt;&gt;= 1;
++				++shifts;
++				--ctr;
++			}
++
++			shifts += ctr;
++		}
++	}
++
++	// a *= b (&amp;a != &amp;b), unsigned
++	BIGTWOTYPES void umultiply(Bigger &amp;a0, T &amp;b0)
++	{
++		Bigger a;
++		set(a, a0);
++
++		zero(a0);
++
++		u32 shifts = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word w_i = b0[ii];
++
++			u16 ctr = WORDBITS;
++
++			while (w_i)
++			{
++				if (w_i &amp; 1)
++				{
++					if (shifts)
++					{
++						shiftLeft(a, shifts);
++						shifts = 0;
++					}
++
++					add(a0, a);
++				}
++
++				w_i &gt;&gt;= 1;
++				++shifts;
++				--ctr;
++			}
++
++			shifts += ctr;
++		}
++	}
++
++	// a *= a, signed
++	BIGONETYPE void ssquare(T &amp;a)
++	{
++		T a0, a1;
++
++		if (BIGHIGHBIT(a))
++			negate(a);
++
++		set(a0, a);
++		set(a1, a);
++		zero(a);
++
++		u32 shifts = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word w_i = a0[ii];
++
++			u16 ctr = WORDBITS;
++
++			while (w_i)
++			{
++				if (w_i &amp; 1)
++				{
++					if (shifts)
++					{
++						shiftLeft(a1, shifts);
++						shifts = 0;
++					}
++
++					add(a, a1);
++				}
++
++				w_i &gt;&gt;= 1;
++				++shifts;
++				--ctr;
++			}
++
++			shifts += ctr;
++		}
++	}
++
++	// m = a * b (&amp;a != &amp;b != &amp;m), signed
++	BIGTWOTYPES void smultiply(T &amp;a0, T &amp;b0, Bigger &amp;m)
++	{
++		Bigger a;
++		ssetlow(a, a0);
++
++		word sign_a = BIGHIGHBIT(a);
++		if (sign_a) negate(a);
++
++		T b;
++		set(b, b0);
++
++		word sign_b = BIGHIGHBIT(b);
++		if (sign_b) negate(b);
++
++		zero(m);
++
++		u32 shifts = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word w_i = b[ii];
++
++			u16 ctr = WORDBITS;
++
++			while (w_i)
++			{
++				if (w_i &amp; 1)
++				{
++					if (shifts)
++					{
++						shiftLeft(a, shifts);
++						shifts = 0;
++					}
++
++					add(m, a);
++				}
++
++				w_i &gt;&gt;= 1;
++				++shifts;
++				--ctr;
++			}
++
++			shifts += ctr;
++		}
++
++		if (sign_a ^ sign_b)
++			negate(m);
++	}
++
++	// a *= b (&amp;a != &amp;b), signed
++	BIGTWOTYPES void smultiply(Bigger &amp;a0, T &amp;b0)
++	{
++		Bigger a;
++		ssetlow(a, a0);
++
++		word sign_a = BIGHIGHBIT(a);
++		if (sign_a) negate(a);
++
++		T b;
++		set(b, b0);
++
++		word sign_b = BIGHIGHBIT(b);
++		if (sign_b) negate(b);
++
++		zero(a0);
++
++		u32 shifts = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word w_i = b[ii];
++
++			u16 ctr = WORDBITS;
++
++			while (w_i)
++			{
++				if (w_i &amp; 1)
++				{
++					if (shifts)
++					{
++						shiftLeft(a, shifts);
++						shifts = 0;
++					}
++
++					add(a0, a);
++				}
++
++				w_i &gt;&gt;= 1;
++				++shifts;
++				--ctr;
++			}
++
++			shifts += ctr;
++		}
++
++		if (sign_a ^ sign_b)
++			negate(a0);
++	}
++
++
++	//////// division/remainder ////////
++
++	// {q, r} = a / b (&amp;q != &amp;r), unsigned
++	BIGONETYPE void udivide(T &amp;a, T &amp;b0, T &amp;q, T &amp;r)
++	{
++		T b;
++
++		set(b, b0);
++		set(r, a);
++		zero(q);
++
++		u32 shifts = 1;
++
++		// sort of: shift b left until b &gt; r, then shift back one
++		if (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++		{
++			s32 ii, jj;
++
++			// shift by words if possible
++			for (ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++				if (r[ii]) break;
++			for (jj = ii; jj &gt;= 0; --jj)
++				if (b[jj]) break;
++
++			if (ii != jj)
++			{
++				shifts = (ii - jj) * WORDBITS;
++				shiftLeft(b, shifts);
++				++shifts;
++			}
++
++			while (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++			{
++				shiftLeft1(b);
++
++				++shifts;
++			}
++
++			while (ugreater(b, r))
++			{
++				ushiftRight1(b);
++
++				--shifts;
++			}
++		}
++		else if (ugreater(b, r))
++		{
++			ushiftRight1(b);
++
++			--shifts;
++		}
++
++		u32 qshifts = 0;
++
++		while (shifts--)
++		{
++			++qshifts;
++
++			if (!ugreater(b, r))
++			{
++				subtract(r, b);
++
++				shiftLeft(q, qshifts);
++				qshifts = 0;
++
++				q[0] |= 1;
++			}
++
++			ushiftRight1(b);
++		}
++
++		shiftLeft(q, qshifts);
++	}
++
++	// r = a Mod b, unsigned
++	BIGONETYPE void umodulo(T &amp;a, T &amp;b0, T &amp;r)
++	{
++		T b;
++		u32 shifts = 1;
++
++		set(b, b0);
++		set(r, a);
++
++		if (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++		{
++			s32 ii, jj;
++
++			// shift by words if possible
++			for (ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++				if (r[ii]) break;
++			for (jj = ii; jj &gt;= 0; --jj)
++				if (b[jj]) break;
++
++			if (ii != jj)
++			{
++				shifts = (ii - jj) * WORDBITS;
++				shiftLeft(b, shifts);
++				++shifts;
++			}
++
++			while (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++			{
++				shiftLeft1(b);
++
++				++shifts;
++			}
++
++			while (ugreater(b, r))
++			{
++				ushiftRight1(b);
++
++				--shifts;
++			}
++		}
++		else if (ugreater(b, r))
++		{
++			ushiftRight1(b);
++
++			--shifts;
++		}
++
++		while (shifts--)
++		{
++			if (!ugreater(b, r))
++				subtract(r, b);
++
++			ushiftRight1(b);
++		}
++	}
++
++	// {q, r} = a / b (&amp;q != &amp;r), signed
++	BIGONETYPE void sdivide(T &amp;a, T &amp;b0, T &amp;q, T &amp;r)
++	{
++		T b;
++
++		set(b, b0);
++		set(r, a);
++		zero(q);
++
++		word sign_a = BIGHIGHBIT(a);
++		if (sign_a) negate(r);
++
++		word sign_b = BIGHIGHBIT(b);
++		if (sign_b) negate(b);
++
++		u32 shifts = 1;
++
++		if (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++		{
++			s32 ii, jj;
++
++			// shift by words if possible
++			for (ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++				if (r[ii]) break;
++			for (jj = ii; jj &gt;= 0; --jj)
++				if (b[jj]) break;
++
++			if (ii != jj)
++			{
++				shifts = (ii - jj) * WORDBITS;
++				shiftLeft(b, shifts);
++				++shifts;
++			}
++
++			while (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++			{
++				shiftLeft1(b);
++
++				++shifts;
++			}
++
++			while (ugreater(b, r))
++			{
++				ushiftRight1(b);
++
++				--shifts;
++			}
++		}
++		else if (ugreater(b, r))
++		{
++			ushiftRight1(b);
++
++			--shifts;
++		}
++
++		u32 qshifts = 0;
++
++		while (shifts--)
++		{
++			++qshifts;
++
++			if (!ugreater(b, r))
++			{
++				subtract(r, b);
++
++				shiftLeft(q, qshifts);
++				qshifts = 0;
++
++				q[0] |= 1;
++			}
++
++			ushiftRight1(b);
++		}
++
++		shiftLeft(q, qshifts);
++
++		if (sign_a ^ sign_b) negate(q);
++
++		if (sign_a) negate(r);
++	}
++
++	// r = a Mod b, signed
++	BIGONETYPE void smodulo(T &amp;a, T &amp;b0, T &amp;r)
++	{
++		T b;
++		u32 shifts = 1;
++
++		set(b, b0);
++		set(r, a);
++
++		word sign_a = BIGHIGHBIT(a);
++		if (sign_a) negate(r);
++
++		word sign_b = BIGHIGHBIT(b);
++		if (sign_b) negate(b);
++
++		if (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++		{
++			s32 ii, jj;
++
++			// shift by words if possible
++			for (ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++				if (r[ii]) break;
++			for (jj = ii; jj &gt;= 0; --jj)
++				if (b[jj]) break;
++
++			if (ii != jj)
++			{
++				shifts = (ii - jj) * WORDBITS;
++				shiftLeft(b, shifts);
++				++shifts;
++			}
++
++			while (!BIGHIGHBIT(b) &amp;&amp; ugreater(r, b))
++			{
++				shiftLeft1(b);
++
++				++shifts;
++			}
++
++			while (ugreater(b, r))
++			{
++				ushiftRight1(b);
++
++				--shifts;
++			}
++		}
++		else if (ugreater(b, r))
++		{
++			ushiftRight1(b);
++
++			--shifts;
++		}
++
++		while (shifts--)
++		{
++			if (!ugreater(b, r))
++				subtract(r, b);
++
++			ushiftRight1(b);
++		}
++
++		if (sign_a) negate(r);
++	}
++
++
++	//////// converting to/from strings ////////
++
++#ifdef BIG_USES_STRINGS
++
++	// n -&gt; string
++	BIGONETYPE std::string toString(T &amp;n0, bool sign = true, u16 radix = 10)
++	{
++		T n, base, r;
++		std::string s;
++
++		set(n, n0);
++		usetw(base, radix);
++
++		word sign_n = 0;
++		if (sign &amp;&amp; (sign_n = BIGHIGHBIT(n)))
++			negate(n);
++
++		do // always allow first iteration for zero
++		{
++			// {q, r} = n / base
++			udivide(n, base, n, r);
++
++			char ch = (char)r[0];
++
++			if (ch &gt;= 10)
++				ch += 'a' - 10;
++			else
++				ch += '0';
++
++			// insert character
++			s = ch + s;
++		} while (!isZero(n));
++
++		if (sign_n) s = '-' + s;
++
++		return s;
++	}
++
++	// s -&gt; n, signed
++	BIGONETYPE void fromString(std::string s, T &amp;n, bool sign = true, u16 radix = 10)
++	{
++		T acc, base, temp;
++
++		usetw(acc, 1);
++		usetw(base, radix);
++		zero(n);
++
++		u32 len = (u32)s.length();
++		const char *citer = s.c_str() + len;
++
++		while (len--)
++		{
++			char ch = *(--citer);
++
++			if (IS_ALPHA(ch)) // assumes alpha characters only up to radix
++				ch = TO_LOWER(ch) - 'a' + 10;
++			else if (sign &amp;&amp; ch == '-') // '-' should be first character
++			{
++				negate(n);
++				break;
++			}
++			else // assumes it's alphanumeric/-
++				ch -= '0';
++
++			usetw(temp, ch);
++
++			umultiply(temp, acc);
++
++			add(n, temp);
++
++			umultiply(acc, base);
++		}
++	}
++
++#endif // BIG_USES_STRINGS
++
++
++	//////// class wrapper ////////
++
++	BIGONETYPE INLINE Int&lt;T&gt;::Int()
++	{
++		big::zero(raw);
++	}
++
++	BIGONETYPE INLINE Int&lt;T&gt;::Int(word n)
++	{
++		ssetw(raw, n);
++	}
++
++#ifdef BIG_USES_STRINGS
++
++	BIGONETYPE INLINE Int&lt;T&gt;::Int(std::string &amp;s)
++	{
++		fromString(s, raw);
++	}
++
++#endif
++
++	BIGONETYPE INLINE Int&lt;T&gt;::Int(T &amp;n)
++	{
++		set(raw, n);
++	}
++
++	BIGONETYPE INLINE Int&lt;T&gt;::operator T &amp;()
++	{
++		return raw;
++	}
++
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::zero()
++	{
++		big::zero(raw);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator=(word n)
++	{
++		ssetw(raw, n);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator=(T &amp;n)
++	{
++		set(raw, n);
++		return *this;
++	}
++
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator&lt;&lt;=(u32 s)
++	{
++		shiftLeft(raw, s);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator&lt;&lt;(u32 s)
++	{
++		Int&lt;T&gt; temp(raw);
++		return temp &lt;&lt;= s;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator&gt;&gt;=(u32 s)
++	{
++		shiftRight(raw, s);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator&gt;&gt;(u32 s)
++	{
++		Int&lt;T&gt; temp(raw);
++		return temp &gt;&gt;= s;
++	}
++
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator+=(T &amp;n)
++	{
++		add(raw, n);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator+(T &amp;n)
++	{
++		Int&lt;T&gt; temp(raw);
++		return temp += n;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator-=(T &amp;n)
++	{
++		subtract(raw, n);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator-(T &amp;n)
++	{
++		Int&lt;T&gt; temp(raw);
++		return temp -= n;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator++() // prefix
++	{
++		increment(raw);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator++(int) // postfix
++	{
++		Int&lt;T&gt; temp(raw);
++		increment(raw);
++		return temp;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator--() // prefix
++	{
++		decrement(raw);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator--(int) // postfix
++	{
++		Int&lt;T&gt; temp(raw);
++		decrement(raw);
++		return temp;
++	}
++
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator-(int) // negation
++	{
++		Int&lt;T&gt; temp(raw);
++		negate(temp);
++		return temp;
++	}
++
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator*(T &amp;n)
++	{
++		Int&lt;T&gt; temp(raw);
++		return temp *= n;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::square()
++	{
++		square(raw);
++		return *this;
++	}
++
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator/=(T &amp;n)
++	{
++		T discard;
++		divide(raw, n, raw, discard);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator/(T &amp;n)
++	{
++		Int&lt;T&gt; temp(raw);
++		return temp /= n;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator%=(T &amp;n)
++	{
++		modulus(raw, n, raw);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTSLOW Int&lt;T&gt;::operator%(T &amp;n)
++	{
++		Int&lt;T&gt; temp(raw);
++		return temp %= n;
++	}
++
++
++	BIGONETYPE INLINE /* fast */ bool Int&lt;T&gt;::operator&gt;(T &amp;n)
++	{
++		return sgreater(raw, n);
++	}
++
++	BIGONETYPE INLINE /* fast */ bool Int&lt;T&gt;::operator&gt;=(T &amp;n)
++	{
++		return sgreaterOrEqual(raw, n);
++	}
++
++	BIGONETYPE INLINE /* fast */ bool Int&lt;T&gt;::operator&lt;(T &amp;n)
++	{
++		return !sgreaterOrEqual(raw, n);
++	}
++
++	BIGONETYPE INLINE /* fast */ bool Int&lt;T&gt;::operator&lt;=(T &amp;n)
++	{
++		return !sgreater(raw, n);
++	}
++
++	BIGONETYPE INLINE /* fast */ bool Int&lt;T&gt;::operator==(T &amp;n)
++	{
++		return equal(raw, n);
++	}
++
++	BIGONETYPE INLINE /* fast */ bool Int&lt;T&gt;::operator!=(T &amp;n)
++	{
++		return !equal(raw, n);
++	}
++
++	BIGONETYPE INLINE /* fast */ bool Int&lt;T&gt;::operator!()
++	{
++		return isZero(raw);
++	}
++
++#ifdef BIG_USES_STRINGS
++
++	BIGONETYPE INLINE /* fast */ std::string Int&lt;T&gt;::str()
++	{
++		return toString(raw);
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator=(std::string &amp;s)
++	{
++		fromString(s, raw);
++		return *this;
++	}
++
++	BIGONETYPE BIGINTFAST Int&lt;T&gt;::operator=(const char *s)
++	{
++		fromString(std::string(s), raw);
++		return *this;
++	}
++
++#endif // BIG_USES_STRINGS
++}
++
++#endif // BIGTYPES_H
++
++
++
+
+Added: trunk/source/libraries/raknet/RSACrypt.h
+===================================================================
+--- trunk/source/libraries/raknet/RSACrypt.h	2004-11-28 17:15:55 UTC (rev 101)
++++ trunk/source/libraries/raknet/RSACrypt.h	2004-11-28 17:18:25 UTC (rev 102)
+@@ -0,0 +1,1095 @@
++/*
++	Performant RSA en/decryption with 256-bit to 16384-bit modulus
++
++	catid(<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">cat02e at fsu.edu</A>)
++
++	7/30/2004	Fixed VS6 compat
++	7/26/2004	Now internally generates private keys
++				simpleModExp() is faster for encryption than MontyModExp
++				CRT-MontyModExp is faster for decryption than CRT-SimpleModExp
++	7/25/2004	Implemented Montgomery modular exponentation
++				Implemented CRT modular exponentation optimization
++	7/21/2004	Did some pre-lim coding
++
++	Best performance on my 1.8 GHz P4 (mobile):
++		1024-bit generate key : 30 seconds
++		1024-bit set private key : 100 ms (pre-compute this step)
++		1024-bit encryption : 200 usec
++		1024-bit decryption : 400 ms
++
++	TODO
++		There's a bug in MonModExp() that restricts us to k-1 bits
++
++	Tabs: 4 spaces
++	Dist: public
++*/
++
++#ifndef RSACRYPT_H
++#define RSACRYPT_H
++
++#define RSASUPPORTGENPRIME
++
++// Can't go under 256 or you'll need to disable the USEASSEMBLY macro in bigtypes.h
++// That's because the assembly assumes at least 128-bit data to work on
++// #define RSA_BIT_SIZE big::u512
++#define RSA_BIT_SIZE big::u256
++
++#include &quot;BigTypes.h&quot;
++#include &quot;Rand.h&quot;	//Giblet - added missing include for randomMT()
++
++namespace big
++{
++	using namespace cat;
++
++	// r = x^y Mod n (fast for small y)
++	BIGONETYPE void simpleModExp(T &amp;x0, T &amp;y0, T &amp;n0, T &amp;r0)
++	{
++		BIGDOUBLESIZE(T, x);
++		BIGDOUBLESIZE(T, y);
++		BIGDOUBLESIZE(T, n);
++		BIGDOUBLESIZE(T, r);
++
++		usetlow(x, x0);
++		usetlow(y, y0);
++		usetlow(n, n0);
++		usetw(r, 1);
++
++		umodulo(x, n, x);
++
++		u32 squares = 0;
++
++		for (u32 ii = 0; ii &lt; BIGWORDCOUNT(T); ++ii)
++		{
++			word y_i = y[ii];
++
++			u32 ctr = WORDBITS;
++
++			while (y_i)
++			{
++				if (y_i &amp; 1)
++				{
++					if (squares) do
++					{
++						usquare(x);
++						umodulo(x, n, x);
++					} while (--squares);
++
++					umultiply(r, x, r);
++					umodulo(r, n, r);
++				}
++
++				y_i &gt;&gt;= 1;
++				++squares;
++				--ctr;
++			}
++
++			squares += ctr;
++		}
++
++		takelow(r0, r);
++	}
++
++	// computes Rn = 2^k (mod n), n &lt; 2^k
++	BIGONETYPE void rModn(T &amp;n, T &amp;Rn)
++	{
++		BIGDOUBLESIZE(T, dR);
++		BIGDOUBLESIZE(T, dn);
++		BIGDOUBLESIZE(T, dRn);
++		T one;
++
++		// dR = 2^k
++		usetw(one, 1);
++		sethigh(dR, one);
++
++		// Rn = 2^k (mod n)
++		usetlow(dn, n);
++		umodulo(dR, dn, dRn);
++		takelow(Rn, dRn);
++	}
++
++	// computes c = GCD(a, b)
++	BIGONETYPE void GCD(T &amp;a0, T &amp;b0, T &amp;c)
++	{
++		T a;
++
++		umodulo(a0, b0, c);
++
++		if (isZero(c))
++		{
++			set(c, b0);
++			return;
++		}
++
++		umodulo(b0, c, a);
++
++		if (isZero(a))
++			return;
++
++		while (true)
++		{
++			umodulo(c, a, c);
++
++			if (isZero(c))
++			{
++				set(c, a);
++				return;
++			}
++
++			umodulo(a, c, a);
++
++			if (isZero(a))
++				return;
++		}
++	}
++
++	// directly computes x = c - a * b (mod n) &gt; 0, c &lt; n
++	BIGONETYPE void SubMulMod(T &amp;a, T &amp;b, T &amp;c, T &amp;n, T &amp;x)
++	{
++		BIGDOUBLESIZE(T, da);
++		BIGDOUBLESIZE(T, dn);
++		T y;
++
++		// y = a b (mod n)
++		usetlow(da, a);
++		umultiply(da, b);
++		usetlow(dn, n);
++		umodulo(da, dn, da);
++		takelow(y, da);
++
++		// x = (c - y) (mod n) &gt; 0
++		set(x, c);
++		if (ugreater(c, y))
++		{
++			subtract(x, y);
++		}
++		else
++		{
++			subtract(x, y);
++			add(x, n);
++		}
++	}
++
++	/*
++		directly compute  a' s.t. a' a - b' b = 1
++
++		b = b0 = n0
++		rp = a'
++		a = 2^k
++		a &gt; b &gt; 0
++		GCD(a, b) = 1 (b odd)
++
++		Trying to keep everything positive
++	*/
++	BIGONETYPE void computeRinverse(T &amp;n0, T &amp;rp)
++	{
++		T x0, x1, x2, a, b, q;
++
++		//x[0] = 1
++		usetw(x0, 1);
++
++		// a = 2^k (mod b0)
++		rModn(n0, a);
++
++		// {q, b} = b0 / a
++		udivide(n0, a, q, b);
++
++		// if b = 0, return x[0]
++		if (isZero(b))
++		{
++			set(rp, x0);
++			return;
++		}
++
++		// x[1] = -q (mod b0) = b0 - q, q &lt;= b0
++		set(x1, n0);
++		subtract(x1, q);
++
++		// {q, a} = a / b
++		udivide(a, b, q, a);
++
++		// if a = 0, return x[1]
++		if (isZero(a))
++		{
++			set(rp, x1);
++			return;
++		}
++
++		while (true)
++		{
++			// x[2] = x[0] - x[1] * q (mod b0)
++			SubMulMod(q, x1, x0, n0, x2);
++
++			// {q, b} = b / a
++			udivide(b, a, q, b);
++
++			// if b = 0, return x[2]
++			if (isZero(b))
++			{
++				set(rp, x2);
++				return;
++			}
++
++			// x[0] = x[1] - x[2] * q (mod b0)
++			SubMulMod(q, x2, x1, n0, x0);
++
++			// {q, a} = a / b
++			udivide(a, b, q, a);
++
++			// if a = 0, return x[0]
++			if (isZero(a))
++			{
++				set(rp, x0);
++				return;
++			}
++
++			// x[1] = x[2] - x[0] * q (mod b0)
++			SubMulMod(q, x0, x2, n0, x1);
++
++			// {q, b} = b / a
++			udivide(b, a, q, b);
++
++			// if b = 0, return x[1]
++			if (isZero(b))
++			{
++				set(rp, x1);
++				return;
++			}
++
++			// x[2] = x[0] - x[1] * q (mod b0)
++			SubMulMod(q, x1, x0, n0, x2);
++
++			// {q, a} = a / b
++			udivide(a, b, q, a);
++
++			// if a = 0, return x[2]
++			if (isZero(a))
++			{
++				set(rp, x2);
++				return;
++			}
++
++			// x[0] = x[1] - x[2] * q (mod b0)
++			SubMulMod(q, x2, x1, n0, x0);
++
++			// {q, b} = b / a
++			udivide(b, a, q, b);
++
++			// if b = 0, return x[0]
++			if (isZero(b))
++			{
++				set(rp, x0);
++				return;
++			}
++
++			// x[1] = x[2] - x[0] * q (mod b0)
++			SubMulMod(q, x0, x2, n0, x1);
++
++			// {q, a} = a / b
++			udivide(a, b, q, a);
++
++			// if a = 0, return x[1]
++			if (isZero(a))
++			{
++				set(rp, x1);
++				return;
++			}
++		}
++	}
++/*	BIGONETYPE void computeRinverse2(T &amp;_n0, T &amp;_rp)
++	{
++		//T x0, x1, x2, a, b, q;
++		BIGDOUBLESIZE(T, x0);
++		BIGDOUBLESIZE(T, x1);
++		BIGDOUBLESIZE(T, x2);
++		BIGDOUBLESIZE(T, a);
++		BIGDOUBLESIZE(T, b);
++		BIGDOUBLESIZE(T, q);
++		BIGDOUBLESIZE(T, n0);
++		BIGDOUBLESIZE(T, rp);
++
++		usetlow(n0, _n0);
++		usetlow(rp, _rp);
++
++std::string old;
++		//x[0] = 1
++		usetw(x0, 1);
++
++		T _a;
++		// a = 2^k (mod b0)
++		rModn(_n0, _a);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;a=&quot; &lt;&lt; toString(a, false) &lt;&lt; &quot; = 2^k (mod &quot; &lt;&lt; toString(n0, false) &lt;&lt; &quot;)&quot;;
++		usetlow(a, _a);
++
++		// {q, b} = b0 / a
++		udivide(n0, a, q, b);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, b=&quot; &lt;&lt; toString(b, false) &lt;&lt; &quot;} = n0=&quot; &lt;&lt; toString(n0, false) &lt;&lt; &quot; / a=&quot; &lt;&lt; toString(a, false);
++
++		// if b = 0, return x[0]
++		if (isZero(b))
++		{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;b == 0, Returning x[0]&quot;;
++			set(rp, x0);
++			takelow(_rp, rp);
++			return;
++		}
++
++		// x[1] = -q (mod b0)
++		negate(q);
++		smodulo(q, n0, x1);
++		if (BIGHIGHBIT(x1))
++			add(x1, n0); // q &gt; 0
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x1=&quot; &lt;&lt; toString(x1, false) &lt;&lt; &quot; = q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot; (mod n0=&quot; &lt;&lt; toString(n0, false) &lt;&lt; &quot;)&quot;;
++
++		// {q, a} = a / b
++old = toString(a, false);
++		udivide(a, b, q, a);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, a=&quot; &lt;&lt; toString(a, false) &lt;&lt; &quot;} = a=&quot; &lt;&lt; old &lt;&lt; &quot; / b=&quot; &lt;&lt; toString(b);
++
++		// if a = 0, return x[1]
++		if (isZero(a))
++		{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;a == 0, Returning x[1]&quot;;
++			set(rp, x1);
++			takelow(_rp, rp);
++			return;
++		}
++
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;Entering loop...&quot;;
++		while (true)
++		{
++			// x[2] = x[0] - x[1] * q (mod b0)
++			SubMulMod(q, x1, x0, n0, x2);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[0] = &quot; &lt;&lt; toString(x0, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[1] = &quot; &lt;&lt; toString(x1, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[2] = &quot; &lt;&lt; toString(x2, false);
++
++			// {q, b} = b / a
++old = toString(b);
++			udivide(b, a, q, b);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, b=&quot; &lt;&lt; toString(b) &lt;&lt; &quot;} = b=&quot; &lt;&lt; old &lt;&lt; &quot; / a=&quot; &lt;&lt; toString(a, false);
++
++			// if b = 0, return x[2]
++			if (isZero(b))
++			{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;b == 0, Returning x[2]&quot;;
++				set(rp, x2);
++				takelow(_rp, rp);
++				return;
++			}
++
++			// x[0] = x[1] - x[2] * q (mod b0)
++			SubMulMod(q, x2, x1, n0, x0);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[0] = &quot; &lt;&lt; toString(x0, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[1] = &quot; &lt;&lt; toString(x1, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[2] = &quot; &lt;&lt; toString(x2, false);
++
++			// {q, a} = a / b
++old = toString(a, false);
++			udivide(a, b, q, a);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, a=&quot; &lt;&lt; toString(a, false) &lt;&lt; &quot;} = a=&quot; &lt;&lt; old &lt;&lt; &quot; / b=&quot; &lt;&lt; toString(b);
++
++			// if a = 0, return x[0]
++			if (isZero(a))
++			{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;a == 0, Returning x[0]&quot;;
++				set(rp, x0);
++				takelow(_rp, rp);
++				return;
++			}
++
++			// x[1] = x[2] - x[0] * q (mod b0)
++			SubMulMod(q, x0, x2, n0, x1);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[0] = &quot; &lt;&lt; toString(x0, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[1] = &quot; &lt;&lt; toString(x1, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[2] = &quot; &lt;&lt; toString(x2, false);
++
++			// {q, b} = b / a
++old = toString(b);
++			udivide(b, a, q, b);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, b=&quot; &lt;&lt; toString(b) &lt;&lt; &quot;} = b=&quot; &lt;&lt; old &lt;&lt; &quot; / a=&quot; &lt;&lt; toString(a, false);
++
++			// if b = 0, return x[1]
++			if (isZero(b))
++			{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;b == 0, Returning x[1]&quot;;
++				set(rp, x1);
++				takelow(_rp, rp);
++				return;
++			}
++
++			// x[2] = x[0] - x[1] * q (mod b0)
++			SubMulMod(q, x1, x0, n0, x2);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[0] = &quot; &lt;&lt; toString(x0, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[1] = &quot; &lt;&lt; toString(x1, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[2] = &quot; &lt;&lt; toString(x2, false);
++
++			// {q, a} = a / b
++old = toString(a, false);
++			udivide(a, b, q, a);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, a=&quot; &lt;&lt; toString(a, false) &lt;&lt; &quot;} = a=&quot; &lt;&lt; old &lt;&lt; &quot; / b=&quot; &lt;&lt; toString(b);
++
++			// if a = 0, return x[2]
++			if (isZero(a))
++			{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;a == 0, Returning x[2]&quot;;
++				set(rp, x2);
++				takelow(_rp, rp);
++				return;
++			}
++
++			// x[0] = x[1] - x[2] * q (mod b0)
++			SubMulMod(q, x2, x1, n0, x0);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[0] = &quot; &lt;&lt; toString(x0, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[1] = &quot; &lt;&lt; toString(x1, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[2] = &quot; &lt;&lt; toString(x2, false);
++
++			// {q, b} = b / a
++old = toString(b);
++			udivide(b, a, q, b);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, b=&quot; &lt;&lt; toString(b) &lt;&lt; &quot;} = b=&quot; &lt;&lt; old &lt;&lt; &quot; / a=&quot; &lt;&lt; toString(a, false);
++
++			// if b = 0, return x[0]
++			if (isZero(b))
++			{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;b == 0, Returning x[0]&quot;;
++				set(rp, x0);
++				takelow(_rp, rp);
++				return;
++			}
++
++			// x[1] = x[2] - x[0] * q (mod b0)
++			SubMulMod(q, x0, x2, n0, x1);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[0] = &quot; &lt;&lt; toString(x0, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[1] = &quot; &lt;&lt; toString(x1, false);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;x[2] = &quot; &lt;&lt; toString(x2, false);
++
++			// {q, a} = a / b
++old = toString(a, false);
++			udivide(a, b, q, a);
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;{q=&quot; &lt;&lt; toString(q, false) &lt;&lt; &quot;, a=&quot; &lt;&lt; toString(a, false) &lt;&lt; &quot;} = a=&quot; &lt;&lt; old &lt;&lt; &quot; / b=&quot; &lt;&lt; toString(b);
++
++			// if a = 0, return x[1]
++			if (isZero(a))
++			{
++RECORD(&quot;TEST&quot;) &lt;&lt; &quot;a == 0, Returning x[1]&quot;;
++				set(rp, x1);
++				takelow(_rp, rp);
++				return;
++			}
++		}
++	}
++*/
++	// directly compute a^-1 s.t. a^-1 a (mod b) = 1, a &lt; b, GCD(a, b)
++	BIGONETYPE void computeModularInverse(T &amp;a0, T &amp;b0, T &amp;ap)
++	{
++		T x0, x1, x2;
++		T a, b, q;
++
++		// x[2] = 1
++		usetw(x2, 1);
++
++		// {q, b} = b0 / a0
++		udivide(b0, a0, q, b);
++
++		// x[0] = -q (mod b0) = b0 - q, q &lt;= b0
++		set(x0, b0);
++		subtract(x0, q);
++
++		set(a, a0);
++
++		while (true)
++		{
++			// {q, a} = a / b
++			udivide(a, b, q, a);
++
++			// if a = 0, return x[0]
++			if (isZero(a))
++			{
++				set(ap, x0);
++				return;
++			}
++
++			// x[1] = x[2] - x[0] * q (mod b0)
++			SubMulMod(x0, q, x2, b0, x1);
++
++			// {q, b} = b / a
++			udivide(b, a, q, b);
++
++			// if b = 0, return x[1]
++			if (isZero(b))
++			{
++				set(ap, x1);
++				return;
++			}
++
++			// x[2] = x[0] - x[1] * q (mod b0)
++			SubMulMod(x1, q, x0, b0, x2);
++
++			// {q, a} = a / b
++			udivide(a, b, q, a);
++
++			// if a = 0, return x[2]
++			if (isZero(a))
++			{
++				set(ap, x2);
++				return;
++			}
++
++			// x[0] = x[1] - x[2] * q (mod b0)
++			SubMulMod(x2, q, x1, b0, x0);
++
++			// {q, b} = b / a
++			udivide(b, a, q, b);
++
++			// if b = 0, return x[0]
++			if (isZero(b))
++			{
++				set(ap, x0);
++				return;
++			}
++
++			// x[1] = x[2] - x[0] * q (mod b0)
++			SubMulMod(x0, q, x2, b0, x1);
++
++			// {q, a} = a / b
++			udivide(a, b, q, a);
++
++			// if a = 0, return x[1]
++			if (isZero(a))
++			{
++				set(ap, x1);
++				return;
++			}
++
++			// x[2] = x[0] - x[1] * q (mod b0)
++			SubMulMod(x1, q, x0, b0, x2);
++
++			// {q, b} = b / a
++			udivide(b, a, q, b);
++
++			// if b = 0, return x[2]
++			if (isZero(b))
++			{
++				set(ap, x2);
++				return;
++			}
++
++			// x[0] = x[1] - x[2] * q (mod b0)
++			SubMulMod(x2, q, x1, b0, x0);
++		}
++	}
++
++	// indirectly computes  n' s.t. 1 = r' r - n' n = GCD(r, n)
++	BIGONETYPE void computeNRinverse(T &amp;n0, T &amp;np)
++	{
++		BIGDOUBLESIZE(T, r);
++		BIGDOUBLESIZE(T, n);
++
++		// r' = (1 + n' n) / r
++		computeRinverse(n0, np);
++
++		// n' = (r' r - 1) / n
++		sethigh(r, np); // special case of r = 2^k
++		decrement(r);
++		usetlow(n, n0);
++		udivide(r, n, n, r);
++		takelow(np, n);
++	}
++/*
++	// indirectly computes  n' s.t. 1 = r' r - n' n = GCD(r, n)
++	BIGONETYPE void computeNRinverse2(T &amp;n0, T &amp;np)
++	{
++		BIGDOUBLESIZE(T, r);
++		BIGDOUBLESIZE(T, n);
++
++		// r' = (1 + n' n) / r
++		computeRinverse2(n0, np);
++
++		// n' = (r' r - 1) / n
++		sethigh(r, np); // special case of r = 2^k
++		decrement(r);
++		usetlow(n, n0);
++		udivide(r, n, n, r);
++		takelow(np, n);
++	}
++*/
++	// Montgomery product u = a * b (mod n)
++	BIGONETYPE void MonPro(T &amp;ap, T &amp;bp, T &amp;n, T &amp;np, T &amp;u_out)
++	{
++		BIGDOUBLESIZE(T, t);
++		BIGDOUBLESIZE(T, u);
++		T m;
++
++		// t = a' b'
++		umultiply(ap, bp, t);
++
++		// m = (low half of t)*np (mod r)
++		takelow(m, t);
++		umultiply(m, np);
++
++		// u = (t + m*n), u_out = u / r = high half of u
++		umultiply(m, n, u);
++		add(u, t);
++		takehigh(u_out, u);
++
++		// if u &gt;= n, return u - n, else u
++		if (ugreaterOrEqual(u_out, n))
++			subtract(u_out, n);
++	}
++
++	// indirectly calculates x = M^e (mod n)
++	BIGONETYPE void MonModExp(T &amp;x, T &amp;M, T &amp;e, T &amp;n, T &amp;np, T &amp;xp0)
++	{
++		// x' = xp0
++		set(x, xp0);
++
++		// find M' = M r (mod n)
++		BIGDOUBLESIZE(T, dM);
++		BIGDOUBLESIZE(T, dn);
++		T Mp;
++		sethigh(dM, M); // dM = M r
++		usetlow(dn, n);
++		umodulo(dM, dn, dM); // dM = dM (mod n)
++		takelow(Mp, dM); // M' = M r (mod n)
++
++		/*
++			i may be wrong, but it seems to me that the squaring
++			results in a constant until we hit the first set bit
++			this could save a lot of time, but it needs to be proven
++		*/
++
++		s32 ii, bc;
++		word e_i;
++
++		// for i = k - 1 down to 0 do
++		for (ii = BIGWORDCOUNT(T) - 1; ii &gt;= 0; --ii)
++		{
++			e_i = e[ii];
++			bc = WORDBITS;
++
++			while (bc--)
++			{
++				// if e_i = 1, x = MonPro(M', x')
++				if (e_i &amp; WORDHIGHBIT)
++					goto start_squaring;
++
++				e_i &lt;&lt;= 1;
++			}
++		}
++
++		for (; ii &gt;= 0; --ii)
++		{
++			e_i = e[ii];
++			bc = WORDBITS;
++
++			while (bc--)
++			{
++				// x' = MonPro(x', x')
++				MonPro(x, x, n, np, x);
++
++				// if e_i = 1, x = MonPro(M', x')
++				if (e_i &amp; WORDHIGHBIT)
++				{
++start_squaring:
++					MonPro(Mp, x, n, np, x);
++				}
++
++				e_i &lt;&lt;= 1;
++			}
++		}
++
++		// x = MonPro(x', 1)
++		T one;
++		usetw(one, 1);
++		MonPro(x, one, n, np, x);
++	}
++
++	// indirectly calculates x = C ^ d (mod n) using the Chinese Remainder Thm
++	BIGTWOTYPES void CRTModExp(Bigger &amp;x, Bigger &amp;C, Bigger &amp;d, T &amp;p, T &amp;q, T &amp;pInverse, T &amp;pnp, T &amp;pxp, T &amp;qnp, T &amp;qxp)
++	{
++		// d1 = d mod (p - 1)
++		Bigger dd1;
++		T d1;
++		usetlow(dd1, p);
++		decrement(dd1);
++		umodulo(d, dd1, dd1);
++		takelow(d1, dd1);
++
++		// M1 = C1^d1 (mod p)
++		Bigger dp, dC1;
++		T M1, C1;
++		usetlow(dp, p);
++		umodulo(C, dp, dC1);
++		takelow(C1, dC1);
++		simpleModExp(C1, d1, p, M1);
++		//MonModExp(M1, C1, d1, p, pnp, pxp);
++
++		// d2 = d mod (q - 1)
++		Bigger dd2;
++		T d2;
++		usetlow(dd2, q);
++		decrement(dd2);
++		umodulo(d, dd2, dd2);
++		takelow(d2, dd2);
++
++		// M2 = C2^d2 (mod q)
++		Bigger dq, dC2;
++		T M2, C2;
++		usetlow(dq, q);
++		umodulo(C, dq, dC2);
++		takelow(C2, dC2);
++		simpleModExp(C2, d2, q, M2);
++		//MonModExp(M2, C2, d2, q, qnp, qxp);
++
++		// x = M1 + p * ((M2 - M1)(p^-1 mod q) mod q)
++
++		if (ugreater(M2, M1))
++		{
++			subtract(M2, M1);
++		}
++		else
++		{
++			subtract(M2, M1);
++			add(M2, q);
++		}
++
++		// x = M1 + p * (( M2 )(p^-1 mod q) mod q)
++
++		umultiply(M2, pInverse, x);
++
++		// x = M1 + p * (( x ) mod q)
++
++		umodulo(x, dq, x);
++
++		// x = M1 + p * ( x )
++
++		umultiply(x, dp);
++
++		// x = M1 + ( x )
++
++		Bigger dM1;
++		usetlow(dM1, M1);
++
++		// x = ( dM1 ) + ( x )
++
++		add(x, dM1);
++	}
++
++	// generates a suitable public exponent s.t. 4 &lt; e &lt;&lt; phi, GCD(e, phi) = 1
++	BIGONETYPE void computePublicExponent(T &amp;phi, T &amp;e)
++	{
++		T r, one, two;
++		usetw(one, 1);
++		usetw(two, 2);
++		usetw(e, 65537 - 2);
++
++		if (ugreater(e, phi))
++			usetw(e, 5 - 2);
++
++		do
++		{
++			add(e, two);
++
++			GCD(phi, e, r);
++		} while (!equal(r, one));
++	}
++
++	// directly computes private exponent
++	BIGONETYPE void computePrivateExponent(T &amp;e, T &amp;phi, T &amp;d)
++	{
++		// d = e^-1 (mod phi), 1 &lt; e &lt;&lt; phi
++		computeModularInverse(e, phi, d);
++	}
++
++#ifdef RSASUPPORTGENPRIME
++
++	static const u16 PRIME_TABLE[256] = {
++		   3,         5,         7,        11,        13,        17,        19,        23,
++		  29,        31,        37,        41,        43,        47,        53,        59,
++		  61,        67,        71,        73,        79,        83,        89,        97,
++		 101,       103,       107,       109,       113,       127,       131,       137,
++		 139,       149,       151,       157,       163,       167,       173,       179,
++		 181,       191,       193,       197,       199,       211,       223,       227,
++		 229,       233,       239,       241,       251,       257,       263,       269,
++		 271,       277,       281,       283,       293,       307,       311,       313,
++		 317,       331,       337,       347,       349,       353,       359,       367,
++		 373,       379,       383,       389,       397,       401,       409,       419,
++		 421,       431,       433,       439,       443,       449,       457,       461,
++		 463,       467,       479,       487,       491,       499,       503,       509,
++		 521,       523,       541,       547,       557,       563,       569,       571,
++		 577,       587,       593,       599,       601,       607,       613,       617,
++		 619,       631,       641,       643,       647,       653,       659,       661,
++		 673,       677,       683,       691,       701,       709,       719,       727,
++		 733,       739,       743,       751,       757,       761,       769,       773,
++		 787,       797,       809,       811,       821,       823,       827,       829,
++		 839,       853,       857,       859,       863,       877,       881,       883,
++		 887,       907,       911,       919,       929,       937,       941,       947,
++		 953,       967,       971,       977,       983,       991,       997,      1009,
++		1013,      1019,      1021,      1031,      1033,      1039,      1049,      1051,
++		1061,      1063,      1069,      1087,      1091,      1093,      1097,      1103,
++		1109,      1117,      1123,      1129,      1151,      1153,      1163,      1171,
++		1181,      1187,      1193,      1201,      1213,      1217,      1223,      1229,
++		1231,      1237,      1249,      1259,      1277,      1279,      1283,      1289,
++		1291,      1297,      1301,      1303,      1307,      1319,      1321,      1327,
++		1361,      1367,      1373,      1381,      1399,      1409,      1423,      1427,
++		1429,      1433,      1439,      1447,      1451,      1453,      1459,      1471,
++		1481,      1483,      1487,      1489,      1493,      1499,      1511,      1523,
++		1531,      1543,      1549,      1553,      1559,      1567,      1571,      1579,
++		1583,      1597,      1601,      1607,      1609,      1613,      1619,      1621
++	};
++
++	/*
++		modified Rabin-Miller primality test (added small primes)
++
++		When picking a value for insurance, note that the probability of failure
++		of the test to detect a composite number is at most 4^(-insurance), so:
++		insurance	max. probability of failure
++		3			1.56%
++		4			0.39%
++		5			0.098% &lt;-- default
++		6			0.024%
++		...
++	*/
++	BIGONETYPE bool RabinMillerPrimalityTest(T &amp;n, u32 insurance)
++	{
++		// check divisibility by small primes &lt;= 1621 (speeds up computation)
++		T temp;
++		for (u32 ii = 0; ii &lt; 256; ++ii)
++		{
++			usetw(temp, PRIME_TABLE[ii++]);
++
++			umodulo(n, temp, temp);
++
++			if (isZero(temp))
++				return false;
++		}
++
++		// n1 = n - 1
++		T n1;
++		set(n1, n);
++		decrement(n1);
++
++		// write r 2^s = n - 1, r is odd
++		T r;
++		u32 s = 0;
++		set(r, n1);
++		while (!(r[0] &amp; 1))
++		{
++			ushiftRight1(r);
++			++s;
++		}
++
++		// one = 1
++		T one;
++		usetw(one, 1);
++
++		// cache n -&gt; dn
++		BIGDOUBLESIZE(T, dy);
++		BIGDOUBLESIZE(T, dn);
++		usetlow(dn, n);
++
++		while (insurance--)
++		{
++		// choose random integer a s.t. 1 &lt; a &lt; n - 1
++			T a;
++			int index;
++			for (index=0; index &lt; sizeof(a)/sizeof(a[0]); index++)
++				a[index]=randomMT();
++			umodulo(a, n1, a);
++
++			// compute y = a ^ r (mod n)
++			T y;
++			simpleModExp(a, r, n, y);
++
++			if (!equal(y, one) &amp;&amp; !equal(y, n1))
++			{
++				u32 j = s;
++				while ((j-- &gt; 1) &amp;&amp; !equal(y, n1))
++				{
++					umultiply(y, y, dy);
++					umodulo(dy, dn, dy);
++					takelow(y, dy);
++
++					if (equal(y, one)) return false;
++				}
++
++				if (!equal(y, n1)) return false;
++			}
++		}
++
++		return true;
++	}
++
++	// generates a strong pseudo-prime
++	BIGONETYPE void generateStrongPseudoPrime(T &amp;n)
++	{
++		do {
++			int index;
++			for (index=0; index &lt; sizeof(n)/sizeof(n[0]); index++)
++				n[index]=randomMT();
++			n[BIGWORDCOUNT(T) - 1] |= WORDHIGHBIT;
++			//n[BIGWORDCOUNT(T) - 1] &amp;= ~WORDHIGHBIT; n[BIGWORDCOUNT(T) - 1] |= WORDHIGHBIT &gt;&gt; 1;
++			n[0] |= 1;
++		} while (!RabinMillerPrimalityTest(n, 5));
++	}
++
++#endif // RSASUPPORTGENPRIME
++
++
++	//////// RSACrypt class ////////
++
++	BIGONETYPE class RSACrypt
++	{
++		// public key
++		T e, n;
++		T np, xp;
++
++		// private key
++		bool factorsAvailable;
++		T d, phi;
++		BIGHALFSIZE(T, p);
++		BIGHALFSIZE(T, pnp);
++		BIGHALFSIZE(T, pxp);
++		BIGHALFSIZE(T, q);
++		BIGHALFSIZE(T, qnp);
++		BIGHALFSIZE(T, qxp);
++		BIGHALFSIZE(T, pInverse);
++
++	public:
++		RSACrypt()
++		{
++			reset();
++		}
++		~RSACrypt()
++		{
++			reset();
++		}
++
++	public:
++		void reset()
++		{
++			zero(d);
++			zero(p);
++			zero(q);
++			zero(pInverse);
++			factorsAvailable = false;
++		}
++
++#ifdef RSASUPPORTGENPRIME
++
++		void generateKeys()
++		{
++			BIGHALFSIZE(T, p0);
++			BIGHALFSIZE(T, q0);
++
++			generateStrongPseudoPrime(p0);
++			generateStrongPseudoPrime(q0);
++
++			setPrivateKey(p0, q0);
++		}
++
++#endif // RSASUPPORTGENPRIME
++
++		BIGSMALLTYPE void setPrivateKey(Smaller &amp;c_p, Smaller &amp;c_q)
++		{
++			factorsAvailable = true;
++
++			// re-order factors s.t. q &gt; p
++			if (ugreater(c_p, c_q))
++			{
++				set(q, c_p);
++				set(p, c_q);
++			}
++			else
++			{
++				set(p, c_p);
++				set(q, c_q);
++			}
++
++			// phi = (p - 1)(q - 1)
++			BIGHALFSIZE(T, p1);
++			BIGHALFSIZE(T, q1);
++			set(p1, p);
++			decrement(p1);
++			set(q1, q);
++			decrement(q1);
++			umultiply(p1, q1, phi);
++
++			// compute e
++			computePublicExponent(phi, e);
++
++			// compute d
++			computePrivateExponent(e, phi, d);
++
++			// compute p^-1 mod q
++			computeModularInverse(p, q, pInverse);
++
++			// compute n = pq
++			umultiply(p, q, n);
++
++			// find n'
++			computeNRinverse(n, np);
++
++			// x' = 1*r (mod n)
++			rModn(n, xp);
++
++			// find pn'
++			computeNRinverse(p, pnp);
++//			computeNRinverse2(p, pnp);
++
++			// px' = 1*r (mod p)
++			rModn(p, pxp);
++
++			// find qn'
++			computeNRinverse(q, qnp);
++
++			// qx' = 1*r (mod q)
++			rModn(q, qxp);
++		}
++		void setPublicKey(u32 c_e, T &amp;c_n)
++		{
++			reset(); // in case we knew a private key
++
++			usetw(e, c_e);
++			set(n, c_n);
++
++			// find n'
++			computeNRinverse(n, np);
++
++			// x' = 1*r (mod n)
++			rModn(n, xp);
++		}
++
++	public:
++		void getPublicKey(u32 &amp;c_e, T &amp;c_n)
++		{
++			c_e = e[0];
++			set(c_n, n);
++		}
++		BIGSMALLTYPE void getPrivateKey(Smaller &amp;c_p, Smaller &amp;c_q)
++		{
++			set(c_p, p);
++			set(c_q, q);
++		}
++
++	public:
++		void encrypt(T &amp;M, T &amp;x)
++		{
++			if (factorsAvailable)
++				CRTModExp(x, M, e, p, q, pInverse, pnp, pxp, qnp, qxp);
++			else
++				simpleModExp(M, e, n, x);
++		}
++
++		void decrypt(T &amp;C, T &amp;x)
++		{
++			if (factorsAvailable)
++				CRTModExp(x, C, d, p, q, pInverse, pnp, pxp, qnp, qxp);
++		}
++	};
++}
++
++#endif // RSACRYPT_H
++
++
++
+
+Added: trunk/source/libraries/raknet/RakNetStatistics.cpp
+===================================================================
+--- trunk/source/libraries/raknet/RakNetStatistics.cpp	2004-11-28 17:15:55 UTC (rev 101)
++++ trunk/source/libraries/raknet/RakNetStatistics.cpp	2004-11-28 17:18:25 UTC (rev 102)
+@@ -0,0 +1,135 @@
++#include &quot;RakNetStatistics.h&quot;
++#include &lt;stdio.h&gt; // sprintf
++#include &quot;BitStream.h&quot; // BITS_TO_BYTES
++
++// Verbosity level currently supports 0 (low), 1 (medium), 2 (high)
++// Buffer must be hold enough to hold the output string.  See the source to get an idea of how many bytes will be output
++void StatisticsToString(RakNetStatisticsStruct *s, char *buffer, int verbosityLevel)
++{
++	if (s==0)
++	{
++		sprintf(buffer, &quot;stats is a NULL pointer in statsToString\n&quot;);
++		return;
++	}
++
++	if (verbosityLevel==0)
++	{
++		// Verbosity level 0
++		sprintf(buffer,
++&quot;Total bytes sent: %u\n\
++Total bytes received: %u\n\
++Packetloss: %.1f%%\n&quot;,
++			BITS_TO_BYTES(s-&gt;totalBitsSent),
++			BITS_TO_BYTES(s-&gt;bitsReceived+s-&gt;bitsWithBadCRCReceived),
++			100.0f*(float)s-&gt;messagesTotalBitsResent/(float)s-&gt;totalBitsSent);
++	}
++	else if (verbosityLevel==1)
++	{
++		// Verbosity level 1
++		
++		sprintf(buffer,
++&quot;Messages in Send buffer: %u\n\
++Messages sent: %u\n\
++Bytes sent: %u\n\
++Acks sent: %u\n\
++Acks in send buffer: %u\n\
++Messages waiting for ack: %u\n\
++Messages resent: %u\n\
++Bytes resent: %u\n\
++Packetloss: %.1f%%\n\
++Messages recieved: %u\n\
++Bytes recieved: %u\n\
++Acks recieved: %u\n\
++Duplicate acks recieved: %u\n\
++Window size: %u\n&quot;,
++			s-&gt;messageSendBuffer[SYSTEM_PRIORITY]+s-&gt;messageSendBuffer[HIGH_PRIORITY]+s-&gt;messageSendBuffer[MEDIUM_PRIORITY]+s-&gt;messageSendBuffer[LOW_PRIORITY],
++			s-&gt;messagesSent[SYSTEM_PRIORITY]+s-&gt;messagesSent[HIGH_PRIORITY]+s-&gt;messagesSent[MEDIUM_PRIORITY]+s-&gt;messagesSent[LOW_PRIORITY],
++			BITS_TO_BYTES(s-&gt;totalBitsSent),
++			s-&gt;acknowlegementsSent,
++			s-&gt;acknowlegementsPending,
++			s-&gt;messagesOnResendQueue,
++			s-&gt;messageResends,
++			BITS_TO_BYTES(s-&gt;messagesTotalBitsResent),
++			100.0f*(float)s-&gt;messagesTotalBitsResent/(float)s-&gt;totalBitsSent,
++			s-&gt;duplicateMessagesReceived+s-&gt;invalidMessagesReceived+s-&gt;messagesReceived,
++			BITS_TO_BYTES(s-&gt;bitsReceived+s-&gt;bitsWithBadCRCReceived),
++			s-&gt;acknowlegementsReceived,
++			s-&gt;duplicateAcknowlegementsReceived,
++			s-&gt;windowSize);
++	}
++	else
++	{
++		// Verbosity level 2.
++		sprintf(buffer,
++&quot;Bytes sent:\t\t\t\t%u\n\
++Messages in send buffer:\t\tSP:%u HP:%u MP:%u LP:%u\n\
++Messages sent:\t\t\t\tSP:%u HP:%u MP:%u LP:%u\n\
++Message data bytes sent:\t\tSP:%u HP:%u MP:%u LP:%u\n\
++Message header bytes sent:\t\tSP:%u HP:%u MP:%u LP:%u\n\
++Message total bytes sent:\t\tSP:%u HP:%u MP:%u LP:%u\n\
++Bytes received:\t\t\t\tTtl:%u Good:%u Bad:%u\n\
++Packets received:\t\t\tTtl:%u Good:%u Bad:%u\n\
++Acks received:\t\t\t\tTtl:%u Good:%u Dup:%u\n\
++Messages received:\t\t\tTotal:%u Valid:%u Invalid:%u Dup:%u\n\
++Packetloss:\t\t\t\t%.1f%%\n\
++Packets sent:\t\t\t\t%u\n\
++Acks sent:\t\t\t\t%u\n\
++Acks in send buffer:\t\t\t%u\n\
++Messages waiting for ack:\t\t%u\n\
++Ack bytes sent:\t\t\t\t%u\n\
++Sent packets containing only acks:\t%u\n\
++Sent packets w/only acks and resends:\t%u\n\
++Reliable messages resent:\t\t%u\n\
++Reliable message data bytes resent:\t%u\n\
++Reliable message header bytes resent:\t%u\n\
++Reliable message total bytes resent:\t%u\n\
++Number of messages split:\t\t%u\n\
++Number of messages unsplit:\t\t%u\n\
++Message splits performed:\t\t%u\n\
++Additional encryption bytes:\t\t%u\n\
++Sequenced messages out of order:\t%u\n\
++Sequenced messages in order:\t\t%u\n\
++Ordered messages out of order:\t\t%u\n\
++Ordered messages in of order:\t\t%u\n\
++Split messages waiting for reassembly:\t%u\n\
++Messages in internal output queue:\t%u\n\
++Window size:\t\t\t\t%u\n\
++Lossy window size\t\t\t%u\n\
++Connection start time:\t\t\t%u\n&quot;,
++			BITS_TO_BYTES(s-&gt;totalBitsSent),
++			s-&gt;messageSendBuffer[SYSTEM_PRIORITY],s-&gt;messageSendBuffer[HIGH_PRIORITY], s-&gt;messageSendBuffer[MEDIUM_PRIORITY],s-&gt;messageSendBuffer[LOW_PRIORITY],
++			s-&gt;messagesSent[SYSTEM_PRIORITY], s-&gt;messagesSent[HIGH_PRIORITY], s-&gt;messagesSent[MEDIUM_PRIORITY],s-&gt;messagesSent[LOW_PRIORITY],
++			BITS_TO_BYTES(s-&gt;messageDataBitsSent[SYSTEM_PRIORITY]),BITS_TO_BYTES(s-&gt;messageDataBitsSent[HIGH_PRIORITY]), BITS_TO_BYTES(s-&gt;messageDataBitsSent[MEDIUM_PRIORITY]),BITS_TO_BYTES(s-&gt;messageDataBitsSent[LOW_PRIORITY]),
++			BITS_TO_BYTES(s-&gt;messageTotalBitsSent[SYSTEM_PRIORITY]-s-&gt;messageDataBitsSent[SYSTEM_PRIORITY]),BITS_TO_BYTES(s-&gt;messageTotalBitsSent[HIGH_PRIORITY]-s-&gt;messageDataBitsSent[HIGH_PRIORITY]), BITS_TO_BYTES(s-&gt;messageTotalBitsSent[MEDIUM_PRIORITY]-s-&gt;messageDataBitsSent[MEDIUM_PRIORITY]),BITS_TO_BYTES(s-&gt;messageTotalBitsSent[LOW_PRIORITY]-s-&gt;messageDataBitsSent[LOW_PRIORITY]),
++			BITS_TO_BYTES(s-&gt;messageTotalBitsSent[SYSTEM_PRIORITY]), BITS_TO_BYTES(s-&gt;messageTotalBitsSent[HIGH_PRIORITY]), BITS_TO_BYTES(s-&gt;messageTotalBitsSent[MEDIUM_PRIORITY]),BITS_TO_BYTES(s-&gt;messageTotalBitsSent[LOW_PRIORITY]),
++			BITS_TO_BYTES(s-&gt;bitsReceived+s-&gt;bitsWithBadCRCReceived),BITS_TO_BYTES(s-&gt;bitsReceived),BITS_TO_BYTES(s-&gt;bitsWithBadCRCReceived),
++			s-&gt;packetsReceived+s-&gt;packetsWithBadCRCRecieved,s-&gt;packetsReceived,s-&gt;packetsWithBadCRCRecieved,
++			s-&gt;acknowlegementsReceived+s-&gt;duplicateAcknowlegementsReceived, s-&gt;acknowlegementsReceived,s-&gt;duplicateAcknowlegementsReceived,
++			s-&gt;messagesReceived+s-&gt;invalidMessagesReceived+s-&gt;duplicateMessagesReceived, s-&gt;messagesReceived, s-&gt;invalidMessagesReceived, s-&gt;duplicateMessagesReceived,
++			100.0f*(float)s-&gt;messagesTotalBitsResent/(float)s-&gt;totalBitsSent,
++			s-&gt;packetsSent,
++			s-&gt;acknowlegementsSent,
++			s-&gt;acknowlegementsPending,
++			s-&gt;messagesOnResendQueue,
++			BITS_TO_BYTES(s-&gt;acknowlegementBitsSent),
++			s-&gt;packetsContainingOnlyAcknowlegements,
++			s-&gt;packetsContainingOnlyAcknowlegementsAndResends,
++			s-&gt;messageResends,
++			BITS_TO_BYTES(s-&gt;messageDataBitsResent),
++			BITS_TO_BYTES(s-&gt;messagesTotalBitsResent-s-&gt;messageDataBitsResent),
++			BITS_TO_BYTES(s-&gt;messagesTotalBitsResent),
++			s-&gt;numberOfSplitMessages,
++			s-&gt;numberOfUnsplitMessages,
++			s-&gt;totalSplits,
++			BITS_TO_BYTES(s-&gt;encryptionBitsSent),
++			s-&gt;sequencedMessagesOutOfOrder,
++			s-&gt;sequencedMessagesInOrder,
++			s-&gt;orderedMessagesOutOfOrder,
++			s-&gt;orderedMessagesInOrder,
++			s-&gt;messagesWaitingForReassembly,
++			s-&gt;internalOutputQueueSize,
++			s-&gt;windowSize,
++			s-&gt;lossySize,
++			s-&gt;connectionStartTime);
++	}
++}
+
+Added: trunk/source/libraries/raknet/RakNetStatistics.h
+===================================================================
+--- trunk/source/libraries/raknet/RakNetStatistics.h	2004-11-28 17:15:55 UTC (rev 101)
++++ trunk/source/libraries/raknet/RakNetStatistics.h	2004-11-28 17:18:25 UTC (rev 102)
+@@ -0,0 +1,97 @@
++#ifndef __RAK_NET_STATISTICS_H
++#define __RAK_NET_STATISTICS_H
++
++#include &quot;PacketPriority.h&quot;
++
++struct RakNetStatisticsStruct
++{
++	//		Number of Messages in the send Buffer (high, medium, low priority)
++	unsigned messageSendBuffer[NUMBER_OF_PRIORITIES];
++	//		Number of messages sent (high, medium, low priority)
++	unsigned messagesSent[NUMBER_OF_PRIORITIES];
++	//		Number of data bits used for user messages
++	unsigned messageDataBitsSent[NUMBER_OF_PRIORITIES];
++	//		Number of total bits used for user messages, including headers
++	unsigned messageTotalBitsSent[NUMBER_OF_PRIORITIES];
++
++	//		Number of packets sent containing only acknowledgements
++	unsigned packetsContainingOnlyAcknowlegements;
++	//		Number of acknowledgements sent
++	unsigned acknowlegementsSent;
++	//		Number of acknowledgements waiting to be sent
++	unsigned acknowlegementsPending;
++	//		Number of acknowledgements bits sent
++	unsigned acknowlegementBitsSent;
++
++	//		Number of packets containing only acknowledgements and resends
++	unsigned packetsContainingOnlyAcknowlegementsAndResends;
++
++	//		Number of messages resent
++	unsigned messageResends;
++	//		Number of bits resent of actual data
++	unsigned messageDataBitsResent;
++	//		Total number of bits resent, including headers
++	unsigned messagesTotalBitsResent;
++	//		Number of messages waiting for ack
++	unsigned messagesOnResendQueue;
++
++	//		Number of messages not split for sending
++	unsigned numberOfUnsplitMessages;
++	//		Number of messages split for sending
++	unsigned numberOfSplitMessages;
++	//		Total number of splits done for sending
++	unsigned totalSplits;
++
++	//		Total packets sent
++	unsigned packetsSent;
++
++	//		Number of bits added by encryption
++	unsigned encryptionBitsSent;
++	//		total bits sent
++	unsigned totalBitsSent;
++
++	//		Number of sequenced messages arrived out of order
++	unsigned sequencedMessagesOutOfOrder;
++	//		Number of sequenced messages arrived in order
++	unsigned sequencedMessagesInOrder;
++
++	//		Number of ordered messages arrived out of order
++	unsigned orderedMessagesOutOfOrder;
++	//		Number of ordered messages arrived in order
++	unsigned orderedMessagesInOrder;
++
++	//		Packets with a good CRC received
++	unsigned packetsReceived;
++	//		Packets with a bad CRC received
++	unsigned packetsWithBadCRCRecieved;
++	//		Bits with a good CRC received
++	unsigned bitsReceived;
++	//		Bits with a bad CRC received
++	unsigned bitsWithBadCRCReceived;
++	//		Number of acknowledgement messages received for packets we are resending
++	unsigned acknowlegementsReceived;
++	//		Number of acknowledgement messages received for packets we are not resending
++	unsigned duplicateAcknowlegementsReceived;
++	//		Number of data messages (anything other than an ack) received that are valid and not duplicate
++	unsigned messagesReceived;
++	//		Number of data messages (anything other than an ack) received that are invalid
++	unsigned invalidMessagesReceived;
++	//		Number of data messages (anything other than an ack) received that are duplicate
++	unsigned duplicateMessagesReceived;
++	//		Number of messages waiting for reassembly
++	unsigned messagesWaitingForReassembly;
++	//		Number of messages in reliability output queue
++	unsigned internalOutputQueueSize;
++	//		Current window size
++	unsigned windowSize;
++	//		lossy window size
++	unsigned lossySize;
++	//		connection start time
++	unsigned long connectionStartTime;
++};
++
++
++// Verbosity level currently supports 0 (low), 1 (medium), 2 (high)
++void StatisticsToString(RakNetStatisticsStruct *s, char *buffer, int verbosityLevel);
++
++#endif
+
+Added: trunk/source/libraries/raknet/Types.h
+===================================================================
+--- trunk/source/libraries/raknet/Types.h	2004-11-28 17:15:55 UTC (rev 101)
++++ trunk/source/libraries/raknet/Types.h	2004-11-28 17:18:25 UTC (rev 102)
+@@ -0,0 +1,486 @@
++/*
++	Fundamental tools &amp; types
++
++	Catid(<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">cat02e at fsu.edu</A>)
++
++	8/9/2004	Added SINGLE/ARRAY_RELEASE
++	8/5/2004	Added COMPILER_ preprocessors
++				class NoCopies
++	8/1/2004	Removed mask stuff
++	7/29/2004	Added swapLE, swapBE, getLE, getBE
++	7/28/2004	Automatic and AutoArray now compile in dev-c++
++				Added pre-processor conditions to support other compilers
++				Removed GETWORD and GETDWORD
++	7/15/2004	Now using COM_RELEASE throughout CatGL3
++	6/22/2004	Removed triple and pair
++	6/12/2004	AutoDeallocate -&gt; Automatic, AutoArray
++	6/9/2004	OBJCLR
++	5/2/2004	class AutoDeallocate
++	5/1/2004	IS_POWER_OF_2, next_highest_power_of_2
++	4/30/2004	Merged character manip macros
++	2/23/2004	CEIL*
++				Removed MEMCOPY32 and MEMCLEAR32,
++				memcpy and memset are now faster
++				MAKE_MASK
++	2/10/2004	LITTLE_ENDIAN
++				COUNT1BITS32
++				AT_LEAST_2_BITS
++				LEAST_SIGNIFICANT_BIT
++	X-mas/2003	[u/s]int?? -&gt; [u/s]??
++	7/3/2003	Added template triple, point-&gt;pair
++	6/15/2003	Added template rect, point
++	3/30/2003	Added RO?8, RO?16 and ?int64
++				Added MEMCOPY32 and MEMCLEAR32
++	3/12/2003	Added GETWORD and GETDWORD
++	1/16/2003	Formalized this library.
++
++	Tabs: 4 spaces
++	Dist: public
++*/
++
++#ifndef TYPES_H
++#define TYPES_H
++
++namespace cat
++{
++////// Compilers //////
++
++/*
++	Things to consider for each compiler:
++
++	BIG_ENDIAN / LITTLE_ENDIAN
++	MULTITHREADED
++	DEBUG
++	HASINT64
++	Basic types {u8-u64, s8-s64, f32, f64}
++	WIN32
++	ASSEMBLY_INTEL_SYNTAX / ASSEMBLY_ATT_SYNTAX, ASSEMBLY_BLOCK
++	INLINE
++	NO_TEMPLATE_INLINE_ASSEMBLY
++	Fixes
++
++	Set depending which compiler is being used:
++
++	COMPILER_MSVC
++	COMPILER_GCC
++	COMPILER_BORLANDC
++*/
++
++
++//// endian-ness (ignoring NUXI) ////
++
++#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || \
++	defined(__ppc__) || defined(__hppa) || defined(_MIPSEB) || defined(_POWER) || \
++	defined(_M_PPC) || defined(_M_MPPC) || defined(_M_MRX000) || \
++	defined(__POWERPC) || defined(m68k) || defined(powerpc) || \
++	defined(sel) || defined(pyr) || defined(mc68000) || defined(is68k) || \
++	defined(tahoe) || defined(ibm032) || defined(ibm370) || defined(MIPSEB) || \
++	defined(__convex__) || defined(DGUX) || defined(hppa) || defined(apollo) || \
++	defined(_CRAY) || defined(__hp9000) || defined(__hp9000s300) || defined(_AIX) || \
++	defined(__AIX) || defined(__pyr__) || defined(hp9000s700) || defined(_IBMR2)
++
++#	define BIG_ENDIAN
++
++#elif defined(__i386__) || defined(i386) || defined(intel) || defined(_M_IX86) || \
++	  defined(__alpha__) || defined(__alpha) || defined(__ia64) || defined(__ia64__) || \
++	  defined(_M_ALPHA) || defined(ns32000) || defined(__ns32000__) || defined(sequent) || \
++	  defined(MIPSEL) || defined(_MIPSEL) || defined(sun386) || defined(__sun386__)
++
++#	define LITTLE_ENDIAN
++
++#else
++
++#	error &quot;I can't tell what endian-ness to use for your architecture.&quot;
++
++#endif
++
++
++//// compiler-specific ////
++
++#if defined(__COMO__) // Comeau C++
++
++#	error &quot;Comeau C++ : I don't know your compiler&quot;
++
++#elif defined(__DMC__) // Digital Mars C++
++
++#	error &quot;Digital Mars C++ : I don't know your compiler&quot;
++
++#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC) // Intel
++
++#	error &quot;Intel : I don't know your compiler&quot;
++
++#elif defined(__GNUC__) // GNU C++
++
++#define COMPILER_GCC
++
++#	if defined(_MT)
++#		define MULTITHREADED
++#	endif
++
++#	if defined(_DEBUG)
++#		define DEBUG
++#	endif
++
++#	define INLINE inline
++#	define HASINT64
++
++#	define ASSEMBLY_ATT_SYNTAX
++#	define ASSEMBLY_BLOCK asm
++
++#elif defined(__DJGPP__) // DJGPP
++
++#	error &quot;DJGPP : I don't know your compiler&quot;
++
++#	define ASSEMBLY_ATT_SYNTAX
++
++#elif defined(__WATCOMC__) // WatcomC
++
++#	error &quot;WatcomC : I don't know your compiler&quot;
++
++#elif defined(__KCC) // Kai C++
++
++#	error &quot;Kai C++ : I don't know your compiler&quot;
++
++#elif defined(__sgi) // SGI MIPSpro C++
++
++#	error &quot;SGI MIPSpro C++ : I don't know your compiler&quot;
++
++#elif defined(__SUNPRO_CC) // Sun Workshop Compiler C++
++
++#	error &quot;Sun Workshop Compiler C++ : I don't know your compiler&quot;
++
++#elif defined(__HP_aCC) // HP aCC
++
++#	error &quot;HP aCC : I don't know your compiler&quot;
++
++#elif defined(__DECCXX) // Compaq Tru64 Unix cxx
++
++#	error &quot;Compaq Tru64 Unix cxx : I don't know your compiler&quot;
++
++#elif defined(__ghs) // Greenhills C++
++
++#	error &quot;Greenhills C++ : I don't know your compiler&quot;
++
++#elif defined(__BORLANDC__) // Borland
++
++#	if (__BORLANDC__ &gt;= 0x561)
++#		define HASINT64
++#	endif
++
++#define COMPILER_BORLANDC
++
++#	if defined(__MT__)
++#		define MULTITHREADED
++#	endif
++
++#	if defined(__DEBUG)
++#		define DEBUG
++#	endif
++
++#	define INLINE inline
++#	define ASSEMBLY_INTEL_SYNTAX
++#	define ASSEMBLY_BLOCK _asm
++#	define NO_TEMPLATE_INLINE_ASSEMBLY
++
++#elif defined(__MWERKS__) // Metrowerks CodeWarrior
++
++#	error &quot;Metrowerks CodeWarrior : I don't know your compiler&quot;
++
++#elif defined(__MRC__) || defined(__SC__) // MPW MrCpp or SCpp
++
++#	error &quot;MPW MrCpp or SCpp : I don't know your compiler&quot;
++
++#elif defined(__IBMCPP__) // IBM Visual Age
++
++#	error &quot;IBM Visual Age : I don't know your compiler&quot;
++
++#elif defined(_MSC_VER) // Microsoft VC++
++	// must be last because many other compilers define this also
++
++#define COMPILER_MSVC
++
++#	if (_MSC_VER &gt;= 1200) /* 1200 == VC++ 6.0 */
++#		define HASINT64
++#		define INLINE __forceinline
++#	endif
++
++#	if defined(_MT)
++#		define MULTITHREADED
++#	endif
++
++#	if defined(__DEBUG)
++#		define DEBUG
++#	endif
++
++#	define BASIC_TYPES_ALREADY_DEFINED
++	typedef unsigned __int8		u8;
++	typedef signed __int8		s8;
++	typedef unsigned __int16	u16;
++	typedef signed __int16		s16;
++	typedef unsigned __int32	u32;
++	typedef signed __int32		s32;
++	typedef float				f32;
++	typedef double				f64;
++#	if defined(HASINT64)
++		typedef unsigned __int64	u64;
++		typedef signed __int64		s64;
++#	endif
++
++#	define ASSEMBLY_INTEL_SYNTAX
++#	define ASSEMBLY_BLOCK __asm
++
++#	if (_MSC_VER &lt;= 1200)
++#		pragma warning(disable : 4786) // truncation to 255 chars
++#	endif
++
++#else
++
++#	error &quot;Unknown : I don't know your compiler&quot;
++
++#endif // compilers
++
++
++	// Generic basic types
++#if !defined(BASIC_TYPES_ALREADY_DEFINED)
++	typedef unsigned char		u8;
++	typedef signed char			s8;
++	typedef unsigned short		u16;
++	typedef signed short		s16;
++	typedef unsigned int		u32;
++	typedef signed int			s32;
++	typedef float				f32;
++	typedef double				f64;
++#	if defined(HASINT64)
++	typedef unsigned long long	u64;
++	typedef signed long long	s64;
++#	endif
++#endif
++
++	// Fixed-point types
++	typedef s32 sfp22_10; // hi-Siiiiiiiiiiiiiiiiiiiii-lo | hi-ffffffffff-lo
++	typedef u32 ufp22_10; // hi-iiiiiiiiiiiiiiiiiiiiii-lo | hi-ffffffffff-lo
++	typedef s32 sfp16_16; // hi-Siiiiiiiiiiiiiii-lo | hi-ffffffffffffffff-lo
++	typedef u32 ufp16_16; // hi-iiiiiiiiiiiiiiii-lo | hi-ffffffffffffffff-lo
++
++/*
++	COMmy macros
++*/
++
++#define COM_RELEASE(ref) if (ref) { (ref)-&gt;Release(); (ref) = 0; }
++#define SINGLE_RELEASE(ref) if (ref) { delete (ref); (ref) = 0; }
++#define ARRAY_RELEASE(ref) if (ref) { delete [](ref); (ref) = 0; }
++
++	template&lt;class T&gt; class rect
++	{
++	public:
++		rect() : x(0), y(0), w(0), h(0) {}
++		rect(T xx, T yy, T ww, T hh) : x(xx), y(yy), w(ww), h(hh) {}
++
++		T x, y, w, h;
++	};
++
++	template&lt;class T&gt; class AutoArray
++	{
++		T *ptr;
++
++	public:
++		AutoArray(T *c_ptr)
++		{
++			ptr = c_ptr;
++		}
++		~AutoArray()
++		{
++			ARRAY_RELEASE(ptr);
++		}
++
++		INLINE void cancel()
++		{
++			ptr = 0;
++		}
++	};
++
++	template&lt;class T&gt; class Automatic
++	{
++		T *ptr;
++
++	public:
++		Automatic(T *c_ptr)
++		{
++			ptr = c_ptr;
++		}
++		~Automatic()
++		{
++			SINGLE_RELEASE(ptr);
++		}
++
++		INLINE void cancel()
++		{
++			ptr = 0;
++		}
++	};
++
++	// Derive from NoCopies to disallow copies of derived class
++	class NoCopies
++	{
++	protected:
++		NoCopies() {}
++		~NoCopies() {}
++
++	private:
++		NoCopies(const NoCopies &amp;cp);
++		NoCopies &amp;operator=(const NoCopies &amp;cp);
++	};
++
++
++	// Byte-order swapping
++#define BOSWAP32(n) ( ((n) &lt;&lt; 24) | (((n) &amp; 0x00ff0000) &gt;&gt; 8) | (((n) &amp; 0x0000ff00) &lt;&lt; 8) | ((n) &gt;&gt; 24) ) /* only works for u32 */
++#define BOSWAP16(n) ( ((n) &lt;&lt; 8) | ((n) &gt;&gt; 8) ) /* only works for u16 */
++
++#ifdef LITTLE_ENDIAN
++#	define swapLE(n)
++#	define getLE(n) (n)
++	INLINE void swapBE(u32 &amp;n) { n = BOSWAP32(n); }
++	INLINE void swapBE(u16 &amp;n) { n = BOSWAP16(n); }
++	INLINE u32 getBE(u32 n) { return BOSWAP32(n); }
++	INLINE u16 getBE(u16 n) { return BOSWAP16(n); }
++	INLINE void swapBE(s32 &amp;n) { n = BOSWAP32((u32)n); }
++	INLINE void swapBE(s16 &amp;n) { n = BOSWAP16((u16)n); }
++	INLINE s32 getBE(s32 n) { return BOSWAP32((u32)n); }
++	INLINE s16 getBE(s16 n) { return BOSWAP16((u16)n); }
++#else
++#	define swapBE(n)
++#	define getBE(n) (n)
++	INLINE void swapLE(u32 &amp;n) { n = BOSWAP32(n); }
++	INLINE void swapLE(u16 &amp;n) { n = BOSWAP16(n); }
++	INLINE u32 getLE(u32 n) { return BOSWAP32(n); }
++	INLINE u16 getLE(u16 n) { return BOSWAP16(n); }
++	INLINE void swapLE(s32 &amp;n) { n = BOSWAP32((u32)n); }
++	INLINE void swapLE(s16 &amp;n) { n = BOSWAP16((u16)n); }
++	INLINE s32 getLE(s32 n) { return BOSWAP32((u32)n); }
++	INLINE s16 getLE(s16 n) { return BOSWAP16((u16)n); }
++#endif
++
++} // namespace cat
++
++
++// Rotation
++#define ROL8(n, r)  ( ((n) &lt;&lt; (r)) | ((n) &gt;&gt; ( 8 - (r))) ) /* only works for u8 */
++#define ROR8(n, r)  ( ((n) &gt;&gt; (r)) | ((n) &lt;&lt; ( 8 - (r))) ) /* only works for u8 */
++#define ROL16(n, r) ( ((n) &lt;&lt; (r)) | ((n) &gt;&gt; (16 - (r))) ) /* only works for u16 */
++#define ROR16(n, r) ( ((n) &gt;&gt; (r)) | ((n) &lt;&lt; (16 - (r))) ) /* only works for u16 */
++#define ROL32(n, r) ( ((n) &lt;&lt; (r)) | ((n) &gt;&gt; (32 - (r))) ) /* only works for u32 */
++#define ROR32(n, r) ( ((n) &gt;&gt; (r)) | ((n) &lt;&lt; (32 - (r))) ) /* only works for u32 */
++
++/*
++	Add memory that is allocated on a 32-bit boundary
++	and has at least one block.
++*/
++#define MEMADD32(ptr, len, val) { \
++	register u32 *__data = (u32*)(ptr); /* pointer to data to clear */ \
++	register s32 __length = (len); /* number of 32-bit blocks */ \
++\
++	switch (__length % 8) \
++	{ \
++	case 0:	do {	*__data++ += (val); \
++	case 7:			*__data++ += (val); \
++	case 6:			*__data++ += (val); \
++	case 5:			*__data++ += (val); \
++	case 4:			*__data++ += (val); \
++	case 3:			*__data++ += (val); \
++	case 2:			*__data++ += (val); \
++	case 1:			*__data++ += (val); \
++					__length -= 8; \
++			} while(__length &gt; 0); \
++	} \
++}
++
++/*
++	Safe null-terminated string -&gt; char buffer copy
++*/
++#define STRNCPY(dest, src, size) { \
++	strncpy(dest, src, size); \
++	dest[size-1] = 0; \
++}
++
++/*
++	Because memory clearing is a frequent operation
++*/
++#define MEMCLR(dest, size) memset(dest, 0, size)
++
++// Works for arrays, also
++#define OBJCLR(object) memset(&amp;(object), 0, sizeof(object))
++
++/*
++	Fast binary method of counting bits
++
++	MIT Hackmem from X11
++
++	Only works for 32-bit integers
++*/
++#define _C1B_INTERMED(n) ( (n) - (((n) &gt;&gt; 1) &amp; 033333333333) - (((n) &gt;&gt; 2) &amp; 011111111111) )
++#define COUNT1BITS32(n) ( ((_C1B_INTERMED(n) + (_C1B_INTERMED(n) &gt;&gt; 3)) &amp; 030707070707) % 63 )
++
++/*
++	Consider N an ordered set of 1/0 values.
++
++	LESSTHAN2BITS(n) := there are less than 2 bits in set N
++
++	Proof:
++
++	(N - 1) will clear the least significant of the bits in N.
++
++	Three cases exist concerning (N-1):
++
++	N contains 0 bits
++		An intersection with N would be trivially null.
++	N contains 1 bit
++		The least only existing bit was cleared,
++			thus an intersection with the original
++			set WOULD be null.
++	N contains more than 1 bit
++		A more significant bit remains in the set,
++			thus an intersection with the original
++			set WOULD NOT be null.
++*/
++#define AT_LEAST_2_BITS(n) ( (n) &amp; ((n) - 1) )
++
++#define LEAST_SIGNIFICANT_BIT(n) ( (n) &amp; -(n) )
++
++#define IS_POWER_OF_2(n) ( n &amp;&amp; !AT_LEAST_2_BITS(n) )
++
++INLINE cat::u32 next_highest_power_of_2(cat::u32 n)
++{
++	if (IS_POWER_OF_2(n)) return n;
++
++	cat::u16 b = 2;
++
++	while (n &gt;&gt;= 1) b &lt;&lt;= 1;
++
++	return b;
++}
++
++/*
++	CEIL*
++
++	Bump 'n' to the next unit of 'width'.
++*/
++#define CEIL_UNIT(n, width) ( ( (n) + (width) - 1 ) / (width) )
++#define CEIL(n, width) ( CEIL_UNIT(n, width) * (width) )
++
++/*
++	Quick character manipulation
++*/
++#define IS_ALPHA(ch) ( (((u8)(ch) &amp; 0xc0) == 0x40) &amp;&amp; ((((u8)(ch) - 1) &amp; 0x1f) &lt;= 0x19) )
++
++#define IS_NUM(ch) ( ((u8)(ch) - 0x30) &lt; 10 )
++
++#define IS_ALPHANUM(ch) ( IS_ALPHA(ch) || IS_NUM(ch) )
++
++#define TO_LOWER(ch) (char)( (ch) | 0x20 ) /* must be upper/lower-case alpha */
++#define TO_UPPER(ch) (char)( (ch) &amp; (~0x20) ) /* must be upper/lower-case alpha */
++
++
++#endif // TYPES_H
++
++
++
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000049.html">[Tw-light-svn] r101 - trunk/source/libraries/raknet
+</A></li>
+	<LI>Next message: <A HREF="000051.html">[Tw-light-svn] r103 - trunk/source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#50">[ date ]</a>
+              <a href="thread.html#50">[ thread ]</a>
+              <a href="subject.html#50">[ subject ]</a>
+              <a href="author.html#50">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

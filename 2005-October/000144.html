@@ -1,0 +1,2717 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r198 - in trunk: . Util/deditor gamedata/games/test_game/scripts gamedata/python mingw-libs/include/allegro/platform source source/games source/generated source/libraries/agup source/libraries/jpgalleg source/melee source/other source/python source/sc1ships source/sc2ships source/ships source/tml web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r198%20-%20in%20trunk%3A%20.%20Util/deditor%20gamedata/games/test_game/scripts%20gamedata/python%20mingw-libs/include/allegro/platform%20source%20source/games%20source/generated%20source/libraries/agup%20source/libraries/jpgalleg%20source/melee%20source/other%20source/python%20source/sc1ships%20source/sc2ships%20source/ships%20source/tml%20web&In-Reply-To=%3C200510162211.j9GMB9sA011148%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000143.html">
+   <LINK REL="Next"  HREF="000145.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r198 - in trunk: . Util/deditor gamedata/games/test_game/scripts gamedata/python mingw-libs/include/allegro/platform source source/games source/generated source/libraries/agup source/libraries/jpgalleg source/melee source/other source/python source/sc1ships source/sc2ships source/ships source/tml web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r198%20-%20in%20trunk%3A%20.%20Util/deditor%20gamedata/games/test_game/scripts%20gamedata/python%20mingw-libs/include/allegro/platform%20source%20source/games%20source/generated%20source/libraries/agup%20source/libraries/jpgalleg%20source/melee%20source/other%20source/python%20source/sc1ships%20source/sc2ships%20source/ships%20source/tml%20web&In-Reply-To=%3C200510162211.j9GMB9sA011148%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r198 - in trunk: . Util/deditor gamedata/games/test_game/scripts gamedata/python mingw-libs/include/allegro/platform source source/games source/generated source/libraries/agup source/libraries/jpgalleg source/melee source/other source/python source/sc1ships source/sc2ships source/ships source/tml web">yurand at berlios.de
+       </A><BR>
+    <I>Mon Oct 17 00:11:09 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000143.html">[Tw-light-svn] r197 - trunk/doc
+</A></li>
+        <LI>Next message: <A HREF="000145.html">[Tw-light-svn] r199 - in trunk: . gamedata/default_ini gamedata/python/lib mingw-libs/include mingw-libs/include/allegro mingw-libs/include/allegro/internal mingw-libs/lib source source/games source/libraries source/libraries/cppunit source/libraries/cppunit/config source/libraries/cppunit/extensions source/libraries/cppunit/plugin source/libraries/cppunit/portability source/libraries/cppunit/tools source/libraries/cppunit/ui source/libraries/cppunit/ui/mfc source/libraries/cppunit/ui/qt source/libraries/cppunit/ui/text source/tests source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-10-17 00:10:02 +0200 (Mon, 17 Oct 2005)
+New Revision: 198
+
+Added:
+   trunk/source/SConscript
+Modified:
+   trunk/
+   trunk/SConstruct
+   trunk/Util/deditor/
+   trunk/gamedata/games/test_game/scripts/
+   trunk/gamedata/games/test_game/scripts/quests.py
+   trunk/gamedata/python/
+   trunk/mingw-libs/include/allegro/platform/
+   trunk/source/games/
+   trunk/source/games/gdefender.cpp
+   trunk/source/games/gflmelee.cpp
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/libraries/agup/
+   trunk/source/libraries/jpgalleg/
+   trunk/source/melee/
+   trunk/source/melee/WarpOutTrail.cpp
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mmain.cpp
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mship.h
+   trunk/source/other/
+   trunk/source/other/gobwarpouttrail.cpp
+   trunk/source/other/gobwarpouttrail.h
+   trunk/source/other/gup.cpp
+   trunk/source/other/nullphas.cpp
+   trunk/source/other/nullphas.h
+   trunk/source/other/radar.cpp
+   trunk/source/other/radar.h
+   trunk/source/other/starmap.cpp
+   trunk/source/other/starmap.h
+   trunk/source/other/vbodies.cpp
+   trunk/source/other/vbodies.h
+   trunk/source/python/
+   trunk/source/sc1ships/
+   trunk/source/sc1ships/shpvuxin.cpp
+   trunk/source/sc2ships/
+   trunk/source/sc2ships/shppkufu.cpp
+   trunk/source/ships/shprogsq.cpp
+   trunk/source/ships/shpsamat.cpp
+   trunk/source/tml/eventmanager.cpp
+   trunk/source/tml/eventmanager.h
+   trunk/source/tml/gameaction.cpp
+   trunk/web/downloads.php
+Log:
+Fixed crash caused by multiple changing systems in full game.
+GobWarpOutTrail inherit Phaser now.
+Added support for Release/Debug configuration for scons
+
+
+
+Property changes on: trunk
+___________________________________________________________________
+Name: svn:ignore
+   + *.bak
+*.cache
+
+
+Modified: trunk/SConstruct
+===================================================================
+--- trunk/SConstruct	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/SConstruct	2005-10-16 22:10:02 UTC (rev 198)
+@@ -6,239 +6,25 @@
+   global SVNVERSION
+   SVNVERSION = y.strip()
+ 
+-twsource = Split(&quot;&quot;&quot;
+-  source/python/game.i
+-  source/ais/c_input.cpp
+-  source/ais/c_other.cpp
+-  source/ais/c_wussie.cpp
+-  source/doxygen.cpp
+-  source/frame.cpp
+-  source/games/gamehierarchy.cpp
+-  source/games/gdefender.cpp
+-  source/games/gflmelee.cpp
+-  source/games/ggob.cpp
+-  source/gui.cpp
+-  source/input.cpp
+-  source/libraries/agup/aalg.c
+-  source/libraries/agup/aase.c
+-  source/libraries/agup/abeos.c
+-  source/libraries/agup/abitmap.c
+-  source/libraries/agup/agtk.c
+-  source/libraries/agup/agup.c
+-  source/libraries/agup/ans.c
+-  source/libraries/agup/aphoton.c
+-  source/libraries/agup/awin95.c
+-  source/libraries/jpgalleg/decode.c
+-  source/libraries/jpgalleg/encode.c
+-  source/libraries/jpgalleg/io.c
+-  source/libraries/jpgalleg/jpgalleg.c
+-  source/melee/manim.cpp
+-  source/melee/mcbodies.cpp
+-  source/melee/mcontrol.cpp
+-  source/melee/mfleet.cpp
+-  source/melee/mframe.cpp
+-  source/melee/mgame.cpp
+-  source/melee/mhelpers.cpp
+-  source/melee/mitems.cpp
+-  source/melee/mlog.cpp
+-  source/melee/mmain.cpp
+-  source/melee/mmath.cpp
+-  source/melee/mnet1.cpp
+-  source/melee/moptions.cpp
+-  source/melee/mship.cpp
+-  source/melee/mshot.cpp
+-  source/melee/mshpdata.cpp
+-  source/melee/mshppan.cpp
+-  source/melee/msprite.cpp
+-  source/melee/mtarget.cpp
+-  source/melee/mview.cpp
+-  source/melee/WarpOutTrail.cpp
+-  source/other/configrw.cpp
+-  source/other/dialogs.cpp
+-  source/other/fontmorph.cpp
+-  source/other/gobwarpouttrail.cpp 
+-  source/other/gup.cpp
+-  source/other/nullphas.cpp
+-  source/other/objanim.cpp
+-  source/other/orbit.cpp
+-  source/other/planet3d.cpp
+-  source/other/radar.cpp
+-  source/other/shippart.cpp
+-  source/other/starmap.cpp
+-  source/other/twconfig.cpp
+-  source/other/vbodies.cpp
+-  source/other/vtarget.cpp
+-  source/python/game.cpp
+-  source/python/python_class.cpp
+-  source/sc1ships/shpandgu.cpp
+-  source/sc1ships/shparisk.cpp
+-  source/sc1ships/shpchebr.cpp
+-  source/sc1ships/shpearcr.cpp
+-  source/sc1ships/shpilwav.cpp
+-  source/sc1ships/shpkzedr.cpp
+-  source/sc1ships/shpmmrxf.cpp
+-  source/sc1ships/shpmycpo.cpp
+-  source/sc1ships/shpshosc.cpp
+-  source/sc1ships/shpspael.cpp
+-  source/sc1ships/shpsyrpe.cpp
+-  source/sc1ships/shpumgdr.cpp
+-  source/sc1ships/shpvuxin.cpp
+-  source/sc1ships/shpyehte.cpp
+-  source/sc2ships/shpchmav.cpp
+-  source/sc2ships/shpdruma.cpp
+-  source/sc2ships/shpkohma.cpp
+-  source/sc2ships/shpmeltr.cpp
+-  source/sc2ships/shporzne.cpp
+-  source/sc2ships/shppkufu.cpp
+-  source/sc2ships/shpslypr.cpp
+-  source/sc2ships/shpsupbl.cpp
+-  source/sc2ships/shpthrto.cpp
+-  source/sc2ships/shputwju.cpp
+-  source/sc2ships/shpzfpst.cpp
+-  source/scp.cpp
+-  source/ships/shpaktgu.cpp
+-  source/ships/shpalabc.cpp
+-  source/ships/shpbahbu.cpp
+-  source/ships/shpbipka.cpp
+-  source/ships/shpbogce.cpp
+-  source/ships/shpchoex.cpp
+-  source/ships/shpconca.cpp
+-  source/ships/shpconho.cpp
+-  source/ships/shpdragr.cpp
+-  source/ships/shpearc3.cpp
+-  source/ships/shpforsh.cpp
+-  source/ships/shpgarty.cpp
+-  source/ships/shpilwsp.cpp
+-  source/ships/shpkahbo.cpp
+-  source/ships/shprogsq.cpp
+-  source/ships/shpsamat.cpp
+-  source/ships/shpstaba.cpp
+-  source/ships/shptauar.cpp
+-  source/ships/shptauda.cpp
+-  source/ships/shptaume.cpp
+-  source/ships/shptausl.cpp
+-  source/ships/shptaust.cpp
+-  source/ships/shptauto.cpp
+-  source/ships/shpwolmi.cpp
+-  source/ships/shpyusra.cpp
+-  source/ships/shpzeksh.cpp
+-  source/tests/gameconfigtest.cpp
+-  source/tests/testdatapath.cpp
+-  source/tests/testmain.cpp
+-  source/tml/eventmanager.cpp
+-  source/tml/gameaction.cpp
+-  source/tml/gameconfig.cpp
+-  source/tml/gamedialog.cpp
+-  source/tml/gameevent.cpp
+-  source/util/aarot.c
+-  source/util/aastr.c
+-  source/util/aautil.c
+-  source/util/base.cpp
+-  source/util/endian.cpp
+-  source/util/errors.cpp
+-  source/util/errors_c.c
+-  source/util/get_time.c
+-  source/util/history.cpp
+-  source/util/net_tcp.cpp
+-  source/util/pmask.c
+-  source/util/random.cpp
+-  source/util/round.c
+-  source/util/sound.cpp
+-  source/util/types.cpp
+-  source/util/vector2.cpp
+-&quot;&quot;&quot;)
++progname = &quot;tw-light&quot;
+ 
+-twheaders = Split(&quot;&quot;&quot;
+-source/util/aastr.h
+-source/util/aautil.h
+-source/ais.h
+-source/util/base.h
+-source/other/configrw.h
+-source/other/dialogs.h
+-source/util/endian.h
+-source/util/errors.h
+-source/tml/eventmanager.h
+-source/other/fontmorph.h
+-source/frame.h
+-source/python/game.h
+-source/tml/gameaction.h
+-source/tml/gameconfig.h
+-source/tests/gameconfigtest.h
+-source/tml/gamedialog.h
+-source/tml/gameevent.h
+-source/games/gamehierarchy.h
+-source/util/get_time.h
+-source/games/gflmelee.h
+-source/games/ggob.h
+-source/gui.h
+-source/other/gup.h
+-source/util/history.h
+-source/id.h
+-source/input.h
+-source/melee/manim.h
+-source/melee/mcbodies.h
+-source/melee/mcontrol.h
+-source/melee.h
+-source/melee/mfleet.h
+-source/melee/mframe.h
+-source/melee/mgame.h
+-source/melee/mhelpers.h
+-source/melee/mitems.h
+-source/melee/mlog.h
+-source/melee/mmain.h
+-source/melee/mnet1.h
+-source/melee/moptions.h
+-source/melee/mship.h
+-source/melee/mshot.h
+-source/melee/mshppan.h
+-source/melee/mtarget.h
+-source/melee/mview.h
+-source/util/net_tcp.h
+-source/other/nullphas.h
+-source/other/objanim.h
+-source/other/orbit.h
+-source/other/planet3d.h
+-source/util/pmask.h
+-source/python/python_class.h
+-source/other/radar.h
+-source/util/random.h
+-source/util/round.h
+-source/sc1ships.h
+-source/sc2ships.h
+-source/scp.h
+-source/ship.h
+-source/other/shippart.h
+-source/ships/shpilwsp.h
+-source/util/sound.h
+-source/other/starmap.h
+-source/tests/testmain.h
+-source/other/twconfig.h
+-source/util/types.h
+-source/other/vbodies.h
+-source/util/vector2.h
+-source/other/vtarget.h
+-source/melee/WarpOutTrail.h
+-&quot;&quot;&quot;)
+-
+ #####################################################################################
+ SConsignFile()
+ SetOption('implicit_cache', 1)
+ SetOption('max_drift', 1)
+ 
+-#ENV = {'PATH' : os.environ['PATH']},tools=['mingw','swig']
++ENV = {'PATH' : os.environ['PATH'] }
+ 
+ if str(Platform()) == &quot;win32&quot;:
+     env = Environment()
+     env.Append(CPPDEFINES=['WIN32'])
+     if env[&quot;CC&quot;] == &quot;cl&quot;:
+-        env['PDB'] = 'tw-light.pdb'
+         env.AppendENVPath('PATH', os.environ['PATH'])
+-        env.Append(CPPPATH=[&quot;#msvc-libs/include&quot;,&quot;msvc-libs/include/SDL&quot;])
++        env.Append(CPPPATH=[&quot;#msvc-libs/include&quot;,&quot;#msvc-libs/include/SDL&quot;])
+         env.Append(LIBPATH=[&quot;#msvc-libs/lib&quot;])
+-        env.Append(CPPFLAGS=['/GX','/MD']) 
+-        #env.Append(LINKFLAGS=['/SUBSYSTEM:CONSOLE']) 
++        env.Append(CPPFLAGS=['/GX','/MD','/J']) 
+     else:
+-        env.Append(CPPPATH=[&quot;#mingw-libs/include&quot;,&quot;mingw-libs/include/SDL&quot;])
++        env.Append(CPPPATH=[&quot;#mingw-libs/include&quot;,&quot;#mingw-libs/include/SDL&quot;])
+         env.Append(LIBPATH=[&quot;#mingw-libs/lib&quot;])
+ else:
+     env = Environment()
+@@ -253,10 +39,18 @@
+ env.Append(LIBS =  [&quot;alleg&quot;, &quot;winmm&quot;, &quot;ws2_32&quot;, &quot;SDL&quot;,&quot;SDLmain&quot;,&quot;SDL_mixer&quot;,&quot;python24&quot;,&quot;z&quot;])
+ env.Append(CPPPATH=[&quot;#source&quot;,&quot;#source/libraries&quot;])
+ 
+-tw = env.Program(&quot;tw-light&quot;, twsource)
++envdbg = env.Copy()
+ 
+-env.MSVSProject(target = 'TW-Light' + env['MSVSPROJECTSUFFIX'],
+-                          srcs = twsource + twheaders,
+-                          buildtarget = tw,
+-                          variant = 'Debug')
++env.Append(CPPFLAGS=['/O2']) 
++SConscript('source/SConscript', build_dir='.build/release', duplicate=0, exports={'env':env,'progname':&quot;tw-light&quot;})
+ 
++if str(Platform()) == &quot;win32&quot;:
++    if envdbg[&quot;CC&quot;] == &quot;cl&quot;:
++        envdbg['PDB'] = 'tw-light-debug.pdb'
++#        envdbg.Append(LINKFLAGS=['/SUBSYSTEM:CONSOLE']) 
++        progname += &quot;-debug&quot;
++
++SConscript('source/SConscript', 
++            build_dir='.build/debug', 
++            duplicate=0, exports={'env':envdbg,'progname':&quot;tw-light-debug&quot;})
++
+
+
+Property changes on: trunk/Util/deditor
+___________________________________________________________________
+Name: svn:ignore
+   + *.sconsign
+
+
+
+Property changes on: trunk/gamedata/games/test_game/scripts
+___________________________________________________________________
+Name: svn:ignore
+   + *.pyc
+*.cache
+
+
+Modified: trunk/gamedata/games/test_game/scripts/quests.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/quests.py	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/gamedata/games/test_game/scripts/quests.py	2005-10-16 22:10:02 UTC (rev 198)
+@@ -44,6 +44,7 @@
+ # Mission 2
+ def negotiate_with_chorali_func():
+     gflag.m2_status = MISSION_IN_PROGRESS
++    gflag.current_mission = &quot;&quot;&quot; You must negotiate with the Chorali at Ixis 5000, 5000.&quot;&quot;&quot;
+     
+ ############################################################################################################
+ # Mission 3
+
+
+Property changes on: trunk/gamedata/python
+___________________________________________________________________
+Name: svn:ignore
+   + *.pyc
+
+
+
+Property changes on: trunk/mingw-libs/include/allegro/platform
+___________________________________________________________________
+Name: svn:ignore
+   + *.cache
+
+
+Added: trunk/source/SConscript
+===================================================================
+--- trunk/source/SConscript	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/SConscript	2005-10-16 22:10:02 UTC (rev 198)
+@@ -0,0 +1,233 @@
++Import(&quot;env&quot;)
++Import(&quot;progname&quot;)
++
++twsource = Split(&quot;&quot;&quot;
++  python/game.i
++  ais/c_input.cpp
++  ais/c_other.cpp
++  ais/c_wussie.cpp
++  doxygen.cpp
++  frame.cpp
++  games/gamehierarchy.cpp
++  games/gdefender.cpp
++  games/gflmelee.cpp
++  games/ggob.cpp
++  gui.cpp
++  input.cpp
++  libraries/agup/aalg.c
++  libraries/agup/aase.c
++  libraries/agup/abeos.c
++  libraries/agup/abitmap.c
++  libraries/agup/agtk.c
++  libraries/agup/agup.c
++  libraries/agup/ans.c
++  libraries/agup/aphoton.c
++  libraries/agup/awin95.c
++  libraries/jpgalleg/decode.c
++  libraries/jpgalleg/encode.c
++  libraries/jpgalleg/io.c
++  libraries/jpgalleg/jpgalleg.c
++  melee/manim.cpp
++  melee/mcbodies.cpp
++  melee/mcontrol.cpp
++  melee/mfleet.cpp
++  melee/mframe.cpp
++  melee/mgame.cpp
++  melee/mhelpers.cpp
++  melee/mitems.cpp
++  melee/mlog.cpp
++  melee/mmain.cpp
++  melee/mmath.cpp
++  melee/mnet1.cpp
++  melee/moptions.cpp
++  melee/mship.cpp
++  melee/mshot.cpp
++  melee/mshpdata.cpp
++  melee/mshppan.cpp
++  melee/msprite.cpp
++  melee/mtarget.cpp
++  melee/mview.cpp
++  melee/WarpOutTrail.cpp
++  other/configrw.cpp
++  other/dialogs.cpp
++  other/fontmorph.cpp
++  other/gobwarpouttrail.cpp 
++  other/gup.cpp
++  other/nullphas.cpp
++  other/objanim.cpp
++  other/orbit.cpp
++  other/planet3d.cpp
++  other/radar.cpp
++  other/shippart.cpp
++  other/starmap.cpp
++  other/twconfig.cpp
++  other/vbodies.cpp
++  other/vtarget.cpp
++  python/game.cpp
++  python/python_class.cpp
++  sc1ships/shpandgu.cpp
++  sc1ships/shparisk.cpp
++  sc1ships/shpchebr.cpp
++  sc1ships/shpearcr.cpp
++  sc1ships/shpilwav.cpp
++  sc1ships/shpkzedr.cpp
++  sc1ships/shpmmrxf.cpp
++  sc1ships/shpmycpo.cpp
++  sc1ships/shpshosc.cpp
++  sc1ships/shpspael.cpp
++  sc1ships/shpsyrpe.cpp
++  sc1ships/shpumgdr.cpp
++  sc1ships/shpvuxin.cpp
++  sc1ships/shpyehte.cpp
++  sc2ships/shpchmav.cpp
++  sc2ships/shpdruma.cpp
++  sc2ships/shpkohma.cpp
++  sc2ships/shpmeltr.cpp
++  sc2ships/shporzne.cpp
++  sc2ships/shppkufu.cpp
++  sc2ships/shpslypr.cpp
++  sc2ships/shpsupbl.cpp
++  sc2ships/shpthrto.cpp
++  sc2ships/shputwju.cpp
++  sc2ships/shpzfpst.cpp
++  scp.cpp
++  ships/shpaktgu.cpp
++  ships/shpalabc.cpp
++  ships/shpbahbu.cpp
++  ships/shpbipka.cpp
++  ships/shpbogce.cpp
++  ships/shpchoex.cpp
++  ships/shpconca.cpp
++  ships/shpconho.cpp
++  ships/shpdragr.cpp
++  ships/shpearc3.cpp
++  ships/shpforsh.cpp
++  ships/shpgarty.cpp
++  ships/shpilwsp.cpp
++  ships/shpkahbo.cpp
++  ships/shprogsq.cpp
++  ships/shpsamat.cpp
++  ships/shpstaba.cpp
++  ships/shptauar.cpp
++  ships/shptauda.cpp
++  ships/shptaume.cpp
++  ships/shptausl.cpp
++  ships/shptaust.cpp
++  ships/shptauto.cpp
++  ships/shpwolmi.cpp
++  ships/shpyusra.cpp
++  ships/shpzeksh.cpp
++  tests/gameconfigtest.cpp
++  tests/testdatapath.cpp
++  tests/testmain.cpp
++  tml/eventmanager.cpp
++  tml/gameaction.cpp
++  tml/gameconfig.cpp
++  tml/gamedialog.cpp
++  tml/gameevent.cpp
++  util/aarot.c
++  util/aastr.c
++  util/aautil.c
++  util/base.cpp
++  util/endian.cpp
++  util/errors.cpp
++  util/errors_c.c
++  util/get_time.c
++  util/history.cpp
++  util/net_tcp.cpp
++  util/pmask.c
++  util/random.cpp
++  util/round.c
++  util/sound.cpp
++  util/types.cpp
++  util/vector2.cpp
++&quot;&quot;&quot;)
++
++twheaders = Split(&quot;&quot;&quot;
++util/aastr.h
++util/aautil.h
++ais.h
++util/base.h
++other/configrw.h
++other/dialogs.h
++util/endian.h
++util/errors.h
++tml/eventmanager.h
++other/fontmorph.h
++frame.h
++python/game.h
++tml/gameaction.h
++tml/gameconfig.h
++tests/gameconfigtest.h
++tml/gamedialog.h
++tml/gameevent.h
++games/gamehierarchy.h
++util/get_time.h
++games/gflmelee.h
++games/ggob.h
++gui.h
++other/gup.h
++util/history.h
++id.h
++input.h
++melee/manim.h
++melee/mcbodies.h
++melee/mcontrol.h
++melee.h
++melee/mfleet.h
++melee/mframe.h
++melee/mgame.h
++melee/mhelpers.h
++melee/mitems.h
++melee/mlog.h
++melee/mmain.h
++melee/mnet1.h
++melee/moptions.h
++melee/mship.h
++melee/mshot.h
++melee/mshppan.h
++melee/mtarget.h
++melee/mview.h
++util/net_tcp.h
++other/nullphas.h
++other/objanim.h
++other/orbit.h
++other/planet3d.h
++util/pmask.h
++python/python_class.h
++other/radar.h
++util/random.h
++util/round.h
++sc1ships.h
++sc2ships.h
++scp.h
++ship.h
++other/shippart.h
++ships/shpilwsp.h
++util/sound.h
++other/starmap.h
++tests/testmain.h
++other/twconfig.h
++util/types.h
++other/vbodies.h
++util/vector2.h
++other/vtarget.h
++melee/WarpOutTrail.h
++&quot;&quot;&quot;)
++
++tw = env.Program(&quot;#&quot; + progname, twsource)
++
++if progname.find(&quot;debug&quot;):
++    byildtype  = &quot;Debug&quot;
++else:
++    byildtype  = &quot;Release&quot;
++
++tw2 = env.Program(&quot;#&quot; + progname, twsource)
++
++env.MSVSProject(target =  &quot;#&quot; + progname + env['MSVSPROJECTSUFFIX'],
++                          srcs = map(lambda x: 'source/' + x,twsource + twheaders),
++                          buildtarget = tw,
++                          variant = byildtype)
++
++
++
+
+
+Property changes on: trunk/source/games
+___________________________________________________________________
+Name: svn:ignore
+   + *.bak
+*.cache
+
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/games/gdefender.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -227,15 +227,16 @@
+   message.print((int)msecs_per_fps, 12, &quot;Your Health: %d&quot;, p);
+ }
+ 
++static void murder_location(SpaceLocation* l)
++{
++  if (l &amp;&amp; l-&gt;exists())
++    l-&gt;die();
++}
+ void DefenderGame::restart() 
+ {
+-  STACKTRACE;  
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i = item.begin();
+-      i != item.end(); i++)
+-    {
+-      if ((*i)-&gt;exists()) 
+-	(*i)-&gt;die();
+-    }
++  STACKTRACE;
++  std::for_each(item_begin(), item_end(), murder_location);
++  
+   game_time = 0;
+ 	
+   Ship *ship = create_ship(&quot;supbl&quot;, player, Vector2(500, 200), 270);
+
+Modified: trunk/source/games/gflmelee.cpp
+===================================================================
+--- trunk/source/games/gflmelee.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/games/gflmelee.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -509,9 +509,8 @@
+   SpaceLocation *l = controller-&gt;get_focus();
+   if (l)
+     {
+-      PaintYRadar paint(this, Painted, l-&gt;pos);
+-	  std::for_each(physics-&gt;item.begin(), physics-&gt;item.end(), paint);
+-      //Paint(Painted,l-&gt;pos);
++      //PaintYRadar paint(this, Painted, l-&gt;pos);
++      std::for_each(physics-&gt;item_begin(), physics-&gt;item_end(), PaintYRadar(this, Painted, l-&gt;pos));
+     }
+   
+   // also, blit the radar foreground:
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/games/ggob.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -195,12 +195,13 @@
+ void GobGame::switch_system(const std::string&amp; name)
+ {
+   STACKTRACE;
++ 
+   if(name == _name)
+     return;
+-
+-  // remove ship from current system
+-  item.remove(gobplayer.ship);
+   
++  if(gobplayer.ship)
++    remove(gobplayer.ship);
++
+   std::list&lt;StarSystem*&gt;::iterator sNew = std::find_if(_galaxy._stars.begin(), 
+                          _galaxy._stars.end(), 
+                          std::bind2nd(findStar(), name));
+@@ -209,44 +210,11 @@
+       tw_error(&quot;Star not found&quot;);
+     }
+ 
+-  std::list&lt;StarSystem*&gt;::iterator sOld = std::find_if(_galaxy._stars.begin(), 
+-                         _galaxy._stars.end(), 
+-                         std::bind2nd(findStar(), _name));
+-  if(sOld==_galaxy._stars.end())
+-    {
+-      tw_error(&quot;Star not found&quot;);
+-    }
+-
+-  // Save current star items  
+-  (*sOld)-&gt;_item     = item;
+-  
+-  
+-  // remove all items
+-  int psize = item.size();
+-  while(item.size())
+-    {
+-      remove(item.back());
+-      if(item.size()==psize)
+-      {
+-    tw_error(&quot;!!!!@@!!@$##$%#$^%#$@#&quot;);
+-      }
+-      psize = item.size();
+-    }
+-  // Load new items
+-  //item     = (*sNew)-&gt;_item;
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i =(*sNew)-&gt;_item.begin(); i!= (*sNew)-&gt;_item.end();i++)
+-    {
+-      add(*i);
+-    }
+-  
+-  // set new name
+   _name = name;
+   _galaxy._playerStar = *sNew;
+ 
+-  // add player ship
+-  item.remove(gobplayer.ship);
+   if(gobplayer.ship)
+-    item.push_back(gobplayer.ship);
++    add(gobplayer.ship);
+ }
+ 
+ void GobGame::add_gobplayer(Control *control) 
+@@ -408,22 +376,31 @@
+ int GobGame::add_planet(const std::string&amp; system, const std::string&amp; name, int x, int y)
+ {
+   STACKTRACE;
++  printf(&quot;Add planet&quot;);
+   Planet *p = new Planet (Vector2(x,y), meleedata.planetSprite, 1/*planet_index*/);
+   p-&gt;set_name(name);
+   add ( p );
+   return p-&gt;get_id();
+ }
+ 
++struct GobGame::planet_by_name : std::binary_function&lt;SpaceLocation*,std::string, bool&gt;
++{
++  bool operator()(SpaceLocation* l,std::string name) const
++  {
++    if(l &amp;&amp; l-&gt;isPlanet() &amp;&amp; l-&gt;exists() &amp;&amp; ((Planet*)l)-&gt;get_name() == name)
++      return true;
++    return false;
++  }
++};
++
+ Planet* GobGame::get_planet(const std::string&amp; name)
+ {
+   STACKTRACE;
+-  //  Planet* p = NULL;
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i= item.begin(); i!= item.end();i++)
++  if(std::find_if(item_begin(),item_end(), std::bind2nd(planet_by_name(), name))==item_end())
+     {
+-      if(*i &amp;&amp; (*i)-&gt;isPlanet() &amp;&amp; (*i)-&gt;exists() &amp;&amp; ((Planet*)(*i))-&gt;get_name() == name)
+-    return (Planet*)(*i);
++      return NULL;
+     }
+-  return NULL;
++  return (Planet*)(*std::find_if(item_begin(),item_end(), std::bind2nd(planet_by_name(), name)));
+ }
+ 
+ int GobGame::add_orbiter_station(const std::string&amp; system, 
+@@ -478,6 +455,7 @@
+ void GobGame::calculate() 
+ {
+   STACKTRACE;
++
+   Game::calculate();
+   EventManager::calculate();
+ }
+@@ -534,10 +512,10 @@
+     {
+     case KEY_M:
+       {
+-    add( GobWarpOutTrail::getGobWarpOutTrail(gobplayer.ship, _galaxy.select(), this));
+-    //game-&gt;add( WarpOutTrail::getWarpOutTrail(gobplayer.ship) );
+-    //switch_system(_galaxy.select());
+-    videosystem-&gt;window.redraw();
++		add( GobWarpOutTrail::getGobWarpOutTrail(gobplayer.ship, _galaxy.select(), this));
++		//game-&gt;add( WarpOutTrail::getWarpOutTrail(gobplayer.ship) );
++		//switch_system(_galaxy.select());
++		videosystem-&gt;window.redraw();
+     return true;
+       }
+       break;
+@@ -634,7 +612,7 @@
+   std::string cur_sys = _name;
+   switch_system(system);
+   Ship *ship = create_ship(channel_server, shptype.c_str(), &quot;WussieBot&quot;, 
+-               pos, random(PI2), team);
++               pos, random(PI2), (int)team);
+   add(ship-&gt;get_ship_phaser());
+   
+   switch_system(cur_sys);
+@@ -658,8 +636,9 @@
+ void GobGame::add_system(std::string name, int x, int y)
+ {
+   STACKTRACE;
+-  _galaxy.add(new StarSystem(name,Vector2(x,y)));
+-  gobgame-&gt;switch_system(name);
++  GobGameBase::add_system(name, x, y);
++  _galaxy.add(new StarSystem(name,Vector2(x,y))); 
++  switch_system(name);
+ }
+ int GobGame::add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y)
+ {
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/games/ggob.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -136,11 +136,12 @@
+ /// GOB class adventure game
+ class GobGame : public  GobGameBase
+ {
+-
++  struct planet_by_name;
++  
+  public:
+   StarMap _galaxy;
+   GobPlayer gobplayer;
+-
++  
+   /// move player to system
+   virtual void switch_system(const std::string&amp; name);
+   /// Add new player to the game
+@@ -183,7 +184,7 @@
+   int add_ship(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos, double team );
+   void add_stars();
+   int  add_asteroid(const std::string system, Vector2 pos, double angle, int speed);
+-  void add_system(std::string name, int x, int y);;
++  virtual void add_system(std::string name, int x, int y);;
+   int  add_player(const std::string&amp; system, const std::string&amp; shptype, int x, int y);
+   
+ 
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/generated/tml_wrap.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -1383,18 +1383,20 @@
+ #define SWIGTYPE_p_GameConfig swig_types[3]
+ #define SWIGTYPE_p_SoundSystem swig_types[4]
+ #define SWIGTYPE_p_allocator_type swig_types[5]
+-#define SWIGTYPE_p_char swig_types[6]
+-#define SWIGTYPE_p_difference_type swig_types[7]
+-#define SWIGTYPE_p_size_type swig_types[8]
+-#define SWIGTYPE_p_std__vectorTstd__string_std__allocatorTstd__string_t_t swig_types[9]
+-#define SWIGTYPE_p_std__vectorTstd__string_std__allocatorTstd__string_t_t__allocator_type swig_types[10]
+-#define SWIGTYPE_p_value_type swig_types[11]
+-#define SWIGTYPE_ptrdiff_t swig_types[12]
+-#define SWIGTYPE_size_t swig_types[13]
+-#define SWIGTYPE_std__ptrdiff_t swig_types[14]
+-#define SWIGTYPE_std__size_t swig_types[15]
+-static swig_type_info *swig_types[16];
+-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
++#define SWIGTYPE_p_boost__shared_ptrTSpaceLocation_t swig_types[6]
++#define SWIGTYPE_p_boost__shared_ptrTTGameEvent_t swig_types[7]
++#define SWIGTYPE_p_char swig_types[8]
++#define SWIGTYPE_p_difference_type swig_types[9]
++#define SWIGTYPE_p_size_type swig_types[10]
++#define SWIGTYPE_p_std__vectorTstd__string_std__allocatorTstd__string_t_t swig_types[11]
++#define SWIGTYPE_p_std__vectorTstd__string_std__allocatorTstd__string_t_t__allocator_type swig_types[12]
++#define SWIGTYPE_p_value_type swig_types[13]
++#define SWIGTYPE_ptrdiff_t swig_types[14]
++#define SWIGTYPE_size_t swig_types[15]
++#define SWIGTYPE_std__ptrdiff_t swig_types[16]
++#define SWIGTYPE_std__size_t swig_types[17]
++static swig_type_info *swig_types[18];
++static swig_module_info swig_module = {swig_types, 18, 0, 0, 0, 0};
+ #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&amp;swig_module, &amp;swig_module, name)
+ #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&amp;swig_module, &amp;swig_module, name)
+ 
+@@ -6631,6 +6633,8 @@
+ static swig_type_info _swigt__p_GameConfig = {&quot;_p_GameConfig&quot;, &quot;GameConfig *&quot;, 0, 0, 0};
+ static swig_type_info _swigt__p_SoundSystem = {&quot;_p_SoundSystem&quot;, &quot;SoundSystem *&quot;, 0, 0, 0};
+ static swig_type_info _swigt__p_allocator_type = {&quot;_p_allocator_type&quot;, &quot;allocator_type *&quot;, 0, 0, 0};
++static swig_type_info _swigt__p_boost__shared_ptrTSpaceLocation_t = {&quot;_p_boost__shared_ptrTSpaceLocation_t&quot;, &quot;boost::shared_ptr&lt;SpaceLocation &gt; *|SpaceLocationPtr *&quot;, 0, 0, 0};
++static swig_type_info _swigt__p_boost__shared_ptrTTGameEvent_t = {&quot;_p_boost__shared_ptrTTGameEvent_t&quot;, &quot;boost::shared_ptr&lt;TGameEvent &gt; *|TGameEventPtr *&quot;, 0, 0, 0};
+ static swig_type_info _swigt__p_char = {&quot;_p_char&quot;, &quot;char *&quot;, 0, 0, 0};
+ static swig_type_info _swigt__p_difference_type = {&quot;_p_difference_type&quot;, &quot;difference_type *&quot;, 0, 0, 0};
+ static swig_type_info _swigt__p_size_type = {&quot;_p_size_type&quot;, &quot;size_type *&quot;, 0, 0, 0};
+@@ -6649,6 +6653,8 @@
+   &amp;_swigt__p_GameConfig,
+   &amp;_swigt__p_SoundSystem,
+   &amp;_swigt__p_allocator_type,
++  &amp;_swigt__p_boost__shared_ptrTSpaceLocation_t,
++  &amp;_swigt__p_boost__shared_ptrTTGameEvent_t,
+   &amp;_swigt__p_char,
+   &amp;_swigt__p_difference_type,
+   &amp;_swigt__p_size_type,
+@@ -6667,6 +6673,8 @@
+ static swig_cast_info _swigc__p_GameConfig[] = {  {&amp;_swigt__p_GameConfig, 0, 0, 0},{0, 0, 0, 0}};
+ static swig_cast_info _swigc__p_SoundSystem[] = {  {&amp;_swigt__p_SoundSystem, 0, 0, 0},{0, 0, 0, 0}};
+ static swig_cast_info _swigc__p_allocator_type[] = {  {&amp;_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
++static swig_cast_info _swigc__p_boost__shared_ptrTSpaceLocation_t[] = {  {&amp;_swigt__p_boost__shared_ptrTSpaceLocation_t, 0, 0, 0},{0, 0, 0, 0}};
++static swig_cast_info _swigc__p_boost__shared_ptrTTGameEvent_t[] = {  {&amp;_swigt__p_boost__shared_ptrTTGameEvent_t, 0, 0, 0},{0, 0, 0, 0}};
+ static swig_cast_info _swigc__p_char[] = {  {&amp;_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+ static swig_cast_info _swigc__p_difference_type[] = {  {&amp;_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
+ static swig_cast_info _swigc__p_size_type[] = {  {&amp;_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
+@@ -6685,6 +6693,8 @@
+   _swigc__p_GameConfig,
+   _swigc__p_SoundSystem,
+   _swigc__p_allocator_type,
++  _swigc__p_boost__shared_ptrTSpaceLocation_t,
++  _swigc__p_boost__shared_ptrTTGameEvent_t,
+   _swigc__p_char,
+   _swigc__p_difference_type,
+   _swigc__p_size_type,
+
+
+Property changes on: trunk/source/libraries/agup
+___________________________________________________________________
+Name: svn:ignore
+   + *.cache
+
+
+
+Property changes on: trunk/source/libraries/jpgalleg
+___________________________________________________________________
+Name: svn:ignore
+   + *.cache
+
+
+
+Property changes on: trunk/source/melee
+___________________________________________________________________
+Name: svn:ignore
+   + *.orig
+*.cache
+
+
+Modified: trunk/source/melee/WarpOutTrail.cpp
+===================================================================
+--- trunk/source/melee/WarpOutTrail.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/WarpOutTrail.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -38,7 +38,7 @@
+ #include &quot;tml/eventmanager.h&quot;
+ #include &quot;tml/gameevent.h&quot;
+ 
+-#include &quot;../util/errors.h&quot;
++#include &quot;util/errors.h&quot;
+ #include &quot;WarpOutTrail.h&quot;
+ 
+ 
+@@ -86,25 +86,23 @@
+   // extra check
+   // note that if this happens, there's something wrong in the ships' constructor...
+   if (sprite_index &gt;= sprite-&gt;frames())
+-    sprite_index = 0;
++  {
++	  tw_error(&quot;!!!!&quot;);
++	  sprite_index = 0;
++  }
+     
+   if (effect)
+      effect-&gt;startEffect();
+-
+-  return;
+ }
+ 
+ void WarpOutTrail::animate(Frame *space) {
+   STACKTRACE;
+   sprite-&gt;animate_character(pos, 
+ 			    sprite_index, pallete_color[colors[color_index]], space);
+-  return;
+ }
+ 
+ void WarpOutTrail::calculate() {
+   STACKTRACE;
+-  if (!exists())
+-    return;
+   frame_step -= frame_time;
+ 
+   while (frame_step &lt; 0) {
+@@ -114,23 +112,30 @@
+       state = 0;
+   }
+ 
+-  if (phaser_step_position &lt; phaser_step_size) {
+-    //if (ship &amp;&amp; !ship-&gt;exists())
+-      //ship = NULL;
++  if (phaser_step_position &lt; phaser_step_size) 
++  {
+     phaser_step_position += frame_time;
+-    if (phaser_step_position &gt;= phaser_step_size) {
+-      if (phaser_steps &gt; 1) {
++    if (phaser_step_position &gt;= phaser_step_size) 
++	{
++      if (phaser_steps &gt; 1) 
++	  {
+          Vector2 d = rel_pos / phaser_steps;
+          game-&gt;add(new WarpOutTrail(this, pos + d, rel_pos-d, ship, sprite, 
+                 sprite_index, colors, num_colors, frame_size, phaser_steps-1, 
+                 phaser_step_size, effect));
+-      } else {
+-	if (effect)
+-	   effect-&gt;endEffect();
++      } 
++	  else 
++	  {
++		if (effect)
++		{
++			effect-&gt;endEffect();
++			effect = NULL;
++		}
+       }
+     }
+   }
+   SpaceObject::calculate();
++  //die();
+ }
+ 
+ /*void WarpOutTrail::startEffect() {
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/mframe.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -108,22 +108,14 @@
+     }
+   qy = qy_min;
+   qx = qx_min;
+-
+-  m_cur_pos = physics-&gt;item.begin();
+-  if(m_cur_pos != physics-&gt;item.end())
++  
++  m_cur_pos = physics-&gt;item_begin();
++  if(m_cur_pos != physics-&gt;item_end())
+     {
+-      current = *(physics-&gt;item.begin());
++      current = *(physics-&gt;item_begin());
+       if (current_invalid()) 
+ 	next();
+     }
+-  return;
+-  /*
+-  current = physics-&gt;quadrant[qy * QUADS_X + qx];
+-  if (!current) next_quadrant();
+-  if (!current) return;
+-  if (current_invalid()) next();
+-  return;
+-  */
+ }
+ 
+ 
+@@ -156,11 +148,10 @@
+   qy = qy_min;
+   qx = qx_min;
+ 
+-
+-  m_cur_pos = physics-&gt;item.begin();
+-  if(m_cur_pos != physics-&gt;item.end())
++  m_cur_pos = physics-&gt;item_begin();
++  if(m_cur_pos != physics-&gt;item_end())
+     {
+-      current = *(physics-&gt;item.begin());
++      current = *(physics-&gt;item_begin());
+       if (current_invalid()) 
+ 	next();
+     }
+@@ -206,13 +197,13 @@
+   STACKTRACE;
+ 
+   // Dumb and slow implementaion 
+-  if(m_cur_pos==physics-&gt;item.end())
++  if(m_cur_pos==physics-&gt;item_end())
+     {
+       current = NULL;
+       return;
+     }
+   m_cur_pos++;
+-  if(m_cur_pos==physics-&gt;item.end())
++  if(m_cur_pos==physics-&gt;item_end())
+     {
+       current = NULL;
+       return;
+@@ -1064,8 +1055,12 @@
+ void Physics::destroy_all() {
+   std::for_each(presence.begin(),presence.end(), delete_presence);
+   presence.clear();
+-  std::for_each(item.begin(),item.end(),delete_item);
+-  item.clear();
++  for(std::map&lt;std::string,std::list&lt;SpaceLocation*&gt; &gt;::iterator i = item.begin(); i!=item.end(); i++)
++    {
++      std::for_each((*i).second.begin(),(*i).second.end(),delete_item);
++      (*i).second.clear();
++    }
++  m_valid_item.clear();
+ }
+ 
+ Physics::~Physics() {
+@@ -1083,6 +1078,11 @@
+   return;
+ }
+ 
++void Physics::add_system(std::string name, int x, int y)
++{
++  item[name] = std::list&lt;SpaceLocation*&gt;();
++}
++
+ unsigned int Physics::get_code(unsigned int ship, TeamCode team) 
+ {
+   return (ship &lt;&lt; SpaceLocation::ship_shift) | (team &lt;&lt; SpaceLocation::team_shift);
+@@ -1098,6 +1098,8 @@
+   last_team += 1;
+   return last_team;
+ }
++
++/*
+ void Physics::switch_team(unsigned int ship, TeamCode team) 
+ {
+   int j;
+@@ -1121,6 +1123,7 @@
+     }
+   return;
+ }
++*/
+ 
+ void Physics::init() 
+ {
+@@ -1137,7 +1140,7 @@
+ }
+ 
+ 
+-void Physics::add(SpaceLocation *o) 
++void Physics::add(SpaceLocation *o, const std::string&amp; system) 
+ {
+   if (o-&gt;attributes &amp; ATTRIB_INGAME) 
+     {
+@@ -1147,12 +1150,17 @@
+     {
+       tw_error(&quot;addItem - catastrophic&quot;);
+     }
+-	
+-
+   o-&gt;attributes |= ATTRIB_INGAME;
+-  if(std::find(item.begin(), item.end(), o)==item.end())
++  std::string sys;
++  if(!system.size())
++    sys = _name;
++  else
++    sys = system;
++  if(std::find(item[sys].begin(), item[sys].end(), o)==item[sys].end())
+     {
+-      item.push_back(o);
++      item[sys].push_back(o);
++      if(sys == _name)
++	m_valid_item.insert(o);
+     }
+   else
+     {
+@@ -1186,17 +1194,20 @@
+     {
+       tw_error(&quot;removeItem - catastrophic&quot;);
+     }
+-  
+-  std::list&lt;SpaceLocation*&gt;::iterator i = std::find(item.begin(),item.end(),o);
+-  if(i!=item.end())
++
++  for(std::map&lt;std::string,std::list&lt;SpaceLocation*&gt; &gt;::iterator i = item.begin(); i!=item.end();i++)
+     {
+-      item.remove(*i);
+-      return true;
++      std::list&lt;SpaceLocation*&gt;::iterator j = std::find((*i).second.begin(),(*i).second.end(),o);
++      if(j!=(*i).second.end())
++	{
++	  (*i).second.remove(*j);
++	  return true;
++	}
+     }
+   return false;
+ }
+ 
+-void Physics::add(Presence *p) 
++void Physics::add(Presence *p, const std::string&amp; system) 
+ {
+   if (p-&gt;attributes &amp; ATTRIB_INGAME) 
+     {
+@@ -1252,6 +1263,7 @@
+ 
+ void Physics::calculate() 
+ {
++  STACKTRACE;
+   int i;
+   
+   //adjust time
+@@ -1263,12 +1275,43 @@
+   
+   debug_value = item.size() + presence.size();
+   
++
++  //prepare quadrants stuff
++  {
++    _STACKTRACE(&quot;Physics::calculate() - quadrants stuff&quot;)
++      for(i = 0; i &lt; QUADS_TOTAL; i += 1) 
++	{
++	  quadrant[i] = NULL;
++	}
++    m_valid_item.clear();
++    for(std::list&lt;SpaceLocation*&gt;::iterator i=item[_name].begin();i!=item[_name].end();i++)
++      {
++	if( (*i)-&gt;exists())
++	  {
++	    m_valid_item.insert(*i);
++	  }
++	if ((*i)-&gt;exists() &amp;&amp; (*i)-&gt;detectable()) 
++	  {
++	    Vector2 n = (*i)-&gt;normal_pos();
++	    int q = iround_down(n.x * QUADI_X) + 
++	      iround_down(n.y * QUADI_Y) * QUADS_X;
++	    if ((q &lt; 0) || (q &gt; QUADS_TOTAL)) 
++	      {
++		tw_error(&quot;bad quadrant&quot;);
++	      }
++	    (*i)-&gt;qnext = quadrant[q];
++	    quadrant[q] = *i;
++	  }
++	else 
++	  (*i)-&gt;qnext = NULL;
++      }
++  }
+   
+   checksync();
+   {
+     _STACKTRACE(&quot;Physics::calculate() - item movement&quot;);
+     //move objects
+-    for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
++    for(std::set&lt;SpaceLocation*&gt;::iterator i=m_valid_item.begin();i!=m_valid_item.end();i++)
+       {
+ 	if ((*i)-&gt;exists()) 
+ 	  (*i)-&gt;pos = normalize((*i)-&gt;pos + (*i)-&gt;vel * frame_time, map_size);
+@@ -1291,7 +1334,7 @@
+   //call objects calculate functions
+   {
+     _STACKTRACE(&quot;Physics::calculate() - item calculation&quot;);
+-    for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
++    for(std::set&lt;SpaceLocation*&gt;::iterator i=m_valid_item.begin();i!=m_valid_item.end();i++)
+       {
+ 	if ((*i)-&gt;exists()) 
+ 	  (*i)-&gt;calculate();
+@@ -1299,36 +1342,6 @@
+       }
+   }
+   
+-  //prepare quadrants stuff
+-  {
+-    _STACKTRACE(&quot;Physics::calculate() - quadrants stuff&quot;)
+-      for(i = 0; i &lt; QUADS_TOTAL; i += 1) {
+-	quadrant[i] = NULL;
+-      }
+-    m_valid_item.clear();
+-    for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
+-      {
+-	if( (*i)-&gt;exists())
+-	  {
+-	    m_valid_item.insert(*i);
+-	  }
+-	if ((*i)-&gt;exists() &amp;&amp; (*i)-&gt;detectable()) 
+-	  {
+-	    Vector2 n = (*i)-&gt;normal_pos();
+-	    int q = iround_down(n.x * QUADI_X) + 
+-	      iround_down(n.y * QUADI_Y) * QUADS_X;
+-	    if ((q &lt; 0) || (q &gt; QUADS_TOTAL)) 
+-	      {
+-		tw_error(&quot;bad quadrant&quot;);
+-	      }
+-	    (*i)-&gt;qnext = quadrant[q];
+-	    quadrant[q] = *i;
+-	  }
+-	else 
+-	  (*i)-&gt;qnext = NULL;
+-      }
+-  }
+-  
+   checksync();
+   //check for collisions
+   {_STACKTRACE(&quot;Physics::calculate() - collisions&quot;)
+@@ -1348,7 +1361,7 @@
+   //remove objects that have been dead long enough
+   {
+     _STACKTRACE(&quot;Physics::calculate() - item destruction&quot;);
+-    item.remove_if(is_dead_object&lt;SpaceLocation*&gt;);
++    item[_name].remove_if(is_dead_object&lt;SpaceLocation*&gt;);
+   }
+   checksync();
+   
+@@ -1380,9 +1393,9 @@
+   ::render_time = this-&gt;game_time;
+ 
+   presence.sort(presence_cmp);
+-  item.sort(presence_cmp);
++  item[_name].sort(presence_cmp);
+ 
+-  std::copy(item.begin(),item.end(),std::back_inserter(animate_buffer));
++  std::copy(item[_name].begin(),item[_name].end(),std::back_inserter(animate_buffer));
+   animate_buffer2 = presence;
+   animate_buffer.merge(animate_buffer2,presence_cmp);
+ 
+@@ -1404,22 +1417,10 @@
+ {
+   PMASKDATA_FLOAT *tmp;
+   int l = 0;
+-  tmp = new PMASKDATA_FLOAT[item.size()];
++  tmp = new PMASKDATA_FLOAT[m_valid_item.size()];
+ 
+-  /*
+-  std::set&lt;SpaceLocation*&gt; tst;
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
++  for(std::set&lt;SpaceLocation*&gt;::iterator i=item_begin();i!=item_end();i++)
+     {
+-      tst.insert(*i);
+-    }
+-  if(tst.size()!=item.size())
+-    {
+-      tw_error(&quot;AAA&quot;);
+-    }
+-  */
+-  
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
+-    {
+       if ((*i) &amp;&amp; (*i)-&gt;exists() &amp;&amp; (*i)-&gt;isObject() &amp;&amp; (*i)-&gt;detectable() ) 
+ 	{
+ 	  SpaceObject *o = (SpaceObject *) (*i);
+@@ -1442,7 +1443,7 @@
+       col[i*2]-&gt;collide(col[i*2+1]);
+     }
+   Query q;
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
++  for(std::set&lt;SpaceLocation*&gt;::iterator i=item_begin();i!=item_end();i++)
+     {
+       if ((*i)-&gt;exists() &amp;&amp; (*i)-&gt;detectable() &amp;&amp; 
+ 	  ((*i)-&gt;collide_flag_sameship | 
+@@ -1482,7 +1483,7 @@
+   Uint32 g = 0;
+   return g;
+ 
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
++  for(std::set&lt;SpaceLocation*&gt;::iterator i=item_begin();i!=item_end();i++)
+     {
+       //if (!item[i]-&gt;detectable()) continue;
+       if (!((*i)-&gt;attributes &amp; ATTRIB_SYNCHED)) 
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/mframe.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -70,21 +70,27 @@
+ /// \brief melee universe
+ class Physics : public BaseClass 
+ {
++  std::map&lt; std::string, std::list&lt;SpaceLocation*&gt; &gt; item; ///&lt; all item in game (key - star system name, value item list)
++ protected:
+   std::set&lt;SpaceLocation*&gt; m_valid_item; ///&lt; contain the same information as item (exept that only exising items here)
+  public:
+-  
++
++  std::string _name;                    ///&lt; Every Game has name which can be used in MainGame to manipulate it
+   std::vector&lt;SpaceLocation*&gt; quadrant;
+   friend struct Query;
+-  
+-  std::list&lt;SpaceLocation*&gt; item;
++
++  std::set&lt;SpaceLocation*&gt;::iterator item_begin(){return m_valid_item.begin();};
++  std::set&lt;SpaceLocation*&gt;::iterator item_end(){return m_valid_item.end();};
++
+   std::list&lt;Presence*&gt; presence;
+   
+   bool in_itemP(SpaceLocation*l); ///&lt; space location can be found in game item
+ 
++  virtual void add_system(std::string name, int x, int y);
+   /// add space location to universe
+-  void add(SpaceLocation *p);
++  void add(SpaceLocation *p, const std::string&amp; system = &quot;&quot;);
+   /// add presence from universe
+-  void add(Presence *p);
++  void add(Presence *p, const std::string&amp; system = &quot;&quot;);
+   /// remove space location to universe
+   bool remove(SpaceLocation *o);
+   /// remove presence from universe
+@@ -103,9 +109,9 @@
+   unsigned int get_code(unsigned int ship, TeamCode team) ;
+   /// \brief causes team1 and team2 to be the same team (changes members of team2 to 
+   /// being members of team1 instead)
+-  virtual void merge_teams ( TeamCode team1, TeamCode team2) ; 
++  //virtual void merge_teams ( TeamCode team1, TeamCode team2) ; 
+   /// causes ship to join team.  if ship was already on an old team, ship betrays that team.  
+-  virtual void switch_team ( unsigned int ship,  TeamCode team ) ; 
++  //virtual void switch_team ( unsigned int ship,  TeamCode team ) ; 
+   
+   /// the total number of frames that have passed so far
+   int frame_number; 
+@@ -391,7 +397,7 @@
+   Vector2 target_pos;
+   double range_sqr;
+ 
+-  std::list&lt;SpaceLocation*&gt;::iterator m_cur_pos;
++  std::set&lt;SpaceLocation*&gt;::iterator m_cur_pos;
+   void next_quadrant ();
+  public:
+   union 
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/mgame.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -173,6 +173,7 @@
+ 
+ GameType *gametype (const char *name) 
+ {
++  STACKTRACE;
+   GameType ** g;
+   for (g = games; *g; g ++)
+     if (!strcmp((*g)-&gt;name, name))
+@@ -205,7 +206,8 @@
+ 	  return;
+ 	if (e-&gt;subtype == VideoEvent::REDRAW)
+ 	  this-&gt;redraw();
+-      } break;
++      } 
++      break;
+     case Event::TW_CONFIG: 
+       {
+ 	ConfigEvent *c = (ConfigEvent*)e;
+@@ -229,7 +231,7 @@
+ 	std::copy(presence.begin(),presence.end(),std::back_inserter(b_presence));
+ 	issue_event(b_presence, e);
+ 	std::list&lt;BaseClass*&gt; b_item;
+-	std::copy(item.begin(),item.end(),std::back_inserter(b_item));
++	std::copy(item_begin(),item_end(),std::back_inserter(b_item));
+ 	issue_event(b_item, e);
+       } break;
+     }
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/mgame.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -75,7 +75,6 @@
+ {
+  public:
+   GameType *type;
+-  std::string _name;                    ///&lt; Every Game has name which can be used in MainGame to manipulate it
+ 
+   MeleeData meleedata;
+   
+
+Modified: trunk/source/melee/mmain.cpp
+===================================================================
+--- trunk/source/melee/mmain.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/mmain.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -280,6 +280,16 @@
+ }
+ 
+ static int kill_all_delay_counter = 0;
++
++static void murder_location(SpaceLocation* o)
++{
++  if (!(o &amp;&amp; o-&gt;exists()))
++    return;
++  if (o-&gt;isPlanet() || o-&gt;isAsteroid())
++    return;
++  o-&gt;die();
++}
++
+ void NormalGame::calculate() {
+   STACKTRACE;
+   Game::calculate();
+@@ -298,22 +308,10 @@
+       if (key[KEY_LCONTROL] &amp;&amp; key[KEY_ALT] &amp;&amp; key[KEY_K])
+ 	{
+ 	  kill_all_delay_counter += 1000;	// 1 second delay
+-
+-			
+-	  for(std::list&lt;SpaceLocation*&gt;::iterator i=physics-&gt;item.begin();i!=physics-&gt;item.end();i++)
+-	    {
+-	      SpaceLocation *o;
+-	      o = *i;
+-	      if (!(o &amp;&amp; o-&gt;exists()))
+-		continue;
+-	      if (o-&gt;isPlanet() || o-&gt;isAsteroid())
+-		continue;
+-	      o-&gt;die();
+-	    }
++	  std::for_each(physics-&gt;item_begin(), physics-&gt;item_end(), murder_location);
+ 	}
+     }
+ 
+-
+   return;
+ }
+ 
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/mship.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -1019,13 +1019,38 @@
+   SpaceObject::chat_with_player();
+ }
+ 
++PhaserEffectAddShip::PhaserEffectAddShip(Ship* s)
++: 
++ship(s)
++{
++}
++
++void PhaserEffectAddShip::startEffect()
++{
++}
++
++void PhaserEffectAddShip::endEffect()
++{
++	if (ship) 
++	{
++		game-&gt;add(ship);
++		ship-&gt;materialize();
++		ship = NULL;
++     }
++}
++
++void PhaserEffectAddShip::calculate()
++{
++  if (ship &amp;&amp; !ship-&gt;exists())
++      ship = NULL;
++}
++
+ Phaser::Phaser(
+ 	       SpaceLocation *creator, Vector2 opos, Vector2 _rpos, 
+-	       Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-	       int onum_colors, int ofsize, int steps, int step_size) :
++	       SpaceSprite *sprite, int osprite_index, int *ocolors, 
++	       int onum_colors, int ofsize, int steps, int step_size, PhaserEffectPtr effect) :
+   SpaceObject(creator, opos, 0.0, sprite),
+   rel_pos(_rpos),
+-  ship(ship),
+   sprite_index(osprite_index),
+   colors(ocolors),
+   num_colors(onum_colors),
+@@ -1034,7 +1059,8 @@
+   frame_step(ofsize),
+   phaser_step_position(0),
+   phaser_steps(steps),
+-  phaser_step_size(step_size)
++  phaser_step_size(step_size),
++  phaser_effect(effect)
+ {
+   STACKTRACE;
+   layer = LAYER_HOTSPOTS;
+@@ -1051,6 +1077,9 @@
+ 
+   return;
+ }
++Phaser::~Phaser()
++{
++}
+ 
+ void Phaser::animate(Frame *space) {
+   STACKTRACE;
+@@ -1073,18 +1102,19 @@
+   }
+ 
+   if (phaser_step_position &lt; phaser_step_size) {
+-    if (ship &amp;&amp; !ship-&gt;exists())
+-      ship = NULL;
++    if(phaser_effect)
++      phaser_effect-&gt;calculate();
++
+     phaser_step_position += frame_time;
+     if (phaser_step_position &gt;= phaser_step_size) {
+       if (phaser_steps &gt; 1) {
+ 	Vector2 d = rel_pos / phaser_steps;
+-	game-&gt;add(new Phaser(this, pos + d, rel_pos-d, ship, sprite, sprite_index, colors, num_colors, frame_size, phaser_steps-1, phaser_step_size));
++	game-&gt;add(new Phaser(this, pos + d, rel_pos-d, sprite, sprite_index, colors, num_colors, frame_size, phaser_steps-1, phaser_step_size, phaser_effect));
+       }
+-      else if (ship) {
+-	game-&gt;add(ship);
+-	ship-&gt;materialize();
+-	ship = NULL;
++      else if (phaser_effect) 
++	  {
++		  phaser_effect-&gt;endEffect();
++		  phaser_effect.reset();
+       }
+     }
+   }
+@@ -1096,7 +1126,7 @@
+   return new Phaser(this,
+ 		    pos - unit_vector(angle ) * PHASE_MAX * size.x,
+ 		    unit_vector(angle ) * PHASE_MAX * size.x,
+-		    this, sprite, sprite_index, hot_color, HOT_COLORS,
+-		    PHASE_DELAY, PHASE_MAX, PHASE_DELAY
++		    sprite, sprite_index, hot_color, HOT_COLORS,
++		    PHASE_DELAY, PHASE_MAX, PHASE_DELAY, PhaserEffectPtr(new PhaserEffectAddShip(this))
+ 		    );
+ }
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/melee/mship.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -41,6 +41,38 @@
+   };
+ };
+ 
++
++class PhaserEffect
++{
++public:
++   /**
++   * This method is called at the beginning of the effect.  
++   *
++   * Subclasses should override this method to customize behaviour; 
++   *
++   */ 
++  virtual void startEffect() = 0;
++  
++  /**
++   * This method is called at the end of the effect.  
++   */ 
++  virtual void endEffect() = 0;
++
++  virtual void calculate(){};
++};
++typedef boost::shared_ptr&lt;PhaserEffect&gt; PhaserEffectPtr;
++
++class PhaserEffectAddShip : public PhaserEffect
++{
++	Ship* ship;
++public:
++	PhaserEffectAddShip(Ship* s);
++
++  virtual void startEffect();
++  virtual void endEffect();
++  virtual void calculate();
++};
++
+ /**
+  * This creates a warp-in animated effect that lasts a few milliseconds; after
+  * which, the ship is considered in play.
+@@ -52,7 +84,6 @@
+ {
+  protected:
+   Vector2 rel_pos;
+-  Ship *ship;
+   int sprite_index;
+   int *colors;
+   int num_colors;
+@@ -62,7 +93,8 @@
+   int phaser_step_position;
+   int phaser_steps;
+   int phaser_step_size;
+-  
++  PhaserEffectPtr phaser_effect;
++
+  public:
+ 	/**
+ 	 * Spawns a ship with a warp-in effect.  At the end of the effect, the ship is
+@@ -74,7 +106,6 @@
+ 	 * @param creator 
+ 	 * @param opos 
+ 	 * @param _rpos 
+-	 * @param ship 
+ 	 * @param sprite 
+ 	 * @param osprite_index 
+ 	 * @param ocolors 
+@@ -82,10 +113,12 @@
+ 	 * @param ofsize 
+ 	 * @param steps 
+ 	 * @param step_size 
++	 * @param effect 
+ 	 */
+   Phaser::Phaser(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
+-		 Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-		 int onum_colors, int ofsize, int steps, int step_time) ;
++		 SpaceSprite *sprite, int osprite_index, int *ocolors, 
++		 int onum_colors, int ofsize, int steps, int step_time, PhaserEffectPtr effect) ;
++  virtual ~Phaser();
+   
+   /**
+    * Draws the warp-in effect
+
+
+Property changes on: trunk/source/other
+___________________________________________________________________
+Name: svn:ignore
+   + *.cache
+
+
+Modified: trunk/source/other/gobwarpouttrail.cpp
+===================================================================
+--- trunk/source/other/gobwarpouttrail.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/gobwarpouttrail.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -1,83 +1,82 @@
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#include &quot;melee/mship.h&quot; // for Ship class
+-#include &quot;melee/WarpOutTrail.h&quot;
+-#include &quot;gobwarpouttrail.h&quot;
+-#include &quot;games/ggob.h&quot;
+-
+-#include &lt;string&gt;
+-
+-GobWarpEffect::GobWarpEffect(const std::string &amp; targetSystem, GobGame * gobGame) :
+-  targetSystem(targetSystem),
+-  gobGame(gobGame)
+-{
+-  STACKTRACE;
+-}
+-
+-void GobWarpEffect::startEffect() {
+-  STACKTRACE;
+-  //yB! should uncomment this when we know there is only one call to this per
+-  //instance of GobWarpEffect.  Currently, this keeps getting called
+-  //gobGame-&gt;item.remove(gobGame-&gt;gobplayer.ship);
+-  printf(&quot;GobWarpEffect::startEffect()\n&quot;);
+-}
+-  
+-void GobWarpEffect::endEffect() {
+-  STACKTRACE;
+-  gobGame-&gt;switch_system(targetSystem);
+-  printf(&quot;GobWarpEffect::endEffect()\n&quot;);
+-}
+-
+-
+-GobWarpOutTrail::GobWarpOutTrail(
+-         const std::string &amp; targetSystem,
+-         GobGame * gobGame,
+-         SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
+-         Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-         int onum_colors, int ofsize, int steps, int step_time) :
+-     WarpOutTrail(creator, pos, rel_pos, 
+-     ship, sprite, osprite_index, ocolors, 
+-     onum_colors, ofsize, steps, step_time, new GobWarpEffect(targetSystem, gobGame))
+-{
+-  STACKTRACE;
+-}
+-
+-GobWarpOutTrail * GobWarpOutTrail::getGobWarpOutTrail(Ship * ship, 
+-    const std::string &amp; targetSystem,
+-    GobGame * gobGame)
+-{
+-  STACKTRACE;
+-  if (!ship) {
+-    tw_error(&quot;In getGobWarpOutTrail(), parameter ship was null&quot;);
+-    return NULL;
+-  }
+-  return new GobWarpOutTrail(
+-            targetSystem,
+-            gobGame, 
+-            ship,
+-            ship-&gt;pos + unit_vector(ship-&gt;get_angle()) * 0 * ship-&gt;get_size().x,
+-            unit_vector(ship-&gt;get_angle()) * PHASE_MAX * ship-&gt;get_size().x,
+-            ship, 
+-            ship-&gt;get_sprite(), 
+-            ship-&gt;get_sprite_index(), 
+-            inverse_hot_color, 
+-            INVERSE_HOT_COLORS,
+-            PHASE_DELAY, 
+-            PHASE_MAX, 
+-            PHASE_DELAY
+-            );
+-}
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#include &quot;melee/mship.h&quot; // for Ship class
++#include &quot;melee/WarpOutTrail.h&quot;
++#include &quot;gobwarpouttrail.h&quot;
++#include &quot;games/ggob.h&quot;
++
++#include &lt;string&gt;
++
++GobWarpEffect::GobWarpEffect(const std::string &amp; targetSystem, GobGame * gobGame) :
++  targetSystem(targetSystem),
++  gobGame(gobGame)
++{
++  STACKTRACE;
++}
++
++void GobWarpEffect::startEffect() {
++  STACKTRACE;
++  //yB! should uncomment this when we know there is only one call to this per
++  //instance of GobWarpEffect.  Currently, this keeps getting called
++  //gobGame-&gt;item.remove(gobGame-&gt;gobplayer.ship);
++  printf(&quot;GobWarpEffect::startEffect()\n&quot;);
++}
++  
++void GobWarpEffect::endEffect() {
++  STACKTRACE;
++  gobGame-&gt;switch_system(targetSystem);
++  printf(&quot;GobWarpEffect::endEffect()\n&quot;);
++}
++
++
++GobWarpOutTrail::GobWarpOutTrail(
++         const std::string &amp; targetSystem,
++         GobGame * gobGame,
++         SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
++         SpaceSprite *sprite, int osprite_index, int *ocolors, 
++         int onum_colors, int ofsize, int steps, int step_time) :
++     Phaser(creator, pos, rel_pos, 
++	    sprite, osprite_index, ocolors, 
++	    onum_colors, ofsize, steps, step_time, PhaserEffectPtr(new GobWarpEffect(targetSystem, gobGame)))
++{
++  STACKTRACE;
++}
++
++GobWarpOutTrail * GobWarpOutTrail::getGobWarpOutTrail(Ship * ship, 
++    const std::string &amp; targetSystem,
++    GobGame * gobGame)
++{
++  STACKTRACE;
++  if (!ship) {
++    tw_error(&quot;In getGobWarpOutTrail(), parameter ship was null&quot;);
++    return NULL;
++  }
++  return new GobWarpOutTrail(
++            targetSystem,
++            gobGame, 
++	    ship,
++            ship-&gt;pos + unit_vector(ship-&gt;get_angle()) * 0 * ship-&gt;get_size().x,
++            unit_vector(ship-&gt;get_angle()) * PHASE_MAX * ship-&gt;get_size().x, 
++            ship-&gt;get_sprite(), 
++            ship-&gt;get_sprite_index(), 
++            inverse_hot_color, 
++            INVERSE_HOT_COLORS,
++            PHASE_DELAY, 
++            PHASE_MAX, 
++            PHASE_DELAY
++            );
++}
+
+Modified: trunk/source/other/gobwarpouttrail.h
+===================================================================
+--- trunk/source/other/gobwarpouttrail.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/gobwarpouttrail.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -1,100 +1,99 @@
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#ifndef GobWarpOutTrail_Header
+-#define GobWarpOutTrail_Header
+-
+-#include &quot;melee/mship.h&quot; //for Ship class
+-#include &quot;melee/WarpOutTrail.h&quot;
+-#include &quot;games/ggob.h&quot;
+-
+-#include &lt;string&gt;
+-
+-/**
+- * 
+- */
+-class GobWarpEffect : public WarpEffect {
+-protected:
+-  std::string targetSystem;
+-  GobGame * gobGame;
+-  
+-public:
+-  GobWarpEffect(const std::string &amp; targetSystem, GobGame * gobGame);
+-
+-  /**
+-   * Removes the ship from play.
+-   */
+-  virtual void startEffect();
+-  
+-  /**
+-   * Moves the ship to the star system specified in the constructor.
+-   */ 
+-  virtual void endEffect();
+-
+-};
+-
+-/**
+- * Used when the player warps out of one system and into another.
+- */  
+-class GobWarpOutTrail : public WarpOutTrail {
+-
+-protected:
+-
+-  /**
+-   * Creates a warp out trail.  At the begining of this effect, the ship is
+-   * removed from its current star system.  At the end of this effect, the ship
+-   * is placed in the target star system.
+-   * 
+-   * @param targetSystem the name of the star system to warp to
+-   * @param the instance of GobGame
+-   * @param creator
+-   * @param pos
+-   * @param rel_pos
+-   * @param ship
+-   * @param sprite
+-   * @param osprite_index
+-   * @param ocolors
+-   * @param onum_colors
+-   * @param ofsize
+-   * @param steps
+-   * @param step_time
+-   * 
+-   * @see WarpOutTrail::WarpOutTrail()
+-   */ 
+-  GobWarpOutTrail(const std::string &amp; targetSystem,
+-		  GobGame * gobGame,
+-		  SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
+-		  Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-		  int onum_colors, int ofsize, int steps, int step_time);
+-
+-public:
+-
+-  /**
+-   * Constructs a trail such that the player will end up at the specified 
+-   * system at the end of the effect.
+-   * 
+-   * @param the ship to move to the star system
+-   * @param system the name of the star system the player wishes to travel to.
+-   * @param the instance of GobGame
+-   */ 
+-  static GobWarpOutTrail * GobWarpOutTrail::getGobWarpOutTrail(Ship * ship, 
+-	const std::string &amp; targetSystem,
+-	GobGame * gobGame);
+-
+-};
+-
+-
+-#endif
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef GobWarpOutTrail_Header
++#define GobWarpOutTrail_Header
++
++#include &quot;melee/mship.h&quot; //for Ship class
++#include &quot;melee/WarpOutTrail.h&quot;
++#include &quot;games/ggob.h&quot;
++
++#include &lt;string&gt;
++
++/**
++ * 
++ */
++class GobWarpEffect : public PhaserEffect {
++protected:
++  std::string targetSystem;
++  GobGame * gobGame;
++  
++public:
++  GobWarpEffect(const std::string &amp; targetSystem, GobGame * gobGame);
++  virtual ~GobWarpEffect(){}
++  /**
++   * Removes the ship from play.
++   */
++  virtual void startEffect();
++  
++  /**
++   * Moves the ship to the star system specified in the constructor.
++   */ 
++  virtual void endEffect();
++};
++
++/**
++ * Used when the player warps out of one system and into another.
++ */  
++class GobWarpOutTrail : public Phaser {
++
++protected:
++
++  /**
++   * Creates a warp out trail.  At the begining of this effect, the ship is
++   * removed from its current star system.  At the end of this effect, the ship
++   * is placed in the target star system.
++   * 
++   * @param targetSystem the name of the star system to warp to
++   * @param the instance of GobGame
++   * @param creator
++   * @param pos
++   * @param rel_pos
++   * @param ship
++   * @param sprite
++   * @param osprite_index
++   * @param ocolors
++   * @param onum_colors
++   * @param ofsize
++   * @param steps
++   * @param step_time
++   * 
++   * @see WarpOutTrail::WarpOutTrail()
++   */ 
++  GobWarpOutTrail(const std::string &amp; targetSystem,
++		  GobGame * gobGame,
++		  SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
++		  SpaceSprite *sprite, int osprite_index, int *ocolors, 
++		  int onum_colors, int ofsize, int steps, int step_time);
++
++public:
++
++  /**
++   * Constructs a trail such that the player will end up at the specified 
++   * system at the end of the effect.
++   * 
++   * @param the ship to move to the star system
++   * @param system the name of the star system the player wishes to travel to.
++   * @param the instance of GobGame
++   */ 
++  static GobWarpOutTrail * GobWarpOutTrail::getGobWarpOutTrail(Ship * ship, 
++	const std::string &amp; targetSystem,
++	GobGame * gobGame);
++
++};
++
++
++#endif
+
+Modified: trunk/source/other/gup.cpp
+===================================================================
+--- trunk/source/other/gup.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/gup.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -38,7 +38,7 @@
+ 	return;
+ 	}
+ 
+-#define UPGRADE(a) virtual Upgrade *duplicate() {return new a();}
++#define UPGRADE(a) public: virtual Upgrade *duplicate() {return new a();}virtual ~a(){};
+ class UpCrewpod : public Upgrade {
+ 	UPGRADE(UpCrewpod)
+ 	bool update(Ship *ship, GobStation *station, GobPlayer *gs) {
+@@ -479,16 +479,22 @@
+     buckazoids = 5;
+     return true;
+   }
++  struct Execute
++  {
++    std::list&lt;Presence*&gt;&amp; locater;
++    Execute(std::list&lt;Presence*&gt;&amp; l):locater(l){};
++    void operator()(SpaceLocation* l)
++    {
++      if((l)-&gt;isPlanet()&amp;&amp;(l)-&gt;exists())
++	{
++	  locater.push_back(new WedgeIndicator ( (l), 80, 2 ));
++	  gobgame-&gt;add( locater.back() );
++	}
++    }
++  };
+   void execute(Ship *ship, GobStation *station, GobPlayer *gs) 
+   {
+-    for(std::list&lt;SpaceLocation*&gt;::iterator i = gobgame-&gt;item.begin();i!=gobgame-&gt;item.end();i++)
+-      {
+-	if((*i)-&gt;isPlanet()&amp;&amp;(*i)-&gt;exists())
+-	  {
+-	    locater.push_back(new WedgeIndicator ( (*i), 80, 2 ));
+-	    gobgame-&gt;add( locater.back() );
+-	  }
+-      }
++    std::for_each(gobgame-&gt;item_begin(), gobgame-&gt;item_end(), Execute(locater));
+   }
+   void clear(Ship *oship, Ship *nship, GobPlayer *gs) 
+   {
+
+Modified: trunk/source/other/nullphas.cpp
+===================================================================
+--- trunk/source/other/nullphas.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/nullphas.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -21,14 +21,14 @@
+ 
+ NullPhaser::NullPhaser( Ship* oship ):
+   Phaser( oship, oship-&gt;normal_pos() - unit_vector( oship-&gt;get_angle()) * PHASE_MAX *
+-  oship-&gt;size, unit_vector( oship-&gt;get_angle()) * PHASE_MAX * oship-&gt;size,
+-  oship, oship-&gt;get_sprite(), oship-&gt;get_sprite_index(), hot_color, HOT_COLORS,
+-  PHASE_DELAY, PHASE_MAX, PHASE_DELAY ){
++  oship-&gt;size, unit_vector( oship-&gt;get_angle()) * PHASE_MAX * oship-&gt;size, oship-&gt;get_sprite(), oship-&gt;get_sprite_index(), hot_color, HOT_COLORS,
++  PHASE_DELAY, PHASE_MAX, PHASE_DELAY, PhaserEffectPtr() ),ship(oship){
+   STACKTRACE;
+ }
+ 
+ void NullPhaser::animate( Frame* space ){
+-  STACKTRACE;}
++  STACKTRACE;
++}
+ void NullPhaser::calculate(){
+   STACKTRACE;
+ 
+
+Modified: trunk/source/other/nullphas.h
+===================================================================
+--- trunk/source/other/nullphas.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/nullphas.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -25,6 +25,7 @@
+  */
+ class NullPhaser : public Phaser {
+ 
++  Ship* ship;
+   public:
+   /**
+    * @param oship the ship to spawn in
+
+Modified: trunk/source/other/radar.cpp
+===================================================================
+--- trunk/source/other/radar.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/radar.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -64,13 +64,6 @@
+ 	set_depth(DEPTH_STARS + 0.1);
+ }
+ 
+-double ZRadar::shiftscale(double r_center, double v_center, double scale, double n)
+-{
+-  STACKTRACE;
+-	//Used to scale game coordinates onto RADAR screen coordinates
+-	return(((n - r_center)*scale)+v_center);
+-}
+-
+ void ZRadar::animate(Frame *space)
+ {
+   STACKTRACE;
+@@ -97,22 +90,41 @@
+ 	blit(Painted,space-&gt;surface,0,0,0,0,Blank-&gt;w,Blank-&gt;h);
+ }
+ 
++struct ZRadar::PaintOneLocation
++{
++  BITMAP *Slate;
++  Vector2 T;
++  double size;
++
++  PaintOneLocation(BITMAP *oSlate, Vector2 oT, double osize):
++    Slate(oSlate), T(oT), size(osize)
++  {
++  }
++  /// Used to scale game coordinates onto RADAR screen coordinates
++  double shiftscale(double r_center, double v_center, double scale, double n)
++  {
++    STACKTRACE;
++    return(((n - r_center)*scale)+v_center);
++  }
++
++  void operator()(SpaceLocation* o)
++  {
++    int xpos=0,ypos=0;
++      
++    double Scale = Slate-&gt;w/(2.*size);
++      
++    xpos=(int)shiftscale(T.x,Slate-&gt;w/2,Scale,o-&gt;pos.x);
++    ypos=(int)shiftscale(T.y,Slate-&gt;w/2,Scale,o-&gt;pos.y);
++    
++    if(o-&gt;isShip())			circle(Slate,xpos,ypos,2,makecol(255,0,0));
++    else if(o-&gt;isAsteroid())	circlefill(Slate,xpos,ypos,1,makecol(174,131,66));
++    else if(o-&gt;isPlanet())		circlefill(Slate,xpos,ypos,4,makecol(200,200,200));
++  }
++};
++
+ //The default RADAR.  Shows ships, planets, and asteroids.
+ void ZRadar::Paint(BITMAP *Slate, Vector2 T)
+ {
+   STACKTRACE;
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i=physics-&gt;item.begin();i!=physics-&gt;item.end();i++) 
+-    {
+-      int xpos=0,ypos=0;
+-      
+-      SpaceLocation *o=*i;
+-      double Scale = Slate-&gt;w/(2.*size);
+-      
+-      xpos=(int)shiftscale(T.x,Slate-&gt;w/2,Scale,o-&gt;pos.x);
+-      ypos=(int)shiftscale(T.y,Slate-&gt;w/2,Scale,o-&gt;pos.y);
+-      
+-      if(o-&gt;isShip())			circle(Slate,xpos,ypos,2,makecol(255,0,0));
+-      else if(o-&gt;isAsteroid())	circlefill(Slate,xpos,ypos,1,makecol(174,131,66));
+-      else if(o-&gt;isPlanet())		circlefill(Slate,xpos,ypos,4,makecol(200,200,200));
+-    }
++  std::for_each(physics-&gt;item_begin(), physics-&gt;item_end(), PaintOneLocation(Slate,T,size));
+ }
+
+Modified: trunk/source/other/radar.h
+===================================================================
+--- trunk/source/other/radar.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/radar.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -34,6 +34,7 @@
+ 
+ class ZRadar : public Presence
+ {
++  struct PaintOneLocation;
+ public:
+ 	BITMAP *Blank, *Painted;
+ 	Presence *t;
+@@ -45,8 +46,6 @@
+ 	//ALL the code for painting on the radar screen is in here.
+ 	virtual void Paint(BITMAP *slate, Vector2 T);
+ 
+-	double shiftscale(double r_center, double v_center, double scale, double n);
+-
+ 	void setTarget(SpaceLocation *target);
+ 	void setSize(double Size);
+ 	void toggleActive();
+
+Modified: trunk/source/other/starmap.cpp
+===================================================================
+--- trunk/source/other/starmap.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/starmap.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -24,7 +24,7 @@
+ 
+ #include &lt;sstream&gt;
+ 
+-std::list&lt;Presence*&gt; StarSystem::m_presenceNewStarBegin;
++//std::list&lt;Presence*&gt; StarSystem::m_presenceNewStarBegin;
+ 
+ StarSystem::StarSystem(const std::string&amp; name, Vector2 pos)
+   :
+@@ -32,7 +32,7 @@
+   _name(name)
+ {
+   STACKTRACE;
+-  _presence = m_presenceNewStarBegin;
++  //_presence = m_presenceNewStarBegin;
+ }
+ 
+ StarSystem::~StarSystem()
+@@ -40,23 +40,11 @@
+   STACKTRACE;
+ }
+ 
+-void StarSystem::add(SpaceLocation* l)
+-{
+-  STACKTRACE;
+-  _item.remove(l);
+-  _item.push_back(l);
+-}
+-
+ std::string StarSystem::getName() const
+ {
+   STACKTRACE;
+   return _name;
+ }
+-std::list&lt;SpaceLocation*&gt; StarSystem::getItem() const
+-{
+-  STACKTRACE;
+-  return _item;
+-}
+ 
+ Vector2 StarSystem::pos()
+ {
+
+Modified: trunk/source/other/starmap.h
+===================================================================
+--- trunk/source/other/starmap.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/starmap.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -34,18 +34,10 @@
+   std::string _name;
+  public:
+   
+-  static std::list&lt;Presence*&gt; m_presenceNewStarBegin;
+-  
+   StarSystem(const std::string&amp; name, Vector2 pos);
+   virtual ~StarSystem();
+-
+-  /// SpaceObjects in system
+-  std::list&lt;SpaceLocation*&gt; _item;
+-  std::list&lt;Presence*&gt; _presence;
+   
+-  virtual void add(SpaceLocation* l);
+   std::string getName() const;
+-  std::list&lt;SpaceLocation*&gt; getItem() const;
+   Vector2 pos();
+ };
+ 
+
+Modified: trunk/source/other/vbodies.cpp
+===================================================================
+--- trunk/source/other/vbodies.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/vbodies.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -739,21 +739,31 @@
+   videosystem-&gt;update_colors();
+ }
+ 
+-void VNebula::calculate(void) {
+-  STACKTRACE;
+-  Presence::calculate();
+-  
+-  for(std::list&lt;SpaceLocation*&gt;::iterator i=game-&gt;item.begin();i!=game-&gt;item.end();i++)
+-    {
+-      if ((*i)-&gt;exists() &amp;&amp; !(*i)-&gt;isPlanet()) {
+-	(*i)-&gt;vel *= 1 - this-&gt;friction * game-&gt;frame_time;
+-	if ((*i)-&gt;isShot()) {
+-	  Shot *s = (Shot*)(*i);
++struct VNebula::CalculateVNebula
++{
++  double friction;
++  CalculateVNebula(double ofriction)
++    :
++    friction(ofriction)
++  {
++  }
++  void operator()(SpaceLocation* l)
++  {
++    if ((l)-&gt;exists() &amp;&amp; !(l)-&gt;isPlanet()) {
++	(l)-&gt;vel *= 1 - this-&gt;friction * game-&gt;frame_time;
++	if ((l)-&gt;isShot()) {
++	  Shot *s = (Shot*)(l);
+ 	  s-&gt;v *= 1 - this-&gt;friction * game-&gt;frame_time;
+ 	  s-&gt;range = s-&gt;d + (s-&gt;range - s-&gt;d) * (1 - this-&gt;friction * game-&gt;frame_time);
+ 	}
+       }
+-    }
++  }
++};
++
++void VNebula::calculate(void) {
++  STACKTRACE;
++  Presence::calculate();  
++  std::for_each(game-&gt;item_begin(), game-&gt;item_end(), CalculateVNebula(this-&gt;friction));
+ }
+ 
+ VNebula::~VNebula() {
+
+Modified: trunk/source/other/vbodies.h
+===================================================================
+--- trunk/source/other/vbodies.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/other/vbodies.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -201,6 +201,7 @@
+ 
+ class VNebula : public Presence {
+ private:
++  struct CalculateVNebula;
+ public:
+   double friction;
+   int ionStorms;
+
+
+Property changes on: trunk/source/python
+___________________________________________________________________
+Name: svn:ignore
+   + *.cache
+
+
+
+Property changes on: trunk/source/sc1ships
+___________________________________________________________________
+Name: svn:ignore
+   + *.cache
+
+
+Modified: trunk/source/sc1ships/shpvuxin.cpp
+===================================================================
+--- trunk/source/sc1ships/shpvuxin.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/sc1ships/shpvuxin.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -208,7 +208,7 @@
+ public:
+ 	VuxPhaser(Vector2 opos, Vector2 n, VuxIntruder *ship, 
+ 			SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-			int onum_colors, int ofsize, int steps, int step_time) ;
++			int onum_colors, int ofsize, int steps, int step_time, PhaserEffectPtr effect) ;
+ 
+ 	VuxIntruder *vuxship;
+ 
+@@ -219,9 +219,9 @@
+ 
+ VuxPhaser::VuxPhaser(Vector2 opos, Vector2 _n, VuxIntruder *ship, 
+ 							 SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-							 int onum_colors, int ofsize, int steps, int step_size)
++							 int onum_colors, int ofsize, int steps, int step_size,PhaserEffectPtr effect)
+ :
+-Phaser(ship, opos, _n, ship, sprite, osprite_index, ocolors, onum_colors, ofsize, steps, step_size)
++Phaser(ship, opos, _n, sprite, osprite_index, ocolors, onum_colors, ofsize, steps, step_size, effect)
+ {
+   STACKTRACE;
+ 	vuxship = ship;
+@@ -245,7 +245,7 @@
+ 			pos - unit_vector(angle) * PHASE_MAX * size.x,
+ 			unit_vector(angle) * PHASE_MAX * size.x,
+ 			this, sprite, sprite_index, hot_color, HOT_COLORS,
+-			PHASE_DELAY, PHASE_MAX, PHASE_DELAY);
++			PHASE_DELAY, PHASE_MAX, PHASE_DELAY, PhaserEffectPtr(new PhaserEffectAddShip(this)));
+ 	}
+ 
+ 
+
+
+Property changes on: trunk/source/sc2ships
+___________________________________________________________________
+Name: svn:ignore
+   + *.cache
+
+
+Modified: trunk/source/sc2ships/shppkufu.cpp
+===================================================================
+--- trunk/source/sc2ships/shppkufu.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/sc2ships/shppkufu.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -78,18 +78,18 @@
+   add(new Phaser (this, 
+ 		  pos - PHASE_MAX * product(unit_vector(angle+0), get_size()),
+ 		  PHASE_MAX * product(unit_vector(angle+0), get_size()),
+-		  this, sprite, sprite_index, hot_color, HOT_COLORS, 
+-		  PHASE_DELAY, PHASE_MAX, PHASE_DELAY) );
++		  sprite, sprite_index, hot_color, HOT_COLORS, 
++		  PHASE_DELAY, PHASE_MAX, PHASE_DELAY, PhaserEffectPtr(new PhaserEffectAddShip(this)) ));
+   add(new Phaser (this, 
+ 		  pos - PHASE_MAX * product(unit_vector(angle+PI/2), get_size()),
+ 		  PHASE_MAX * product(unit_vector(angle+PI/2), get_size()),
+-		  NULL, sprite, (sprite_index+0)&amp;63, hot_color, HOT_COLORS, 
+-		  PHASE_DELAY, PHASE_MAX, PHASE_DELAY) );
++		  sprite, (sprite_index+0)&amp;63, hot_color, HOT_COLORS, 
++		  PHASE_DELAY, PHASE_MAX, PHASE_DELAY,PhaserEffectPtr(new PhaserEffectAddShip(NULL))) );
+   add(new Phaser (this, 
+ 		  pos - PHASE_MAX * product(unit_vector(angle-PI/2), get_size()),
+ 		  PHASE_MAX * product(unit_vector(angle-PI/2), get_size()),
+-		  NULL, sprite, (sprite_index-0)&amp;63, hot_color, HOT_COLORS, 
+-		  PHASE_DELAY, PHASE_MAX, PHASE_DELAY) );
++		  sprite, (sprite_index-0)&amp;63, hot_color, HOT_COLORS, 
++		  PHASE_DELAY, PHASE_MAX, PHASE_DELAY,PhaserEffectPtr(new PhaserEffectAddShip(NULL))) );
+ 
+ 	// copied from katpoly code
+ 	Ship *s;
+
+Modified: trunk/source/ships/shprogsq.cpp
+===================================================================
+--- trunk/source/ships/shprogsq.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/ships/shprogsq.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -633,10 +633,10 @@
+ 
+ 	if ( mother-&gt;thrust )
+ 	{
+-		thrust = TRUE;
++		thrust = true;
+ 	}
+ 	Ship::calculate_hotspots();
+-	thrust = FALSE;
++	thrust = false;
+ 
+ }
+ 
+
+Modified: trunk/source/ships/shpsamat.cpp
+===================================================================
+--- trunk/source/ships/shpsamat.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/ships/shpsamat.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -482,7 +482,7 @@
+ 
+   SaMatraPhaser(Vector2 opos, Vector2 n, SaMatra *ship, 
+ 		SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-		int onum_colors, int ofsize, int steps, int step_time) ;
++		int onum_colors, int ofsize, int steps, int step_time, PhaserEffectPtr effect) ;
+ 
+   virtual void calculate();
+ };
+@@ -493,10 +493,10 @@
+ 
+ SaMatraPhaser::SaMatraPhaser(Vector2 opos, Vector2 _n, SaMatra *ship, 
+ 			     SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-			     int onum_colors, int ofsize, int steps, int step_size)
++			     int onum_colors, int ofsize, int steps, int step_size, PhaserEffectPtr effect)
+   :
+-  Phaser(ship, opos, _n, ship, sprite, osprite_index, ocolors, onum_colors, ofsize, 
+-	 steps, step_size)
++  Phaser(ship, opos, _n, sprite, osprite_index, ocolors, onum_colors, ofsize, 
++	 steps, step_size, effect)
+ {
+   STACKTRACE;
+ 
+@@ -535,7 +535,7 @@
+ 			   pos - unit_vector(angle) * PHASE_MAX * size.x,
+ 			   unit_vector(angle) * PHASE_MAX * size.x,
+ 			   this, sprite, sprite_index, hot_color, HOT_COLORS,
+-			   PHASE_DELAY, PHASE_MAX, PHASE_DELAY);
++			   PHASE_DELAY, PHASE_MAX, PHASE_DELAY, PhaserEffectPtr(new PhaserEffectAddShip(this)));
+ }
+ 
+ 
+
+Modified: trunk/source/tml/eventmanager.cpp
+===================================================================
+--- trunk/source/tml/eventmanager.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/tml/eventmanager.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -30,7 +30,7 @@
+ 
+ #include &quot;python/python_class.h&quot;
+ //////////////////////////////////////////////////////////////////
+-std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; EventManager::g_events;
++std::list&lt;TGameEventPtr &gt; EventManager::g_events;
+ std::set&lt;SpaceLocation*&gt; EventManager::m_allSpaceLocations;
+ 
+ //////////////////////////////////////////////////////////////////
+@@ -67,7 +67,7 @@
+ 
+ struct find_event_by_id : public std::binary_function&lt; boost::shared_ptr&lt;TGameEvent&gt;, int, bool&gt;
+ {
+-  bool operator() (boost::shared_ptr&lt;TGameEvent&gt; e, int id) const
++  bool operator() ( TGameEventPtr e, int id) const
+   {
+     if(e-&gt;exists() &amp;&amp; e-&gt;getID()==id)
+       {
+
+Modified: trunk/source/tml/eventmanager.h
+===================================================================
+--- trunk/source/tml/eventmanager.h	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/tml/eventmanager.h	2005-10-16 22:10:02 UTC (rev 198)
+@@ -24,7 +24,11 @@
+ #include &lt;set&gt;
+ 
+ class SpaceLocation;
++typedef boost::shared_ptr&lt;SpaceLocation&gt; SpaceLocationPtr;
++
+ class TGameEvent;
++typedef boost::shared_ptr&lt;TGameEvent&gt; TGameEventPtr;
++
+ /// event API for python
+ class EventManager
+ {
+@@ -126,7 +130,7 @@
+   template &lt;class T&gt;
+   static int distanceXThen(double obj1, double obj2, double dist, const std::string&amp; script);
+ 
+-  static std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; g_events;
++  static std::list&lt;TGameEventPtr &gt; g_events;
+   static std::set&lt;SpaceLocation*&gt; m_allSpaceLocations;
+   /// Should be called every frame for calculating events
+   static void calculate();
+@@ -139,11 +143,11 @@
+ namespace twl
+ {
+ 
+-  typedef std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; EventList;
++  typedef std::list&lt; TGameEventPtr &gt; EventList;
+ 
+   struct isexists : public std::unary_function&lt; boost::shared_ptr&lt;TGameEvent&gt;, bool&gt;
+   {
+-    bool operator() (boost::shared_ptr&lt;TGameEvent&gt; e) const;
++    bool operator() (TGameEventPtr e) const;
+   };
+ 
+ /// Check if event with type type present
+
+Modified: trunk/source/tml/gameaction.cpp
+===================================================================
+--- trunk/source/tml/gameaction.cpp	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/source/tml/gameaction.cpp	2005-10-16 22:10:02 UTC (rev 198)
+@@ -301,7 +301,7 @@
+ 	SpaceLocation* l  =  twl::get_location((int)id);
+ 	if(l &amp;&amp; l-&gt;exists())
+ 	{
+-		return l-&gt;normal_pos().x;
++		return (int)l-&gt;normal_pos().x;
+ 	}
+ 	return -1;
+ }
+@@ -312,7 +312,7 @@
+ 	SpaceLocation* l  =  twl::get_location((int)id);
+ 	if(l &amp;&amp; l-&gt;exists())
+ 	{
+-		return l-&gt;normal_pos().y;
++		return (int)l-&gt;normal_pos().y;
+ 	}
+ 	return -1;
+ }
+
+Modified: trunk/web/downloads.php
+===================================================================
+--- trunk/web/downloads.php	2005-10-14 03:48:23 UTC (rev 197)
++++ trunk/web/downloads.php	2005-10-16 22:10:02 UTC (rev 198)
+@@ -8,21 +8,21 @@
+ To successfully compile the sources and play the game on Linux/Unix you first need 
+ &lt;a href=&quot;<A HREF="http://www.allegro.cc/files/index.html">http://www.allegro.cc/files/index.html</A>&quot;&gt;Allegro&lt;/a&gt;, SDL 1.2.5 (or newer),
+ SDL_mixer with ogg support installed. See makefile after unpacking for more instructions.
+-	&lt;!--	
+-	 and &lt;a href=&quot;<A HREF="http://www.lua.org">http://www.lua.org</A>&quot;&gt;Lua&lt;/a&gt;
+-	View &lt;a href=&quot;&quot;&gt;ChangeLog&lt;/a&gt; to see the list of the latest changes.&lt;br&gt;
+-	--&gt;
++    &lt;!--    
++     and &lt;a href=&quot;<A HREF="http://www.lua.org">http://www.lua.org</A>&quot;&gt;Lua&lt;/a&gt;
++    View &lt;a href=&quot;&quot;&gt;ChangeLog&lt;/a&gt; to see the list of the latest changes.&lt;br&gt;
++    --&gt;
+ &lt;/p&gt;
+ 
+ 
+ &lt;p class=&quot;indented&quot;&gt;
+ If you want to contribute TW-Light by writting good dialogs, download and use 
+ our dialog editor. The latest version is &lt;b&gt;73&lt;/b&gt;. You can download Windows binaries 
+-&lt;a href=&quot;./dialog-editor.zip&quot;&gt;here&lt;/a&gt;. This 
+-&lt;a href=&quot;./tutorial.zip&quot;&gt;tutorial&lt;/a&gt; contains few instruction about how to use it.
++&lt;a href=&quot;<A HREF="ftp://ftp.berlios.de/pub/tw-light/dialog-editor.zip">ftp://ftp.berlios.de/pub/tw-light/dialog-editor.zip</A>&quot;&gt;here&lt;/a&gt;. This 
++&lt;a href=&quot;<A HREF="ftp://ftp.berlios.de/pub/tw-light/tutorial.zip">ftp://ftp.berlios.de/pub/tw-light/tutorial.zip</A>&quot;&gt;tutorial&lt;/a&gt; contains few instruction about how to use it.
+ &lt;/p&gt;
+ &lt;p class=&quot;indented&quot;&gt;
+-Also you will need &lt;a href=&quot;./twplot.zip&quot;&gt;TW-Light plot&lt;/a&gt; for that (Warning: don't download it if 
++Also you will need &lt;a href=&quot;<A HREF="ftp://ftp.berlios.de/pub/tw-light/twplot.zip">ftp://ftp.berlios.de/pub/tw-light/twplot.zip</A>&quot;&gt;TW-Light plot&lt;/a&gt; for that (Warning: don't download it if 
+ you interested only in playing the game, your fun might be ruined if you read it).
+ &lt;/p&gt;
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000143.html">[Tw-light-svn] r197 - trunk/doc
+</A></li>
+	<LI>Next message: <A HREF="000145.html">[Tw-light-svn] r199 - in trunk: . gamedata/default_ini gamedata/python/lib mingw-libs/include mingw-libs/include/allegro mingw-libs/include/allegro/internal mingw-libs/lib source source/games source/libraries source/libraries/cppunit source/libraries/cppunit/config source/libraries/cppunit/extensions source/libraries/cppunit/plugin source/libraries/cppunit/portability source/libraries/cppunit/tools source/libraries/cppunit/ui source/libraries/cppunit/ui/mfc source/libraries/cppunit/ui/qt source/libraries/cppunit/ui/text source/tests source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

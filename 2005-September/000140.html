@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r194 - trunk/source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r194%20-%20trunk/source/melee&In-Reply-To=%3C200509261813.j8QIDfD6022171%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000139.html">
+   <LINK REL="Next"  HREF="000141.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r194 - trunk/source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r194%20-%20trunk/source/melee&In-Reply-To=%3C200509261813.j8QIDfD6022171%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r194 - trunk/source/melee">yurand at berlios.de
+       </A><BR>
+    <I>Mon Sep 26 20:13:41 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000139.html">[Tw-light-svn] r193 - in trunk: . mingw-libs/include msvc-libs/include source/libraries source/libraries/boost source/libraries/boost/config source/libraries/boost/config/abi source/libraries/boost/config/compiler source/libraries/boost/config/platform source/libraries/boost/config/stdlib source/libraries/boost/detail
+</A></li>
+        <LI>Next message: <A HREF="000141.html">[Tw-light-svn] r195 - trunk/source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#140">[ date ]</a>
+              <a href="thread.html#140">[ thread ]</a>
+              <a href="subject.html#140">[ subject ]</a>
+              <a href="author.html#140">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-09-26 20:13:38 +0200 (Mon, 26 Sep 2005)
+New Revision: 194
+
+Modified:
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mview.cpp
+Log:
+Updating Corona688 dynamic view
+
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2005-09-24 05:41:48 UTC (rev 193)
++++ trunk/source/melee/mframe.cpp	2005-09-26 18:13:38 UTC (rev 194)
+@@ -545,6 +545,15 @@
+ 	  );
+ }
+ 
++Vector2 SpaceLocation::rel_pos(SpaceLocation *l) const
++{
++   Vector2 p1,p2;
++   p1=normal_pos();
++   p2=l-&gt;normal_pos();
++   return(Vector2(min_delta(p1.x,p2.x,map_size.x),
++       min_delta(p1.y,p2.y,map_size.y)) );
++}
++
+ double SpaceLocation::distance(SpaceLocation *l)
+ {
+   return(distance_from(normal_pos(), l-&gt;normal_pos()));
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2005-09-24 05:41:48 UTC (rev 193)
++++ trunk/source/melee/mframe.h	2005-09-26 18:13:38 UTC (rev 194)
+@@ -283,6 +283,8 @@
+ 
+   virtual SpaceLocation *get_focus();
+ 
++  /// Returns the shortest relative vector to an object
++  Vector2 rel_pos(SpaceLocation *l) const;
+   /// returns the x,y coordinates, and normalizes it (0 &lt;= pos.x &lt; map_size.x), (0 &lt;= pos.y &lt; map_size.y)
+   Vector2 normal_pos() const;          
+   Vector2 nearest_pos(SpaceLocation *l) const;
+
+Modified: trunk/source/melee/mview.cpp
+===================================================================
+--- trunk/source/melee/mview.cpp	2005-09-24 05:41:48 UTC (rev 193)
++++ trunk/source/melee/mview.cpp	2005-09-26 18:13:38 UTC (rev 194)
+@@ -532,6 +532,67 @@
+ }
+ 
+ /**
++ * Weighted-average camera class.  Takes average of values and weights
++ * of values fed into it.
++ */
++class CCameraPosition:public CameraPosition
++{
++   double totalweight;
++public:
++   inline CCameraPosition() { Reset(); }
++
++   inline CCameraPosition(const CameraPosition &amp;cp)
++   {
++       totalweight=1.0f;
++       pos=cp.pos;
++       vel=cp.vel;
++       z=cp.z;
++   }
++
++   inline void Set(Vector2 ipos, Vector2 ivel, float iz, float weight)
++   {
++       totalweight=weight;
++       pos=ipos*weight;
++       vel=ivel*weight;
++       z=iz*weight;
++   }
++
++   inline void Accumulate(Vector2 ipos, Vector2 ivel,
++       float iz, float weight)
++   {
++       pos+=(ipos*weight);
++       vel+=(ivel*weight);
++       z+=(iz*weight);
++       totalweight+=weight;
++   }
++
++   /* Take weighted average to get final values */
++   inline void Finalize()
++   {
++       pos/=totalweight;
++       vel/=totalweight;
++       z  /=totalweight;
++       totalweight=1.0f;
++   }
++
++   inline void operator=(const CameraPosition &amp;cp)
++   {
++       totalweight=1.0f;
++       pos=cp.pos;
++       vel=cp.vel;
++       z=cp.z;
++   }
++
++   inline void Reset()
++   {
++       totalweight=0.0f;
++       pos.x=pos.y=0.0f;
++       vel.x=vel.y=0.0f;
++       z          =0.0f;
++   }
++};
++
++/**
+  * &quot;Dynamic&quot; view:  hero-centered intelligent zooming for multiple
+  * ships.
+  *
+@@ -544,6 +605,17 @@
+   double cutoff;
+   double f,power;
+   double max, min;
++
++  // Z-value as a function of distance from hero
++  inline float zcurve(float dist) const { return dist*2.0f; }
++  // Weight/influence as a function of distance from hero
++  inline float wcurve(float dist) const
++  {
++    // Logarithmic curves seem the most natural-looking.
++    // We use the negative part of the curve from (0,1], scaled to
++    // (0,cutoff]
++    return((-50.0f)*log(dist/cutoff));
++  }
+ public:
+   virtual void calculate(Game *game);
+   virtual void init(View *old);  
+@@ -561,8 +633,50 @@
+ }
+ 
+ void View_Dynamic::calculate (Game *game) {STACKTRACE
++   int i;
++   CCameraPosition cpos=camera;
++   SpaceLocation *c=NULL;
+ 
+-  int i;
++   if(game-&gt;num_focuses) c=game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
++
++   if (key_pressed(key_zoom_in))  f /= 1 + 0.002 * frame_time;
++   if (key_pressed(key_zoom_out)) f *= 1 + 0.002 * frame_time;
++
++   if(c!=NULL)
++   {
++       cpos.Set(c-&gt;pos,c-&gt;vel,f,power);
++
++       for(i=0; i&lt;=game-&gt;gametargets.N; i++)
++       {
++           float dist;
++           SpaceObject *obj;
++           if(i==game-&gt;gametargets.N)
++               obj=c-&gt;nearest_planet();
++           else
++               obj=game-&gt;gametargets.item[i];
++
++           if((obj==NULL)||(obj==c)) continue;
++           if(!(obj-&gt;isPlanet() || obj-&gt;isShip())) continue;
++
++           dist=c-&gt;distance(obj);
++           if(dist &gt; cutoff) continue;
++
++           cpos.Accumulate( c-&gt;pos - (c-&gt;rel_pos(obj)/2),
++               (c-&gt;vel + obj-&gt;vel)/2,
++               zcurve(dist),
++               wcurve(dist));
++
++       }
++
++       cpos.Finalize();
++       if(cpos.z &lt; min) cpos.z=min;
++       else if(cpos.z &gt; max) cpos.z=max;
++   }
++
++   focus(&amp;cpos,NULL);
++   track(cpos,frame_time);
++
++/*  int i;
+   CameraPosition n = camera;
+   SpaceLocation *c = NULL;
+   if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
+@@ -602,7 +716,7 @@
+ 
+   focus ( &amp;n, c );
+   track ( n, frame_time );
+-  return;
++  return;*/
+ }
+ 
+ class View_Hero : public View {
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000139.html">[Tw-light-svn] r193 - in trunk: . mingw-libs/include msvc-libs/include source/libraries source/libraries/boost source/libraries/boost/config source/libraries/boost/config/abi source/libraries/boost/config/compiler source/libraries/boost/config/platform source/libraries/boost/config/stdlib source/libraries/boost/detail
+</A></li>
+	<LI>Next message: <A HREF="000141.html">[Tw-light-svn] r195 - trunk/source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#140">[ date ]</a>
+              <a href="thread.html#140">[ thread ]</a>
+              <a href="subject.html#140">[ subject ]</a>
+              <a href="author.html#140">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

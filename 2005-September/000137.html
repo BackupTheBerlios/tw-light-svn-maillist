@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r191 - trunk/source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r191%20-%20trunk/source/melee&In-Reply-To=%3C200509181924.j8IJO2Ke026916%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000138.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r191 - trunk/source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r191%20-%20trunk/source/melee&In-Reply-To=%3C200509181924.j8IJO2Ke026916%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r191 - trunk/source/melee">yurand at berlios.de
+       </A><BR>
+    <I>Sun Sep 18 21:24:02 CEST 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000138.html">[Tw-light-svn] r192 - in trunk: . gamedata/default_ini source source/libraries/jpgalleg source/other source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#137">[ date ]</a>
+              <a href="thread.html#137">[ thread ]</a>
+              <a href="subject.html#137">[ subject ]</a>
+              <a href="author.html#137">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-09-18 21:23:58 +0200 (Sun, 18 Sep 2005)
+New Revision: 191
+
+Modified:
+   trunk/source/melee/mview.cpp
+Log:
+Adding &quot;dynamic&quot; view, thanks to Corona688
+
+Modified: trunk/source/melee/mview.cpp
+===================================================================
+--- trunk/source/melee/mview.cpp	2005-08-31 01:38:49 UTC (rev 190)
++++ trunk/source/melee/mview.cpp	2005-09-18 19:23:58 UTC (rev 191)
+@@ -531,9 +531,80 @@
+   return;
+ }
+ 
++/**
++ * &quot;Dynamic&quot; view:  hero-centered intelligent zooming for multiple
++ * ships.
++ *
++ * It has a 'default' zoom level that it gravitates toward, which is
++ * fairly large.  Nearby ships draw the focus down to just it and the 
++ * player in a linear way -- when there are several nearby ships, the
++ * focii smoothly balance.
++ */
++class View_Dynamic : public View {
++  double cutoff;
++  double f,power;
++  double max, min;
++public:
++  virtual void calculate(Game *game);
++  virtual void init(View *old);  
++};
+ 
++void View_Dynamic::init(View *old)
++{ STACKTRACE
++  View::init(old);
++  power=5;
++  f = 2000;
++  min = 480;//480;
++  max = 480000;
++  cutoff=2500;
++  return;
++}
+ 
++void View_Dynamic::calculate (Game *game) {STACKTRACE
+ 
++  int i;
++  CameraPosition n = camera;
++  SpaceLocation *c = NULL;
++  if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
++
++  if (key_pressed(key_zoom_in))  f /= 1 + 0.002 * frame_time;
++  if (key_pressed(key_zoom_out)) f *= 1 + 0.002 * frame_time;
++
++  if(c!=NULL)
++  {
++    float z=f*power;     // The sum of the zooming factors
++    float tweight=power; // The sum of the factor weights
++
++    for(i=0; i&lt;=game-&gt;gametargets.N; i++)
++    {
++      SpaceObject *obj;
++      if(i==game-&gt;gametargets.N)
++        obj=c-&gt;nearest_planet();
++      else
++        obj=game-&gt;gametargets.item[i];
++      if(obj==NULL) continue;
++
++      if((c != obj) &amp;&amp;(obj-&gt;isPlanet() || obj-&gt;isShip()))
++      {
++        float dist=c-&gt;distance(obj);
++        if(dist&gt;cutoff) continue;
++        float weight=(22000*22000)/(dist*dist);
++
++        z+=(weight*dist*2);
++        tweight+=weight;
++      }
++    }
++
++    n.z=z/tweight;
++    if(n.z &lt; min) n.z=min;
++    else if(n.z &gt; max) n.z=max;
++  }
++
++  focus ( &amp;n, c );
++  track ( n, frame_time );
++  return;
++}
++
+ class View_Hero : public View {
+   double f;
+   double max, min;
+@@ -551,6 +622,7 @@
+   return;
+ }
+ 
++
+ void View_Hero::calculate (Game *game) {STACKTRACE
+ 					  CameraPosition n = camera;
+  if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
+@@ -573,7 +645,6 @@
+ 
+ 
+ 
+-
+ class View_Enemy : public View {
+ public:
+   virtual void calculate(Game *game);
+@@ -1047,4 +1118,4 @@
+ REGISTER_VIEW ( View_Split3, &quot;Split_3_Horizontal&quot; );
+ REGISTER_VIEW ( View_Split4, &quot;Split_4_Quad&quot; );
+ REGISTER_VIEW ( View_Everything, &quot;Everything&quot; );
+-
++REGISTER_VIEW ( View_Dynamic, &quot;Dynamic&quot; );
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000138.html">[Tw-light-svn] r192 - in trunk: . gamedata/default_ini source source/libraries/jpgalleg source/other source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#137">[ date ]</a>
+              <a href="thread.html#137">[ thread ]</a>
+              <a href="subject.html#137">[ subject ]</a>
+              <a href="author.html#137">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

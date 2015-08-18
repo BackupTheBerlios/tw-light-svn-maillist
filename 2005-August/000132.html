@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r186 - trunk/source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r186%20-%20trunk/source/melee&In-Reply-To=%3C200508190556.j7J5uBNE032618%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000131.html">
+   <LINK REL="Next"  HREF="000133.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r186 - trunk/source/melee</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r186%20-%20trunk/source/melee&In-Reply-To=%3C200508190556.j7J5uBNE032618%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r186 - trunk/source/melee">youbastrd at berlios.de
+       </A><BR>
+    <I>Fri Aug 19 07:56:11 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000131.html">[Tw-light-svn] r185 - trunk/source/melee
+</A></li>
+        <LI>Next message: <A HREF="000133.html">[Tw-light-svn] r187 - trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#132">[ date ]</a>
+              <a href="thread.html#132">[ thread ]</a>
+              <a href="subject.html#132">[ subject ]</a>
+              <a href="author.html#132">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2005-08-19 07:55:05 +0200 (Fri, 19 Aug 2005)
+New Revision: 186
+
+Modified:
+   trunk/source/melee/mmain.cpp
+Log:
+Fix: Bug #63 : fixing a dumb mistake which caused an array to go out of bounds
+
+Modified: trunk/source/melee/mmain.cpp
+===================================================================
+--- trunk/source/melee/mmain.cpp	2005-08-19 04:14:29 UTC (rev 185)
++++ trunk/source/melee/mmain.cpp	2005-08-19 05:55:05 UTC (rev 186)
+@@ -487,7 +487,7 @@
+       fleet-&gt;Sort();
+       
+       s-&gt;locate();
+-      add ( new WedgeIndicator ( s, 30, player_team[i+1] ) );
++      add ( new WedgeIndicator ( s, 30, player_team[i]+1 ) );
+       ShipPanel *panel = new ShipPanel(s);
+       panel-&gt;window-&gt;init(window);
+       panel-&gt;window-&gt;locate(
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000131.html">[Tw-light-svn] r185 - trunk/source/melee
+</A></li>
+	<LI>Next message: <A HREF="000133.html">[Tw-light-svn] r187 - trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#132">[ date ]</a>
+              <a href="thread.html#132">[ thread ]</a>
+              <a href="subject.html#132">[ subject ]</a>
+              <a href="author.html#132">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

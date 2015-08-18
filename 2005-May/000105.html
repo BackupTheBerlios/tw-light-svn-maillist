@@ -1,0 +1,720 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r159 - in trunk: . gamedata/python source/melee web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r159%20-%20in%20trunk%3A%20.%20gamedata/python%20source/melee%20web&In-Reply-To=%3C200505082100.j48L0vGx028926%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000104.html">
+   <LINK REL="Next"  HREF="000106.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r159 - in trunk: . gamedata/python source/melee web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r159%20-%20in%20trunk%3A%20.%20gamedata/python%20source/melee%20web&In-Reply-To=%3C200505082100.j48L0vGx028926%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r159 - in trunk: . gamedata/python source/melee web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun May  8 23:00:57 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000104.html">[Tw-light-svn] r158 - in trunk/source: . games generated melee other python tml
+</A></li>
+        <LI>Next message: <A HREF="000106.html">[Tw-light-svn] r160 - in trunk: . gamedata/python gamedata/test_game mingw-libs/include mingw-libs/include/boost mingw-libs/include/boost/bind mingw-libs/include/boost/compatibility mingw-libs/include/boost/compatibility/cpp_c_headers mingw-libs/include/boost/config mingw-libs/include/boost/config/abi mingw-libs/include/boost/config/compiler mingw-libs/include/boost/config/platform mingw-libs/include/boost/config/stdlib mingw-libs/include/boost/date_time mingw-libs/include/boost/date_time/gregorian mingw-libs/include/boost/date_time/posix_time mingw-libs/include/boost/detail mingw-libs/include/boost/filesystem mingw-libs/include/boost/format mingw-libs/include/boost/format/detail mingw-libs/include/boost/function mingw-libs/include/boost/function/detail mingw-libs/include/boost/graph mingw-libs/include/boost/graph/detail mingw-libs/include/boost/integer mingw-libs/include/boost/io mingw-libs/include/boost/iterator mingw-libs/include/boost/iterator/detail mingw-libs/include/boost/l! ambda mingw-libs/include/boost/lambda/detail mingw-libs/include/boost/math mingw-libs/include/boost/math/special_functions mingw-libs/include/boost/mpl mingw-libs/include/boost/mpl/aux_ mingw-libs/include/boost/mpl/aux_/config mingw-libs/include/boost/mpl/aux_/preprocessed mingw-libs/include/boost/mpl/aux_/preprocessed/bcc mingw-libs/include/boost/mpl/aux_/preprocessed/bcc551 mingw-libs/include/boost/mpl/aux_/preprocessed/gcc mingw-libs/include/boost/mpl/aux_/preprocessed/msvc60 mingw-libs/include/boost/mpl/aux_/preprocessed/msvc70 mingw-libs/include/boost/mpl/aux_/preprocessed/mwcw mingw-libs/include/boost/mpl/aux_/preprocessed/no_ctps mingw-libs/include/boost/mpl/aux_/preprocessed/no_ttp mingw-libs/include/boost/mpl/aux_/preprocessed/plain mingw-libs/include/boost/mpl/aux_/preprocessor mingw-libs/include/boost/mpl/aux_/range_c mingw-libs/include/boost/mpl/aux_/test mingw-libs/include/boost/mpl/limits mingw-libs/include/boost/mpl/list mingw-libs/include/boost/mpl/list/aux_! mingw-libs/include/boost/mpl/list/aux_/preprocessed mingw-lib! s/includ
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-08 23:00:56 +0200 (Sun, 08 May 2005)
+New Revision: 159
+
+Removed:
+   trunk/gamedata/python/start.py
+Modified:
+   trunk/gamedata/python/tml.py
+   trunk/makefile
+   trunk/source/melee/mview.cpp
+   trunk/sources.lst
+   trunk/web/update.sh
+Log:
+Adding constraint to camera for Hero View
+
+
+Deleted: trunk/gamedata/python/start.py
+===================================================================
+--- trunk/gamedata/python/start.py	2005-05-08 20:05:12 UTC (rev 158)
++++ trunk/gamedata/python/start.py	2005-05-08 21:00:56 UTC (rev 159)
+@@ -1,36 +0,0 @@
+-import tml
+-print &quot;Gob Start script&quot;
+-
+-game = tml.GobGame.get_this()
+-
+-# System Arix
+-game.add_system('Arix', 50, 50)
+-game.prepare()
+-
+-game.add_planet_and_station(0, 'gob.dat', 'station0sprite', 'gob.dat#station0picture.bmp', 'supbl','dialogs/welcomecommander.xml')
+-game.add_planet_and_station(1, 'gob.dat', 'station1sprite', 'gob.dat#station1picture.bmp', 'orzne','dialogs/welcomecommander.xml')
+-game.add_planet_and_station(2, 'gob.dat', 'station2sprite', 'gob.dat#station2picture.bmp', 'kohma','dialogs/welcomecommander.xml')
+-game.add_planet_and_station(1, 'gob.dat', 'station1sprite', 'gob.dat#station1picture.bmp', 'utwju','dialogs/welcomecommander.xml')
+-
+-game.add_new_enemy()
+-
+-for i in xrange(10):
+-    game.add_asteroid()
+-
+-# System Beta
+-game.add_system('Beta', 100, 100)
+-game.prepare()
+-
+-game.add_stars()
+-game.add_planet_and_station(0, 'gob.dat', 'station0sprite', 'gob.dat#station0picture.bmp', 'supbl','dialogs/test_dialog.xml')
+-game.add_planet_and_station(1, 'gob.dat', 'station1sprite', 'gob.dat#station1picture.bmp', 'orzne','dialogs/test_dialog.xml')
+-game.add_planet_and_station(2, 'gob.dat', 'station2sprite', 'gob.dat#station2picture.bmp', 'kohma','dialogs/test_dialog.xml')
+-game.add_planet_and_station(1, 'gob.dat', 'station1sprite', 'gob.dat#station1picture.bmp', 'utwju','dialogs/test_dialog.xml')
+-
+-game.add_new_enemy()
+-
+-for i in xrange(10):
+-    game.add_asteroid()
+-
+-game.add_player('Arix', 12400, 12400)
+-
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-08 20:05:12 UTC (rev 158)
++++ trunk/gamedata/python/tml.py	2005-05-08 21:00:56 UTC (rev 159)
+@@ -30,434 +30,48 @@
+ del types
+ 
+ 
+-class pair(_object):
++class GameAction(_object):
+     __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, pair, name, value)
++    __setattr__ = lambda self, name, value: _swig_setattr(self, GameAction, name, value)
+     __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, pair, name)
++    __getattr__ = lambda self, name: _swig_getattr(self, GameAction, name)
+     def __repr__(self):
+-        return &quot;&lt;C pair instance at %s&gt;&quot; % (self.this,)
+-    __swig_setmethods__[&quot;id&quot;] = _tml.pair_id_set
+-    __swig_getmethods__[&quot;id&quot;] = _tml.pair_id_get
+-    if _newclass:id = property(_tml.pair_id_get, _tml.pair_id_set)
+-    __swig_setmethods__[&quot;value&quot;] = _tml.pair_value_set
+-    __swig_getmethods__[&quot;value&quot;] = _tml.pair_value_get
+-    if _newclass:value = property(_tml.pair_value_get, _tml.pair_value_set)
++        return &quot;&lt;C GameAction instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;add_system&quot;] = lambda x: _tml.GameAction_add_system
++    if _newclass:add_system = staticmethod(_tml.GameAction_add_system)
++    __swig_getmethods__[&quot;add_planet&quot;] = lambda x: _tml.GameAction_add_planet
++    if _newclass:add_planet = staticmethod(_tml.GameAction_add_planet)
++    __swig_getmethods__[&quot;add_orbiter_station&quot;] = lambda x: _tml.GameAction_add_orbiter_station
++    if _newclass:add_orbiter_station = staticmethod(_tml.GameAction_add_orbiter_station)
++    __swig_getmethods__[&quot;add_asteroid&quot;] = lambda x: _tml.GameAction_add_asteroid
++    if _newclass:add_asteroid = staticmethod(_tml.GameAction_add_asteroid)
++    __swig_getmethods__[&quot;add_player&quot;] = lambda x: _tml.GameAction_add_player
++    if _newclass:add_player = staticmethod(_tml.GameAction_add_player)
+     def __init__(self, *args):
+-        _swig_setattr(self, pair, 'this', _tml.new_pair(*args))
+-        _swig_setattr(self, pair, 'thisown', 1)
+-    def __del__(self, destroy=_tml.delete_pair):
++        _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
++        _swig_setattr(self, GameAction, 'thisown', 1)
++    def __del__(self, destroy=_tml.delete_GameAction):
+         try:
+             if self.thisown: destroy(self)
+         except: pass
+ 
+-class pairPtr(pair):
++class GameActionPtr(GameAction):
+     def __init__(self, this):
+-        _swig_setattr(self, pair, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, pair, 'thisown', 0)
+-        _swig_setattr(self, pair,self.__class__,pair)
+-_tml.pair_swigregister(pairPtr)
++        _swig_setattr(self, GameAction, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GameAction, 'thisown', 0)
++        _swig_setattr(self, GameAction,self.__class__,GameAction)
++_tml.GameAction_swigregister(GameActionPtr)
+ 
+-class EnemySaveData(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, EnemySaveData, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, EnemySaveData, name)
+-    def __repr__(self):
+-        return &quot;&lt;C EnemySaveData instance at %s&gt;&quot; % (self.this,)
+-    __swig_setmethods__[&quot;pos_x&quot;] = _tml.EnemySaveData_pos_x_set
+-    __swig_getmethods__[&quot;pos_x&quot;] = _tml.EnemySaveData_pos_x_get
+-    if _newclass:pos_x = property(_tml.EnemySaveData_pos_x_get, _tml.EnemySaveData_pos_x_set)
+-    __swig_setmethods__[&quot;pos_y&quot;] = _tml.EnemySaveData_pos_y_set
+-    __swig_getmethods__[&quot;pos_y&quot;] = _tml.EnemySaveData_pos_y_get
+-    if _newclass:pos_y = property(_tml.EnemySaveData_pos_y_get, _tml.EnemySaveData_pos_y_set)
+-    def __init__(self, *args):
+-        _swig_setattr(self, EnemySaveData, 'this', _tml.new_EnemySaveData(*args))
+-        _swig_setattr(self, EnemySaveData, 'thisown', 1)
+-    def __del__(self, destroy=_tml.delete_EnemySaveData):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
++GameAction_add_system = _tml.GameAction_add_system
+ 
+-class EnemySaveDataPtr(EnemySaveData):
+-    def __init__(self, this):
+-        _swig_setattr(self, EnemySaveData, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, EnemySaveData, 'thisown', 0)
+-        _swig_setattr(self, EnemySaveData,self.__class__,EnemySaveData)
+-_tml.EnemySaveData_swigregister(EnemySaveDataPtr)
++GameAction_add_planet = _tml.GameAction_add_planet
+ 
+-class SaveGobGameInfo(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, SaveGobGameInfo, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, SaveGobGameInfo, name)
+-    def __repr__(self):
+-        return &quot;&lt;C SaveGobGameInfo instance at %s&gt;&quot; % (self.this,)
+-    __swig_getmethods__[&quot;getInstance&quot;] = lambda x: _tml.SaveGobGameInfo_getInstance
+-    if _newclass:getInstance = staticmethod(_tml.SaveGobGameInfo_getInstance)
+-    def updateSave(*args): return _tml.SaveGobGameInfo_updateSave(*args)
+-    def updateGame(*args): return _tml.SaveGobGameInfo_updateGame(*args)
+-    __swig_setmethods__[&quot;starbucks&quot;] = _tml.SaveGobGameInfo_starbucks_set
+-    __swig_getmethods__[&quot;starbucks&quot;] = _tml.SaveGobGameInfo_starbucks_get
+-    if _newclass:starbucks = property(_tml.SaveGobGameInfo_starbucks_get, _tml.SaveGobGameInfo_starbucks_set)
+-    __swig_setmethods__[&quot;buckazoids&quot;] = _tml.SaveGobGameInfo_buckazoids_set
+-    __swig_getmethods__[&quot;buckazoids&quot;] = _tml.SaveGobGameInfo_buckazoids_get
+-    if _newclass:buckazoids = property(_tml.SaveGobGameInfo_buckazoids_get, _tml.SaveGobGameInfo_buckazoids_set)
+-    __swig_setmethods__[&quot;kills&quot;] = _tml.SaveGobGameInfo_kills_set
+-    __swig_getmethods__[&quot;kills&quot;] = _tml.SaveGobGameInfo_kills_get
+-    if _newclass:kills = property(_tml.SaveGobGameInfo_kills_get, _tml.SaveGobGameInfo_kills_set)
+-    __swig_setmethods__[&quot;pos_x&quot;] = _tml.SaveGobGameInfo_pos_x_set
+-    __swig_getmethods__[&quot;pos_x&quot;] = _tml.SaveGobGameInfo_pos_x_get
+-    if _newclass:pos_x = property(_tml.SaveGobGameInfo_pos_x_get, _tml.SaveGobGameInfo_pos_x_set)
+-    __swig_setmethods__[&quot;pos_y&quot;] = _tml.SaveGobGameInfo_pos_y_set
+-    __swig_getmethods__[&quot;pos_y&quot;] = _tml.SaveGobGameInfo_pos_y_get
+-    if _newclass:pos_y = property(_tml.SaveGobGameInfo_pos_y_get, _tml.SaveGobGameInfo_pos_y_set)
+-    __swig_setmethods__[&quot;system&quot;] = _tml.SaveGobGameInfo_system_set
+-    __swig_getmethods__[&quot;system&quot;] = _tml.SaveGobGameInfo_system_get
+-    if _newclass:system = property(_tml.SaveGobGameInfo_system_get, _tml.SaveGobGameInfo_system_set)
+-    def getSystem(*args): return _tml.SaveGobGameInfo_getSystem(*args)
+-    def setSystem(*args): return _tml.SaveGobGameInfo_setSystem(*args)
+-    __swig_setmethods__[&quot;tst&quot;] = _tml.SaveGobGameInfo_tst_set
+-    __swig_getmethods__[&quot;tst&quot;] = _tml.SaveGobGameInfo_tst_get
+-    if _newclass:tst = property(_tml.SaveGobGameInfo_tst_get, _tml.SaveGobGameInfo_tst_set)
+-    def getTst(*args): return _tml.SaveGobGameInfo_getTst(*args)
+-    def setTst(*args): return _tml.SaveGobGameInfo_setTst(*args)
+-    def __init__(self, *args):
+-        _swig_setattr(self, SaveGobGameInfo, 'this', _tml.new_SaveGobGameInfo(*args))
+-        _swig_setattr(self, SaveGobGameInfo, 'thisown', 1)
+-    def __del__(self, destroy=_tml.delete_SaveGobGameInfo):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
++GameAction_add_orbiter_station = _tml.GameAction_add_orbiter_station
+ 
+-class SaveGobGameInfoPtr(SaveGobGameInfo):
+-    def __init__(self, this):
+-        _swig_setattr(self, SaveGobGameInfo, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, SaveGobGameInfo, 'thisown', 0)
+-        _swig_setattr(self, SaveGobGameInfo,self.__class__,SaveGobGameInfo)
+-_tml.SaveGobGameInfo_swigregister(SaveGobGameInfoPtr)
++GameAction_add_asteroid = _tml.GameAction_add_asteroid
+ 
+-SaveGobGameInfo_getInstance = _tml.SaveGobGameInfo_getInstance
++GameAction_add_player = _tml.GameAction_add_player
+ 
+-class GobPlayer(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, GobPlayer, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, GobPlayer, name)
+-    def __repr__(self):
+-        return &quot;&lt;C GobPlayer instance at %s&gt;&quot; % (self.this,)
+-    def __init__(self, *args):
+-        _swig_setattr(self, GobPlayer, 'this', _tml.new_GobPlayer(*args))
+-        _swig_setattr(self, GobPlayer, 'thisown', 1)
+-    def __del__(self, destroy=_tml.delete_GobPlayer):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-    __swig_setmethods__[&quot;ship&quot;] = _tml.GobPlayer_ship_set
+-    __swig_getmethods__[&quot;ship&quot;] = _tml.GobPlayer_ship_get
+-    if _newclass:ship = property(_tml.GobPlayer_ship_get, _tml.GobPlayer_ship_set)
+-    __swig_setmethods__[&quot;pair_list&quot;] = _tml.GobPlayer_pair_list_set
+-    __swig_getmethods__[&quot;pair_list&quot;] = _tml.GobPlayer_pair_list_get
+-    if _newclass:pair_list = property(_tml.GobPlayer_pair_list_get, _tml.GobPlayer_pair_list_set)
+-    __swig_setmethods__[&quot;num_pairs&quot;] = _tml.GobPlayer_num_pairs_set
+-    __swig_getmethods__[&quot;num_pairs&quot;] = _tml.GobPlayer_num_pairs_get
+-    if _newclass:num_pairs = property(_tml.GobPlayer_num_pairs_get, _tml.GobPlayer_num_pairs_set)
+-    __swig_setmethods__[&quot;total&quot;] = _tml.GobPlayer_total_set
+-    __swig_getmethods__[&quot;total&quot;] = _tml.GobPlayer_total_get
+-    if _newclass:total = property(_tml.GobPlayer_total_get, _tml.GobPlayer_total_set)
+-    __swig_setmethods__[&quot;starbucks&quot;] = _tml.GobPlayer_starbucks_set
+-    __swig_getmethods__[&quot;starbucks&quot;] = _tml.GobPlayer_starbucks_get
+-    if _newclass:starbucks = property(_tml.GobPlayer_starbucks_get, _tml.GobPlayer_starbucks_set)
+-    __swig_setmethods__[&quot;buckazoids&quot;] = _tml.GobPlayer_buckazoids_set
+-    __swig_getmethods__[&quot;buckazoids&quot;] = _tml.GobPlayer_buckazoids_get
+-    if _newclass:buckazoids = property(_tml.GobPlayer_buckazoids_get, _tml.GobPlayer_buckazoids_set)
+-    __swig_setmethods__[&quot;kills&quot;] = _tml.GobPlayer_kills_set
+-    __swig_getmethods__[&quot;kills&quot;] = _tml.GobPlayer_kills_get
+-    if _newclass:kills = property(_tml.GobPlayer_kills_get, _tml.GobPlayer_kills_set)
+-    __swig_setmethods__[&quot;value_starbucks&quot;] = _tml.GobPlayer_value_starbucks_set
+-    __swig_getmethods__[&quot;value_starbucks&quot;] = _tml.GobPlayer_value_starbucks_get
+-    if _newclass:value_starbucks = property(_tml.GobPlayer_value_starbucks_get, _tml.GobPlayer_value_starbucks_set)
+-    __swig_setmethods__[&quot;value_buckazoids&quot;] = _tml.GobPlayer_value_buckazoids_set
+-    __swig_getmethods__[&quot;value_buckazoids&quot;] = _tml.GobPlayer_value_buckazoids_get
+-    if _newclass:value_buckazoids = property(_tml.GobPlayer_value_buckazoids_get, _tml.GobPlayer_value_buckazoids_set)
+-    __swig_setmethods__[&quot;team&quot;] = _tml.GobPlayer_team_set
+-    __swig_getmethods__[&quot;team&quot;] = _tml.GobPlayer_team_get
+-    if _newclass:team = property(_tml.GobPlayer_team_get, _tml.GobPlayer_team_set)
+-    def init(*args): return _tml.GobPlayer_init(*args)
+-    def died(*args): return _tml.GobPlayer_died(*args)
+-    def new_ship(*args): return _tml.GobPlayer_new_ship(*args)
+-    def charge(*args): return _tml.GobPlayer_charge(*args)
+-    def _add_pair(*args): return _tml.GobPlayer__add_pair(*args)
+-    def _get_pair(*args): return _tml.GobPlayer__get_pair(*args)
+-    def write_pair(*args): return _tml.GobPlayer_write_pair(*args)
+-    def read_pair(*args): return _tml.GobPlayer_read_pair(*args)
+-    __swig_setmethods__[&quot;upgrade_list&quot;] = _tml.GobPlayer_upgrade_list_set
+-    __swig_getmethods__[&quot;upgrade_list&quot;] = _tml.GobPlayer_upgrade_list_get
+-    if _newclass:upgrade_list = property(_tml.GobPlayer_upgrade_list_get, _tml.GobPlayer_upgrade_list_set)
+-
+-class GobPlayerPtr(GobPlayer):
+-    def __init__(self, this):
+-        _swig_setattr(self, GobPlayer, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GobPlayer, 'thisown', 0)
+-        _swig_setattr(self, GobPlayer,self.__class__,GobPlayer)
+-_tml.GobPlayer_swigregister(GobPlayerPtr)
+-
+-class GobEnemy(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, GobEnemy, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, GobEnemy, name)
+-    def __repr__(self):
+-        return &quot;&lt;C GobEnemy instance at %s&gt;&quot; % (self.this,)
+-    __swig_setmethods__[&quot;ship&quot;] = _tml.GobEnemy_ship_set
+-    __swig_getmethods__[&quot;ship&quot;] = _tml.GobEnemy_ship_get
+-    if _newclass:ship = property(_tml.GobEnemy_ship_get, _tml.GobEnemy_ship_set)
+-    __swig_setmethods__[&quot;starbucks&quot;] = _tml.GobEnemy_starbucks_set
+-    __swig_getmethods__[&quot;starbucks&quot;] = _tml.GobEnemy_starbucks_get
+-    if _newclass:starbucks = property(_tml.GobEnemy_starbucks_get, _tml.GobEnemy_starbucks_set)
+-    __swig_setmethods__[&quot;buckazoids&quot;] = _tml.GobEnemy_buckazoids_set
+-    __swig_getmethods__[&quot;buckazoids&quot;] = _tml.GobEnemy_buckazoids_get
+-    if _newclass:buckazoids = property(_tml.GobEnemy_buckazoids_get, _tml.GobEnemy_buckazoids_set)
+-    def init(*args): return _tml.GobEnemy_init(*args)
+-    def died(*args): return _tml.GobEnemy_died(*args)
+-    def __init__(self, *args):
+-        _swig_setattr(self, GobEnemy, 'this', _tml.new_GobEnemy(*args))
+-        _swig_setattr(self, GobEnemy, 'thisown', 1)
+-    def __del__(self, destroy=_tml.delete_GobEnemy):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-
+-class GobEnemyPtr(GobEnemy):
+-    def __init__(self, this):
+-        _swig_setattr(self, GobEnemy, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GobEnemy, 'thisown', 0)
+-        _swig_setattr(self, GobEnemy,self.__class__,GobEnemy)
+-_tml.GobEnemy_swigregister(GobEnemyPtr)
+-
+-class GobAsteroid(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, GobAsteroid, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, GobAsteroid, name)
+-    def __repr__(self):
+-        return &quot;&lt;C GobAsteroid instance at %s&gt;&quot; % (self.this,)
+-    def handle_damage(*args): return _tml.GobAsteroid_handle_damage(*args)
+-    def death(*args): return _tml.GobAsteroid_death(*args)
+-    def __init__(self, *args):
+-        _swig_setattr(self, GobAsteroid, 'this', _tml.new_GobAsteroid(*args))
+-        _swig_setattr(self, GobAsteroid, 'thisown', 1)
+-    def __del__(self, destroy=_tml.delete_GobAsteroid):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-
+-class GobAsteroidPtr(GobAsteroid):
+-    def __init__(self, this):
+-        _swig_setattr(self, GobAsteroid, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GobAsteroid, 'thisown', 0)
+-        _swig_setattr(self, GobAsteroid,self.__class__,GobAsteroid)
+-_tml.GobAsteroid_swigregister(GobAsteroidPtr)
+-
+-class GobGame(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, GobGame, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, GobGame, name)
+-    def __repr__(self):
+-        return &quot;&lt;C GobGame instance at %s&gt;&quot; % (self.this,)
+-    __swig_setmethods__[&quot;_galaxy&quot;] = _tml.GobGame__galaxy_set
+-    __swig_getmethods__[&quot;_galaxy&quot;] = _tml.GobGame__galaxy_get
+-    if _newclass:_galaxy = property(_tml.GobGame__galaxy_get, _tml.GobGame__galaxy_set)
+-    __swig_setmethods__[&quot;gobplayer&quot;] = _tml.GobGame_gobplayer_set
+-    __swig_getmethods__[&quot;gobplayer&quot;] = _tml.GobGame_gobplayer_get
+-    if _newclass:gobplayer = property(_tml.GobGame_gobplayer_get, _tml.GobGame_gobplayer_set)
+-    def switch_system(*args): return _tml.GobGame_switch_system(*args)
+-    def __init__(self, *args):
+-        _swig_setattr(self, GobGame, 'this', _tml.new_GobGame(*args))
+-        _swig_setattr(self, GobGame, 'thisown', 1)
+-    __swig_getmethods__[&quot;get_this&quot;] = lambda x: _tml.GobGame_get_this
+-    if _newclass:get_this = staticmethod(_tml.GobGame_get_this)
+-    def __del__(self, destroy=_tml.delete_GobGame):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-    __swig_setmethods__[&quot;_player_panel&quot;] = _tml.GobGame__player_panel_set
+-    __swig_getmethods__[&quot;_player_panel&quot;] = _tml.GobGame__player_panel_get
+-    if _newclass:_player_panel = property(_tml.GobGame__player_panel_get, _tml.GobGame__player_panel_set)
+-    __swig_setmethods__[&quot;_player_control&quot;] = _tml.GobGame__player_control_set
+-    __swig_getmethods__[&quot;_player_control&quot;] = _tml.GobGame__player_control_get
+-    if _newclass:_player_control = property(_tml.GobGame__player_control_get, _tml.GobGame__player_control_set)
+-    __swig_setmethods__[&quot;enemy_team&quot;] = _tml.GobGame_enemy_team_set
+-    __swig_getmethods__[&quot;enemy_team&quot;] = _tml.GobGame_enemy_team_get
+-    if _newclass:enemy_team = property(_tml.GobGame_enemy_team_get, _tml.GobGame_enemy_team_set)
+-    def AddPanel(*args): return _tml.GobGame_AddPanel(*args)
+-    def calculate(*args): return _tml.GobGame_calculate(*args)
+-    def setGameDone(*args): return _tml.GobGame_setGameDone(*args)
+-    def ship_died(*args): return _tml.GobGame_ship_died(*args)
+-    def preinit(*args): return _tml.GobGame_preinit(*args)
+-    def init(*args): return _tml.GobGame_init(*args)
+-    def play_sound(*args): return _tml.GobGame_play_sound(*args)
+-    def add_gobplayer(*args): return _tml.GobGame_add_gobplayer(*args)
+-    def get_player(*args): return _tml.GobGame_get_player(*args)
+-    __swig_setmethods__[&quot;gobenemies&quot;] = _tml.GobGame_gobenemies_set
+-    __swig_getmethods__[&quot;gobenemies&quot;] = _tml.GobGame_gobenemies_get
+-    if _newclass:gobenemies = property(_tml.GobGame_gobenemies_get, _tml.GobGame_gobenemies_set)
+-    __swig_setmethods__[&quot;max_enemies&quot;] = _tml.GobGame_max_enemies_set
+-    __swig_getmethods__[&quot;max_enemies&quot;] = _tml.GobGame_max_enemies_get
+-    if _newclass:max_enemies = property(_tml.GobGame_max_enemies_get, _tml.GobGame_max_enemies_set)
+-    __swig_setmethods__[&quot;gobenemy&quot;] = _tml.GobGame_gobenemy_set
+-    __swig_getmethods__[&quot;gobenemy&quot;] = _tml.GobGame_gobenemy_get
+-    if _newclass:gobenemy = property(_tml.GobGame_gobenemy_get, _tml.GobGame_gobenemy_set)
+-    def get_enemy_index(*args): return _tml.GobGame_get_enemy_index(*args)
+-    def prepare(*args): return _tml.GobGame_prepare(*args)
+-    def fps(*args): return _tml.GobGame_fps(*args)
+-    def add_new_enemy(*args): return _tml.GobGame_add_new_enemy(*args)
+-    def add_stars(*args): return _tml.GobGame_add_stars(*args)
+-    def add_asteroid(*args): return _tml.GobGame_add_asteroid(*args)
+-    def add_system(*args): return _tml.GobGame_add_system(*args)
+-    def add_player(*args): return _tml.GobGame_add_player(*args)
+-    __swig_setmethods__[&quot;next_add_new_enemy_time&quot;] = _tml.GobGame_next_add_new_enemy_time_set
+-    __swig_getmethods__[&quot;next_add_new_enemy_time&quot;] = _tml.GobGame_next_add_new_enemy_time_get
+-    if _newclass:next_add_new_enemy_time = property(_tml.GobGame_next_add_new_enemy_time_get, _tml.GobGame_next_add_new_enemy_time_set)
+-    __swig_setmethods__[&quot;defenderSprite&quot;] = _tml.GobGame_defenderSprite_set
+-    __swig_getmethods__[&quot;defenderSprite&quot;] = _tml.GobGame_defenderSprite_get
+-    if _newclass:defenderSprite = property(_tml.GobGame_defenderSprite_get, _tml.GobGame_defenderSprite_set)
+-    __swig_setmethods__[&quot;num_planets&quot;] = _tml.GobGame_num_planets_set
+-    __swig_getmethods__[&quot;num_planets&quot;] = _tml.GobGame_num_planets_get
+-    if _newclass:num_planets = property(_tml.GobGame_num_planets_get, _tml.GobGame_num_planets_set)
+-    __swig_setmethods__[&quot;planet&quot;] = _tml.GobGame_planet_set
+-    __swig_getmethods__[&quot;planet&quot;] = _tml.GobGame_planet_get
+-    if _newclass:planet = property(_tml.GobGame_planet_get, _tml.GobGame_planet_set)
+-    __swig_setmethods__[&quot;station&quot;] = _tml.GobGame_station_set
+-    __swig_getmethods__[&quot;station&quot;] = _tml.GobGame_station_get
+-    if _newclass:station = property(_tml.GobGame_station_get, _tml.GobGame_station_set)
+-    def add_planet_and_station(*args): return _tml.GobGame_add_planet_and_station(*args)
+-
+-class GobGamePtr(GobGame):
+-    def __init__(self, this):
+-        _swig_setattr(self, GobGame, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GobGame, 'thisown', 0)
+-        _swig_setattr(self, GobGame,self.__class__,GobGame)
+-_tml.GobGame_swigregister(GobGamePtr)
+-
+-GobGame_get_this = _tml.GobGame_get_this
+-
+-class GobStation(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, GobStation, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, GobStation, name)
+-    def __repr__(self):
+-        return &quot;&lt;C GobStation instance at %s&gt;&quot; % (self.this,)
+-    __swig_setmethods__[&quot;_build_type&quot;] = _tml.GobStation__build_type_set
+-    __swig_getmethods__[&quot;_build_type&quot;] = _tml.GobStation__build_type_get
+-    if _newclass:_build_type = property(_tml.GobStation__build_type_get, _tml.GobStation__build_type_set)
+-    __swig_setmethods__[&quot;_background_pic&quot;] = _tml.GobStation__background_pic_set
+-    __swig_getmethods__[&quot;_background_pic&quot;] = _tml.GobStation__background_pic_get
+-    if _newclass:_background_pic = property(_tml.GobStation__background_pic_get, _tml.GobStation__background_pic_set)
+-    def __init__(self, *args):
+-        _swig_setattr(self, GobStation, 'this', _tml.new_GobStation(*args))
+-        _swig_setattr(self, GobStation, 'thisown', 1)
+-    def buy_new_ship_menu(*args): return _tml.GobStation_buy_new_ship_menu(*args)
+-    def inflict_damage(*args): return _tml.GobStation_inflict_damage(*args)
+-    def station_screen(*args): return _tml.GobStation_station_screen(*args)
+-    def upgrade_menu(*args): return _tml.GobStation_upgrade_menu(*args)
+-    def __del__(self, destroy=_tml.delete_GobStation):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-
+-class GobStationPtr(GobStation):
+-    def __init__(self, this):
+-        _swig_setattr(self, GobStation, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GobStation, 'thisown', 0)
+-        _swig_setattr(self, GobStation,self.__class__,GobStation)
+-_tml.GobStation_swigregister(GobStationPtr)
+-
+-class Upgrade(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, Upgrade, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, Upgrade, name)
+-    def __init__(self): raise RuntimeError, &quot;No constructor defined&quot;
+-    def __repr__(self):
+-        return &quot;&lt;C Upgrade instance at %s&gt;&quot; % (self.this,)
+-    active = _tml.Upgrade_active
+-    inactive = _tml.Upgrade_inactive
+-    __swig_setmethods__[&quot;name&quot;] = _tml.Upgrade_name_set
+-    __swig_getmethods__[&quot;name&quot;] = _tml.Upgrade_name_get
+-    if _newclass:name = property(_tml.Upgrade_name_get, _tml.Upgrade_name_set)
+-    __swig_setmethods__[&quot;starbucks&quot;] = _tml.Upgrade_starbucks_set
+-    __swig_getmethods__[&quot;starbucks&quot;] = _tml.Upgrade_starbucks_get
+-    if _newclass:starbucks = property(_tml.Upgrade_starbucks_get, _tml.Upgrade_starbucks_set)
+-    __swig_setmethods__[&quot;buckazoids&quot;] = _tml.Upgrade_buckazoids_set
+-    __swig_getmethods__[&quot;buckazoids&quot;] = _tml.Upgrade_buckazoids_get
+-    if _newclass:buckazoids = property(_tml.Upgrade_buckazoids_get, _tml.Upgrade_buckazoids_set)
+-    __swig_setmethods__[&quot;status&quot;] = _tml.Upgrade_status_set
+-    __swig_getmethods__[&quot;status&quot;] = _tml.Upgrade_status_get
+-    if _newclass:status = property(_tml.Upgrade_status_get, _tml.Upgrade_status_set)
+-    __swig_setmethods__[&quot;num&quot;] = _tml.Upgrade_num_set
+-    __swig_getmethods__[&quot;num&quot;] = _tml.Upgrade_num_get
+-    if _newclass:num = property(_tml.Upgrade_num_get, _tml.Upgrade_num_set)
+-    __swig_setmethods__[&quot;index&quot;] = _tml.Upgrade_index_set
+-    __swig_getmethods__[&quot;index&quot;] = _tml.Upgrade_index_get
+-    if _newclass:index = property(_tml.Upgrade_index_get, _tml.Upgrade_index_set)
+-    def update(*args): return _tml.Upgrade_update(*args)
+-    def execute(*args): return _tml.Upgrade_execute(*args)
+-    def charge(*args): return _tml.Upgrade_charge(*args)
+-    def clear(*args): return _tml.Upgrade_clear(*args)
+-    def duplicate(*args): return _tml.Upgrade_duplicate(*args)
+-    def __del__(self, destroy=_tml.delete_Upgrade):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-
+-class UpgradePtr(Upgrade):
+-    def __init__(self, this):
+-        _swig_setattr(self, Upgrade, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, Upgrade, 'thisown', 0)
+-        _swig_setattr(self, Upgrade,self.__class__,Upgrade)
+-_tml.Upgrade_swigregister(UpgradePtr)
+-
+-class RainbowRift(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, RainbowRift, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, RainbowRift, name)
+-    def __repr__(self):
+-        return &quot;&lt;C RainbowRift instance at %s&gt;&quot; % (self.this,)
+-    n = _tml.RainbowRift_n
+-    __swig_setmethods__[&quot;p&quot;] = _tml.RainbowRift_p_set
+-    __swig_getmethods__[&quot;p&quot;] = _tml.RainbowRift_p_get
+-    if _newclass:p = property(_tml.RainbowRift_p_get, _tml.RainbowRift_p_set)
+-    __swig_setmethods__[&quot;c&quot;] = _tml.RainbowRift_c_set
+-    __swig_getmethods__[&quot;c&quot;] = _tml.RainbowRift_c_get
+-    if _newclass:c = property(_tml.RainbowRift_c_get, _tml.RainbowRift_c_set)
+-    __swig_setmethods__[&quot;next_time&quot;] = _tml.RainbowRift_next_time_set
+-    __swig_getmethods__[&quot;next_time&quot;] = _tml.RainbowRift_next_time_get
+-    if _newclass:next_time = property(_tml.RainbowRift_next_time_get, _tml.RainbowRift_next_time_set)
+-    __swig_setmethods__[&quot;next_time2&quot;] = _tml.RainbowRift_next_time2_set
+-    __swig_getmethods__[&quot;next_time2&quot;] = _tml.RainbowRift_next_time2_get
+-    if _newclass:next_time2 = property(_tml.RainbowRift_next_time2_get, _tml.RainbowRift_next_time2_set)
+-    def __init__(self, *args):
+-        _swig_setattr(self, RainbowRift, 'this', _tml.new_RainbowRift(*args))
+-        _swig_setattr(self, RainbowRift, 'thisown', 1)
+-    def animate(*args): return _tml.RainbowRift_animate(*args)
+-    def calculate(*args): return _tml.RainbowRift_calculate(*args)
+-    def squiggle(*args): return _tml.RainbowRift_squiggle(*args)
+-    def __del__(self, destroy=_tml.delete_RainbowRift):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-
+-class RainbowRiftPtr(RainbowRift):
+-    def __init__(self, this):
+-        _swig_setattr(self, RainbowRift, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, RainbowRift, 'thisown', 0)
+-        _swig_setattr(self, RainbowRift,self.__class__,RainbowRift)
+-_tml.RainbowRift_swigregister(RainbowRiftPtr)
+-
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+@@ -567,40 +181,6 @@
+ 
+ 
+ GetSoundSystem = _tml.GetSoundSystem
+-class vectorEnemySaveData(_object):
+-    __swig_setmethods__ = {}
+-    __setattr__ = lambda self, name, value: _swig_setattr(self, vectorEnemySaveData, name, value)
+-    __swig_getmethods__ = {}
+-    __getattr__ = lambda self, name: _swig_getattr(self, vectorEnemySaveData, name)
+-    def __repr__(self):
+-        return &quot;&lt;C std::vector&lt;(EnemySaveData)&gt; instance at %s&gt;&quot; % (self.this,)
+-    def __init__(self, *args):
+-        _swig_setattr(self, vectorEnemySaveData, 'this', _tml.new_vectorEnemySaveData(*args))
+-        _swig_setattr(self, vectorEnemySaveData, 'thisown', 1)
+-    def __len__(*args): return _tml.vectorEnemySaveData___len__(*args)
+-    def clear(*args): return _tml.vectorEnemySaveData_clear(*args)
+-    def append(*args): return _tml.vectorEnemySaveData_append(*args)
+-    def __nonzero__(*args): return _tml.vectorEnemySaveData___nonzero__(*args)
+-    def pop(*args): return _tml.vectorEnemySaveData_pop(*args)
+-    def __getitem__(*args): return _tml.vectorEnemySaveData___getitem__(*args)
+-    def __getslice__(*args): return _tml.vectorEnemySaveData___getslice__(*args)
+-    def __setitem__(*args): return _tml.vectorEnemySaveData___setitem__(*args)
+-    def __setslice__(*args): return _tml.vectorEnemySaveData___setslice__(*args)
+-    def __delitem__(*args): return _tml.vectorEnemySaveData___delitem__(*args)
+-    def __delslice__(*args): return _tml.vectorEnemySaveData___delslice__(*args)
+-    def __del__(self, destroy=_tml.delete_vectorEnemySaveData):
+-        try:
+-            if self.thisown: destroy(self)
+-        except: pass
+-
+-class vectorEnemySaveDataPtr(vectorEnemySaveData):
+-    def __init__(self, this):
+-        _swig_setattr(self, vectorEnemySaveData, 'this', this)
+-        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, vectorEnemySaveData, 'thisown', 0)
+-        _swig_setattr(self, vectorEnemySaveData,self.__class__,vectorEnemySaveData)
+-_tml.vectorEnemySaveData_swigregister(vectorEnemySaveDataPtr)
+-cvar = _tml.cvar
+-
+ class vectorString(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, vectorString, name, value)
+@@ -633,5 +213,6 @@
+         if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, vectorString, 'thisown', 0)
+         _swig_setattr(self, vectorString,self.__class__,vectorString)
+ _tml.vectorString_swigregister(vectorStringPtr)
++cvar = _tml.cvar
+ 
+ 
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-05-08 20:05:12 UTC (rev 158)
++++ trunk/makefile	2005-05-08 21:00:56 UTC (rev 159)
+@@ -171,7 +171,7 @@
+ 	./$(NAME) -test
+ 
+ 
+-source/generated/tml_wrap.cpp: source/python/game.i source/games/ggob.h source/util/sound.h source/tml/gameconfig.h source/tml/gamedialog.h
++source/generated/tml_wrap.cpp: source/python/game.i source/tml/gameaction.h source/util/sound.h source/tml/gameconfig.h source/tml/gamedialog.h
+ 	swig -c++ -python -o source/generated/tml_wrap.cpp source/python/game.i
+ 	cp source/generated/tml.py $(DATAPATH)/python/
+ 
+
+Modified: trunk/source/melee/mview.cpp
+===================================================================
+--- trunk/source/melee/mview.cpp	2005-05-08 20:05:12 UTC (rev 158)
++++ trunk/source/melee/mview.cpp	2005-05-08 21:00:56 UTC (rev 159)
+@@ -512,19 +512,23 @@
+ 
+ 
+ 
+-class View_Everything : public View {
++class View_Everything : public View 
++{
+ public:
+   virtual void calculate(Game *game);
+ };
+-void View_Everything::calculate (Game *game) {STACKTRACE
+-						double a, b, c;
+-//sqrt(view_w * view_w + view_h * view_h) / 1.41421356237309504880168872
+- c = 1.414 / magnitude(view_size);
+- a = map_size.x * view_size.x * c;
+- b = map_size.y * view_size.y * c;
+- if (b &gt; a) a = b;
+- camera.z = a;
+- return;
++
++void View_Everything::calculate (Game *game) 
++{
++  STACKTRACE
++    double a, b, c;
++  //sqrt(view_w * view_w + view_h * view_h) / 1.41421356237309504880168872
++  c = 1.414 / magnitude(view_size);
++  a = map_size.x * view_size.x * c;
++  b = map_size.y * view_size.y * c;
++  if (b &gt; a) a = b;
++  camera.z = a;
++  return;
+ }
+ 
+ 
+@@ -542,8 +546,8 @@
+   STACKTRACE;
+   View::init(old);
+   f = 0;
+-  min = 30;//480;
+-  max = 480000;
++  min = 700;
++  max = 3000;
+   return;
+ }
+ 
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-05-08 20:05:12 UTC (rev 158)
++++ trunk/sources.lst	2005-05-08 21:00:56 UTC (rev 159)
+@@ -129,6 +129,7 @@
+ source/gui.cpp
+ source/tml/gamedialog.cpp
+ source/tml/gameconfig.cpp
++source/tml/gameaction.cpp
+ source/python/game.cpp
+ source/python/python_class.cpp
+ source/python/fileops.cpp
+
+Modified: trunk/web/update.sh
+===================================================================
+--- trunk/web/update.sh	2005-05-08 20:05:12 UTC (rev 158)
++++ trunk/web/update.sh	2005-05-08 21:00:56 UTC (rev 159)
+@@ -1,2 +1,2 @@
+ #!/bin/bash
+-scp downloads.php <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
++scp tw-light-setup-0.3r156M.exe <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000104.html">[Tw-light-svn] r158 - in trunk/source: . games generated melee other python tml
+</A></li>
+	<LI>Next message: <A HREF="000106.html">[Tw-light-svn] r160 - in trunk: . gamedata/python gamedata/test_game mingw-libs/include mingw-libs/include/boost mingw-libs/include/boost/bind mingw-libs/include/boost/compatibility mingw-libs/include/boost/compatibility/cpp_c_headers mingw-libs/include/boost/config mingw-libs/include/boost/config/abi mingw-libs/include/boost/config/compiler mingw-libs/include/boost/config/platform mingw-libs/include/boost/config/stdlib mingw-libs/include/boost/date_time mingw-libs/include/boost/date_time/gregorian mingw-libs/include/boost/date_time/posix_time mingw-libs/include/boost/detail mingw-libs/include/boost/filesystem mingw-libs/include/boost/format mingw-libs/include/boost/format/detail mingw-libs/include/boost/function mingw-libs/include/boost/function/detail mingw-libs/include/boost/graph mingw-libs/include/boost/graph/detail mingw-libs/include/boost/integer mingw-libs/include/boost/io mingw-libs/include/boost/iterator mingw-libs/include/boost/iterator/detail mingw-libs/include/boost/l! ambda mingw-libs/include/boost/lambda/detail mingw-libs/include/boost/math mingw-libs/include/boost/math/special_functions mingw-libs/include/boost/mpl mingw-libs/include/boost/mpl/aux_ mingw-libs/include/boost/mpl/aux_/config mingw-libs/include/boost/mpl/aux_/preprocessed mingw-libs/include/boost/mpl/aux_/preprocessed/bcc mingw-libs/include/boost/mpl/aux_/preprocessed/bcc551 mingw-libs/include/boost/mpl/aux_/preprocessed/gcc mingw-libs/include/boost/mpl/aux_/preprocessed/msvc60 mingw-libs/include/boost/mpl/aux_/preprocessed/msvc70 mingw-libs/include/boost/mpl/aux_/preprocessed/mwcw mingw-libs/include/boost/mpl/aux_/preprocessed/no_ctps mingw-libs/include/boost/mpl/aux_/preprocessed/no_ttp mingw-libs/include/boost/mpl/aux_/preprocessed/plain mingw-libs/include/boost/mpl/aux_/preprocessor mingw-libs/include/boost/mpl/aux_/range_c mingw-libs/include/boost/mpl/aux_/test mingw-libs/include/boost/mpl/limits mingw-libs/include/boost/mpl/list mingw-libs/include/boost/mpl/list/aux_! mingw-libs/include/boost/mpl/list/aux_/preprocessed mingw-lib! s/includ
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

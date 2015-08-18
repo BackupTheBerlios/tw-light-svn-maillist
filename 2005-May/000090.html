@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r144 - in trunk: gamedata/python source/games source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r144%20-%20in%20trunk%3A%20gamedata/python%20source/games%20source/melee&In-Reply-To=%3C200505011423.j41ENuaT001153%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000089.html">
+   <LINK REL="Next"  HREF="000091.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r144 - in trunk: gamedata/python source/games source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r144%20-%20in%20trunk%3A%20gamedata/python%20source/games%20source/melee&In-Reply-To=%3C200505011423.j41ENuaT001153%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r144 - in trunk: gamedata/python source/games source/melee">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun May  1 16:23:56 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000089.html">[Tw-light-svn] r143 - in trunk/source: . games other
+</A></li>
+        <LI>Next message: <A HREF="000091.html">[Tw-light-svn] r145 - in trunk: gamedata/python source/games source/generated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-01 16:23:55 +0200 (Sun, 01 May 2005)
+New Revision: 144
+
+Added:
+   trunk/gamedata/python/twsaveload.py
+Modified:
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+Log:
+Adding python script for saving gob player data
+
+
+Added: trunk/gamedata/python/twsaveload.py
+===================================================================
+--- trunk/gamedata/python/twsaveload.py	2005-05-01 11:24:32 UTC (rev 143)
++++ trunk/gamedata/python/twsaveload.py	2005-05-01 14:23:55 UTC (rev 144)
+@@ -0,0 +1,52 @@
++#!/usr/bin/python
++import pickle,os,sys,ggob,copy
++
++tr = &quot;Happy days&quot;
++game = ggob.GobGame.get_this()
++
++class Vector2:
++    x = 0
++    y = 0
++
++class Player:
++    starbucks        = 0
++    buckazoids       = 0
++    value_starbucks  = 0
++    value_buckazoids = 0
++    kills            = 0
++
++class GameData:
++    def __init__(self):
++        self.player = Player()
++    def getData(self):
++        # get player possession
++        self.player.starbucks        = copy.deepcopy(game.gobplayer.starbucks)
++        self.player.buckazoids       = copy.deepcopy(game.gobplayer.buckazoids)
++        self.player.value_starbucks  = copy.deepcopy(game.gobplayer.value_starbucks)
++        self.player.value_buckazoids = copy.deepcopy(game.gobplayer.value_buckazoids)
++        self.player.kills            = copy.deepcopy(game.gobplayer.kills)
++    
++    def commitData(self):
++        # commit player possession
++        game.gobplayer.starbucks          = self.player.starbucks
++        game.gobplayer.buckazoids         = self.player.buckazoids
++        game.gobplayer.value_starbucks    = self.player.value_starbucks
++        game.gobplayer.value_buckazoids   = self.player.value_buckazoids
++        game.gobplayer.kills              = self.player.kills
++
++class SaveManager:
++    def __init__(self, file):
++	self.file = file
++	self.data = GameData()
++	pass
++    def saveSelf(self):
++	f = open(self.file, &quot;w&quot;, pickle.HIGHEST_PROTOCOL)
++	pickle.dump(self.data,f)
++	f.close()
++    def getData(self):
++        self.data.getData()
++    def loadSelf(self):
++	f = open(self.file, &quot;r&quot;)
++	self.data = pickle.load(f)
++	f.close()
++        self.data.commitData()
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-05-01 11:24:32 UTC (rev 143)
++++ trunk/source/games/ggob.cpp	2005-05-01 14:23:55 UTC (rev 144)
+@@ -1101,7 +1101,32 @@
+   gobplayer.ship-&gt;translate(pos);
+ }
+ 
++/// Save game 
++/// @param file path to saved data
++std::string GobGame::Save(const std::string&amp; file)
++{
++  std::string save_script;
++  save_script  = &quot;import twsaveload\n&quot;;
++  save_script += &quot;data = twsaveload.SaveManager(\&quot;\&quot;\&quot;&quot; + file +&quot;\&quot;\&quot;\&quot;)\n&quot;;
++  save_script += &quot;data.getData()\n&quot;;
++  save_script += &quot;data.saveSelf()\n&quot;;
++  python::exec_string(save_script);
++  return &quot;&quot;;
++}
+ 
++/// Load game 
++/// @param file path to saved data
++int GobGame::Load(const std::string&amp; file)
++{
++  std::string load_script;
++  load_script  = &quot;import twsaveload\n&quot;;
++  load_script += &quot;data = twsaveload.SaveManager(\&quot;\&quot;\&quot;&quot; + file +&quot;\&quot;\&quot;\&quot;)\n&quot;;
++  load_script += &quot;data.loadSelf()\n&quot;;
++  python::exec_string(load_script);
++  return 0;
++}
++
++
+ REGISTER_GAME(GobGame, &quot;GOB&quot;)
+ 
+ 
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-05-01 11:24:32 UTC (rev 143)
++++ trunk/source/games/ggob.h	2005-05-01 14:23:55 UTC (rev 144)
+@@ -45,10 +45,7 @@
+   Ship *ship;
+   pair *pair_list;
+   int num_pairs;
+-  void _add_pair(const char *id, int value);
+-  pair *_get_pair(const char *id);
+-  void write_pair(const char *id, int value);
+-  int read_pair(const char *id);
++
+   int total;         ///&lt;total upgrades purchased, used in calculating price of future upgrades
+   int starbucks;
+   int buckazoids;
+@@ -56,10 +53,15 @@
+   int value_starbucks;
+   int value_buckazoids;
+   TeamCode team;
++
+   void init(TeamCode team);
+   void died(SpaceLocation *killer);
+   void new_ship(ShipType *type);
+   int charge (char *name, int price_starbucks, int price_buckazoids) ;
++  void _add_pair(const char *id, int value);
++  pair *_get_pair(const char *id);
++  void write_pair(const char *id, int value);
++  int read_pair(const char *id);
+   Upgrade **upgrade_list;
+ } ;
+ 
+@@ -143,6 +145,13 @@
+   SpaceSprite* LoadStationSprite(std::string datafile, std::string name);
+   virtual bool handle_key(int k);
+ 
++  /// Save game 
++  /// @param file path to saved data
++  virtual std::string Save(const std::string&amp; file);
++  /// Load game 
++  /// @param file path to saved data
++  virtual int Load(const std::string&amp; file);
++
+  public:
+   int num_planets;
+   Planet *planet[16];
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-05-01 11:24:32 UTC (rev 143)
++++ trunk/source/melee/mgame.cpp	2005-05-01 14:23:55 UTC (rev 144)
+@@ -1182,7 +1182,7 @@
+     case KEY_F2:
+       {
+ 	pause();
+-	Save();
++	Save(home_ini_full_path(&quot;.savegame&quot;));
+ 	unpause();
+ 	return true;
+       }
+@@ -1190,7 +1190,7 @@
+     case KEY_F3:
+       {
+ 	pause();
+-	Load(home_ini_full_path(&quot;save.xml&quot;));
++	Load(home_ini_full_path(&quot;.savegame&quot;));
+ 	unpause();
+ 	return true;
+       }
+@@ -1363,13 +1363,13 @@
+     }
+ }
+ 
+-std::string Game::Save()
++std::string Game::Save(const std::string&amp; file)
+ {
+   STACKTRACE;
+   return &quot;&quot;;
+ }
+ 
+-int Game::Load(std::string xml)
++int Game::Load(const std::string&amp; file)
+ {
+   STACKTRACE;
+   return 0;
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-05-01 11:24:32 UTC (rev 143)
++++ trunk/source/melee/mgame.h	2005-05-01 14:23:55 UTC (rev 144)
+@@ -168,8 +168,12 @@
+   /// Show ingame menu (save/load/option/quit/exit)
+   virtual void GameMenu();
+ 
+-  virtual std::string Save();
+-  virtual int Load(std::string xml);
++  /// Save game 
++  /// @param file path to saved data
++  virtual std::string Save(const std::string&amp; file);
++  /// Load game 
++  /// @param file path to saved data
++  virtual int Load(const std::string&amp; file);
+ 
+  public:
+   /// sets whether the game is done, according to the rules for the
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000089.html">[Tw-light-svn] r143 - in trunk/source: . games other
+</A></li>
+	<LI>Next message: <A HREF="000091.html">[Tw-light-svn] r145 - in trunk: gamedata/python source/games source/generated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

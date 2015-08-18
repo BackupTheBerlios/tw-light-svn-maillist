@@ -1,0 +1,1898 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r156 - in trunk: . gamedata/images/alien gamedata/music gamedata/music/races gamedata/python gamedata/test_game/dialogs source source/generated source/melee source/python source/tml source/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r156%20-%20in%20trunk%3A%20.%20gamedata/images/alien%20gamedata/music%20gamedata/music/races%20gamedata/python%20gamedata/test_game/dialogs%20source%20source/generated%20source/melee%20source/python%20source/tml%20source/util&In-Reply-To=%3C200505072102.j47L2Vlm020861%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000101.html">
+   <LINK REL="Next"  HREF="000103.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r156 - in trunk: . gamedata/images/alien gamedata/music gamedata/music/races gamedata/python gamedata/test_game/dialogs source source/generated source/melee source/python source/tml source/util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r156%20-%20in%20trunk%3A%20.%20gamedata/images/alien%20gamedata/music%20gamedata/music/races%20gamedata/python%20gamedata/test_game/dialogs%20source%20source/generated%20source/melee%20source/python%20source/tml%20source/util&In-Reply-To=%3C200505072102.j47L2Vlm020861%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r156 - in trunk: . gamedata/images/alien gamedata/music gamedata/music/races gamedata/python gamedata/test_game/dialogs source source/generated source/melee source/python source/tml source/util">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat May  7 23:02:31 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000101.html">[Tw-light-svn] r155 - in trunk: . gamedata gamedata/python gamedata/test_game gamedata/test_game/dialogs source source/generated source/other source/python source/tests source/tml
+</A></li>
+        <LI>Next message: <A HREF="000103.html">[Tw-light-svn] r157 - in trunk: . Util gamedata/python gamedata/python/lib gamedata/python/lib/bsddb gamedata/python/lib/bsddb/test gamedata/python/lib/compiler gamedata/python/lib/curses gamedata/python/lib/distutils gamedata/python/lib/distutils/command gamedata/python/lib/distutils/tests gamedata/python/lib/email gamedata/python/lib/email/test gamedata/python/lib/email/test/data gamedata/python/lib/encodings gamedata/python/lib/hotshot gamedata/python/lib/idlelib gamedata/python/lib/idlelib/Icons gamedata/python/lib/lib-old gamedata/python/lib/lib-tk gamedata/python/lib/logging gamedata/python/lib/site-packages gamedata/python/lib/xml gamedata/python/lib/xml/dom gamedata/python/lib/xml/parsers gamedata/python/lib/xml/sax gamedata/test_game/dialogs source/games source/generated source/melee source/tml source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#102">[ date ]</a>
+              <a href="thread.html#102">[ thread ]</a>
+              <a href="subject.html#102">[ subject ]</a>
+              <a href="author.html#102">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-07 23:02:30 +0200 (Sat, 07 May 2005)
+New Revision: 156
+
+Added:
+   trunk/gamedata/images/alien/arilou.jpg
+   trunk/gamedata/images/alien/chmmr.jpg
+   trunk/gamedata/images/alien/druuge.jpg
+   trunk/gamedata/images/alien/dynarri.jpg
+   trunk/gamedata/images/alien/human.jpg
+   trunk/gamedata/images/alien/ilwrath.jpg
+   trunk/gamedata/images/alien/korah.jpg
+   trunk/gamedata/images/alien/melnorme.jpg
+   trunk/gamedata/images/alien/mycon.jpg
+   trunk/gamedata/images/alien/orz.jpg
+   trunk/gamedata/images/alien/pkunk.jpg
+   trunk/gamedata/images/alien/shofixty.jpg
+   trunk/gamedata/images/alien/spathi-council.jpg
+   trunk/gamedata/images/alien/spathi.jpg
+   trunk/gamedata/images/alien/supox.jpg
+   trunk/gamedata/images/alien/sylandro.jpg
+   trunk/gamedata/images/alien/syreen.jpg
+   trunk/gamedata/images/alien/thraddash.jpg
+   trunk/gamedata/images/alien/umgah.jpg
+   trunk/gamedata/images/alien/urquan.jpg
+   trunk/gamedata/images/alien/utwig.jpg
+   trunk/gamedata/images/alien/vux.jpg
+   trunk/gamedata/images/alien/yehat.jpg
+   trunk/gamedata/images/alien/zoqfot.jpg
+   trunk/gamedata/music/races/
+   trunk/gamedata/music/races/arilou.mod
+   trunk/gamedata/music/races/chmmr.mod
+   trunk/gamedata/music/races/druuge.mod
+   trunk/gamedata/music/races/dynarri.mod
+   trunk/gamedata/music/races/human.mod
+   trunk/gamedata/music/races/ilwrath.mod
+   trunk/gamedata/music/races/korah.mod
+   trunk/gamedata/music/races/melnorme.mod
+   trunk/gamedata/music/races/mycon.mod
+   trunk/gamedata/music/races/orz.mod
+   trunk/gamedata/music/races/pkunk.mod
+   trunk/gamedata/music/races/shofixty.mod
+   trunk/gamedata/music/races/spathi.mod
+   trunk/gamedata/music/races/supox.mod
+   trunk/gamedata/music/races/sylandro.mod
+   trunk/gamedata/music/races/syreen.mod
+   trunk/gamedata/music/races/thraddash.mod
+   trunk/gamedata/music/races/umgah.mod
+   trunk/gamedata/music/races/urquan.mod
+   trunk/gamedata/music/races/utwig.mod
+   trunk/gamedata/music/races/vux.mod
+   trunk/gamedata/music/races/yehat.mod
+   trunk/gamedata/music/races/zoqfot.mod
+   trunk/gamedata/test_game/dialogs/shpalabc.xml
+   trunk/gamedata/test_game/dialogs/shpandgu.xml
+   trunk/gamedata/test_game/dialogs/shparisk.xml
+   trunk/gamedata/test_game/dialogs/shpbahbu.xml
+   trunk/gamedata/test_game/dialogs/shpbipka.xml
+   trunk/gamedata/test_game/dialogs/shpchebr.xml
+   trunk/gamedata/test_game/dialogs/shpchmav.xml
+   trunk/gamedata/test_game/dialogs/shpchoex.xml
+   trunk/gamedata/test_game/dialogs/shpconca.xml
+   trunk/gamedata/test_game/dialogs/shpconho.xml
+   trunk/gamedata/test_game/dialogs/shpdragr.xml
+   trunk/gamedata/test_game/dialogs/shpdruma.xml
+   trunk/gamedata/test_game/dialogs/shpearc3.xml
+   trunk/gamedata/test_game/dialogs/shpearcr.xml
+   trunk/gamedata/test_game/dialogs/shpforsh.xml
+   trunk/gamedata/test_game/dialogs/shpgarty.xml
+   trunk/gamedata/test_game/dialogs/shpilwav.xml
+   trunk/gamedata/test_game/dialogs/shpilwsp.xml
+   trunk/gamedata/test_game/dialogs/shpkahbo.xml
+   trunk/gamedata/test_game/dialogs/shpkohma.xml
+   trunk/gamedata/test_game/dialogs/shpkzedr.xml
+   trunk/gamedata/test_game/dialogs/shpmeltr.xml
+   trunk/gamedata/test_game/dialogs/shpmmrxf.xml
+   trunk/gamedata/test_game/dialogs/shpmycpo.xml
+   trunk/gamedata/test_game/dialogs/shporzne.xml
+   trunk/gamedata/test_game/dialogs/shppkufu.xml
+   trunk/gamedata/test_game/dialogs/shprogsq.xml
+   trunk/gamedata/test_game/dialogs/shpshosc.xml
+   trunk/gamedata/test_game/dialogs/shpslypr.xml
+   trunk/gamedata/test_game/dialogs/shpspael.xml
+   trunk/gamedata/test_game/dialogs/shpstaba.xml
+   trunk/gamedata/test_game/dialogs/shpsupbl.xml
+   trunk/gamedata/test_game/dialogs/shpsyrpe.xml
+   trunk/gamedata/test_game/dialogs/shptauar.xml
+   trunk/gamedata/test_game/dialogs/shptauda.xml
+   trunk/gamedata/test_game/dialogs/shptausl.xml
+   trunk/gamedata/test_game/dialogs/shptauto.xml
+   trunk/gamedata/test_game/dialogs/shpthrto.xml
+   trunk/gamedata/test_game/dialogs/shpumgdr.xml
+   trunk/gamedata/test_game/dialogs/shputwju.xml
+   trunk/gamedata/test_game/dialogs/shpvuxin.xml
+   trunk/gamedata/test_game/dialogs/shpyehte.xml
+   trunk/gamedata/test_game/dialogs/shpzeksh.xml
+   trunk/gamedata/test_game/dialogs/shpzfpst.xml
+Modified:
+   trunk/gamedata/python/dialog.py
+   trunk/gamedata/python/tml.py
+   trunk/gamedata/python/tml_fake.py
+   trunk/gamedata/python/twsaveload.py
+   trunk/gamedata/test_game/dialogs/test_dialog.xml
+   trunk/makefile
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mship.h
+   trunk/source/python/game.i
+   trunk/source/scp.cpp
+   trunk/source/tml/gamedialog.cpp
+   trunk/source/util/get_time.h
+   trunk/source/util/sound.cpp
+   trunk/source/util/sound.h
+Log:
+Adding chat posibility for ships
+
+
+Added: trunk/gamedata/images/alien/arilou.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/arilou.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/chmmr.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/chmmr.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/druuge.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/druuge.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/dynarri.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/dynarri.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/human.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/human.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/ilwrath.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/ilwrath.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/korah.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/korah.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/melnorme.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/melnorme.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/mycon.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/mycon.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/orz.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/orz.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/pkunk.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/pkunk.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/shofixty.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/shofixty.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/spathi-council.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/spathi-council.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/spathi.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/spathi.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/supox.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/supox.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/sylandro.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/sylandro.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/syreen.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/syreen.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/thraddash.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/thraddash.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/umgah.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/umgah.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/urquan.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/urquan.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/utwig.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/utwig.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/vux.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/vux.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/yehat.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/yehat.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/alien/zoqfot.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/zoqfot.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/arilou.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/arilou.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/chmmr.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/chmmr.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/druuge.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/druuge.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/dynarri.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/dynarri.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/human.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/human.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/ilwrath.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/ilwrath.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/korah.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/korah.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/melnorme.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/melnorme.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/mycon.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/mycon.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/orz.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/orz.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/pkunk.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/pkunk.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/shofixty.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/shofixty.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/spathi.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/spathi.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/supox.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/supox.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/sylandro.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/sylandro.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/syreen.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/syreen.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/thraddash.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/thraddash.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/umgah.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/umgah.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/urquan.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/urquan.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/utwig.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/utwig.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/vux.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/vux.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/yehat.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/yehat.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/races/zoqfot.mod
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/races/zoqfot.mod
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: trunk/gamedata/python/dialog.py
+===================================================================
+--- trunk/gamedata/python/dialog.py	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/python/dialog.py	2005-05-07 21:02:30 UTC (rev 156)
+@@ -16,7 +16,7 @@
+ #  * runDialogString(str_xml) 
+ #  * runDialogFile(file_path)
+ 
+-import unittest
++import unittest, os
+ import xml.parsers.expat
+ 
+ &quot;&quot;&quot; For testing purpose we import fake TML implementation that provide the same API as
+@@ -35,7 +35,8 @@
+ def runDialogString(str_xml):
+     DialogLoader().loadDialogString(str_xml).doDialog()
+ def runDialogFile(file_path):
+-    DialogLoader().loadDialogFile(file_path).doDialog()
++    if os.access(file_path, os.F_OK):
++        DialogLoader().loadDialogFile(file_path).doDialog()
+ 
+ #########################################################
+ # Native dialog API
+@@ -61,7 +62,7 @@
+     
+ class PlayerAnswer(Action):
+     def __init__(self,text,appear_condition,actions):
+-        self.text         = text              # player answer text
++        self.text         = text             # player answer text
+         self.cond         = appear_condition  # if true variant visible
+         self.actions      = actions           # actions tuple that should run on evaluate
+         
+@@ -83,6 +84,7 @@
+     def evaluate(self):
+         tml.DialogApi.showAlienPicture(self.background)
+         tml.DialogApi.showText(self.alien_text, 0, self.text_location[0], self.text_location[1])
++        tml.GetSoundSystem().play_music(self.music)
+         answers = filter(lambda x: x.checkCond(), self.player_answers)
+         answ_texts = []
+         for answer in answers:
+@@ -222,7 +224,7 @@
+         self.assertEqual(self.dialog.cur_node,None)
+     def testDoDialog(self):
+         self.dialog.doDialog()
+-        self.assertEqual(tml.DialogApi.getJornal(),&quot;startDialog showAlienPicture showText askPlayer showAlienPicture showText askPlayer endDialog &quot;)
++        self.assertEqual(tml.DialogApi.getJornal(),&quot;startDialog showAlienPicture showText play_music askPlayer showAlienPicture showText play_music askPlayer endDialog &quot;)
+ 
+ class TestDialogLoaderFunctions(unittest.TestCase):
+     def setUp(self):
+@@ -261,7 +263,7 @@
+         dlg_ldr.start_element('NODES', {})
+         self.assertEqual('Dialog((',dlg_ldr.python_code)
+     def testComplexTest(self):
+-        jornalString = &quot;startDialog showAlienPicture showText askPlayer showAlienPicture showText askPlayer endDialog &quot;
++        jornalString = &quot;startDialog showAlienPicture showText play_music askPlayer showAlienPicture showText play_music askPlayer endDialog &quot;
+         f = open('test_dialog.xml','r')
+         str = f.read()
+         f.close()
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/python/tml.py	2005-05-07 21:02:30 UTC (rev 156)
+@@ -534,6 +534,39 @@
+ 
+ GameConfig_GetAbsolutePath = _tml.GameConfig_GetAbsolutePath
+ 
++class SoundSystem(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, SoundSystem, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, SoundSystem, name)
++    def __repr__(self):
++        return &quot;&lt;C SoundSystem instance at %s&gt;&quot; % (self.this,)
++    def __init__(self, *args):
++        _swig_setattr(self, SoundSystem, 'this', _tml.new_SoundSystem(*args))
++        _swig_setattr(self, SoundSystem, 'thisown', 1)
++    def __del__(self, destroy=_tml.delete_SoundSystem):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++    def play_music(*args): return _tml.SoundSystem_play_music(*args)
++    def play_sound(*args): return _tml.SoundSystem_play_sound(*args)
++    def stop_sound(*args): return _tml.SoundSystem_stop_sound(*args)
++    def set_music_volume(*args): return _tml.SoundSystem_set_music_volume(*args)
++    def set_sound_volume(*args): return _tml.SoundSystem_set_sound_volume(*args)
++    def load_music_volume(*args): return _tml.SoundSystem_load_music_volume(*args)
++    def load_sound_volume(*args): return _tml.SoundSystem_load_sound_volume(*args)
++    def playing_music(*args): return _tml.SoundSystem_playing_music(*args)
++    def playing_music_file(*args): return _tml.SoundSystem_playing_music_file(*args)
++
++class SoundSystemPtr(SoundSystem):
++    def __init__(self, this):
++        _swig_setattr(self, SoundSystem, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, SoundSystem, 'thisown', 0)
++        _swig_setattr(self, SoundSystem,self.__class__,SoundSystem)
++_tml.SoundSystem_swigregister(SoundSystemPtr)
++
++
++GetSoundSystem = _tml.GetSoundSystem
+ class vectorEnemySaveData(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, vectorEnemySaveData, name, value)
+@@ -566,6 +599,7 @@
+         if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, vectorEnemySaveData, 'thisown', 0)
+         _swig_setattr(self, vectorEnemySaveData,self.__class__,vectorEnemySaveData)
+ _tml.vectorEnemySaveData_swigregister(vectorEnemySaveDataPtr)
++cvar = _tml.cvar
+ 
+ class vectorString(_object):
+     __swig_setmethods__ = {}
+
+Modified: trunk/gamedata/python/tml_fake.py
+===================================================================
+--- trunk/gamedata/python/tml_fake.py	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/python/tml_fake.py	2005-05-07 21:02:30 UTC (rev 156)
+@@ -19,6 +19,10 @@
+         self.__call__ = anycallable
+ 
+ jornal = &quot;&quot;
++
++#############################################################################
++# Dialogs                                                                   #
++#############################################################################
+ class DialogApi:
+     def startDialog():
+         global jornal
+@@ -51,6 +55,33 @@
+     clearJornal = Callable(clearJornal)
+     getJornal   = Callable(getJornal)
+ 
++############################################################################
++# Sound                                                                    #
++############################################################################
++def GetSoundSystem():
++    return SoundSystem()
++
++class SoundSystem:
++    def play_music(self,file, loops = -1):
++        global jornal
++        jornal += &quot;play_music &quot;
++    def play_sound(self,file, vol = -1):
++        global jornal
++        jornal += &quot;play_music &quot;
++    def stop_sound(self,file):
++        global jornal
++        jornal += &quot;stop_sound &quot;
++    def set_music_volume(self,vol):
++        global jornal
++        jornal += &quot;play_music &quot;
++    def playing_music(self):
++        global jornal
++        jornal += &quot;playing_music &quot;
++        return False
++    def playing_music_file(self):
++        global jornal
++        jornal += &quot;playing_music_file &quot;
++        return &quot;&quot;
+ #############################################################################
+ #            TESTS                                                          #
+ #############################################################################
+
+Modified: trunk/gamedata/python/twsaveload.py
+===================================================================
+--- trunk/gamedata/python/twsaveload.py	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/python/twsaveload.py	2005-05-07 21:02:30 UTC (rev 156)
+@@ -41,7 +41,6 @@
+             e[i].pos_x = self.enemy[i].pos_x
+             e[i].pos_y = self.enemy[i].pos_y
+         gamedata.setTst(e)
+-        print &quot;DIALOG&quot; + tml.GameConfig.GetAbsolutePath(&quot;dialogs/test_dialog.xml&quot;) + &quot;GGG&quot;
+         dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/test_dialog.xml&quot;))
+ 
+ class SaveManager:
+
+Added: trunk/gamedata/test_game/dialogs/shpalabc.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpalabc.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpalabc.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpandgu.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpandgu.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpandgu.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shparisk.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shparisk.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shparisk.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpbahbu.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpbahbu.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpbahbu.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpbipka.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpbipka.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpbipka.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpchebr.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpchebr.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpchebr.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpchmav.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpchmav.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpchmav.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpchoex.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpchoex.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpchoex.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpconca.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpconca.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpconca.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpconho.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpconho.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpconho.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpdragr.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpdragr.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpdragr.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpdruma.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpdruma.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpdruma.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpearc3.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpearc3.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpearc3.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpearcr.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpearcr.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpearcr.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpforsh.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpforsh.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpforsh.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpgarty.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpgarty.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpgarty.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpilwav.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpilwav.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpilwav.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpilwsp.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpilwsp.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpilwsp.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpkahbo.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpkahbo.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpkahbo.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpkohma.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpkohma.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpkohma.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpkzedr.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpkzedr.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpkzedr.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpmeltr.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpmeltr.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpmeltr.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpmmrxf.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpmmrxf.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpmmrxf.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpmycpo.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpmycpo.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpmycpo.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shporzne.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shporzne.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shporzne.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shppkufu.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shppkufu.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shppkufu.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shprogsq.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shprogsq.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shprogsq.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpshosc.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpshosc.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpshosc.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpslypr.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpslypr.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpslypr.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpspael.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpspael.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpspael.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpstaba.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpstaba.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpstaba.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpsupbl.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpsupbl.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpsupbl.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpsyrpe.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpsyrpe.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpsyrpe.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shptauar.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shptauar.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shptauar.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shptauda.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shptauda.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shptauda.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shptausl.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shptausl.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shptausl.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shptauto.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shptauto.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shptauto.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpthrto.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpthrto.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpthrto.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpumgdr.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpumgdr.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpumgdr.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shputwju.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shputwju.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shputwju.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpvuxin.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpvuxin.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpvuxin.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpyehte.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpyehte.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpyehte.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpzeksh.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpzeksh.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpzeksh.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/test_game/dialogs/shpzfpst.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/shpzfpst.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/shpzfpst.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Modified: trunk/gamedata/test_game/dialogs/test_dialog.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/test_dialog.xml	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/gamedata/test_game/dialogs/test_dialog.xml	2005-05-07 21:02:30 UTC (rev 156)
+@@ -1 +1 @@
+-&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;a.ogg&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;a.ogg&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;music/races/spathi.mod&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/makefile	2005-05-07 21:02:30 UTC (rev 156)
+@@ -171,7 +171,7 @@
+ 	./$(NAME) -test
+ 
+ 
+-source/generated/tml_wrap.cpp: source/python/game.i source/games/ggob.h
++source/generated/tml_wrap.cpp: source/python/game.i source/games/ggob.h source/util/sound.h source/tml/gameconfig.h source/tml/gamedialog.h
+ 	swig -c++ -python -o source/generated/tml_wrap.cpp source/python/game.i
+ 	cp source/generated/tml.py $(DATAPATH)/python/
+ 
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/generated/tml.py	2005-05-07 21:02:30 UTC (rev 156)
+@@ -534,6 +534,39 @@
+ 
+ GameConfig_GetAbsolutePath = _tml.GameConfig_GetAbsolutePath
+ 
++class SoundSystem(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, SoundSystem, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, SoundSystem, name)
++    def __repr__(self):
++        return &quot;&lt;C SoundSystem instance at %s&gt;&quot; % (self.this,)
++    def __init__(self, *args):
++        _swig_setattr(self, SoundSystem, 'this', _tml.new_SoundSystem(*args))
++        _swig_setattr(self, SoundSystem, 'thisown', 1)
++    def __del__(self, destroy=_tml.delete_SoundSystem):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++    def play_music(*args): return _tml.SoundSystem_play_music(*args)
++    def play_sound(*args): return _tml.SoundSystem_play_sound(*args)
++    def stop_sound(*args): return _tml.SoundSystem_stop_sound(*args)
++    def set_music_volume(*args): return _tml.SoundSystem_set_music_volume(*args)
++    def set_sound_volume(*args): return _tml.SoundSystem_set_sound_volume(*args)
++    def load_music_volume(*args): return _tml.SoundSystem_load_music_volume(*args)
++    def load_sound_volume(*args): return _tml.SoundSystem_load_sound_volume(*args)
++    def playing_music(*args): return _tml.SoundSystem_playing_music(*args)
++    def playing_music_file(*args): return _tml.SoundSystem_playing_music_file(*args)
++
++class SoundSystemPtr(SoundSystem):
++    def __init__(self, this):
++        _swig_setattr(self, SoundSystem, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, SoundSystem, 'thisown', 0)
++        _swig_setattr(self, SoundSystem,self.__class__,SoundSystem)
++_tml.SoundSystem_swigregister(SoundSystemPtr)
++
++
++GetSoundSystem = _tml.GetSoundSystem
+ class vectorEnemySaveData(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, vectorEnemySaveData, name, value)
+@@ -566,6 +599,7 @@
+         if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, vectorEnemySaveData, 'thisown', 0)
+         _swig_setattr(self, vectorEnemySaveData,self.__class__,vectorEnemySaveData)
+ _tml.vectorEnemySaveData_swigregister(vectorEnemySaveDataPtr)
++cvar = _tml.cvar
+ 
+ class vectorString(_object):
+     __swig_setmethods__ = {}
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/generated/tml_wrap.cpp	2005-05-07 21:02:30 UTC (rev 156)
+@@ -719,24 +719,25 @@
+ #define  SWIGTYPE_p_Vector2 swig_types[16] 
+ #define  SWIGTYPE_p_GobStation swig_types[17] 
+ #define  SWIGTYPE_p_p_GobStation swig_types[18] 
+-#define  SWIGTYPE_p_p_Planet swig_types[19] 
+-#define  SWIGTYPE_p_pair swig_types[20] 
+-#define  SWIGTYPE_p_std__string swig_types[21] 
+-#define  SWIGTYPE_p_GobPlayer swig_types[22] 
+-#define  SWIGTYPE_p_Frame swig_types[23] 
+-#define  SWIGTYPE_p_ShipType swig_types[24] 
+-#define  SWIGTYPE_p_TeamCode swig_types[25] 
+-#define  SWIGTYPE_p_SpaceObject swig_types[26] 
+-#define  SWIGTYPE_p_EnemySaveData swig_types[27] 
+-#define  SWIGTYPE_p_p_GobEnemy swig_types[28] 
+-#define  SWIGTYPE_p_GobEnemy swig_types[29] 
+-#define  SWIGTYPE_p_GameConfig swig_types[30] 
+-#define  SWIGTYPE_p_RainbowRift swig_types[31] 
+-#define  SWIGTYPE_p_Log swig_types[32] 
+-#define  SWIGTYPE_p_ShipPanel swig_types[33] 
+-#define  SWIGTYPE_p_float swig_types[34] 
+-#define  SWIGTYPE_p_std__vectorTEnemySaveData_t swig_types[35] 
+-static swig_type_info *swig_types[37];
++#define  SWIGTYPE_p_SoundSystem swig_types[19] 
++#define  SWIGTYPE_p_p_Planet swig_types[20] 
++#define  SWIGTYPE_p_pair swig_types[21] 
++#define  SWIGTYPE_p_std__string swig_types[22] 
++#define  SWIGTYPE_p_GobPlayer swig_types[23] 
++#define  SWIGTYPE_p_Frame swig_types[24] 
++#define  SWIGTYPE_p_ShipType swig_types[25] 
++#define  SWIGTYPE_p_TeamCode swig_types[26] 
++#define  SWIGTYPE_p_SpaceObject swig_types[27] 
++#define  SWIGTYPE_p_EnemySaveData swig_types[28] 
++#define  SWIGTYPE_p_p_GobEnemy swig_types[29] 
++#define  SWIGTYPE_p_GobEnemy swig_types[30] 
++#define  SWIGTYPE_p_GameConfig swig_types[31] 
++#define  SWIGTYPE_p_RainbowRift swig_types[32] 
++#define  SWIGTYPE_p_Log swig_types[33] 
++#define  SWIGTYPE_p_ShipPanel swig_types[34] 
++#define  SWIGTYPE_p_float swig_types[35] 
++#define  SWIGTYPE_p_std__vectorTEnemySaveData_t swig_types[36] 
++static swig_type_info *swig_types[38];
+ 
+ /* -------- TYPES TABLE (END) -------- */
+ 
+@@ -751,6 +752,7 @@
+ #include &quot;games/ggob.h&quot;
+ #include &quot;tml/gamedialog.h&quot;
+ #include &quot;tml/gameconfig.h&quot;
++#include &quot;util/sound.h&quot;
+ 
+ 
+ #define  SWIG_MemoryError    1
+@@ -833,6 +835,8 @@
+ 
+ #include &lt;utility&gt;
+ 
++extern SoundSystem *tw_sound;
++extern SoundSystem *GetSoundSystem();
+ 
+ #include &lt;vector&gt;
+ #include &lt;algorithm&gt;
+@@ -4532,6 +4536,265 @@
+     Py_INCREF(obj);
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
++static PyObject *_wrap_new_SoundSystem(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    bool arg1 = (bool) true ;
++    SoundSystem *result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;|O:new_SoundSystem&quot;,&amp;obj0)) goto fail;
++    if (obj0) {
++        arg1 = PyInt_AsLong(obj0) ? true : false;
++        if (PyErr_Occurred()) SWIG_fail;
++    }
++    result = (SoundSystem *)new SoundSystem(arg1);
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_SoundSystem, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_delete_SoundSystem(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_SoundSystem&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    delete arg1;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_play_music(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    std::string arg2 ;
++    int arg3 = (int) -1 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO|i:SoundSystem_play_music&quot;,&amp;obj0,&amp;obj1,&amp;arg3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        if (PyString_Check(obj1))
++        arg2 = std::string(PyString_AsString(obj1),
++        PyString_Size(obj1));
++        else
++        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++    }
++    (arg1)-&gt;play_music(arg2,arg3);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_play_sound(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    std::string arg2 ;
++    double arg3 = (double) -1 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO|d:SoundSystem_play_sound&quot;,&amp;obj0,&amp;obj1,&amp;arg3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        if (PyString_Check(obj1))
++        arg2 = std::string(PyString_AsString(obj1),
++        PyString_Size(obj1));
++        else
++        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++    }
++    (arg1)-&gt;play_sound(arg2,arg3);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_stop_sound(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    std::string arg2 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:SoundSystem_stop_sound&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        if (PyString_Check(obj1))
++        arg2 = std::string(PyString_AsString(obj1),
++        PyString_Size(obj1));
++        else
++        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++    }
++    (arg1)-&gt;stop_sound(arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_set_music_volume(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    double arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Od:SoundSystem_set_music_volume&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;set_music_volume(arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_set_sound_volume(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    double arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Od:SoundSystem_set_sound_volume&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;set_sound_volume(arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_load_music_volume(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    double result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SoundSystem_load_music_volume&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (double)(arg1)-&gt;load_music_volume();
++    
++    resultobj = PyFloat_FromDouble(result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_load_sound_volume(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    double result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SoundSystem_load_sound_volume&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (double)(arg1)-&gt;load_sound_volume();
++    
++    resultobj = PyFloat_FromDouble(result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_playing_music(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    bool result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SoundSystem_playing_music&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (bool)(arg1)-&gt;playing_music();
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SoundSystem_playing_music_file(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *arg1 = (SoundSystem *) 0 ;
++    std::string result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SoundSystem_playing_music_file&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SoundSystem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (arg1)-&gt;playing_music_file();
++    
++    {
++        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject * SoundSystem_swigregister(PyObject *self, PyObject *args) {
++    PyObject *obj;
++    if (!PyArg_ParseTuple(args,(char*)&quot;O&quot;, &amp;obj)) return NULL;
++    SWIG_TypeClientData(SWIGTYPE_p_SoundSystem, obj);
++    Py_INCREF(obj);
++    return Py_BuildValue((char *)&quot;&quot;);
++}
++static int _wrap_tw_sound_set(PyObject *_val) {
++    {
++        void *temp;
++        if ((SWIG_ConvertPtr(_val,(void **) &amp;temp, SWIGTYPE_p_SoundSystem, SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN)) == -1) {
++            PyErr_SetString(PyExc_TypeError, &quot;C variable 'tw_sound (SoundSystem *)'&quot;);
++            return 1;
++        }
++        tw_sound = (SoundSystem *) temp;
++    }
++    return 0;
++}
++
++
++static PyObject *_wrap_tw_sound_get() {
++    PyObject *pyobj;
++    
++    pyobj = SWIG_NewPointerObj((void *) tw_sound, SWIGTYPE_p_SoundSystem, 0);
++    return pyobj;
++}
++
++
++static PyObject *_wrap_GetSoundSystem(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SoundSystem *result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:GetSoundSystem&quot;)) goto fail;
++    result = (SoundSystem *)GetSoundSystem();
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_SoundSystem, 0);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_vectorEnemySaveData__SWIG_0(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     unsigned int arg1 = (unsigned int) 0 ;
+@@ -5712,6 +5975,19 @@
+ 	 { (char *)&quot;new_GameConfig&quot;, _wrap_new_GameConfig, METH_VARARGS },
+ 	 { (char *)&quot;delete_GameConfig&quot;, _wrap_delete_GameConfig, METH_VARARGS },
+ 	 { (char *)&quot;GameConfig_swigregister&quot;, GameConfig_swigregister, METH_VARARGS },
++	 { (char *)&quot;new_SoundSystem&quot;, _wrap_new_SoundSystem, METH_VARARGS },
++	 { (char *)&quot;delete_SoundSystem&quot;, _wrap_delete_SoundSystem, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_play_music&quot;, _wrap_SoundSystem_play_music, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_play_sound&quot;, _wrap_SoundSystem_play_sound, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_stop_sound&quot;, _wrap_SoundSystem_stop_sound, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_set_music_volume&quot;, _wrap_SoundSystem_set_music_volume, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_set_sound_volume&quot;, _wrap_SoundSystem_set_sound_volume, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_load_music_volume&quot;, _wrap_SoundSystem_load_music_volume, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_load_sound_volume&quot;, _wrap_SoundSystem_load_sound_volume, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_playing_music&quot;, _wrap_SoundSystem_playing_music, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_playing_music_file&quot;, _wrap_SoundSystem_playing_music_file, METH_VARARGS },
++	 { (char *)&quot;SoundSystem_swigregister&quot;, SoundSystem_swigregister, METH_VARARGS },
++	 { (char *)&quot;GetSoundSystem&quot;, _wrap_GetSoundSystem, METH_VARARGS },
+ 	 { (char *)&quot;new_vectorEnemySaveData&quot;, _wrap_new_vectorEnemySaveData, METH_VARARGS },
+ 	 { (char *)&quot;vectorEnemySaveData___len__&quot;, _wrap_vectorEnemySaveData___len__, METH_VARARGS },
+ 	 { (char *)&quot;vectorEnemySaveData_clear&quot;, _wrap_vectorEnemySaveData_clear, METH_VARARGS },
+@@ -5768,6 +6044,7 @@
+ static swig_type_info _swigt__p_Vector2[] = {{&quot;_p_Vector2&quot;, 0, &quot;Vector2 *&quot;, 0},{&quot;_p_Vector2&quot;},{0}};
+ static swig_type_info _swigt__p_GobStation[] = {{&quot;_p_GobStation&quot;, 0, &quot;GobStation *&quot;, 0},{&quot;_p_GobStation&quot;},{0}};
+ static swig_type_info _swigt__p_p_GobStation[] = {{&quot;_p_p_GobStation&quot;, 0, &quot;GobStation **&quot;, 0},{&quot;_p_p_GobStation&quot;},{0}};
++static swig_type_info _swigt__p_SoundSystem[] = {{&quot;_p_SoundSystem&quot;, 0, &quot;SoundSystem *&quot;, 0},{&quot;_p_SoundSystem&quot;},{0}};
+ static swig_type_info _swigt__p_p_Planet[] = {{&quot;_p_p_Planet&quot;, 0, &quot;Planet **&quot;, 0},{&quot;_p_p_Planet&quot;},{0}};
+ static swig_type_info _swigt__p_pair[] = {{&quot;_p_pair&quot;, 0, &quot;pair *&quot;, 0},{&quot;_p_pair&quot;},{0}};
+ static swig_type_info _swigt__p_std__string[] = {{&quot;_p_std__string&quot;, 0, &quot;std::string *&quot;, 0},{&quot;_p_std__string&quot;},{0}};
+@@ -5806,6 +6083,7 @@
+ _swigt__p_Vector2, 
+ _swigt__p_GobStation, 
+ _swigt__p_p_GobStation, 
++_swigt__p_SoundSystem, 
+ _swigt__p_p_Planet, 
+ _swigt__p_pair, 
+ _swigt__p_std__string, 
+@@ -5859,5 +6137,7 @@
+     }
+     SWIG_InstallConstants(d,swig_const_table);
+     
++    PyDict_SetItemString(d,(char*)&quot;cvar&quot;, SWIG_globals);
++    SWIG_addvarlink(SWIG_globals,(char*)&quot;tw_sound&quot;,_wrap_tw_sound_get, _wrap_tw_sound_set);
+ }
+ 
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/melee/mship.cpp	2005-05-07 21:02:30 UTC (rev 156)
+@@ -34,7 +34,8 @@
+ #include &quot;other/twconfig.h&quot;
+ #include &quot;scp.h&quot;
+ #include &quot;mitems.h&quot;
+-
++#include &quot;tml/gameconfig.h&quot;
++#include &quot;python/python_class.h&quot;
+ /*------------------------------*
+  *		Ship Class Registration *
+  *------------------------------*/
+@@ -555,6 +556,22 @@
+       this-&gt;target_next      = 1&amp;&amp;(nextkeys &amp; keyflag::next);
+       this-&gt;target_prev      = 1&amp;&amp;(nextkeys &amp; keyflag::prev);
+       this-&gt;target_closest   = 1&amp;&amp;(nextkeys &amp; keyflag::closest);
++      
++      if ( !(nextkeys &amp; keyflag::chat) &amp;&amp; (control-&gt;keys &amp; keyflag::chat))
++	{
++	  if(get_target()/*&amp;&amp;distance(get_target())&lt;2500*/)
++	    {
++	      Ship* s = (Ship*)get_target();
++	      if(strcmp(control-&gt;getTypeName(),&quot;Keyboard/Joystick&quot;)==0)
++		{
++		  s-&gt;chat_with_player();
++		}
++	      else
++		{
++		  chat_with_player();
++		} 
++	    }
++	}
+       if (nextkeys &amp; keyflag::suicide) 
+ 	{
+ 	  crew  = 0;
+@@ -934,7 +951,17 @@
+   return type;
+ }
+ 
+-
++void Ship::chat_with_player()
++{
++  std::string dialog = GameConfig::GetAbsolutePath( std::string(&quot;dialogs/shp&quot;) + type-&gt;id + &quot;.xml&quot;);
++  if(dialog.length())
++    {
++      std::string script;
++      script  = &quot;import dialog\n&quot;;
++      script += &quot;dialog.runDialogFile(\&quot;\&quot;\&quot;&quot; + dialog +&quot;\&quot;\&quot;\&quot;)\n&quot;;
++      python::exec_string(script);
++    }
++}
+ Phaser::Phaser(
+ 	       SpaceLocation *creator, Vector2 opos, Vector2 _rpos, 
+ 	       Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/melee/mship.h	2005-05-07 21:02:30 UTC (rev 156)
+@@ -177,6 +177,8 @@
+   virtual double handle_speed_loss(SpaceLocation *source, double normal);
+   
+   virtual void animate(Frame *frame);
++  
++  virtual void chat_with_player();
+ 
+  protected:
+     Presence* _target_TeamIndicator;
+
+Modified: trunk/source/python/game.i
+===================================================================
+--- trunk/source/python/game.i	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/python/game.i	2005-05-07 21:02:30 UTC (rev 156)
+@@ -3,12 +3,14 @@
+ #include &quot;games/ggob.h&quot;
+ #include &quot;tml/gamedialog.h&quot;
+ #include &quot;tml/gameconfig.h&quot;
++#include &quot;util/sound.h&quot;
+ %}
+ %include &quot;std_string.i&quot;
+ %include &quot;std_pair.i&quot;
+ %include ../games/ggob.h
+ %include ../tml/gamedialog.h
+ %include ../tml/gameconfig.h
++%include ../util/sound.h
+ 
+ %include &quot;std_vector.i&quot;
+ 
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/scp.cpp	2005-05-07 21:02:30 UTC (rev 156)
+@@ -687,8 +687,7 @@
+   int mainRet;
+   do 
+     {
+-      //mainRet = popup_dialog(mainDialog, MAIN_DIALOG_MELEE);
+-      mainRet = tw_do_dialog(window, mainDialog, MAIN_DIALOG_MELEE);
++      mainRet = tw_do_dialog(window, mainDialog, MAIN_DIALOG_NEW_GAME);
+       switch (mainRet) {
+       case MAIN_DIALOG_MELEE:
+ 	disable();
+
+Modified: trunk/source/tml/gamedialog.cpp
+===================================================================
+--- trunk/source/tml/gamedialog.cpp	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/tml/gamedialog.cpp	2005-05-07 21:02:30 UTC (rev 156)
+@@ -31,20 +31,24 @@
+ 
+ #include &quot;gamedialog.h&quot;
+ #include &quot;gameconfig.h&quot;
++#include &quot;util/sound.h&quot;
+ 
+ #define DIALOG_HEIGHT_AREA 0.7
+ 
++static std::string g_current_music = &quot;&quot;;
+ void DialogApi::startDialog()
+ {
+   std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
+   if(!game-&gt;is_paused())
+     game-&gt;pause();
++  g_current_music  = tw_sound-&gt;playing_music_file();
+ }
+ 
+ void DialogApi::endDialog()
+ {
+   std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
+   game-&gt;unpause();
++  tw_sound-&gt;play_music(g_current_music);
+ }
+ 
+ int DialogApi::askPlayer(std::vector&lt;const char*&gt; answers)
+@@ -67,8 +71,10 @@
+   
+   show_mouse(game-&gt;window-&gt;surface);
+   int ret = -1;
+-  while( ret == -1 )
+-    ret = do_menu(pMenuAnswers, 0, (int)(game-&gt;view-&gt;frame-&gt;window-&gt;h*DIALOG_HEIGHT_AREA));
++  while( ret &lt; 0 )
++    {
++      ret = do_menu(pMenuAnswers, 0, (int)(game-&gt;view-&gt;frame-&gt;window-&gt;h*DIALOG_HEIGHT_AREA));
++    }
+   show_mouse(NULL);
+ 
+   ///////////////////////////////////////////////
+
+Modified: trunk/source/util/get_time.h
+===================================================================
+--- trunk/source/util/get_time.h	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/util/get_time.h	2005-05-07 21:02:30 UTC (rev 156)
+@@ -16,7 +16,7 @@
+ int idle ( int time ); //to yeild a number of milliseconds to the OS
+ extern int _no_idle;   //to disable the above function
+ 
+-  // wait (_d) msec until ESC pressed
++  // wait (_d) msec until key pressed
+ #define HAVE_A_WAIT(_d)	\
+ { \
+         int time = get_time(); \
+@@ -24,8 +24,6 @@
+         {  \
+ 	  while (keypressed()) \
+ 	  { \
+-	    int k = readkey(); \
+-	    if(k&gt;&gt;8 == KEY_ESC) \
+ 	      return; \
+ 	  } \
+            idle(10); \
+
+Modified: trunk/source/util/sound.cpp
+===================================================================
+--- trunk/source/util/sound.cpp	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/util/sound.cpp	2005-05-07 21:02:30 UTC (rev 156)
+@@ -25,6 +25,7 @@
+ #include &lt;allegro.h&gt;
+ #include &quot;other/twconfig.h&quot;
+ #include &quot;errors.h&quot;
++#include &quot;tml/gameconfig.h&quot;
+ 
+ SoundSystem* tw_sound = NULL;
+ 
+@@ -54,7 +55,8 @@
+     }
+ 
+   
+-  int res = Mix_OpenAudio(MIX_DEFAULT_FREQUENCY,MIX_DEFAULT_FORMAT,2,buf_size_);
++  //  int res = Mix_OpenAudio(MIX_DEFAULT_FREQUENCY,MIX_DEFAULT_FORMAT,2,buf_size_);
++  int res = Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,buf_size_);
+   if(res &gt;= 0) 
+     {
+       mix_ok = true;
+@@ -103,19 +105,20 @@
+ void SoundSystem::play_music(const std::string file, int loops)
+ {
+   STACKTRACE;
+-  if(!mix_ok || current_music == file)
++  std::string absolute_file = GameConfig::GetAbsolutePath(file);
++  if(!mix_ok || current_music == absolute_file)
+     return;
+   
+   if(music_off) 
+     {
+-      current_music = file;
++      current_music = absolute_file;
+       return;
+     }
+   
+-  std::map&lt;std::string,Mix_Music*&gt;::const_iterator itor = music_cache.find(file);
++  std::map&lt;std::string,Mix_Music*&gt;::const_iterator itor = music_cache.find(absolute_file);
+   if(itor == music_cache.end()) 
+     {
+-      const std::string&amp; filename = file;
++      const std::string&amp; filename = absolute_file;
+       
+       if(filename.empty()) 
+ 	{
+@@ -143,7 +146,7 @@
+       std::cerr &lt;&lt; &quot;Could not play music: &quot; &lt;&lt; SDL_GetError() &lt;&lt; &quot;\n&quot;;
+     }
+   
+-  current_music = file;
++  current_music = absolute_file;
+ }
+ 
+ void SoundSystem::play_sound(const std::string file, double vol)
+@@ -280,3 +283,14 @@
+   
+   return Mix_PlayingMusic();
+ }
++
++std::string SoundSystem::playing_music_file()
++{
++  if(playing_music() &amp;&amp; current_music.length()&gt;0)
++    return current_music;
++  return &quot;&quot;;
++}
++SoundSystem* GetSoundSystem()
++{
++  return tw_sound;
++}
+
+Modified: trunk/source/util/sound.h
+===================================================================
+--- trunk/source/util/sound.h	2005-05-07 17:10:38 UTC (rev 155)
++++ trunk/source/util/sound.h	2005-05-07 21:02:30 UTC (rev 156)
+@@ -22,6 +22,7 @@
+ 
+ #include &quot;SDL_mixer.h&quot;
+ 
++
+ /// \brief All work with sound must be implemented using this class
+ class SoundSystem
+ {  
+@@ -68,7 +69,11 @@
+ 
+   /// \brief return true if music playing
+   bool playing_music();
++
++  /// \return currently playing file, empty string if no music played
++  std::string playing_music_file();
+ };
+ extern SoundSystem* tw_sound;
++extern SoundSystem* GetSoundSystem();
+ 
+ #endif
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000101.html">[Tw-light-svn] r155 - in trunk: . gamedata gamedata/python gamedata/test_game gamedata/test_game/dialogs source source/generated source/other source/python source/tests source/tml
+</A></li>
+	<LI>Next message: <A HREF="000103.html">[Tw-light-svn] r157 - in trunk: . Util gamedata/python gamedata/python/lib gamedata/python/lib/bsddb gamedata/python/lib/bsddb/test gamedata/python/lib/compiler gamedata/python/lib/curses gamedata/python/lib/distutils gamedata/python/lib/distutils/command gamedata/python/lib/distutils/tests gamedata/python/lib/email gamedata/python/lib/email/test gamedata/python/lib/email/test/data gamedata/python/lib/encodings gamedata/python/lib/hotshot gamedata/python/lib/idlelib gamedata/python/lib/idlelib/Icons gamedata/python/lib/lib-old gamedata/python/lib/lib-tk gamedata/python/lib/logging gamedata/python/lib/site-packages gamedata/python/lib/xml gamedata/python/lib/xml/dom gamedata/python/lib/xml/parsers gamedata/python/lib/xml/sax gamedata/test_game/dialogs source/games source/generated source/melee source/tml source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#102">[ date ]</a>
+              <a href="thread.html#102">[ thread ]</a>
+              <a href="subject.html#102">[ subject ]</a>
+              <a href="author.html#102">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

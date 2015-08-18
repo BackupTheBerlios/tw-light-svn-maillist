@@ -1,0 +1,623 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r172 - in trunk: . source/games source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r172%20-%20in%20trunk%3A%20.%20source/games%20source/melee&In-Reply-To=%3C200507260540.j6Q5e8nK002480%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000117.html">
+   <LINK REL="Next"  HREF="000119.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r172 - in trunk: . source/games source/melee</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r172%20-%20in%20trunk%3A%20.%20source/games%20source/melee&In-Reply-To=%3C200507260540.j6Q5e8nK002480%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r172 - in trunk: . source/games source/melee">youbastrd at berlios.de
+       </A><BR>
+    <I>Tue Jul 26 07:40:08 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000117.html">[Tw-light-svn] r171 - in trunk: . msvc-libs msvc-libs/include msvc-libs/include/SDL msvc-libs/include/allegro msvc-libs/include/allegro/inline msvc-libs/include/allegro/internal msvc-libs/include/allegro/platform msvc-libs/include/boost msvc-libs/include/boost/config msvc-libs/include/boost/config/abi msvc-libs/include/boost/config/compiler msvc-libs/include/boost/config/platform msvc-libs/include/boost/config/stdlib msvc-libs/include/boost/detail msvc-libs/lib source/games source/generated source/libraries/agup source/melee source/python
+</A></li>
+        <LI>Next message: <A HREF="000119.html">[Tw-light-svn] r173 - in trunk/source: ais melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#118">[ date ]</a>
+              <a href="thread.html#118">[ thread ]</a>
+              <a href="subject.html#118">[ subject ]</a>
+              <a href="author.html#118">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2005-07-26 07:40:02 +0200 (Tue, 26 Jul 2005)
+New Revision: 172
+
+Added:
+   trunk/source/melee/GobWarpOutTrail.cpp
+   trunk/source/melee/GobWarpOutTrail.h
+Modified:
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/WarpOutTrail.cpp
+   trunk/source/melee/WarpOutTrail.h
+   trunk/source/melee/mship.cpp
+   trunk/sources.lst
+Log:
+Attempting to integrate this WarpOutTrail class into the current full game code.  Still some quirks with it, namely that the startEffect() method is called many times, when it would make life easier if it was only called once per warp effect.  Also, the trail remains after the ship has left the system, and then returns.  
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/source/games/ggob.cpp	2005-07-26 05:40:02 UTC (rev 172)
+@@ -52,6 +52,9 @@
+ #include &quot;tml/eventmanager.h&quot;
+ #include &quot;tml/gameaction.h&quot;
+ 
++#include &quot;melee/GobWarpOutTrail.h&quot;
++//#include &quot;melee/WarpOutTrail.h&quot;
++
+ #define gobgame ((GobGame*)game)
+ 
+ ///////////////////////////////////////////////////////////////////////
+@@ -561,18 +564,23 @@
+       {
+ 	if(_name==&quot;Arix&quot;)
+ 	  {
+-	    switch_system(&quot;Beta&quot;);
++	    add(GobWarpOutTrail::getGobWarpOutTrail(gobplayer.ship, &quot;Beta&quot;, this));
++	    //switch_system(&quot;Beta&quot;);
+ 	  }
+ 	else
+ 	  {
+-	    switch_system(&quot;Arix&quot;);
++	    add(GobWarpOutTrail::getGobWarpOutTrail(gobplayer.ship, &quot;Arix&quot;, this));
++	    //switch_system(&quot;Arix&quot;);
+ 	  }
++	
+ 	return true;
+       }
+       break;
+     case KEY_M:
+       {
+-	switch_system(_galaxy.select());
++	add( GobWarpOutTrail::getGobWarpOutTrail(gobplayer.ship, _galaxy.select(), this));
++	//game-&gt;add( WarpOutTrail::getWarpOutTrail(gobplayer.ship) );
++	//switch_system(_galaxy.select());
+ 	videosystem-&gt;window.redraw();
+ 	return true;
+       }
+@@ -1256,7 +1264,6 @@
+ 	return;
+ }
+ 
+-
+ int GobGame::add_gobplayer(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos)
+ {
+   STACKTRACE;
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/source/games/ggob.h	2005-07-26 05:40:02 UTC (rev 172)
+@@ -26,6 +26,8 @@
+ #include &quot;gamehierarchy.h&quot;
+ #include &quot;other/starmap.h&quot;
+ 
++#include &quot;melee/GobWarpOutTrail.h&quot;
++
+ class Upgrade;
+ class GobStation;
+ 
+@@ -260,5 +262,6 @@
+ };
+ 
+ 
++
+ #endif // TW_GOB_H_INCLUDES
+ 
+
+Added: trunk/source/melee/GobWarpOutTrail.cpp
+===================================================================
+--- trunk/source/melee/GobWarpOutTrail.cpp	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/source/melee/GobWarpOutTrail.cpp	2005-07-26 05:40:02 UTC (rev 172)
+@@ -0,0 +1,83 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#include &quot;melee/mship.h&quot; // for Ship class
++#include &quot;melee/WarpOutTrail.h&quot;
++#include &quot;melee/GobWarpOutTrail.h&quot;
++#include &quot;games/ggob.h&quot;
++
++#include &lt;string&gt;
++
++GobWarpEffect::GobWarpEffect(const std::string &amp; targetSystem, GobGame * gobGame) :
++  targetSystem(targetSystem),
++  gobGame(gobGame)
++{
++  STACKTRACE;
++}
++
++void GobWarpEffect::startEffect() {
++  STACKTRACE;
++  //yB! should uncomment this when we know there is only one call to this per
++  //instance of GobWarpEffect.  Currently, this keeps getting called
++  //gobGame-&gt;item.remove(gobGame-&gt;gobplayer.ship);
++  printf(&quot;GobWarpEffect::startEffect()\n&quot;);
++}
++  
++void GobWarpEffect::endEffect() {
++  STACKTRACE;
++  gobGame-&gt;switch_system(targetSystem);
++  printf(&quot;GobWarpEffect::endEffect()\n&quot;);
++}
++
++
++GobWarpOutTrail::GobWarpOutTrail(
++		 const std::string &amp; targetSystem,
++		 GobGame * gobGame,
++		 SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
++		 Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
++		 int onum_colors, int ofsize, int steps, int step_time) :
++	 WarpOutTrail(creator, pos, rel_pos, 
++	 ship, sprite, osprite_index, ocolors, 
++	 onum_colors, ofsize, steps, step_time, new GobWarpEffect(targetSystem, gobGame))
++{
++  STACKTRACE;
++}
++
++GobWarpOutTrail * GobWarpOutTrail::getGobWarpOutTrail(Ship * ship, 
++	const std::string &amp; targetSystem,
++	GobGame * gobGame)
++{
++  STACKTRACE;
++  if (!ship) {
++  	tw_error(&quot;In getGobWarpOutTrail(), parameter ship was null&quot;);
++  	return NULL;
++  }
++  return new GobWarpOutTrail(
++		    targetSystem,
++		    gobGame, 
++		    ship,
++		    ship-&gt;pos + unit_vector(ship-&gt;get_angle()) * 0 * ship-&gt;get_size().x,
++		    unit_vector(ship-&gt;get_angle()) * PHASE_MAX * ship-&gt;get_size().x,
++		    ship, 
++		    ship-&gt;get_sprite(), 
++		    ship-&gt;get_sprite_index(), 
++		    inverse_hot_color, 
++		    INVERSE_HOT_COLORS,
++		    PHASE_DELAY, 
++		    PHASE_MAX, 
++		    PHASE_DELAY
++		    );
++}
+
+Added: trunk/source/melee/GobWarpOutTrail.h
+===================================================================
+--- trunk/source/melee/GobWarpOutTrail.h	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/source/melee/GobWarpOutTrail.h	2005-07-26 05:40:02 UTC (rev 172)
+@@ -0,0 +1,100 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef GobWarpOutTrail_Header
++#define GobWarpOutTrail_Header
++
++#include &quot;melee/mship.h&quot; //for Ship class
++#include &quot;melee/WarpOutTrail.h&quot;
++#include &quot;games/ggob.h&quot;
++
++#include &lt;string&gt;
++
++/**
++ * 
++ */
++class GobWarpEffect : public WarpEffect {
++protected:
++  std::string targetSystem;
++  GobGame * gobGame;
++  
++public:
++  GobWarpEffect(const std::string &amp; targetSystem, GobGame * gobGame);
++
++  /**
++   * Removes the ship from play.
++   */
++  virtual void startEffect();
++  
++  /**
++   * Moves the ship to the star system specified in the constructor.
++   */ 
++  virtual void endEffect();
++
++};
++
++/**
++ * Used when the player warps out of one system and into another.
++ */  
++class GobWarpOutTrail : public WarpOutTrail {
++
++protected:
++
++  /**
++   * Creates a warp out trail.  At the begining of this effect, the ship is
++   * removed from its current star system.  At the end of this effect, the ship
++   * is placed in the target star system.
++   * 
++   * @param targetSystem the name of the star system to warp to
++   * @param the instance of GobGame
++   * @param creator
++   * @param pos
++   * @param rel_pos
++   * @param ship
++   * @param sprite
++   * @param osprite_index
++   * @param ocolors
++   * @param onum_colors
++   * @param ofsize
++   * @param steps
++   * @param step_time
++   * 
++   * @see WarpOutTrail::WarpOutTrail()
++   */ 
++  GobWarpOutTrail(const std::string &amp; targetSystem,
++		  GobGame * gobGame,
++		  SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
++		  Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
++		  int onum_colors, int ofsize, int steps, int step_time);
++
++public:
++
++  /**
++   * Constructs a trail such that the player will end up at the specified 
++   * system at the end of the effect.
++   * 
++   * @param the ship to move to the star system
++   * @param system the name of the star system the player wishes to travel to.
++   * @param the instance of GobGame
++   */ 
++  static GobWarpOutTrail * GobWarpOutTrail::getGobWarpOutTrail(Ship * ship, 
++	const std::string &amp; targetSystem,
++	GobGame * gobGame);
++
++};
++
++
++#endif
+
+Modified: trunk/source/melee/WarpOutTrail.cpp
+===================================================================
+--- trunk/source/melee/WarpOutTrail.cpp	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/source/melee/WarpOutTrail.cpp	2005-07-26 05:40:02 UTC (rev 172)
+@@ -1,4 +1,19 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
+ 
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
+ #include &quot;util/sound.h&quot;
+ 
+ #include &lt;allegro.h&gt;
+@@ -27,8 +42,6 @@
+ #include &quot;WarpOutTrail.h&quot;
+ 
+ 
+-#define INVERSE_HOT_COLORS 23
+-
+ /**
+  * These are colours used when the ship warps out.  They are in the 
+  * inverse order as the ones used to warp in.
+@@ -46,7 +59,8 @@
+ WarpOutTrail::WarpOutTrail(
+ 	       SpaceLocation *creator, Vector2 opos, Vector2 _rpos, 
+ 	       Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-	       int onum_colors, int ofsize, int steps, int step_size) :
++	       int onum_colors, int ofsize, int steps, int step_size,
++	       WarpEffect * effect) :
+   SpaceObject(creator, opos, 0.0, sprite),
+   rel_pos(_rpos),
+   ship(ship),
+@@ -58,7 +72,8 @@
+   frame_step(ofsize),
+   phaser_step_position(0),
+   phaser_steps(steps),
+-  phaser_step_size(step_size)
++  phaser_step_size(step_size),
++  effect(effect)
+ {
+   STACKTRACE;
+   layer = LAYER_HOTSPOTS;
+@@ -68,13 +83,13 @@
+ 
+   attributes |= ATTRIB_UNDETECTABLE;
+   
+-  //destroy the ship
+-  ship-&gt;state = 0;
+-
+   // extra check
+   // note that if this happens, there's something wrong in the ships' constructor...
+   if (sprite_index &gt;= sprite-&gt;frames())
+     sprite_index = 0;
++    
++  if (effect)
++     effect-&gt;startEffect();
+ 
+   return;
+ }
+@@ -108,16 +123,34 @@
+          Vector2 d = rel_pos / phaser_steps;
+          game-&gt;add(new WarpOutTrail(this, pos + d, rel_pos-d, ship, sprite, 
+                 sprite_index, colors, num_colors, frame_size, phaser_steps-1, 
+-                phaser_step_size));
++                phaser_step_size, effect));
++      } else {
++	if (effect)
++	   effect-&gt;endEffect();
+       }
+     }
+   }
+   SpaceObject::calculate();
+ }
+ 
++/*void WarpOutTrail::startEffect() {
++  STACKTRACE;
++  //destroy the ship
++  //ship-&gt;state = 0;
++//  tw_error(&quot;warpouttrail::startEffect()&quot;);
++  printf(&quot;warpouttrail::startEffect()\n&quot;);
++  
++}
+ 
+-WarpOutTrail * WarpOutTrail::getWarpOutTrail(Ship * ship) {
++void WarpOutTrail::endEffect() {
+   STACKTRACE;
++  //tw_error(&quot;warpouttrail::endEffect()&quot;);
++  printf(&quot;warpouttrail::endEffect()\n&quot;);
++}*/
++
++
++/*WarpOutTrail * WarpOutTrail::getWarpOutTrail(Ship * ship) {
++  STACKTRACE;
+   if (!ship) {
+   	tw_error(&quot;In getWarpOutTrail(), parameter ship was null&quot;);
+   	return NULL;
+@@ -134,4 +167,4 @@
+ 		    PHASE_MAX, 
+ 		    PHASE_DELAY
+ 		    );
+-}
++}*/
+
+Modified: trunk/source/melee/WarpOutTrail.h
+===================================================================
+--- trunk/source/melee/WarpOutTrail.h	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/source/melee/WarpOutTrail.h	2005-07-26 05:40:02 UTC (rev 172)
+@@ -21,8 +21,35 @@
+ #include &quot;mframe.h&quot;
+ 
+ 
++#define INVERSE_HOT_COLORS 23
+ 
+ /**
++ * These are colours used when the ship warps out.  They are in the 
++ * inverse order as the ones used to warp in.
++ */ 
++extern int inverse_hot_color[];
++
++
++class WarpEffect {
++public:
++  /**
++   * This method is called at the beginning of the effect.  The default
++   * behaviour is to immediately remove the ship from play by setting its state
++   * to 0.
++   * Subclasses should override this method to customize behaviour; it is not 
++   * necessary to call the parent's startEffect method.
++   */ 
++  virtual void startEffect() = 0;
++  
++  /**
++   * This method is called at the end of the effect.  The default behaviour is
++   * to do nothing; it is not necessary to call the parent's startEffect method.
++   * Override this method to customize behaviour.  
++   */ 
++  virtual void endEffect() = 0;
++};
++
++/**
+  * This creates a warp-in animated effect that lasts a few milliseconds; after
+  * which, the ship is considered in play.
+  * 
+@@ -44,32 +71,50 @@
+   int phaser_steps;
+   int phaser_step_size;
+   
++  WarpEffect * effect;
++  
+  public:
+-	/**
+-	 * Removes a ship from play and displays a warp-out effect.  At the 
+-	 * beginning of the effect, the ship is not longer in play.  The effect
+-	 * lasts a few milliseconds afterwards.  
+-	 * 
+-	 * Typically, this constructor is called with the method
+-	 * Ship::get_ship_phaser()
+-	 * 
+-	 * @see Ship::get_ship_phaser()
+-	 *  
+-	 * @param creator 
+-	 * @param opos 
+-	 * @param _rpos 
+-	 * @param ship 
+-	 * @param sprite 
+-	 * @param osprite_index 
+-	 * @param ocolors 
+-	 * @param onum_colors 
+-	 * @param ofsize 
+-	 * @param steps 
+-	 * @param step_size 
+-	 */
+-  WarpOutTrail::WarpOutTrail(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
++  /**
++   * Removes a ship from play and displays a warp-out effect.  At the 
++   * beginning of the effect, the ship is not longer in play.  The effect
++   * lasts a few milliseconds afterwards.  
++   * 
++   * Typically, this constructor is called with the method
++   * Ship::get_ship_phaser()
++   * 
++   * @see WarpOutTrail::getWarpOutTrail()
++   *  
++   * @param creator 
++   * @param opos 
++   * @param _rpos 
++   * @param ship 
++   * @param sprite 
++   * @param osprite_index 
++   * @param ocolors 
++   * @param onum_colors 
++   * @param ofsize 
++   * @param steps 
++   * @param step_size 
++   */
++  WarpOutTrail(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
+ 		 Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-		 int onum_colors, int ofsize, int steps, int step_time) ;
++		 int onum_colors, int ofsize, int steps, int step_time,
++		 WarpEffect * effect);
++		 
++  /**
++   * Removes a ship from play and displays a warp-out effect.  At the 
++   * beginning of the effect, the ship is not longer in play.  The effect
++   * lasts a few milliseconds afterwards.  
++   * 
++   * This constructor makes the trail appear in front of the ship, lasts a fair
++   * distance, and cycles the colours in an attractive pattern.  
++   * 
++   * This constructor is probably easier to work with than the other one for
++   * this class.
++   *  
++   * @param ship 
++   */
++  //WarpOutTrail(Ship * ship);
+   
+   /**
+    * Draws the warp-out effect
+@@ -92,7 +137,7 @@
+    * the ship is removed from play.  
+    * @param ship the ship to warp out and remove from play
+    */ 
+-  static WarpOutTrail * getWarpOutTrail(Ship * ship);
++  //static WarpOutTrail * getWarpOutTrail(Ship * ship);
+ };
+ 
+ #endif
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/source/melee/mship.cpp	2005-07-26 05:40:02 UTC (rev 172)
+@@ -632,10 +632,10 @@
+ 	      attributes &amp;= ~ATTRIB_NOTIFY_ON_DEATH;
+             }
+         }
+-      if (nextkeys &amp; keyflag::warpOut) 
++      /*if (nextkeys &amp; keyflag::warpOut) 
+ 	{
+-	  game-&gt;add( WarpOutTrail::getWarpOutTrail(this) );
+-        }
++	  game-&gt;add( new WarpOutTrail(this) );
++        }*/
+       this-&gt;nextkeys = control-&gt;keys;
+       
+       if (!control-&gt;exists()) 
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-07-24 17:51:13 UTC (rev 171)
++++ trunk/sources.lst	2005-07-26 05:40:02 UTC (rev 172)
+@@ -23,6 +23,7 @@
+ source/libraries/jpgalleg/encode.c
+ source/libraries/jpgalleg/io.c
+ source/libraries/jpgalleg/jpgalleg.c
++source/melee/GobWarpOutTrail.cpp
+ source/melee/manim.cpp
+ source/melee/mcbodies.cpp
+ source/melee/mcontrol.cpp
+@@ -115,6 +116,7 @@
+ source/ships/shpzeksh.cpp
+ source/tests/gameconfigtest.cpp
+ source/tests/testdatapath.cpp
++source/tests/TestFleetEditor.cpp
+ source/tests/testmain.cpp
+ source/tml/eventmanager.cpp
+ source/tml/gameaction.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000117.html">[Tw-light-svn] r171 - in trunk: . msvc-libs msvc-libs/include msvc-libs/include/SDL msvc-libs/include/allegro msvc-libs/include/allegro/inline msvc-libs/include/allegro/internal msvc-libs/include/allegro/platform msvc-libs/include/boost msvc-libs/include/boost/config msvc-libs/include/boost/config/abi msvc-libs/include/boost/config/compiler msvc-libs/include/boost/config/platform msvc-libs/include/boost/config/stdlib msvc-libs/include/boost/detail msvc-libs/lib source/games source/generated source/libraries/agup source/melee source/python
+</A></li>
+	<LI>Next message: <A HREF="000119.html">[Tw-light-svn] r173 - in trunk/source: ais melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#118">[ date ]</a>
+              <a href="thread.html#118">[ thread ]</a>
+              <a href="subject.html#118">[ subject ]</a>
+              <a href="author.html#118">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

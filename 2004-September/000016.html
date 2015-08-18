@@ -1,0 +1,1180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r68 - in trunk: . doc gamedata gamedata/default_ini source source/games source/melee source/other source/sc1ships source/sc2ships source/ships
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r68%20-%20in%20trunk%3A%20.%20doc%20gamedata%20gamedata/default_ini%20source%20source/games%20source/melee%20source/other%20source/sc1ships%20source/sc2ships%20source/ships&In-Reply-To=%3C200409272204.i8RM4AP2013504%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000015.html">
+   <LINK REL="Next"  HREF="000017.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r68 - in trunk: . doc gamedata gamedata/default_ini source source/games source/melee source/other source/sc1ships source/sc2ships source/ships</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r68%20-%20in%20trunk%3A%20.%20doc%20gamedata%20gamedata/default_ini%20source%20source/games%20source/melee%20source/other%20source/sc1ships%20source/sc2ships%20source/ships&In-Reply-To=%3C200409272204.i8RM4AP2013504%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r68 - in trunk: . doc gamedata gamedata/default_ini source source/games source/melee source/other source/sc1ships source/sc2ships source/ships">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Tue Sep 28 00:04:10 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000015.html">[Tw-light-svn] r67 - trunk/web
+</A></li>
+        <LI>Next message: <A HREF="000017.html">[Tw-light-svn] r69 - in trunk: . Util doc gamedata rawgraphic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-09-28 00:04:09 +0200 (Tue, 28 Sep 2004)
+New Revision: 68
+
+Modified:
+   trunk/doc/Doxyfile
+   trunk/gamedata/default_ini/scp.ini
+   trunk/gamedata/readme.html
+   trunk/makefile
+   trunk/source/games/gdefender.cpp
+   trunk/source/melee.h
+   trunk/source/melee/mcbodies.cpp
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mshot.cpp
+   trunk/source/melee/mshppan.cpp
+   trunk/source/other/planet3d.cpp
+   trunk/source/other/vbodies.cpp
+   trunk/source/sc1ships/shpandgu.cpp
+   trunk/source/sc1ships/shpmmrxf.cpp
+   trunk/source/sc2ships/shpchmav.cpp
+   trunk/source/sc2ships/shporzne.cpp
+   trunk/source/sc2ships/shppkufu.cpp
+   trunk/source/sc2ships/shpthrto.cpp
+   trunk/source/scp.cpp
+   trunk/source/ships/shpaktgu.cpp
+   trunk/source/ships/shpalabc.cpp
+   trunk/source/ships/shpbipka.cpp
+   trunk/source/ships/shpchoex.cpp
+   trunk/source/ships/shpconca.cpp
+   trunk/source/ships/shpearc3.cpp
+   trunk/source/ships/shprogsq.cpp
+   trunk/source/ships/shptauda.cpp
+   trunk/source/ships/shptaume.cpp
+   trunk/source/ships/shptauto.cpp
+Log:
+Meleedata moved back to game class,
+Updated documentation, updated ini
+
+
+Modified: trunk/doc/Doxyfile
+===================================================================
+--- trunk/doc/Doxyfile	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/doc/Doxyfile	2004-09-27 22:04:09 UTC (rev 68)
+@@ -4,7 +4,7 @@
+ # General configuration options
+ #---------------------------------------------------------------------------
+ PROJECT_NAME           = TW-Light
+-PROJECT_NUMBER         = 0.3b64
++PROJECT_NUMBER         = 0.3b67
+ OUTPUT_DIRECTORY       = ./
+ OUTPUT_LANGUAGE        = English
+ USE_WINDOWS_ENCODING   = YES
+
+Modified: trunk/gamedata/default_ini/scp.ini
+===================================================================
+--- trunk/gamedata/default_ini/scp.ini	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/gamedata/default_ini/scp.ini	2004-09-27 22:04:09 UTC (rev 68)
+@@ -10,7 +10,7 @@
+ Right = 83
+ Fire = 67
+ AltFire = 63
+-Special = 108
++Special = 106
+ Next_Target = 65
+ Prev_Target = 66
+ Closest_Target = 16
+
+Modified: trunk/gamedata/readme.html
+===================================================================
+--- trunk/gamedata/readme.html	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/gamedata/readme.html	2004-09-27 22:04:09 UTC (rev 68)
+@@ -1,216 +1,54 @@
+-&lt;html&gt;
+-&lt;head&gt;
+-    &lt;title&gt;TW-Light Readme&lt;/title&gt;
+-&lt;/head&gt;
+-&lt;body&gt;
+-
+-&lt;h1&gt;TW-Light Readme&lt;/h1&gt;
+-
+-&lt;h2&gt;Overview: What is TW-Light?&lt;/h2&gt;
+-
++&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;
++&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=iso-8859-1&quot;&gt;
++&lt;title&gt;TW-Light: TW-Light&lt;/title&gt;
++&lt;link href=&quot;doxygen.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
++&lt;/head&gt;&lt;body&gt;
++&lt;!-- Generated by Doxygen 1.3.8 --&gt;
++&lt;h1&gt;TW-Light &lt;/h1&gt;
+ &lt;p&gt;
+-TW-Light is lightweighted version of Star Control: TimeWarp.
+-Currently it includes only a combat portion with the best TW ships but 
+-without network support. There are some plans to expand it to include an 
+-epic adventure.
+-&lt;/p&gt;
+-
+-&lt;h2&gt;Getting Started&lt;/h2&gt;
+-
+-&lt;p&gt;
+-&lt;pre&gt;
+-Melee:  Starts a battle.  In battle the following keys do stuff:
+-        F1 brings up the help screen (this file, at the moment)
+-        F2 brings up the options menu
+-        F3 switches camera focus
+-        F4 is fast-forward (speeds up in-game time greatly)
+-        F5 displays fleet status
+-        F7 changes game tic rate (physics quality)
+-        F8 changes camera mode
+-        F9 creates planets (silly &quot;feature&quot;)
+-        F10 quits (so does ESCAPE)
+-        F11 saves screenshots
+-        F12 displays framerates / performance data
+-        - zooms out on some viewing modes.
+-        + (or =) zooms in on some viewing modes.
+-        0 and 9 also effect the camera in some viewing modes.
+-        ctrl+T = toggle team indicators on/off
+-        ctrl+H = toggle healthbar indicators on/off
+-        Also, if some controllers are set to keyboard, customizable
+-        buttons may cause ship actions.  Be default these are:
+-        Config 0:
+-                left:   Keypad 4
+-                thrust: Keypad 8
+-                right:  Keypad 6
+-                fire:   Quote (&quot;)
+-                special:Semicolon (;)
+-                next:   Closebrace (])
+-                prev:   Openbrace ([)
+-                near:   P
+-        Config 1:
+-                left:   A
+-                thrust: S
+-                right:  D
+-                fire:   B
+-                special:V
+-                next:   F
+-                prev:   G
+-                near:   H
+-Extended Menu:
+-	Play Game:
+-               Same as &quot;Melee&quot; now
+-	Key Tester:
+-               Use this utility to check keys combination for conflicts.
+-	Ship Info:
+-		Here you can get detail information about every 
+-             ship in the game.
+-	Diagnostic:
+-                Show comlile options and version information. 
+-	Main Menu:
+-                This returns to the main menu.
+-		
+-Teams:
+-        Select Controller:
+-                Select the player (i.e. &quot;Player 1&quot; or &quot;Player 2&quot;)
+-              you wish to alter from the list on the left, and
+-              the controller (i.e. &quot;Keyboard&quot;, &quot;MoronBot&quot;) you
+-              want to control that player from the list on the
+-              left.  Then either click on the &quot;Select
+-              Controller&quot; button or double click on the
+-              controller name.
+-	Change Team #: 
+-	        This switches the player allys. 
+-	      Note that team 0 mean no allys.
+-        Change Config #:
+-                 This switches the configuration used by the
+-               currently highlighted controller.  
+-        Edit Configuration:
+-                 This is used to setup up keys when the currently
+-               highlighted player is using the keyboard.  It
+-               may eventually allow the configuration of AIs
+-               and calibration of joysticks.
+-        Edit Fleet:
+-                 This button brings up the fleet selection menu for
+-               the currently highlighted player.  
+-        Main Menu:
+-                 This returns to the main menu.
+-Options:
+-        Most things on this menu are self-explanatory, but a few
+-          need special mention.
+-
+-        Gamma correction:
+-                This makes things brighter during combat.  This
+-                  should not be changed from the middle of combat,
+-                  or colors could get weird.  
+-        Antialiasing:
+-                If this box is checked then TimeWarp will use
+-                  higher quality graphics, but run slower.  
+-        Color Depth:
+-                You cannot change this from the middle of combat.  
+-        Camera Mode:
+-                This allows you to control what is shown on your
+-                  screen in combat.  
+-
+-                &quot;Enemy_Discrete&quot;
+-                  is just like Star Control on the PC, where
+-                  the camera moved to keep both you and your
+-                  enemy onscreen, and zoomed in by factors of
+-                  2.
+-                &quot;Enemy&quot;
+-                  is like Star Control on the Genesis or 3DO,
+-                  where the camera zoomed in smoothly.
+-                &quot;Hero&quot;
+-                  makes the camera stay focused on Player 1,
+-                  and zoom in/out when + and - are pressed.
+-                &quot;Everything&quot;
+-                  makes the camera stay on the planet and zoom
+-                  way out so that everything is visible.  This
+-                  mode is slightly buggy (visual artifacts).  
+-&lt;/pre&gt;
+-&lt;/p&gt;
+-
+-&lt;h2&gt;Development&lt;/h2&gt;
+-&lt;p&gt;
+-  &lt;ul&gt;
+-	&lt;li&gt;Introduce the most interesting and cool TimeWarp ships&lt;/li&gt;
+-	&lt;li&gt;Simplify and fix melee engine&lt;/li&gt;
+-	&lt;li&gt;Add TimeWarp Markup Language (TML) support&lt;/li&gt;
+-	&lt;li&gt;Write plot&lt;/li&gt;
+-	&lt;li&gt;Implement plot with TML&lt;/li&gt;
+-  &lt;/ul&gt;
+-&lt;/p&gt;
+-
+-&lt;h4&gt;Introduce the most interesting and cool TimeWarp ships&lt;/h4&gt;
+-&lt;p&gt;
+-Currently TW-Light includes the following ships:&lt;br&gt;
++&lt;h3 align=&quot;center&quot;&gt;0.3b68 &lt;/h3&gt;&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;overview_sec&quot;&gt;
++Overview: What is TW-Light?&lt;/a&gt;&lt;/h2&gt;
++TW-Light is an open source clone/sequel to the epic cross-genre game Star Control II. Currently it includes only a combat portion, although epic adventure part that is called TW:Legacies is actively developed now.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;getting_started_sec&quot;&gt;
++Getting Started&lt;/a&gt;&lt;/h2&gt;
+ &lt;ul&gt;
+-	&lt;li&gt;Alary Battlecruiser&lt;/li&gt;
+-	&lt;li&gt;Bipole Katamaran&lt;/li&gt;
+-	&lt;li&gt;The Chorali Extractor&lt;/li&gt;
+-	&lt;li&gt;Confed Cargotran&lt;/li&gt;
+-	&lt;li&gt;Confederation Hornet&lt;/li&gt;
+-	&lt;li&gt;Drax Griffon&lt;/li&gt;
+-	&lt;li&gt;Earthling Crusader MK2&lt;/li&gt;
+-	&lt;li&gt;Earthling Crusader MK3&lt;/li&gt;
+-	&lt;li&gt;Zekfahan Shocker&lt;/li&gt;
+-	&lt;li&gt;Garash Tyrant&lt;/li&gt;
+-	&lt;li&gt;Ilwrath Spider&lt;/li&gt;
+-	&lt;li&gt;Kahr Boomerang&lt;/li&gt;
+-	&lt;li&gt;Re-Koj Assassin&lt;/li&gt;
+-	&lt;li&gt;Rogue Squadron&lt;/li&gt;
+-	&lt;li&gt;Tau Archon&lt;/li&gt;
+-	&lt;li&gt;Tau Dagger&lt;/li&gt;
+-	&lt;li&gt;Tau Slider&lt;/li&gt;
+-	&lt;li&gt;Tau Torrent&lt;/li&gt;
+-	&lt;li&gt;Zekfahan Shocker&lt;/li&gt;
+-&lt;/ul&gt;
+-&lt;/p&gt;
+-
+-&lt;h4&gt;Simplify and fix melee engine&lt;/h4&gt;
++&lt;li&gt;Melee: Starts a battle. In battle the following keys do stuff:&lt;ul&gt;
++&lt;li&gt;F1 brings up the help screen (this file, at the moment)&lt;/li&gt;&lt;li&gt;F2 brings up the options menu&lt;/li&gt;&lt;li&gt;F3 switches camera focus&lt;/li&gt;&lt;li&gt;F4 is fast-forward (speeds up in-game time greatly)&lt;/li&gt;&lt;li&gt;F5 displays fleet status&lt;/li&gt;&lt;li&gt;F7 changes game tic rate (physics quality)&lt;/li&gt;&lt;li&gt;F8 changes camera mode&lt;/li&gt;&lt;li&gt;F9 creates planets (silly &quot;feature&quot;)&lt;/li&gt;&lt;li&gt;F10 quits (so does ESCAPE)&lt;/li&gt;&lt;li&gt;F11 saves screenshots&lt;/li&gt;&lt;li&gt;F12 displays framerates / performance data&lt;/li&gt;&lt;li&gt;- zooms out on some viewing modes.&lt;/li&gt;&lt;li&gt;+ (or =) zooms in on some viewing modes.&lt;/li&gt;&lt;li&gt;0 also effect the camera in some viewing modes.&lt;/li&gt;&lt;li&gt;ctrl+T = toggle team indicators on/off&lt;/li&gt;&lt;li&gt;ctrl+H = toggle healthbar indicators on/off&lt;/li&gt;&lt;li&gt;Also, if some controllers are set to keyboard, customizable&lt;/li&gt;&lt;li&gt;buttons may cause ship actions. Be default these are:&lt;/li&gt;&lt;li&gt;Config 0:&lt;ul&gt;
++&lt;li&gt;left: Keypad 4&lt;/li&gt;&lt;li&gt;thrust: Keypad 8&lt;/li&gt;&lt;li&gt;right: Keypad 6&lt;/li&gt;&lt;li&gt;fire: Enter&lt;/li&gt;&lt;li&gt;special:Ctrl&lt;/li&gt;&lt;li&gt;next: Closebrace (])&lt;/li&gt;&lt;li&gt;prev: Openbrace ([)&lt;/li&gt;&lt;li&gt;near: P&lt;/li&gt;&lt;/ul&gt;
++&lt;/li&gt;&lt;/ul&gt;
++&lt;/li&gt;&lt;/ul&gt;
+ &lt;p&gt;
+-  We are working on it.
+-&lt;/p&gt;
+-
+-&lt;h4&gt;Add TimeWarp Markup Language (TML) support&lt;/h4&gt;
++See ingame help for controls description.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;development&quot;&gt;
++Development&lt;/a&gt;&lt;/h2&gt;
++Full developer documentation can be produced using doxygen tool.&lt;p&gt;
++Following documents describes some of the issues concerning contributing to TW-Light&lt;ul&gt;
++&lt;li&gt;&lt;a class=&quot;el&quot; href=&quot;coding_page.html&quot;&gt;A guide to a few of the wierder issues with programming for TW-Light.&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a class=&quot;el&quot; href=&quot;howto_document.html&quot;&gt;Document your code&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
+ &lt;p&gt;
+-  No progress.
+-&lt;/p&gt;
+-
+-&lt;h4&gt;Write plot&lt;/h4&gt;
+-&lt;p&gt;
+-  The official TW-Light plot is TW-Legacies.
+-&lt;/p&gt;
+-
+-&lt;h4&gt;Implement plot with TML&lt;/h4&gt;
+-&lt;p&gt;
+-  No progress.
+-&lt;/p&gt;
+-
+-&lt;h2&gt;License&lt;/h2&gt;
+-
+-&lt;p&gt;
+-  Copyright (C) 2004 &lt;a href=mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at land.ru</A>&gt;Yura Semashko aka Yurand&lt;/a&gt;&lt;br&gt;
+-  Copyright (C) 2001-2004  TimeWarp development team&lt;br&gt;
+-&lt;br&gt;
+-  This program is free software; you can redistribute it and/or modify &lt;br&gt;
+-  it under the terms of the GNU General Public License as published by &lt;br&gt;
+-  the Free Software Foundation; either version 2 of the License, or    &lt;br&gt;
+-  (at your option) any later version. &lt;br&gt;
+-                                          &lt;br&gt;
+-  This program is distributed in the hope that it will be useful,&lt;br&gt;
+-  but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;br&gt;
+-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;br&gt;
+-  GNU General Public License for more details.
+-&lt;/p&gt;
+-
+-&lt;h2&gt;Credits&lt;/h2&gt;
+-&lt;pre&gt;
+-
+-  TW-Light is derivative work from &lt;a href=&quot;<A HREF="http://timewarp.sf.net/">http://timewarp.sf.net/</A>&quot;&gt;Star Control: TimeWarp&lt;/a&gt;
+-
+-&lt;/pre&gt;
+-
+-
+-&lt;/div&gt;
++Currently we are working on the following tasks:&lt;p&gt;
++&lt;ul&gt;
++&lt;li&gt;Introduce the most interesting and cool TimeWarp ships&lt;/li&gt;&lt;li&gt;Simplify and fix melee engine&lt;/li&gt;&lt;li&gt;Add TimeWarp Markup Language (TML) support&lt;/li&gt;&lt;li&gt;Write plot&lt;/li&gt;&lt;li&gt;Implement plot with TML&lt;/li&gt;&lt;/ul&gt;
++&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;intoro&quot;&gt;
++Introduce the most interesting and cool TimeWarp ships&lt;/a&gt;&lt;/h3&gt;
++Currently TW-Light includes the following ships:&lt;p&gt;
++&lt;ul&gt;
++&lt;li&gt;Alary Battlecruiser&lt;/li&gt;&lt;li&gt;Bipole Katamaran&lt;/li&gt;&lt;li&gt;The Chorali Extractor&lt;/li&gt;&lt;li&gt;Confed Cargotran&lt;/li&gt;&lt;li&gt;Confederation Hornet&lt;/li&gt;&lt;li&gt;Drax Griffon&lt;/li&gt;&lt;li&gt;Earthling Crusader MK3&lt;/li&gt;&lt;li&gt;Zekfahan Shocker&lt;/li&gt;&lt;li&gt;Garash Tyrant&lt;/li&gt;&lt;li&gt;Ilwrath Spider&lt;/li&gt;&lt;li&gt;Kahr Boomerang&lt;/li&gt;&lt;li&gt;Re-Koj Assassin&lt;/li&gt;&lt;li&gt;Rogue Squadron&lt;/li&gt;&lt;li&gt;Tau Archon&lt;/li&gt;&lt;li&gt;Tau Dagger&lt;/li&gt;&lt;li&gt;Tau Slider&lt;/li&gt;&lt;li&gt;Tau Torrent&lt;/li&gt;&lt;li&gt;Zekfahan Shocker&lt;/li&gt;&lt;/ul&gt;
++&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;simplyfy_subsec&quot;&gt;
++Simplify and fix melee engine&lt;/a&gt;&lt;/h3&gt;
++Almost done.&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;TML_subsec&quot;&gt;
++Add TimeWarp Markup Language (TML) support&lt;/a&gt;&lt;/h3&gt;
++No progress.&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;plot_subsec&quot;&gt;
++Write plot&lt;/a&gt;&lt;/h3&gt;
++The Plot is fully writen.&lt;h3&gt;&lt;a class=&quot;anchor&quot; name=&quot;plot_impl_subsec&quot;&gt;
++Implement plot with TML&lt;/a&gt;&lt;/h3&gt;
++No progress.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;licene_sec&quot;&gt;
++License&lt;/a&gt;&lt;/h2&gt;
++Copyright (C) 2004 &lt;a href=&quot;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at land.ru</A>&quot;&gt;Yura Semashko aka Yurand&lt;/a&gt; Copyright (C) 2001-2004 TimeWarp development team&lt;p&gt;
++This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;p&gt;
++This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;h2&gt;&lt;a class=&quot;anchor&quot; name=&quot;credits_sec&quot;&gt;
++Credits&lt;/a&gt;&lt;/h2&gt;
++&lt;ul&gt;
++&lt;li&gt;TW-Light is derivative work from &lt;a href=&quot;timewarp.sourceforge.net&quot;&gt;Star Control: TimeWarp&lt;/a&gt;&lt;/li&gt;&lt;li&gt;Some code and documents were taken from &lt;a href=&quot;www.wesnoth.org&quot;&gt;Battle for Wesnoth&lt;/a&gt;&lt;/li&gt;&lt;li&gt;UQM Ships description were taken from Ultronomicon (&lt;a href=&quot;<A HREF="http://uqm.stack.nl/wiki/">http://uqm.stack.nl/wiki/</A>&quot;&gt;<A HREF="http://uqm.stack.nl/wiki/&lt;/a">http://uqm.stack.nl/wiki/&lt;/a</A>&gt;)&lt;/li&gt;&lt;li&gt;Some battle music were written by Robeter Productions Inc. &lt;/li&gt;&lt;/ul&gt;
++&lt;hr size=&quot;1&quot;&gt;&lt;address style=&quot;align: right;&quot;&gt;&lt;small&gt;Generated on Mon Sep 27 22:11:45 2004 for TW-Light by
++&lt;a href=&quot;<A HREF="http://www.doxygen.org/index.html">http://www.doxygen.org/index.html</A>&quot;&gt;
++&lt;img src=&quot;doxygen.png&quot; alt=&quot;doxygen&quot; align=&quot;middle&quot; border=0 &gt;&lt;/a&gt; 1.3.8 &lt;/small&gt;&lt;/address&gt;
+ &lt;/body&gt;
+-&lt;/head&gt;
++&lt;/html&gt;
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/makefile	2004-09-27 22:04:09 UTC (rev 68)
+@@ -206,18 +206,7 @@
+ 
+ uninstall:
+ 	$(RM) $(EXECPATH)/$(NAME)
+-	$(RM) $(DATAPATH)/ships/shp*.dat
+-	$(RM) $(DATAPATH)/*.dat
+-	$(RM) $(DATAPATH)/*.html
+-	$(RM) $(DATAPATH)/*.txt
+-	$(RM) $(DATAPATH)/palette
+-	$(RM) $(DATAPATH)/ships/shp*.txt
+-	rmdir $(DATAPATH)/ships
+-	$(RM) $(DATAPATH)/default_ini/*.ini
+-	$(RM) $(DATAPATH)/default_ini/ships/shp*.ini
+-	rmdir $(DATAPATH)/default_ini/ships
+-	rmdir $(DATAPATH)/default_ini
+-	rmdir $(DATAPATH)
++	$(RM) -r $(DATAPATH)
+ 
+ 
+ -include $(DEPS)
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/games/gdefender.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -91,8 +91,8 @@
+   health -= direct;
+   if (health &lt;= 0) 
+     {
+-      add ( new Animation ( this, pos, meleedata.kaboomSprite, 0, 
+-			    meleedata.kaboomSprite-&gt;frames(), 50, DEPTH_EXPLOSIONS) );
++      add ( new Animation ( this, pos, game-&gt;meleedata.kaboomSprite, 0, 
++			    game-&gt;meleedata.kaboomSprite-&gt;frames(), 50, DEPTH_EXPLOSIONS) );
+       state = 0;
+     }
+   return iround(old-health);
+
+Modified: trunk/source/melee/mcbodies.cpp
+===================================================================
+--- trunk/source/melee/mcbodies.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mcbodies.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -33,7 +33,7 @@
+ #include &quot;other/twconfig.h&quot;
+ 
+ Asteroid::Asteroid() 
+-:	SpaceObject(NULL, random(map_size), random(PI2), meleedata.asteroidSprite), explosion(meleedata.asteroidExplosionSprite)
++:	SpaceObject(NULL, random(map_size), random(PI2), game-&gt;meleedata.asteroidSprite), explosion(game-&gt;meleedata.asteroidExplosionSprite)
+ {
+   STACKTRACE;
+   collide_flag_sameteam = ALL_LAYERS;
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mframe.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -68,7 +68,7 @@
+ int physics_time = 0;
+ int render_time = 0;
+ int frame_time = 1;
+-DATAFILE *melee = NULL;
++//DATAFILE *melee = NULL;
+ Vector2 map_size;
+ double MAX_SPEED = 0;
+ 
+@@ -939,7 +939,7 @@
+   damage(other, damage_factor);
+   collide_flag_anyone = collide_flag_sameship = collide_flag_sameteam = 0;
+   physics-&gt;add(new Animation( this, 
+-			      pos + edge(), meleedata.sparkSprite, 0, 
++			      pos + edge(), game-&gt;meleedata.sparkSprite, 0, 
+ 			      SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
+   return;
+ }
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mframe.h	2004-09-27 22:04:09 UTC (rev 68)
+@@ -29,7 +29,7 @@
+ extern Vector2 map_size;
+ extern double MAX_SPEED;
+ 
+-extern DATAFILE *melee;
++//extern DATAFILE *melee;
+ 
+ typedef unsigned int TeamCode;
+ 
+@@ -37,7 +37,6 @@
+ class Planet;
+ class Presence;
+ 
+-
+ enum {
+   ATTRIB_SYNCHED         =    (1&lt;&lt;0), 
+   ATTRIB_LOGGED          =    (1&lt;&lt;1), 
+@@ -87,7 +86,7 @@
+   
+   TeamCode last_team;
+   unsigned int last_ship;
+-  
++
+  protected:
+   /// \brief calculate which object collide
+   virtual void collide();
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mgame.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -1,7 +1,7 @@
+ /* $Id: mgame.cpp,v 1.5 2004/08/08 17:36:06 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -52,77 +52,78 @@
+ 
+ int random_seed[2];
+ 
+-MeleeData meleedata;
+ 
+ MeleeData::MeleeData()
+ {
+   STACKTRACE;
+-	panelSprite             = NULL;
+-	kaboomSprite            = NULL;
+-	hotspotSprite           = NULL;
+-	sparkSprite             = NULL;
+-	asteroidExplosionSprite = NULL;
+-	asteroidSprite          = NULL;
+-	planetSprite            = NULL;
+-	xpl1Sprite              = NULL;
++  
++  DATAFILE*  melee = load_datafile(data_full_path(&quot;melee.dat&quot;).c_str());
++  
++  if (!melee) 
++    tw_error(&quot;Error loading melee data\n&quot;);
+ 
+-	melee = NULL;
++  panelSprite = new SpaceSprite(&amp;melee[MELEE_PANEL], 
++				PANEL_FRAMES, SpaceSprite::IRREGULAR);
++  kaboomSprite = new SpaceSprite(&amp;melee[MELEE_KABOOM], KABOOM_FRAMES,
++				 SpaceSprite::ALPHA | SpaceSprite::MASKED | 
++				 SpaceSprite::MIPMAPED);
++  hotspotSprite = new SpaceSprite(&amp;melee[MELEE_HOTSPOT], HOTSPOT_FRAMES,
++				  SpaceSprite::ALPHA | SpaceSprite::MASKED | 
++				  SpaceSprite::MIPMAPED);
++  sparkSprite = new SpaceSprite(&amp;melee[MELEE_SPARK], SPARK_FRAMES,
++				SpaceSprite::ALPHA | SpaceSprite::MASKED | 
++				SpaceSprite::MIPMAPED | 
++				SpaceSprite::MATCH_SCREEN_FORMAT);
++  asteroidExplosionSprite = new SpaceSprite(&amp;melee[MELEE_ASTEROIDEXPLOSION], 
++					    ASTEROIDEXPLOSION_FRAMES);
++  asteroidSprite = new SpaceSprite(&amp;melee[MELEE_ASTEROID], ASTEROID_FRAMES);
++  planetSprite = new SpaceSprite(&amp;melee[MELEE_PLANET], PLANET_FRAMES);
++  xpl1Sprite = new SpaceSprite(&amp;melee[MELEE_XPL1], XPL1_FRAMES,
++			       SpaceSprite::ALPHA | SpaceSprite::MASKED | 
++			       SpaceSprite::MIPMAPED);
++  unload_datafile(melee);
+ }
+ 
+-
+-
+-void MeleeData::init()
++MeleeData::~MeleeData()
+ {
+   STACKTRACE;
+-  melee = load_datafile(data_full_path(&quot;melee.dat&quot;).c_str());
+-  if (!melee) tw_error(&quot;Error loading melee data\n&quot;);
+-
+-  meleedata.panelSprite             = new SpaceSprite(&amp;melee[MELEE_PANEL], 
+-						      PANEL_FRAMES, SpaceSprite::IRREGULAR);
+-  meleedata.kaboomSprite            = new SpaceSprite(&amp;melee[MELEE_KABOOM], KABOOM_FRAMES,
+-						      SpaceSprite::ALPHA | SpaceSprite::MASKED | 
+-						      SpaceSprite::MIPMAPED);
+-  meleedata.hotspotSprite           = new SpaceSprite(&amp;melee[MELEE_HOTSPOT], HOTSPOT_FRAMES,
+-						      SpaceSprite::ALPHA | SpaceSprite::MASKED | 
+-						      SpaceSprite::MIPMAPED);
+-  meleedata.sparkSprite             = new SpaceSprite(&amp;melee[MELEE_SPARK], SPARK_FRAMES,
+-						      SpaceSprite::ALPHA | SpaceSprite::MASKED | 
+-						      SpaceSprite::MIPMAPED | 
+-						      SpaceSprite::MATCH_SCREEN_FORMAT);
+-  meleedata.asteroidExplosionSprite = new SpaceSprite(&amp;melee[MELEE_ASTEROIDEXPLOSION], 
+-						      ASTEROIDEXPLOSION_FRAMES);
+-  meleedata.asteroidSprite          = new SpaceSprite(&amp;melee[MELEE_ASTEROID], ASTEROID_FRAMES);
+-  meleedata.planetSprite            = new SpaceSprite(&amp;melee[MELEE_PLANET], PLANET_FRAMES);
+-  meleedata.xpl1Sprite              = new SpaceSprite(&amp;melee[MELEE_XPL1], XPL1_FRAMES,
+-						      SpaceSprite::ALPHA | SpaceSprite::MASKED | 
+-						      SpaceSprite::MIPMAPED);
+-  
+-  //planet_victory = (Music*) (melee[MELEE_PLANET+PLANET_FRAMES].dat);
+-  //  planet_victory = std::string(&quot;melee.dat#&quot;);
++  if(panelSprite)
++    {
++      delete panelSprite;
++    }
++  if(kaboomSprite)
++    {
++      delete kaboomSprite;
++    }
++  if(hotspotSprite)
++    {
++      delete hotspotSprite;
++    }
++  if(sparkSprite)
++    {
++      delete sparkSprite;
++    }
++  if(asteroidExplosionSprite)
++    {
++      delete asteroidExplosionSprite;
++    }
++  if(asteroidSprite)
++    {
++      delete asteroidSprite;
++    }
++  if(planetSprite)
++    {
++      delete planetSprite;
++    }
++  if(xpl1Sprite)
++    {
++      delete xpl1Sprite;
++    }
+ }
+ 
+-void MeleeData::deinit()
+-{
+-  STACKTRACE;
+-	panelSprite             = NULL;
+-	kaboomSprite            = NULL;
+-	hotspotSprite           = NULL;
+-	sparkSprite             = NULL;
+-	asteroidExplosionSprite = NULL;
+-	asteroidSprite          = NULL;
+-	planetSprite            = NULL;
+-	xpl1Sprite              = NULL;
+ 
+-	//	planet_victory		= &quot;&quot;;		
+ 
+-	unload_datafile(melee);
+-	
+-	melee = NULL;
+-}
+ 
+-
+-
+-
+ int interpolate_frames = false;
+ 
+ 
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mgame.h	2004-09-27 22:04:09 UTC (rev 68)
+@@ -51,9 +51,7 @@
+ {
+  public:
+   MeleeData();
+-  
+-  void init();
+-  void deinit();
++  ~MeleeData();
+ 	
+   SpaceSprite *planetSprite;
+   SpaceSprite *asteroidSprite;
+@@ -72,6 +70,8 @@
+  public:
+   GameType *type;
+   
++  MeleeData meleedata;
++  
+   enum 
+     {
+       channel_none = -1,    /**&lt; not a valid channel */
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mship.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -494,7 +494,7 @@
+ 	  for (i=0; i&lt;2; i++) 
+ 	    {
+ 	      ff = random(25);
+-	      a = new Animation(this, pos, meleedata.xpl1Sprite,
++	      a = new Animation(this, pos, game-&gt;meleedata.xpl1Sprite,
+ 				ff, 40-ff, 25, DEPTH_EXPLOSIONS);
+ 	      a-&gt;transparency = 1.0 / 4;
+ 	      game-&gt;add(a);
+@@ -532,7 +532,7 @@
+ 	  crew  = 0;
+ 	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMSHIP_WAV.wav&quot;));
+ 	  
+-	  if (meleedata.xpl1Sprite) 
++	  if (game-&gt;meleedata.xpl1Sprite) 
+ 	    {
+ 	      death_counter = 0;
+ 	      death_explosion_counter = 0;
+@@ -541,7 +541,7 @@
+ 	  else 
+ 	    {
+ 	      state = 0;
+-	      game-&gt;add(new Animation(this, pos, meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
++	      game-&gt;add(new Animation(this, pos, game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
+ 	    }
+ 	  if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) 
+ 	    {
+@@ -751,8 +751,7 @@
+       total += crew;
+       crew  = 0;
+       tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMSHIP_WAV.wav&quot;));
+-      //modified by Tau - start
+-      if (meleedata.xpl1Sprite) 
++      if (game-&gt;meleedata.xpl1Sprite) 
+ 	{
+ 	  death_counter = 0;
+ 	  death_explosion_counter = 0;
+@@ -761,7 +760,7 @@
+       else 
+ 	{
+ 	  state = 0;
+-	  game-&gt;add(new Animation(this, pos, meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
++	  game-&gt;add(new Animation(this, pos, game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
+ 	}
+       if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) {
+ 	game-&gt;ship_died(this, source);
+@@ -871,7 +870,7 @@
+     {
+       game-&gt;add(new Animation(this,
+ 			      normal_pos() - unit_vector(angle) * size.x / 2.5,
+-			      meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, time_ratio, DEPTH_HOTSPOTS));
++			      game-&gt;meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, time_ratio, DEPTH_HOTSPOTS));
+       hotspot_frame += hotspot_rate;
+     }
+   if (hotspot_frame &gt; 0)
+
+Modified: trunk/source/melee/mshot.cpp
+===================================================================
+--- trunk/source/melee/mshot.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mshot.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -38,7 +38,7 @@
+ 	d(0.0),
+   range(orange),
+   armour(oarmour),
+-  explosionSprite(meleedata.sparkSprite),
++  explosionSprite(game-&gt;meleedata.sparkSprite),
+   explosionFrameCount(SPARK_FRAMES),
+   explosionFrameSize(scale_frames(0))
+ {
+
+Modified: trunk/source/melee/mshppan.cpp
+===================================================================
+--- trunk/source/melee/mshppan.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee/mshppan.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -206,12 +206,12 @@
+ 		}
+ 
+ 	if((!batt_light) &amp;&amp; (ship-&gt;weapon_low || ship-&gt;special_low)) {
+-		meleedata.panelSprite-&gt;draw(40, 58, 2, panel);
++		game-&gt;meleedata.panelSprite-&gt;draw(40, 58, 2, panel);
+ 		batt_light = TRUE;
+ 		panel_needs_update = true;
+ 		}
+ 	else if(batt_light &amp;&amp; (!ship-&gt;weapon_low) &amp;&amp; (!ship-&gt;special_low)) {
+-		meleedata.panelSprite-&gt;draw(40, 58, 1, panel);
++		game-&gt;meleedata.panelSprite-&gt;draw(40, 58, 1, panel);
+ 		batt_light = FALSE;
+ 		panel_needs_update = true;
+ 		}
+
+Modified: trunk/source/melee.h
+===================================================================
+--- trunk/source/melee.h	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/melee.h	2004-09-27 22:04:09 UTC (rev 68)
+@@ -252,8 +252,6 @@
+ extern class GobGame *&gobgame;
+ extern Vector2 map_size;
+ 
+-extern class MeleeData meleedata;
+-
+ //melee/mhelpers.cpp
+ 
+ /// \brief Config event
+
+Modified: trunk/source/other/planet3d.cpp
+===================================================================
+--- trunk/source/other/planet3d.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/other/planet3d.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -71,8 +71,8 @@
+     
+   // create a 2D planet
+   Planet *planet = new Planet (position, 
+-			       meleedata.planetSprite, 
+-			       random(meleedata.planetSprite-&gt;frames()));
++			       game-&gt;meleedata.planetSprite, 
++			       random(game-&gt;meleedata.planetSprite-&gt;frames()));
+   game-&gt;add (planet);
+   return planet;
+ }
+
+Modified: trunk/source/other/vbodies.cpp
+===================================================================
+--- trunk/source/other/vbodies.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/other/vbodies.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -206,7 +206,8 @@
+ 
+ //end sprite handling routines
+ 
+-VSpaceInstallation::VSpaceInstallation():SpaceObject(NULL, random(map_size), random(PI2), meleedata.asteroidSprite)
++VSpaceInstallation::VSpaceInstallation():SpaceObject(NULL, random(map_size), 
++						     random(PI2), game-&gt;meleedata.asteroidSprite)
+ {
+   STACKTRACE;
+ 	collide_flag_sameteam = ALL_LAYERS;
+@@ -612,7 +613,7 @@
+ }
+ 
+ 
+-VSpaceMine::VSpaceMine():SpaceObject(NULL, random(map_size), random(PI2), meleedata.asteroidSprite)
++VSpaceMine::VSpaceMine():SpaceObject(NULL, random(map_size), random(PI2), game-&gt;meleedata.asteroidSprite)
+ {
+   STACKTRACE;
+   this-&gt;set_sprite(VSpaceMine::mySprite);
+@@ -768,7 +769,7 @@
+ 
+ VDustCloud::VDustCloud(void)
+ :
+-SpaceObject(NULL, random(map_size), random(PI2), meleedata.asteroidSprite)
++SpaceObject(NULL, random(map_size), random(PI2), game-&gt;meleedata.asteroidSprite)
+ {
+   STACKTRACE;
+   double speed, angle;
+@@ -860,7 +861,7 @@
+ 
+ VGasCloud::VGasCloud(void)
+ :
+-SpaceObject(NULL, random(map_size), random(PI2), meleedata.asteroidSprite)
++SpaceObject(NULL, random(map_size), random(PI2), game-&gt;meleedata.asteroidSprite)
+ {
+   STACKTRACE;
+   double speed, angle;
+@@ -1280,7 +1281,7 @@
+   armour = VMetalShard::myArmour;
+   damage_factor = VMetalShard::myDamage;
+   mass = VMetalShard::myMass;
+-  explosionSprite = meleedata.sparkSprite;
++  explosionSprite = game-&gt;meleedata.sparkSprite;
+   mass = 1;
+   this-&gt;willRespawn = FALSE;
+ }
+@@ -1296,7 +1297,7 @@
+   this-&gt;set_sprite(mySprite);
+   armour = VMetalShard::myArmour;
+   damage_factor = VMetalShard::myArmour;
+-  explosionSprite = meleedata.sparkSprite;
++  explosionSprite = game-&gt;meleedata.sparkSprite;
+   mass = VMetalShard::myMass;
+   //
+   this-&gt;pos = pos;
+@@ -1394,7 +1395,7 @@
+   this-&gt;set_sprite(mySprite);
+   armour = VMetalAsteroid::myArmour;
+   damage_factor = VMetalAsteroid::myDamage;
+-  explosionSprite = meleedata.sparkSprite;
++  explosionSprite = game-&gt;meleedata.sparkSprite;
+   mass = VMetalAsteroid::myMass;
+   this-&gt;willRespawn = TRUE;
+ }
+@@ -1511,7 +1512,7 @@
+   this-&gt;set_sprite(mySprite);
+   armour = VSmallAsteroid::myArmour;
+   damage_factor = VSmallAsteroid::damage_factor;
+-  explosionSprite = meleedata.sparkSprite;
++  explosionSprite = game-&gt;meleedata.sparkSprite;
+   mass = VSmallAsteroid::mass;
+   willRespawn = TRUE;
+ }
+@@ -1524,7 +1525,7 @@
+   this-&gt;set_sprite(mySprite);
+   armour = 10;
+   damage_factor = 0;
+-  explosionSprite = meleedata.sparkSprite;
++  explosionSprite = game-&gt;meleedata.sparkSprite;
+   mass = 10;
+   //
+   this-&gt;pos = pos;
+@@ -1621,7 +1622,7 @@
+   this-&gt;set_sprite(mySprite);
+   armour = VLargeAsteroid::myArmour;
+   damage_factor = VLargeAsteroid::myDamage;
+-  explosionSprite = meleedata.sparkSprite;
++  explosionSprite = game-&gt;meleedata.sparkSprite;
+   mass = VLargeAsteroid::myMass;
+   willRespawn = TRUE;
+ }
+
+Modified: trunk/source/sc1ships/shpandgu.cpp
+===================================================================
+--- trunk/source/sc1ships/shpandgu.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/sc1ships/shpandgu.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -112,7 +112,7 @@
+ 	{
+ 	  game-&gt;add(new Animation(this, 
+ 				  pos + unit_vector(trajectory_angle(other)) * 20.0,
+-				  meleedata.sparkSprite, 0, SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
++				  game-&gt;meleedata.sparkSprite, 0, SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
+ 	  translate(-specialBounceDistance*unit_vector(angle));
+ 	  bounce_status = specialBounceTime;
+ 	  int i = iround_down(damage_factor / 2);
+
+Modified: trunk/source/sc1ships/shpmmrxf.cpp
+===================================================================
+--- trunk/source/sc1ships/shpmmrxf.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/sc1ships/shpmmrxf.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -86,7 +86,7 @@
+       if ((laser1-&gt;damage_factor &gt; 0) &amp;&amp; (laser2-&gt;damage_factor &gt; 0))
+         add(new Animation(this, 
+           laser1-&gt;normal_pos() + laser1-&gt;edge(),
+-          meleedata.sparkSprite, 0, SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
++          game-&gt;meleedata.sparkSprite, 0, SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
+       laser1 = NULL;
+       laser2 = NULL;
+     }
+
+Modified: trunk/source/sc2ships/shpchmav.cpp
+===================================================================
+--- trunk/source/sc2ships/shpchmav.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/sc2ships/shpchmav.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -160,7 +160,7 @@
+ 
+ ChmmrBeam::ChmmrBeam(Ship *oship, int oframes) :
+ 	SpaceObject(oship, oship-&gt;normal_pos(), oship-&gt;get_angle(), 
+-    meleedata.sparkSprite),
++    game-&gt;meleedata.sparkSprite),
+ 	frame(0),
+ 	frame_count(oframes),
+ 	ship(oship),
+@@ -323,7 +323,7 @@
+ 			armour = 0;
+ 			state = 0;
+ 			add(new Animation(this, pos,
+-					  meleedata.kaboomSprite, 0, KABOOM_FRAMES, 
++					  game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, 
+ 					  50, DEPTH_EXPLOSIONS));
+ 			tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 			tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+
+Modified: trunk/source/sc2ships/shporzne.cpp
+===================================================================
+--- trunk/source/sc2ships/shporzne.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/sc2ships/shporzne.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -363,7 +363,7 @@
+ 	{
+ 	  add(new Animation(this, 
+ 			    normal_pos() - product(unit_vector(angle), get_size()) / 2.0,
+-			    meleedata.hotspotSprite,
++			    game-&gt;meleedata.hotspotSprite,
+ 			    0, HOTSPOT_FRAMES, 50, DEPTH_HOTSPOTS));
+ 	  hotspot_frame += hotspot_rate;
+ 	}
+
+Modified: trunk/source/sc2ships/shppkufu.cpp
+===================================================================
+--- trunk/source/sc2ships/shppkufu.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/sc2ships/shppkufu.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -50,7 +50,7 @@
+     return r;
+   
+   tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+-  game-&gt;add(new Animation(this, pos,	meleedata.kaboomSprite, 0, KABOOM_FRAMES, 
++  game-&gt;add(new Animation(this, pos, game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, 
+ 			  time_ratio, DEPTH_EXPLOSIONS));
+   
+   if (random() % 2) 
+
+Modified: trunk/source/sc2ships/shpthrto.cpp
+===================================================================
+--- trunk/source/sc2ships/shpthrto.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/sc2ships/shpthrto.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -106,7 +106,7 @@
+ 	if ((armour &lt;= 0) || (source-&gt;isObject() &amp;&amp; ((SpaceObject*)source)-&gt;mass)) {
+ 		state = 0;
+ 		add(new Animation(this, normal_pos(), //normal_x(), normal_y(), 
+-				meleedata.sparkSprite, 0, SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
++				game-&gt;meleedata.sparkSprite, 0, SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
+ 		}
+ 	return total;
+ 	}
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/scp.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -676,7 +676,6 @@
+     set_view(v);
+     init_ships();
+     init_fleet();
+-    meleedata.init();//mainmain
+     
+     if (auto_play) {// FIX ME
+       if (!strcmp(auto_play, &quot;game&quot;)) play_game(auto_param, NULL);
+@@ -693,7 +692,6 @@
+ 	delete game;
+ 	game = NULL;
+       }
+-    meleedata.deinit();
+     disable_input(); 
+   }
+   catch (int i) {
+
+Modified: trunk/source/ships/shpaktgu.cpp
+===================================================================
+--- trunk/source/ships/shpaktgu.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shpaktgu.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -279,7 +279,7 @@
+ 	armour = 0;
+ 	state = 0;
+ 	game-&gt;add(new Animation(this, pos,
+-				meleedata.kaboomSprite, 0, KABOOM_FRAMES, 50, LAYER_EXPLOSIONS));
++				game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, 50, LAYER_EXPLOSIONS));
+ 	tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	}
+
+Modified: trunk/source/ships/shpalabc.cpp
+===================================================================
+--- trunk/source/ships/shpalabc.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shpalabc.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -389,7 +389,7 @@
+     {
+       game-&gt;add(new Animation(this,
+ 			      pos - unit_vector(angle)*size.x/3.8,
+-			      meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, time_ratio, LAYER_HOTSPOTS));
++			      game-&gt;meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, time_ratio, LAYER_HOTSPOTS));
+       hotspot_frame += hotspot_rate; 
+     }
+   if (hotspot_frame &gt; 0) hotspot_frame -= frame_time;
+@@ -570,7 +570,7 @@
+       turret[i]-&gt;state = 0;
+     tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+     game-&gt;add(new Animation(this, pos,
+-			    meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS, 2.0));
++			    game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS, 2.0));
+     if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) game-&gt;ship_died(this, source);
+     state = 0; return 0;
+   }
+
+Modified: trunk/source/ships/shpbipka.cpp
+===================================================================
+--- trunk/source/ships/shpbipka.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shpbipka.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -479,7 +479,7 @@
+   STACKTRACE;
+   tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+   game-&gt;add(new Animation(this, pos,
+-			  meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, LAYER_EXPLOSIONS));
++			  game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, LAYER_EXPLOSIONS));
+ }
+ 
+ 
+
+Modified: trunk/source/ships/shpchoex.cpp
+===================================================================
+--- trunk/source/ships/shpchoex.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shpchoex.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -261,7 +261,7 @@
+     int R, int Rm, int G, int Gm, int B, int Bm) :
+   HomingMissile(oship, Vector2(ox,oy), oangle, ov, odamage, orange, oarmour, otrate, 
+ 		oship, osprite, oship-&gt;target), 
+-  explosion(meleedata.asteroidExplosionSprite), frame_count(oframe_count) 
++  explosion(game-&gt;meleedata.asteroidExplosionSprite), frame_count(oframe_count) 
+ {
+   STACKTRACE;
+ 	collide_flag_sameship = bit(LAYER_SHIPS) | bit(LAYER_SHOTS);
+@@ -507,7 +507,7 @@
+       else
+ 	{
+ 	  grabbed-&gt;die();
+-       	  add(new AsteroidMissile(0.0, (size.y * 1.0), angle, AsteroidMissileVelocity, AsteroidMissileDamage, AsteroidMissileRange, AsteroidMissileArmour, AsteroidMissileTurnRate, this, meleedata.asteroidSprite, 1,
++       	  add(new AsteroidMissile(0.0, (size.y * 1.0), angle, AsteroidMissileVelocity, AsteroidMissileDamage, AsteroidMissileRange, AsteroidMissileArmour, AsteroidMissileTurnRate, this, game-&gt;meleedata.asteroidSprite, 1,
+                  tractorR, tractorRmin, tractorG, tractorGmin, tractorB, tractorBmin ));
+ 	  return(TRUE);
+      	}
+
+Modified: trunk/source/ships/shpconca.cpp
+===================================================================
+--- trunk/source/ships/shpconca.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shpconca.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -156,7 +156,7 @@
+ 	  do_area_damage( );
+ 	  
+ 	  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+-	  game-&gt;add(new Animation(this, pos,	meleedata.kaboomSprite, 0, 
++	  game-&gt;add(new Animation(this, pos,	game-&gt;meleedata.kaboomSprite, 0, 
+ 				  KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
+ 	  
+ 	}
+
+Modified: trunk/source/ships/shpearc3.cpp
+===================================================================
+--- trunk/source/ships/shpearc3.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shpearc3.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -318,7 +318,7 @@
+ 	int aa = get_tw_aa_mode();
+ 	if (!((aa &amp; AA_BLEND) &amp;&amp; (aa &amp; AA_ALPHA) &amp;&amp; (!got_spark) &amp;&amp; !(aa &amp; AA_NO_AA))) {
+ 		physics-&gt;add(new Animation( this, 
+-				pos + edge(), meleedata.sparkSprite, 0, 
++				pos + edge(), game-&gt;meleedata.sparkSprite, 0, 
+ 				SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
+ 		got_spark = true; }
+ 
+
+Modified: trunk/source/ships/shprogsq.cpp
+===================================================================
+--- trunk/source/ships/shprogsq.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shprogsq.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -673,7 +673,7 @@
+ 	if ( !state )
+ 	{
+ 	  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+-	  game-&gt;add(new Animation(this, pos, meleedata.kaboomSprite, 0, 
++	  game-&gt;add(new Animation(this, pos, game-&gt;meleedata.kaboomSprite, 0, 
+ 				  KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
+ 	}
+ 	
+
+Modified: trunk/source/ships/shptauda.cpp
+===================================================================
+--- trunk/source/ships/shptauda.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shptauda.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -156,7 +156,7 @@
+ 	int aa = get_tw_aa_mode();
+ 	if (!((aa &amp; AA_BLEND) &amp;&amp; (aa &amp; AA_ALPHA) &amp;&amp; (!got_spark) &amp;&amp; !(aa &amp; AA_NO_AA))) {
+ 		physics-&gt;add(new Animation( this, 
+-				pos + edge(), meleedata.sparkSprite, 0, 
++				pos + edge(), game-&gt;meleedata.sparkSprite, 0, 
+ 				SPARK_FRAMES, 50, DEPTH_EXPLOSIONS));
+ 		got_spark = true; }
+ 
+
+Modified: trunk/source/ships/shptaume.cpp
+===================================================================
+--- trunk/source/ships/shptaume.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shptaume.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -245,7 +245,8 @@
+ 	if((thrust) &amp;&amp; (hotspot_frame &lt;= 0)) {
+ 		game-&gt;add(new Animation( this, 
+ 				normal_pos() - unit_vector(angle) * 14,
+-				meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, time_ratio, DEPTH_HOTSPOTS));
++				game-&gt;meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, 
++					 time_ratio, DEPTH_HOTSPOTS));
+ 		hotspot_frame += hotspot_rate; }
+ 	if (hotspot_frame &gt; 0) hotspot_frame -= frame_time;
+ 	return;
+
+Modified: trunk/source/ships/shptauto.cpp
+===================================================================
+--- trunk/source/ships/shptauto.cpp	2004-09-27 20:14:25 UTC (rev 67)
++++ trunk/source/ships/shptauto.cpp	2004-09-27 22:04:09 UTC (rev 68)
+@@ -216,7 +216,7 @@
+       else	
+ 	add(new Animation(this, 
+ 			  normal_pos() - 21 * unit_vector(angle),
+-			  meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, time_ratio, LAYER_HOTSPOTS));
++			  game-&gt;meleedata.hotspotSprite, 0, HOTSPOT_FRAMES, time_ratio, LAYER_HOTSPOTS));
+       hotspot_frame += hotspot_rate; 
+     }
+   if (hotspot_frame &gt; 0) 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000015.html">[Tw-light-svn] r67 - trunk/web
+</A></li>
+	<LI>Next message: <A HREF="000017.html">[Tw-light-svn] r69 - in trunk: . Util doc gamedata rawgraphic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

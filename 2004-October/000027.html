@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r79 - in trunk/source: games melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r79%20-%20in%20trunk/source%3A%20games%20melee&In-Reply-To=%3C200410151946.i9FJk5C3030566%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000026.html">
+   <LINK REL="Next"  HREF="000028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r79 - in trunk/source: games melee</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r79%20-%20in%20trunk/source%3A%20games%20melee&In-Reply-To=%3C200410151946.i9FJk5C3030566%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r79 - in trunk/source: games melee">youbastrd at sheep.berlios.de
+       </A><BR>
+    <I>Fri Oct 15 21:46:05 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000026.html">[Tw-light-svn] r78 - trunk
+</A></li>
+        <LI>Next message: <A HREF="000028.html">[Tw-light-svn] r80 - trunk/source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2004-10-15 21:46:04 +0200 (Fri, 15 Oct 2004)
+New Revision: 79
+
+Modified:
+   trunk/source/games/gdefender.cpp
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mmain.cpp
+   trunk/source/melee/mmain.h
+Log:
+adding victory conditions again.  Adding for NormalGame (ie Melee), Gob and Defender
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2004-10-09 05:57:31 UTC (rev 78)
++++ trunk/source/games/gdefender.cpp	2004-10-15 19:46:04 UTC (rev 79)
+@@ -66,6 +66,9 @@
+ 
+   /// here we check to see if the player lost the game and we add new enemies if it's time for that
+   virtual void calculate ( ) ;
++  
++  virtual bool isGameDone();
++  
+   /// this is used to display the starbases current health
+   virtual void fps();
+ 	
+@@ -79,6 +82,9 @@
+   int time_for_next_attack;
+   /// phase of enemy ships spawning
+   int time_between_attacks;
++  
++protected:
++	bool lostGame;
+ 
+ };
+ 
+@@ -143,7 +149,8 @@
+       starbase = NULL;
+       char buffy[1024];
+       sprintf(buffy, &quot;You lost after %d seconds&quot;, game_time/1000);
+-      message.print(9999000, 15, buffy);
++      lostGame = true;
++      message.print(10000, 15, buffy);
+     }
+   else if (game_time &gt;= time_for_next_attack) 
+     {
+@@ -157,12 +164,27 @@
+   return;
+ }
+ 
++bool DefenderGame::isGameDone() {
++	if (lostGame || 
++	    defendergame-&gt;player-&gt;ship == NULL || 
++	    !defendergame-&gt;player-&gt;ship-&gt;exists()) 
++	{
++		game_done = true;
++		char buffy[500] = &quot;&quot;;
++		sprintf(buffy, &quot;Game Over!\n\nYou Defended the base for %d seconds.&quot;, game_time/1000);
++		tw_alert(buffy, &quot;Ok!&quot;);
++	}
++	return Game::isGameDone();
++}
++
+ void DefenderGame::preinit() 
+ {
+   Game::preinit();
+   //because the desctructor deals with stationsprite, we have to initialize it here
+   //just in case the normal init() function doesn't get called
+   stationsprite = NULL;
++  
++  lostGame = false;
+ }
+ 
+ DefenderGame::~DefenderGame() 
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2004-10-09 05:57:31 UTC (rev 78)
++++ trunk/source/games/ggob.cpp	2004-10-15 19:46:04 UTC (rev 79)
+@@ -101,6 +101,19 @@
+   defenderSprite = NULL;
+ }
+ 
++bool GobGame::isGameDone() {
++	bool done = true;
++	for (int i = 0; i &lt; gobplayers; i += 1) {
++		if (gobplayer[i]-&gt;ship != NULL)
++			done = false;
++	}
++	if (done) {
++		game_done = true;
++		tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
++    }
++	return Game::isGameDone();
++}
++
+ void GobGame::add_gobplayer(Control *control) 
+ {
+   STACKTRACE;
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2004-10-09 05:57:31 UTC (rev 78)
++++ trunk/source/games/ggob.h	2004-10-15 19:46:04 UTC (rev 79)
+@@ -87,6 +87,7 @@
+   TeamCode enemy_team;
+ 
+   virtual void calculate();
++  virtual bool isGameDone();
+   virtual void ship_died(Ship *who, SpaceLocation *source);
+   virtual void preinit();
+   virtual void init (Log *log);
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2004-10-09 05:57:31 UTC (rev 78)
++++ trunk/source/melee/mgame.cpp	2004-10-15 19:46:04 UTC (rev 79)
+@@ -193,7 +193,7 @@
+     {
+     case Event::VIDEO: 
+       {
+-	if (game_done)
++	if (isGameDone())
+ 	  return;
+ 	if (e-&gt;subtype == VideoEvent::REDRAW)
+ 	  this-&gt;redraw();
+@@ -665,7 +665,7 @@
+   try 
+     {
+       play_music();
+-      while(!game_done) 
++      while(!isGameDone()) 
+ 	{
+ 	  if(!tw_sound-&gt;playing_music())
+ 	    play_music();
+@@ -1153,7 +1153,8 @@
+     case KEY_F1: 
+       {// help
+ 	pause();
+-	show_file(data_full_path(&quot;ingame.txt&quot;));
++	showHelpText();
++	//show_file(data_full_path(&quot;ingame.txt&quot;));
+ 	unpause();
+ 	return true;
+       }
+@@ -1289,3 +1290,14 @@
+   game_done = true;
+ }
+ 
++bool Game::isGameDone() { 
++    return game_done;
++}
++
++void Game::setGameDone(const bool done)
++{ 
++    game_done = done; 
++}
++
++
++
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2004-10-09 05:57:31 UTC (rev 78)
++++ trunk/source/melee/mgame.h	2004-10-15 19:46:04 UTC (rev 79)
+@@ -157,9 +157,13 @@
+   bool game_done;
+ 
+ public:
+-  virtual void setGameDone(const bool done) { game_done = done; }
+-  virtual bool isGameDone() { return game_done; }
+-	
++  /// sets whether the game is done, according to the rules for the
++  /// gametype.
++  virtual void setGameDone(const bool done);
++  
++  /// gets if the game is done.  Will wait a few seconds for dramatic effect.
++  virtual bool isGameDone();
++  
+   virtual void quit(const char *message);
+     
+   int hiccup_margin;
+
+Modified: trunk/source/melee/mmain.cpp
+===================================================================
+--- trunk/source/melee/mmain.cpp	2004-10-09 05:57:31 UTC (rev 78)
++++ trunk/source/melee/mmain.cpp	2004-10-15 19:46:04 UTC (rev 79)
+@@ -223,9 +223,6 @@
+ 	num_kills = 0;
+ 	kills = NULL;
+ 	num_players = 0;
+-	
+-	gameEnding = false;
+-	gameEndingTime = DefaultEndingTime;
+ 	}
+ void NormalGame::init(Log *_log) {
+   STACKTRACE;
+@@ -567,20 +564,15 @@
+ bool NormalGame::isGameDone() 
+ {
+   STACKTRACE;
++  enum {MAX_VICTORY_MESSAGE=500};
++  enum {MAX_VICTORY_ACKNOWLEDGE_TEXT=50};
++  char victoryMessage[MAX_VICTORY_MESSAGE] = &quot;&quot;;
++  char victoryAcknowledgeText[MAX_VICTORY_ACKNOWLEDGE_TEXT] = &quot;Ok&quot;;
++  
+   /*! we'll only check this every now and again, to avoid bogging down the engine.  */  
+-  enum { IterationsToSkip = 30 };
++  enum { IterationsToSkip = 30 };  
+   static long iterationsToSkip = IterationsToSkip;
+   
+-  /*! */
+-  if (gameEnding) {
+-    /*! how long do we wait after a victory before exiting the game? */
+-    if (--gameEndingTime &gt; 0)
+-      return Game::isGameDone();
+-    else {
+-      game_done = true;
+-    }
+-  }
+-  
+   if (iterationsToSkip-- &lt;=0 ) {
+     iterationsToSkip = IterationsToSkip;
+     
+@@ -608,9 +600,8 @@
+     
+     //either there's one team left standing, or none. :)
+     // either way, the game is over.
+-    //we delay ending the game a few seconds for dramatic effect
+     if (numAliveTeams &lt;= 1) {
+-      gameEnding = true;
++      game_done = true;
+       if (numAliveTeams==1) {
+ 	for (int i=0; i&lt;num_players; i++) {
+ 	  if ( ( player_fleet[i] &amp;&amp; 
+@@ -619,20 +610,34 @@
+ 	       (player_control[i] &amp;&amp;
+ 		player_control[i]-&gt;ship) )
+ 	    {
+-	      if (player_control[i]-&gt;isHuman())
+-		message.print(8000,15,&quot;%s won the match!&quot;, player_name[i]);
+-	      else
+-		message.print(8000,15,&quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
+-	    				break;
++	      if (player_control[i]-&gt;isHuman()) {
++			message.print(8000,15,&quot;%s won the match!&quot;, player_name[i]);
++			sprintf(victoryMessage, &quot;%s won the match!&quot;, player_name[i]);
++			sprintf(victoryAcknowledgeText, &quot;Woohoo!&quot;);
++	      } else {
++			message.print(8000,15,&quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
++			sprintf(victoryMessage, &quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
++			sprintf(victoryAcknowledgeText, &quot;Awww...&quot;);
++		  }
++	      break;
+ 	    }
+ 	}
+       } else {
+-	message.print(8000,15,&quot;Match ends in a draw!&quot;);
++	     message.print(8000,15,&quot;Match ends in a draw!&quot;);
++	     sprintf(victoryMessage, &quot;Match ends in a draw!&quot;);
++	     sprintf(victoryAcknowledgeText, &quot;Darn, maybe next time!&quot;);
+       }
+     }
+     free(teams);
+   }
+-  return Game::isGameDone();
++  
++  bool done = Game::isGameDone();
++  
++  if (done &amp;&amp; strlen(victoryMessage)&gt;0) {
++  	  tw_alert(victoryMessage, victoryAcknowledgeText);
++  }
++
++  return done;
+ }
+ 
+ // this should be places elsewhere I think ...
+@@ -719,5 +724,4 @@
+ }
+ 
+ 
+-
+ REGISTER_GAME(NormalGame, &quot;Melee&quot;)
+
+Modified: trunk/source/melee/mmain.h
+===================================================================
+--- trunk/source/melee/mmain.h	2004-10-09 05:57:31 UTC (rev 78)
++++ trunk/source/melee/mmain.h	2004-10-15 19:46:04 UTC (rev 79)
+@@ -21,7 +21,6 @@
+ #include &quot;melee.h&quot;
+ #include &quot;mgame.h&quot;
+ 
+-enum { DefaultEndingTime = 1000 };
+ 
+ class NormalGame : public Game {
+ 	public:
+@@ -71,9 +70,6 @@
+ 	
+ 	virtual void showHelpText();
+ 	
+-	bool gameEnding;
+-	long gameEndingTime;
+-
+ 	int next_choose_new_ships_time;
+ 	virtual void choose_new_ships() ;
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000026.html">[Tw-light-svn] r78 - trunk
+</A></li>
+	<LI>Next message: <A HREF="000028.html">[Tw-light-svn] r80 - trunk/source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

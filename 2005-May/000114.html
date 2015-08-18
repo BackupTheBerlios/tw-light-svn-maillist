@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r168 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images source
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r168%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/images%20source&In-Reply-To=%3C200505221127.j4MBR8S2001699%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000113.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r168 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images source</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r168%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/images%20source&In-Reply-To=%3C200505221127.j4MBR8S2001699%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r168 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images source">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun May 22 13:27:08 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000113.html">[Tw-light-svn] r167 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images/alien web
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#114">[ date ]</a>
+              <a href="thread.html#114">[ thread ]</a>
+              <a href="subject.html#114">[ subject ]</a>
+              <a href="author.html#114">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-22 13:27:04 +0200 (Sun, 22 May 2005)
+New Revision: 168
+
+Added:
+   trunk/gamedata/images/PkunkQueen.jpg
+Modified:
+   trunk/gamedata/games/test_game/dialogs/welcomecommander.xml
+   trunk/gamedata/games/test_game/scripts/quests.py
+   trunk/gamedata/games/test_game/scripts/start.py
+   trunk/source/scp.cpp
+Log:
+Replacing intro pickture
+
+
+Modified: trunk/gamedata/games/test_game/dialogs/welcomecommander.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/welcomecommander.xml	2005-05-22 10:19:21 UTC (rev 167)
++++ trunk/gamedata/games/test_game/dialogs/welcomecommander.xml	2005-05-22 11:27:04 UTC (rev 168)
+@@ -1 +1 @@
+-&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Welcome&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Welcome to the Charlys Sector, Captain.  I am Commander Jacques Haven, of Silcuu Station. Your ship will be a great addition to fleet here. Would you like some background information before you proceed with your first assignment? &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Yes, Commander. Information is always valuable.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;No, Commander. I'd like to get straight to my duties.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;Info&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;As you might have seen on your hyperspace map, there are three systems in the Charlys Sector; Narike, Ixis, and Gamma Onyx. It's mostly peaceful in Charlys, except for a few Ko!
+ hr-Ah raiders and Ulzrak. We are having negotiatons to have a native, energy-based race known as the Chorali join the Alliance, and we are hoping to initiate them soon with the avian Drax race. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like to learn more about the Ulzrak.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(2)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'd like to learn more about the Chorali.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(3)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'd like to learn more about the Drax.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(4)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;2&quot; name=&quot;Ulzrak&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;The Ulzrak are a completely hostil!
+ e race, that do not seem to have any purpose to their destruct!
+ ion, as 
+far as we can tell. They do not initiate contact before attacking. The only reason we know their name is froma salvaged computer database. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like some more general info, Commander.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;3&quot; name=&quot;Chorali&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;The Chorali are energy-based creatures that mostly made of photons, liquid, and a thin normal matter shell, through which they interact with a normal environment. As a species, they're rather secretive about any technology or information they find, though it's said they are quite social amog themselves. They are also, as a species rather friendly, however. We're currently negoti!
+ ating them joining the New Alliance. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like some more general info, Commander.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;4&quot; name=&quot;Drax&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;We haven't had much contact with the Drax so far, but from what we've heard they've had over a hundred million internal conflicts, and that's only during their spacefaring age. The only governments that succeed are very loosely tied ones, with very little law. It will likely be difficult getting even a preliminary treaty, with the number of factions working for different goals.  &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like some more general info, Comman!
+ der.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(!
+ 1)&quot;&gt;&lt;/AC
+TION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;5&quot; name=&quot;Orders/Assignments&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;You actually have a choice of assignments, Captain. You can choose to take a transport escort assignment to a mining operation in Ixis, where they need medical supplies. Or, you can negotiate with the Chorali, here in Narike.  &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'll escort the transport to Ixis. &quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(6)&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;quests.escort_transport_to_ixis_func()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'll negotiate with the Chorali.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(6)&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;CHORALI_SELECTED=True&quot;&gt;&lt;/ACTION&gt;&lt;/PL!
+ AYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;6&quot; name=&quot;Good Luck!&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Good luck, Captain. Be careful, I wouldn't want to lose the newest addition to my fleet. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Thank you, Commander.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'll execute my mission well, Commander, be sure of that. &quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog() &quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Welcome&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Welcome to the Charlys Sector, Captain.  I am Commander Jacques Haven, of Silcuu Station. Your ship will be a great addition to fleet here. Would you like some background information before you proceed with your first assignment? &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Yes, Commander. Information is always valuable.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;No, Commander. I'd like to get straight to my duties.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;Info&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;As you might have seen on your hyperspace map, there are three systems in the Charlys Sector; Narike, Ixis, and Gamma Onyx. It's mostly peaceful in Charlys, except for a few Ko!
+ hr-Ah raiders and Ulzrak. We are having negotiatons to have a native, energy-based race known as the Chorali join the Alliance, and we are hoping to initiate them soon with the avian Drax race. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like to learn more about the Ulzrak.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(2)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'd like to learn more about the Chorali.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(3)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'd like to learn more about the Drax.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(4)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;2&quot; name=&quot;Ulzrak&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;The Ulzrak are a completely hostil!
+ e race, that do not seem to have any purpose to their destruct!
+ ion, as 
+far as we can tell. They do not initiate contact before attacking. The only reason we know their name is froma salvaged computer database. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like some more general info, Commander.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;3&quot; name=&quot;Chorali&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;The Chorali are energy-based creatures that mostly made of photons, liquid, and a thin normal matter shell, through which they interact with a normal environment. As a species, they're rather secretive about any technology or information they find, though it's said they are quite social amog themselves. They are also, as a species rather friendly, however. We're currently negoti!
+ ating them joining the New Alliance. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like some more general info, Commander.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;4&quot; name=&quot;Drax&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;We haven't had much contact with the Drax so far, but from what we've heard they've had over a hundred million internal conflicts, and that's only during their spacefaring age. The only governments that succeed are very loosely tied ones, with very little law. It will likely be difficult getting even a preliminary treaty, with the number of factions working for different goals.  &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'd like some more general info, Comman!
+ der.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(!
+ 1)&quot;&gt;&lt;/AC
+TION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;That's enough information for now. What are my orders?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;5&quot; name=&quot;Orders/Assignments&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;You actually have a choice of assignments, Captain. You can choose to take a transport escort assignment to a mining operation in Ixis, where they need medical supplies. Or, you can negotiate with the Chorali, here in Narike.  &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I'll escort the transport to Ixis. &quot; appear_condition=&quot;not tml.GameAction.get_double_flag('escort_transport_accept')&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(6)&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;quests.escort_transport_to_ixis_func()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'll negotiate with the Chorali.&quot; appear_condition=&quot;not tml.GameAction.get_double_flag('negotiate_with_choral!
+ i_accept')&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(6)&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;CHORALI_SELECTED=True&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;6&quot; name=&quot;Good Luck!&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Good luck, Captain. Be careful, I wouldn't want to lose the newest addition to my fleet. &quot; font=&quot;Earthling&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Thank you, Commander.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;I'll execute my mission well, Commander, be sure of that. &quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog() &quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Modified: trunk/gamedata/games/test_game/scripts/quests.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/quests.py	2005-05-22 10:19:21 UTC (rev 167)
++++ trunk/gamedata/games/test_game/scripts/quests.py	2005-05-22 11:27:04 UTC (rev 168)
+@@ -2,7 +2,9 @@
+ 
+ 
+ # player choose to escort transport to Ixis star system
++
+ def escort_transport_to_ixis_func():
++    tml.GameAction.save_flag('escort_transport_accept',1)
+     tml.GameAction.save_flag('escort_transport_to_ixis_mission_completeP', 0)
+     transport = tml.GameAction.add_ship('Ixis',
+                                         &quot;choex&quot;, 1000, 1000, tml.GameAction.get_player_team())
+
+Modified: trunk/gamedata/games/test_game/scripts/start.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/start.py	2005-05-22 10:19:21 UTC (rev 167)
++++ trunk/gamedata/games/test_game/scripts/start.py	2005-05-22 11:27:04 UTC (rev 168)
+@@ -20,6 +20,10 @@
+         tml.GameAction.add_ship(tml.GameAction.get_player_star_system(), &quot;ilwsp&quot;, -1, -1, tml.GameAction.get_enemy_team())
+         
+ 
++#init values for quests
++tml.GameAction.save_flag('escort_transport_accept',0)
++tml.GameAction.save_flag('negotiate_with_chorali_accept',0)
++
+ # Start quests
+ start_precursor_wrack_mission()
+ 
+
+Added: trunk/gamedata/images/PkunkQueen.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/PkunkQueen.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-05-22 10:19:21 UTC (rev 167)
++++ trunk/source/scp.cpp	2005-05-22 11:27:04 UTC (rev 168)
+@@ -2145,7 +2145,7 @@
+   HAVE_A_WAIT(2500);
+   clear(d_buf);
+ 
+-  BITMAP* pkunk = load_bitmap(data_full_path(&quot;images/joses_pkunk.jpg&quot;).c_str(), NULL);
++  BITMAP* pkunk = load_bitmap(data_full_path(&quot;images/PkunkQueen.jpg&quot;).c_str(), NULL);
+   blit(pkunk, d_buf, 0, 0,  (screen-&gt;w-pkunk-&gt;w)/2, 20, pkunk-&gt;w, pkunk-&gt;h);
+   textout_centre(d_buf, D_FONT_ENGLISH, &quot;TW-Light : Legacies&quot;, screen-&gt;w/2, pkunk-&gt;h+60, -1);
+   destroy_bitmap(pkunk);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000113.html">[Tw-light-svn] r167 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images/alien web
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#114">[ date ]</a>
+              <a href="thread.html#114">[ thread ]</a>
+              <a href="subject.html#114">[ subject ]</a>
+              <a href="author.html#114">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

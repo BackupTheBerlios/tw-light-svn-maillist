@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r119 - in trunk: . source/libraries
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r119%20-%20in%20trunk%3A%20.%20source/libraries&In-Reply-To=%3C200502162039.j1GKd1Ei024611%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000064.html">
+   <LINK REL="Next"  HREF="000066.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r119 - in trunk: . source/libraries</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r119%20-%20in%20trunk%3A%20.%20source/libraries&In-Reply-To=%3C200502162039.j1GKd1Ei024611%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r119 - in trunk: . source/libraries">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Wed Feb 16 21:39:01 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000064.html">[Tw-light-svn] r118 - in trunk: . source source/games source/melee
+</A></li>
+        <LI>Next message: <A HREF="000066.html">[Tw-light-svn] r120 - in trunk: . source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#65">[ date ]</a>
+              <a href="thread.html#65">[ thread ]</a>
+              <a href="subject.html#65">[ subject ]</a>
+              <a href="author.html#65">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-16 21:38:59 +0100 (Wed, 16 Feb 2005)
+New Revision: 119
+
+Removed:
+   trunk/source/libraries/lua/
+   trunk/source/libraries/raknet/
+Modified:
+   trunk/sources.lst
+Log:
+removing unused libraries from sources, they will be readd when/if they 
+need
+
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-02-16 20:31:49 UTC (rev 118)
++++ trunk/sources.lst	2005-02-16 20:38:59 UTC (rev 119)
+@@ -82,34 +82,6 @@
+ source/ships/shpstaba.cpp
+ source/tests/testmain.cpp
+ source/tests/testdatapath.cpp
+-source/libraries/lua/lib/ldblib.c
+-source/libraries/lua/lib/lauxlib.c
+-source/libraries/lua/lib/lbaselib.c
+-source/libraries/lua/lib/loadlib.c
+-source/libraries/lua/lib/ltablib.c
+-source/libraries/lua/lib/lmathlib.c
+-source/libraries/lua/lib/lstrlib.c
+-source/libraries/lua/lib/liolib.c
+-source/libraries/lua/lundump.c
+-source/libraries/lua/ldebug.c
+-source/libraries/lua/ldo.c
+-source/libraries/lua/lgc.c
+-source/libraries/lua/ltm.c
+-source/libraries/lua/lvm.c
+-source/libraries/lua/lcode.c
+-source/libraries/lua/ldump.c
+-source/libraries/lua/lfunc.c
+-source/libraries/lua/lparser.c
+-source/libraries/lua/ltable.c
+-source/libraries/lua/ltests.c
+-source/libraries/lua/lstate.c
+-source/libraries/lua/lapi.c
+-source/libraries/lua/llex.c
+-source/libraries/lua/lmem.c
+-source/libraries/lua/lzio.c
+-source/libraries/lua/lopcodes.c
+-source/libraries/lua/lobject.c
+-source/libraries/lua/lstring.c
+ source/libraries/agup/aphoton.c
+ source/libraries/agup/ans.c
+ source/libraries/agup/awin95.c
+@@ -119,38 +91,6 @@
+ source/libraries/agup/agup.c
+ source/libraries/agup/abeos.c
+ source/libraries/agup/abitmap.c
+-source/libraries/raknet/AES128.cpp
+-source/libraries/raknet/PacketPool.cpp
+-source/libraries/raknet/RakNetStatistics.cpp
+-source/libraries/raknet/ExtendedOverlappedPool.cpp
+-source/libraries/raknet/RakServer.cpp
+-source/libraries/raknet/RPCNode.cpp
+-source/libraries/raknet/RSA.cpp
+-source/libraries/raknet/RakClient.cpp
+-source/libraries/raknet/HuffmanEncodingTreeFactory.cpp
+-source/libraries/raknet/RakPeer.cpp
+-source/libraries/raknet/SocketLayer.cpp
+-source/libraries/raknet/StringCompressor.cpp
+-source/libraries/raknet/DataBlockEncryptor.cpp
+-source/libraries/raknet/InternalPacketPool.cpp
+-source/libraries/raknet/SHA1.cpp
+-source/libraries/raknet/rand.cpp
+-source/libraries/raknet/GetTime.cpp
+-source/libraries/raknet/EncodeClassName.cpp
+-source/libraries/raknet/NetworkObject.cpp
+-source/libraries/raknet/SimpleMutex.cpp
+-source/libraries/raknet/Euclid.cpp
+-source/libraries/raknet/DistributedNetworkObjectStub.cpp
+-source/libraries/raknet/ReliabilityLayer.cpp
+-source/libraries/raknet/AsynchronousFileIO.cpp
+-source/libraries/raknet/HuffmanEncodingTree.cpp
+-source/libraries/raknet/BitStream.cpp
+-source/libraries/raknet/RakNetworkFactory.cpp
+-source/libraries/raknet/DistributedNetworkObject.cpp
+-source/libraries/raknet/MPUInt.cpp
+-source/libraries/raknet/CheckSum.cpp
+-source/libraries/raknet/DistributedNetworkObjectManager.cpp
+-source/libraries/raknet/NetworkTypes.cpp
+ source/libraries/jpgalleg/io.c
+ source/libraries/jpgalleg/encode.c
+ source/libraries/jpgalleg/decode.c
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000064.html">[Tw-light-svn] r118 - in trunk: . source source/games source/melee
+</A></li>
+	<LI>Next message: <A HREF="000066.html">[Tw-light-svn] r120 - in trunk: . source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#65">[ date ]</a>
+              <a href="thread.html#65">[ thread ]</a>
+              <a href="subject.html#65">[ subject ]</a>
+              <a href="author.html#65">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

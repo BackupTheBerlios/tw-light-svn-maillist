@@ -1,0 +1,31 @@
+From youbastrd at berlios.de  Thu Nov  3 04:03:26 2005
+From: youbastrd at berlios.de (Paul Forest at BerliOS)
+Date: Thu, 3 Nov 2005 04:03:26 +0100
+Subject: [Tw-light-svn] r202 - trunk/source/other
+Message-ID: <200511030303.jA333Qdq020245@sheep.berlios.de>
+
+Author: youbastrd
+Date: 2005-11-03 04:03:22 +0100 (Thu, 03 Nov 2005)
+New Revision: 202
+
+Modified:
+   trunk/source/other/dialogs.cpp
+Log:
+Modifying menu text to say "Return to Game" instead of "Exit Menu".  This is more intuitive, since it focuses on positive behaviour and uses the same terminology as other places in the menu. 
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-10-27 03:09:08 UTC (rev 201)
++++ trunk/source/other/dialogs.cpp	2005-11-03 03:03:22 UTC (rev 202)
+@@ -41,7 +41,7 @@
+   { my_d_button_proc,       150,  260,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)"Switches Camera Focus (F11)", NULL, NULL },
+   { my_d_button_proc,       150,  295,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)"Displays Framerates   (F12)", NULL, NULL },
+   { my_d_button_proc,       150,  330,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)"Quit game", NULL, NULL },
+-  { my_d_button_proc,       150,  365,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)"Exit Menu", NULL, NULL },
++  { my_d_button_proc,       150,  365,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)"Return to game", NULL, NULL },
+   { NULL,                    0,    0,     0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL }
+ };
+ 
+
+
+

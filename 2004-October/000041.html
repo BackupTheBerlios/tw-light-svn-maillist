@@ -1,0 +1,357 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r93 - in trunk: . source source/ais source/games source/melee source/other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r93%20-%20in%20trunk%3A%20.%20source%20source/ais%20source/games%20source/melee%20source/other&In-Reply-To=%3C200410311105.i9VB56H4030647%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000040.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r93 - in trunk: . source source/ais source/games source/melee source/other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r93%20-%20in%20trunk%3A%20.%20source%20source/ais%20source/games%20source/melee%20source/other&In-Reply-To=%3C200410311105.i9VB56H4030647%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r93 - in trunk: . source source/ais source/games source/melee source/other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Oct 31 12:05:06 CET 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000040.html">[Tw-light-svn] r92 - trunk/source
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#41">[ date ]</a>
+              <a href="thread.html#41">[ thread ]</a>
+              <a href="subject.html#41">[ subject ]</a>
+              <a href="author.html#41">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-10-31 12:05:05 +0100 (Sun, 31 Oct 2004)
+New Revision: 93
+
+Added:
+   trunk/source/games/glegacies.cpp
+Modified:
+   trunk/source/ais.h
+   trunk/source/ais/c_input.cpp
+   trunk/source/melee/mitems.h
+   trunk/source/melee/mship.h
+   trunk/source/other/dialogs.cpp
+   trunk/source/other/dialogs.h
+   trunk/sources.lst
+Log:
+Added chat key
+
+
+Modified: trunk/source/ais/c_input.cpp
+===================================================================
+--- trunk/source/ais/c_input.cpp	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/source/ais/c_input.cpp	2004-10-31 11:05:05 UTC (rev 93)
+@@ -178,22 +178,18 @@
+ {
+   STACKTRACE;
+   tw_set_config_file (inifile);
+-  thrust  = get_config_int(inisection, &quot;Thrust&quot;,      0);
+-  back    = get_config_int(inisection, &quot;Backwards&quot;,   0);
+-  left    = get_config_int(inisection, &quot;Left&quot;,        0);
+-  right   = get_config_int(inisection, &quot;Right&quot;,       0);
+-  fire    = get_config_int(inisection, &quot;Fire&quot;,        0);
+-  altfire = get_config_int(inisection, &quot;AltFire&quot;,     0);
+-  special = get_config_int(inisection, &quot;Special&quot;,     0);
+-  next    = get_config_int(inisection, &quot;Next_Target&quot;, 0);
+-  prev    = get_config_int(inisection, &quot;Prev_Target&quot;, 0);
++  thrust  = get_config_int(inisection, &quot;Thrust&quot;,         0);
++  back    = get_config_int(inisection, &quot;Backwards&quot;,      0);
++  left    = get_config_int(inisection, &quot;Left&quot;,           0);
++  right   = get_config_int(inisection, &quot;Right&quot;,          0);
++  fire    = get_config_int(inisection, &quot;Fire&quot;,           0);
++  altfire = get_config_int(inisection, &quot;AltFire&quot;,        0);
++  special = get_config_int(inisection, &quot;Special&quot;,        0);
++  next    = get_config_int(inisection, &quot;Next_Target&quot;,    0);
++  prev    = get_config_int(inisection, &quot;Prev_Target&quot;,    0);
+   closest = get_config_int(inisection, &quot;Closest_Target&quot;, 0);
+-  extra1  = get_config_int(inisection, &quot;Extra1&quot;, 0);
+-  extra2  = get_config_int(inisection, &quot;Extra2&quot;, 0);
+-  extra3  = get_config_int(inisection, &quot;Extra3&quot;, 0);
+-  extra4  = get_config_int(inisection, &quot;Extra4&quot;, 0);
+-  extra5  = get_config_int(inisection, &quot;Extra5&quot;, 0);
+-  suicide = get_config_int(inisection, &quot;Extra6&quot;, 0);
++  chat    = get_config_int(inisection, &quot;Chat&quot;,           0);
++  suicide = get_config_int(inisection, &quot;Suicide&quot;,        0);
+   return;
+ }
+ 
+@@ -215,12 +211,8 @@
+   set_config_int(inisection, &quot;Next_Target&quot;,    next);
+   set_config_int(inisection, &quot;Prev_Target&quot;,    prev);
+   set_config_int(inisection, &quot;Closest_Target&quot;, closest);
+-  set_config_int(inisection, &quot;Extra1&quot;, extra1);
+-  set_config_int(inisection, &quot;Extra2&quot;, extra2);
+-  set_config_int(inisection, &quot;Extra3&quot;, extra3);
+-  set_config_int(inisection, &quot;Extra4&quot;, extra4);
+-  set_config_int(inisection, &quot;Extra5&quot;, extra5);
+-  set_config_int(inisection, &quot;Extra6&quot;, suicide);
++  set_config_int(inisection, &quot;Chat&quot;,           chat);
++  set_config_int(inisection, &quot;Suicide&quot;,        suicide);
+   return;
+ }
+ 
+@@ -246,11 +238,7 @@
+   if (key_pressed(next))    r |= keyflag::next;
+   if (key_pressed(prev))    r |= keyflag::prev;
+   if (key_pressed(closest)) r |= keyflag::closest;
+-  if (key_pressed(extra1))  r |= keyflag::extra1;
+-  if (key_pressed(extra2))  r |= keyflag::extra2;
+-  if (key_pressed(extra3))  r |= keyflag::extra3;
+-  if (key_pressed(extra4))  r |= keyflag::extra4;
+-  if (key_pressed(extra5))  r |= keyflag::extra5;
++  if (key_pressed(chat))    r |= keyflag::chat;
+   if (key_pressed(suicide)) r |= keyflag::suicide;
+   return r;
+ }
+@@ -315,6 +303,7 @@
+   key_to_description(next, desc);   sprintf ( line, &quot;  Next Target: %s\n&quot;, desc);strcat(text, line);
+   key_to_description(prev, desc);   sprintf ( line, &quot;  Previous Target: %s\n&quot;, desc);strcat(text, line);
+   key_to_description(closest, desc);sprintf ( line, &quot;  Closest: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(chat, desc);   sprintf ( line, &quot;  Chat: %s\n&quot;, desc);strcat(text, line);
+   key_to_description(suicide, desc);sprintf ( line, &quot;  Suicide: %s\n&quot;, desc);strcat(text, line);
+ }
+ 
+@@ -365,22 +354,11 @@
+       key_to_description ( closest, s );
+       
+       s = dialog_string[index]; index += 1;
+-      s += sprintf ( s, &quot;Extra1: &quot;);
+-      key_to_description ( extra1, s );
++      s += sprintf ( s, &quot;Chat:           &quot;);
++      key_to_description ( chat, s );
++
+       s = dialog_string[index]; index += 1;
+-      s += sprintf ( s, &quot;Extra2: &quot;);
+-      key_to_description ( extra2, s );
+-      s = dialog_string[index]; index += 1;
+-      s += sprintf ( s, &quot;Extra3: &quot;);
+-      key_to_description ( extra3, s );
+-      s = dialog_string[index]; index += 1;
+-      s += sprintf ( s, &quot;Extra4: &quot;);
+-      key_to_description ( extra4, s );
+-      s = dialog_string[index]; index += 1;
+-      s += sprintf ( s, &quot;Extra5: &quot;);
+-      key_to_description ( extra5, s );
+-      s = dialog_string[index]; index += 1;
+-      s += sprintf ( s, &quot;Suicide: &quot;);
++      s += sprintf ( s, &quot;Suicide:        &quot;);
+       key_to_description ( suicide, s );
+       
+       s = dialog_string[index]; index += 1;
+@@ -422,12 +400,8 @@
+ 	case 8:  next    = t; break;
+ 	case 9:  prev    = t; break;
+ 	case 10: closest = t; break;
+-	case 11: extra1 = t; break;
+-	case 12: extra2 = t; break;
+-	case 13: extra3 = t; break;
+-	case 14: extra4 = t; break;
+-	case 15: extra5 = t; break;
+-	case 16: suicide = t; break;
++	case 11: chat = t; break;
++	case 12: suicide = t; break;
+ 	case KEY_DIALOG_OK:  save(&quot;scp.ini&quot;, getDescription()); return;
+ 	case KEY_DIALOG_CANCEL: load(&quot;scp.ini&quot;, getDescription()); return;
+ 	case KEY_DIALOG_CALIBRATE: calibrate_joysticks(); break;
+
+Modified: trunk/source/ais.h
+===================================================================
+--- trunk/source/ais.h	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/source/ais.h	2004-10-31 11:05:05 UTC (rev 93)
+@@ -39,7 +39,7 @@
+   int next;
+   int prev;
+   int closest;
+-  int extra1, extra2, extra3, extra4, extra5;
++  int chat;
+   int suicide;
+  public:
+   virtual void load(const char* inifile, const char* inisection);
+
+Added: trunk/source/games/glegacies.cpp
+===================================================================
+--- trunk/source/games/glegacies.cpp	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/source/games/glegacies.cpp	2004-10-31 11:05:05 UTC (rev 93)
+@@ -0,0 +1,42 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++
++#include &lt;stdio.h&gt;   //standard io libary (needed for sprintf)
++#include &lt;allegro.h&gt; //allegro library header
++
++#include &quot;melee.h&quot;          //used by all TW source files.  well, mostly. 
++#include &quot;melee/mgame.h&quot;    //Game stuff
++#include &quot;melee/mcbodies.h&quot; //asteroids &amp; planets
++#include &quot;melee/mship.h&quot;    //ships
++#include &quot;melee/mshot.h&quot;   //shots, missiles, lasers
++#include &quot;melee/mlog.h&quot;     //networking / demo recording / demo playback
++#include &quot;melee/mcontrol.h&quot; //controllers &amp; AIs
++#include &quot;melee/mview.h&quot;    //Views &amp; messages
++#include &quot;melee/mshppan.h&quot;  //ship panels...
++
++#include &quot;melee/mitems.h&quot;  //ship panels...
++#include &quot;melee/manim.h&quot;  //ship panels...
++#include &quot;scp.h&quot;
++#include &quot;other/dialogs.h&quot;
++
++#include &quot;gadventure.h&quot;
++
++/// TW Legacies Adventure Game 
++///
++
++REGISTER_GAME ( LegaciesGame, &quot;TW:Legacies&quot; )
++
+
+Modified: trunk/source/melee/mitems.h
+===================================================================
+--- trunk/source/melee/mitems.h	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/source/melee/mitems.h	2004-10-31 11:05:05 UTC (rev 93)
+@@ -14,6 +14,9 @@
+ GNU General Public License for more details.
+ */
+ 
++#ifndef __TW_MITEMS_H__
++#define __TW_MITEMS_H__
++
+ class HealthBar : public Presence
+ {
+ public:
+@@ -61,3 +64,6 @@
+ 	virtual void calculate();
+ 	Orbiter ( SpaceSprite *sprite, SpaceLocation *orbit, double distance);
+ };
++
++#endif
++
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/source/melee/mship.h	2004-10-31 11:05:05 UTC (rev 93)
+@@ -35,12 +35,8 @@
+     next       =	(1&lt;&lt;7),
+     prev       =	(1&lt;&lt;8),
+     closest    =	(1&lt;&lt;9),
+-    extra1     =   (1&lt;&lt;10),
+-    extra2     =   (1&lt;&lt;11),
+-    extra3     =   (1&lt;&lt;12),
+-    extra4     =   (1&lt;&lt;13),
+-    extra5     =   (1&lt;&lt;14),
+-    suicide    =   (1&lt;&lt;15),
++    chat       =        (1&lt;&lt;10),
++    suicide    =        (1&lt;&lt;11),
+   };
+ };
+ 
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/source/other/dialogs.cpp	2004-10-31 11:05:05 UTC (rev 93)
+@@ -1,7 +1,7 @@
+ /* $Id: dialogs.cpp,v 1.2 2004/08/03 21:05:00 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -52,14 +52,9 @@
+   { my_d_button_proc,  60,   270,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[7], NULL, NULL },
+   { my_d_button_proc,  60,   300,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[8], NULL, NULL },
+   { my_d_button_proc,  60,   330,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[9], NULL, NULL },
+-  { my_d_button_proc,  60,   360,  500,  15,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[10], NULL, NULL },
+-  { my_d_button_proc,  60,   375,  500,  15,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[11], NULL, NULL },
+-  { my_d_button_proc,  60,   390,  500,  15,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[12], NULL, NULL },
+-  { my_d_button_proc,  60,   405,  500,  15,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[13], NULL, NULL },
+-  { my_d_button_proc,  60,   420,  500,  15,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[14], NULL, NULL },
+-  { my_d_button_proc,  60,   435,  500,  15,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[15], NULL, NULL },
+-  { my_d_button_proc,  60,   450,  500,  15,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[16], NULL, NULL },
+-  
++  { my_d_button_proc,  60,   360,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[10], NULL, NULL },
++  { my_d_button_proc,  60,   390,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[11], NULL, NULL },
++  { my_d_button_proc,  60,   420,  500,  25,   255,  0,    0,    D_EXIT,  0,    0,    dialog_string[12], NULL, NULL },
+   { my_d_button_proc,  180,  20,   180,  25,   255,  0,    0,    D_EXIT,  0,    0,    (void*)&quot;Accept Changes&quot;, NULL, NULL },
+   { my_d_button_proc,     180,  50,   180,  25,   255,  0,    0,    D_EXIT,  0,    0,    (void*)&quot;Cancel&quot;, NULL, NULL },
+   { my_d_button_proc,  360,  35,   200,  25,   255,  0,    0,    D_EXIT,  0,    0,    (void*)&quot;Calibrate Joysticks&quot;, NULL, NULL },
+
+Modified: trunk/source/other/dialogs.h
+===================================================================
+--- trunk/source/other/dialogs.h	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/source/other/dialogs.h	2004-10-31 11:05:05 UTC (rev 93)
+@@ -61,7 +61,7 @@
+ enum 
+ {
+   KEY_DIALOG_MODIFY = 0,
+-  KEY_DIALOG_OK = 17,
++  KEY_DIALOG_OK = 13,
+   KEY_DIALOG_CANCEL,   
+   KEY_DIALOG_CALIBRATE,
+ };
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2004-10-28 17:58:18 UTC (rev 92)
++++ trunk/sources.lst	2004-10-31 11:05:05 UTC (rev 93)
+@@ -20,6 +20,7 @@
+ source/games/ggob.cpp
+ source/games/gflmelee.cpp
+ source/games/gdefender.cpp
++source/games/glegacies.cpp
+ source/melee/mlog.cpp
+ source/melee/mitems.cpp
+ source/melee/mnet1.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000040.html">[Tw-light-svn] r92 - trunk/source
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#41">[ date ]</a>
+              <a href="thread.html#41">[ thread ]</a>
+              <a href="subject.html#41">[ subject ]</a>
+              <a href="author.html#41">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

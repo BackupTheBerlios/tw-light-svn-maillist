@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r153 - trunk/gamedata/python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r153%20-%20trunk/gamedata/python&In-Reply-To=%3C200505071154.j47BsKNH020148%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000098.html">
+   <LINK REL="Next"  HREF="000100.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r153 - trunk/gamedata/python</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r153%20-%20trunk/gamedata/python&In-Reply-To=%3C200505071154.j47BsKNH020148%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r153 - trunk/gamedata/python">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat May  7 13:54:20 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000098.html">[Tw-light-svn] r152 - trunk/Util/deditor
+</A></li>
+        <LI>Next message: <A HREF="000100.html">[Tw-light-svn] r154 - in trunk: gamedata/python source source/generated source/other source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#99">[ date ]</a>
+              <a href="thread.html#99">[ thread ]</a>
+              <a href="subject.html#99">[ subject ]</a>
+              <a href="author.html#99">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-07 13:53:49 +0200 (Sat, 07 May 2005)
+New Revision: 153
+
+Added:
+   trunk/gamedata/python/tml_fake.py
+Modified:
+   trunk/gamedata/python/dialog.py
+   trunk/gamedata/python/tml.py
+Log:
+Dialog module now can show dialog in game
+
+
+Modified: trunk/gamedata/python/dialog.py
+===================================================================
+--- trunk/gamedata/python/dialog.py	2005-05-07 08:50:23 UTC (rev 152)
++++ trunk/gamedata/python/dialog.py	2005-05-07 11:53:49 UTC (rev 153)
+@@ -14,7 +14,26 @@
+ 
+ 
+ import unittest
+-    
++
++&quot;&quot;&quot; For testing purpose we import fake TML implementation that provide the same API as
++    real TML, but doesn't contain real game code.&quot;&quot;&quot;
++if __name__ == '__main__':
++    import tml_fake as tml
++else:
++    import tml
++
++g_cur_dialog = &quot;&quot;
++
++#########################################################
++# Native dialog API
++#########################################################
++def goto(id):
++    g_cur_dialog.goto(id)
++
++def endDialog():
++    g_cur_dialog.endDialog()    
++#########################################################
++
+ class Action:
+     def __init__(self,cond,eval):
+         self.cond = cond     # should be true for evaluating action
+@@ -42,21 +61,36 @@
+     def __init__(self, id, name, music, background, alien_text, font, text_location, player_answers):
+         self.id             = id                     # node id must be unique within dialog
+         self.name           = name                   # human readable node name, for debug output 
+-	self.music          = music                  # file path to music 
++        self.music          = music                  # file path to music 
+         self.background     = background             # file path to background image
+         self.alien_text     = alien_text             # alien text delimited with &lt;br&gt;
+         self.font           = font                   # font for dialog
+         self.text_location  = text_location          # tuple (x, y) x,y from 0..100% of the screen
+-        self.player_answers = self.player_answers    # player Answers tuple
+-
++        self.player_answers = player_answers         # player Answers tuple
++    def evaluate(self):
++        tml.DialogApi.showAlienPicture(self.background)
++        tml.DialogApi.showText(self.alien_text)
++        answers = filter(lambda x: x.checkCond(), self.player_answers)
++        answ_texts = []
++        for answer in answers:
++            answ_texts.append(answer.text)
++        answers[tml.DialogApi.askPlayer(answ_texts)].evaluate()
++        
+ class Dialog:
+     def __init__(self, nodeset):
+         self.nodeset  = nodeset     # tuple with all dialog data, terminated by None object
+         self.cur_node = nodeset[0]  # currently selectet node
+-    def do_dialog(self): # run dialog untill selected node != None
+-        pass
+-    def goto(id): # switch current node
+-        pass
++    def doDialog(self): # run dialog untill selected node != None
++        global g_cur_dialog
++        g_cur_dialog = self
++        tml.DialogApi.startDialog()
++        while(self.cur_node != None):
++            self.cur_node.evaluate()
++        tml.DialogApi.endDialog()
++    def goto(self,id): # switch current node
++        self.cur_node = filter(lambda x: x.id == id, self.nodeset)[0]
++    def endDialog(self):
++        self.cur_node = None
+ 
+ #####################################################################################################
+ #                              TESTS                                                                #
+@@ -97,7 +131,31 @@
+                                                   Action('1==0', 'global test_global_value\ntest_global_value=14')))
+         playerAnswer.evaluate()
+         self.assertEqual(15, test_global_value)
+-    
++
++class TestDialogFunctions(unittest.TestCase):
++    def setUp(self):
++        tml.DialogApi.clearJornal()
++        self.dialog = Dialog( (
++            Node(0, 'Node1','','','AlienText','',(50,10),
++                 (PlayerAnswer('Answer1', '1', (Action('1', 'goto(1)'), )),
++                  PlayerAnswer('Answer2', '1', (Action('1', 'endDialog()'),)
++                               )))
++            ,
++            Node(1, 'Node1','','','AlienText','',(50,10),
++                 (PlayerAnswer('Answer3', '1', (Action('1', 'endDialog()'),)
++                               ),)),
++            )                         )
++    def testGoto(self):
++        self.dialog.goto(1)
++        self.assertEqual(self.dialog.cur_node.id,1)
++    def testEndDialog(self):
++        self.dialog.endDialog()
++        self.assertEqual(self.dialog.cur_node,None)
++    def testDoDialog(self):
++        self.dialog.doDialog()
++        self.assertEqual(tml.DialogApi.getJornal(),&quot;startDialog showAlienPicture showText askPlayer showAlienPicture showText askPlayer endDialog &quot;)
++
++        
+ if __name__ == '__main__':
+     unittest.main()
+ 
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-07 08:50:23 UTC (rev 152)
++++ trunk/gamedata/python/tml.py	2005-05-07 11:53:49 UTC (rev 153)
+@@ -539,14 +539,14 @@
+     __swig_getmethods__ = {}
+     __getattr__ = lambda self, name: _swig_getattr(self, vectorString, name)
+     def __repr__(self):
+-        return &quot;&lt;C std::vector&lt;(std::string)&gt; instance at %s&gt;&quot; % (self.this,)
++        return &quot;&lt;C std::vector&lt;(p.q(const).char)&gt; instance at %s&gt;&quot; % (self.this,)
+     def __init__(self, *args):
+         _swig_setattr(self, vectorString, 'this', _tml.new_vectorString(*args))
+         _swig_setattr(self, vectorString, 'thisown', 1)
+     def __len__(*args): return _tml.vectorString___len__(*args)
+-    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def clear(*args): return _tml.vectorString_clear(*args)
+     def append(*args): return _tml.vectorString_append(*args)
++    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def pop(*args): return _tml.vectorString_pop(*args)
+     def __getitem__(*args): return _tml.vectorString___getitem__(*args)
+     def __getslice__(*args): return _tml.vectorString___getslice__(*args)
+
+Added: trunk/gamedata/python/tml_fake.py
+===================================================================
+--- trunk/gamedata/python/tml_fake.py	2005-05-07 08:50:23 UTC (rev 152)
++++ trunk/gamedata/python/tml_fake.py	2005-05-07 11:53:49 UTC (rev 153)
+@@ -0,0 +1,50 @@
++# This file is part of &quot;TW-Light&quot; 
++#                     <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++# Copyright (C) 2001-2004  TimeWarp development team
++
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++class Callable:
++    def __init__(self, anycallable):
++        self.__call__ = anycallable
++
++jornal = &quot;&quot;
++class DialogApi:
++    def startDialog():
++        global jornal
++        jornal += &quot;startDialog &quot;
++    def endDialog():
++        global jornal
++        jornal += &quot;endDialog &quot;
++    def askPlayer(answer):
++        global jornal
++        jornal += &quot;askPlayer &quot;
++        return 0
++    def showText(text):
++        global jornal
++        jornal += &quot;showText &quot;
++    def showAlienPicture(background):
++        global jornal
++        jornal += &quot;showAlienPicture &quot;
++    startDialog      = Callable(startDialog)
++    endDialog        = Callable(endDialog)
++    askPlayer        = Callable(askPlayer)
++    showText         = Callable(showText)
++    showAlienPicture = Callable(showAlienPicture)
++    # Test Interface
++    def clearJornal():
++        jornal = &quot;&quot;
++    def getJornal():
++        return jornal
++    clearJornal = Callable(clearJornal)
++    getJornal   = Callable(getJornal)
++
++
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000098.html">[Tw-light-svn] r152 - trunk/Util/deditor
+</A></li>
+	<LI>Next message: <A HREF="000100.html">[Tw-light-svn] r154 - in trunk: gamedata/python source source/generated source/other source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#99">[ date ]</a>
+              <a href="thread.html#99">[ thread ]</a>
+              <a href="subject.html#99">[ subject ]</a>
+              <a href="author.html#99">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

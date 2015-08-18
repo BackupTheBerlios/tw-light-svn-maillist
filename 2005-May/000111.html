@@ -1,0 +1,2396 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r165 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/images/alien gamedata/python source/generated source/melee source/python source/ships source/tml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r165%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/games/test_game/scripts/systems%20gamedata/images/alien%20gamedata/python%20source/generated%20source/melee%20source/python%20source/ships%20source/tml&In-Reply-To=%3C200505201757.j4KHvQFC006997%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000110.html">
+   <LINK REL="Next"  HREF="000112.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r165 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/images/alien gamedata/python source/generated source/melee source/python source/ships source/tml</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r165%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/games/test_game/scripts/systems%20gamedata/images/alien%20gamedata/python%20source/generated%20source/melee%20source/python%20source/ships%20source/tml&In-Reply-To=%3C200505201757.j4KHvQFC006997%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r165 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/images/alien gamedata/python source/generated source/melee source/python source/ships source/tml">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Fri May 20 19:57:26 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000110.html">[Tw-light-svn] r164 - in trunk: Util/deditor gamedata/default_ini/ships gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source source/ais source/games source/generated source/melee source/other source/python source/tests source/tml source/util
+</A></li>
+        <LI>Next message: <A HREF="000112.html">[Tw-light-svn] r166 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/python source/games source/generated source/tml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-20 19:57:25 +0200 (Fri, 20 May 2005)
+New Revision: 165
+
+Added:
+   trunk/gamedata/games/test_game/dialogs/druuge.xml
+   trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml
+   trunk/gamedata/games/test_game/dialogs/precursor_wrack_first_inspection.xml
+   trunk/gamedata/games/test_game/dialogs/transport_please_help.xml
+   trunk/gamedata/games/test_game/dialogs/transport_thanks.xml
+   trunk/gamedata/games/test_game/scripts/quests.py
+   trunk/gamedata/images/alien/estion.jpg
+   trunk/gamedata/python/misc_fake.py
+   trunk/source/ships/shpsamat.cpp
+Modified:
+   trunk/gamedata/games/test_game/scripts/start.py
+   trunk/gamedata/games/test_game/scripts/systems/ixis.py
+   trunk/gamedata/python/tml.py
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/melee/mhelpers.cpp
+   trunk/source/melee/mhelpers.h
+   trunk/source/python/game.i
+   trunk/source/python/python_class.cpp
+   trunk/source/python/python_class.h
+   trunk/source/tml/eventmanager.cpp
+   trunk/source/tml/eventmanager.h
+   trunk/source/tml/gameaction.cpp
+   trunk/source/tml/gameaction.h
+   trunk/source/tml/gamedialog.cpp
+   trunk/source/tml/gamedialog.h
+   trunk/source/tml/gameevent.cpp
+   trunk/source/tml/gameevent.h
+Log:
+Adding missing files and other stuff
+
+
+Added: trunk/gamedata/games/test_game/dialogs/druuge.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/druuge.xml	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/dialogs/druuge.xml	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1,4 @@
++&lt;DIALOG&gt;&lt;START_NODES&gt;&lt;/START_NODES&gt;&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Meet Druuge&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;We are the Druuge of the Crimson Corporation. We have rightfully taken possesion of this area, and must ask you to cease tresspassing immediately.&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;These are Precursor artifacts. They aren't rightfully owned by anyone!&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Stand aside, Druuge. I have come to claim the bounty of this region.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(7)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Oh, me? I was just passing through.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(10)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;We lay claim&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;Ha ha ha! We lay claim to these grou!
+ nds under secion 577(d) of the Druuge Civil Code.&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;That's impossible! What is this code?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(2)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;In that case, I lay claim to your lives under section 2(c) of the code of [Player_name]!&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(6)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;2&quot; name=&quot;text of the law&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;I quote section 577(d), Article IX:
++Finders keepers, losers weepers.&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;But I found it first! I've been to this wreck before!&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(3)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Laws are made to be broken.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(11)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;3&quot; name=&quot;prove it&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;Oh, did you? Well then, I suppose we'd better stand down, as long as you submitted a proper request for posession and scavenging to the Crimson Corporation Headquarters. &quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Why, of course. You may go now.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(5)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Er... no, I didn't.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(4)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;4&quot; name=&quot;(F) forced to!
+  eradicate&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;Ahhh... that is a pity. As a dutiful employee of the Crimson 
++Corporation, I am forced to eradicate you and your crew for attempting 
++deliberate subterfuge under section 8808(b) of the Druuge Penal Code. [Fight]&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;(end dialogue)&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;5&quot; name=&quot;check records&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;At once. But first, let me double-check our records.&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;No- wait! I didn't submit a request!&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(4)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Go ahead. I'm sure you will find things in order.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(4)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;6&quot; name=&quot;(F) prepare to die&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;We are not aware of this code, but we are obligated to defend the property of the Crimson Corporation at all costs. P!
+ repare to die. [Fight]&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;(end dialogue)&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;7&quot; name=&quot;refuse&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;I refuse. This salvage is property of the Crimson Corporation. You have one more chance to remove yourself from the premises before I am forced to do so myself.&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Eat plasma, you gremlin-faced spawn of hell!&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(8)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Fine, I give up. The wreckage is yours.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(9)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;8&quot; name=&quot;(F) add your wreckage&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;We will add your name to our Ledger of Hatred once your own demolished!
+  hull floats besides the wreckage you seek! [Fight]&quot; font=&quot;&quot; t!
+ ext_loca
+tion=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;(end dialogue)&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;9&quot; name=&quot;(E) leave&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;As it should be. Leave this place now, human, and do not return.&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Goodbye, Druuge.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;10&quot; name=&quot;another route&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;Very well. We ask that you find another route immedately, or we will be obligated to remove you from the premises ourselves.&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I've thought of a new route already- my main cannons straight through your hull!&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(8)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Do not harm us, !
+ Druuge. We will find a way around.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(9)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;11&quot; name=&quot;(F) defend property&quot; music=&quot;music/races/druuge.mod&quot; background=&quot;images/alien/druuge.jpg&quot; alien_text=&quot;We are obligated to defend the property of the Crimson Corporation. You must die now. [Fight]&quot; font=&quot;&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;(end dialogue)&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;&lt;/DIALOG&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Welcome to ixis mining station station&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Welcome to Ixis mining station&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I have some question&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Good bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;Do you know&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;We have some precursor wreck here in the asteroid belt. coordinate (1500,5000)&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/games/test_game/dialogs/precursor_wrack_first_inspection.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/precursor_wrack_first_inspection.xml	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/dialogs/precursor_wrack_first_inspection.xml	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;We have discovered precursor battleship&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;We have discovered precursor vessel. Unfortunately we can't get inside.&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Ok&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/games/test_game/dialogs/transport_please_help.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/transport_please_help.xml	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/dialogs/transport_please_help.xml	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Help request&quot; music=&quot;music/races/korah.mod&quot; background=&quot;images/alien/estion.jpg&quot; alien_text=&quot;SOS, Help, we have kohr-ah battle versel after us. Please do something about it or we are going to die&quot; font=&quot;Estion&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;This is earth cruiser Tamerlan, I will help you.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/games/test_game/dialogs/transport_thanks.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/transport_thanks.xml	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/dialogs/transport_thanks.xml	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;thanks for saving my sorry ass&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/estion.jpg&quot; alien_text=&quot;Thanks for saving my sorry ass.&quot; font=&quot;Estion&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;It was my duty&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/games/test_game/scripts/quests.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/quests.py	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/scripts/quests.py	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1,77 @@
++import tml,dialog,misc
++
++
++# player choose to escort transport to Ixis star system
++def escort_transport_to_ixis_func():
++    tml.GameAction.save_flag('escort_transport_to_ixis_mission_completeP', 0)
++    transport = tml.GameAction.add_ship('Ixis',
++                                        &quot;choex&quot;, 1000, 1000, tml.GameAction.get_player_team())
++    tml.GameAction.save_flag('escort_transport_to_ixis_transport_id',transport )
++    tml.GameAction.go_to_location(transport, tml.GameAction.get_double_flag('ixis_mining_station base'), 50)
++    tml.EventManager.distanceLessThen(transport,
++                                      tml.GameAction.get_double_flag('ixis_mining_station base'),
++                                      100,  'escort_transport_to_ixis_mission_complete')
++    tml.EventManager.distanceLessThen(transport,
++                                      tml.GameAction.get_player_ship_id(),
++                                      5000,  'escort_transport_to_ixis_ask_help_against_kohr_ah')
++    enemy = tml.GameAction.add_ship('Ixis',
++                                    &quot;kzedr&quot;, 2000, 2000, tml.GameAction.get_enemy_team())
++    tml.GameAction.set_crew(enemy, 10)
++
++def escort_transport_to_ixis_ask_help_against_kohr_ah():
++    print &quot;escort_transport_to_ixis_ask_help_against_kohr_ah&quot;
++    dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/transport_please_help.xml&quot;))
++
++def escort_transport_to_ixis_mission_complete():
++    print &quot;escort_transport_to_ixis_mission_complete&quot;
++    tml.GameAction.save_flag('escort_transport_to_ixis_mission_completeP', 1)
++    tml.GameAction.remove_location(tml.GameAction.get_double_flag('escort_transport_to_ixis_transport_id'))
++    dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/transport_thanks.xml&quot;))
++
++############################################################################################################
++# Precursor wrack
++
++def start_precursor_wrack_mission():
++    tml.GameAction.save_flag('have_drax_open_device', 1)
++    tml.EventManager.distanceLessThen(tml.GameAction.get_double_flag('precursor_wrack_id'),
++                                      tml.GameAction.get_player_ship_id(),
++                                      200,  'precursor_wrack_first_inspection')
++    id = tml.EventManager.distanceLessThen(tml.GameAction.get_double_flag('precursor_wrack_id'),
++                                           tml.GameAction.get_player_ship_id(),
++                                           200,  'win_game_func')
++    tml.EventManager.AddEventCondition(id, 'check_has_drax_open_device')
++
++def check_has_drax_open_device():
++    print &quot;Check drax open device&quot;
++    if tml.GameAction.get_double_flag('have_drax_open_device')&gt;0:
++        return True
++    return False
++
++def precursor_wrack_first_inspection():
++    dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/precursor_wrack_first_inspection.xml&quot;))
++
++def win_game_func():
++    tml.GameAction.end_game()
++    congrat = []
++    congrat.append(&quot;&quot;&quot;You win this little demo game&quot;&quot;&quot;)
++    congrat.append(&quot;&quot;)
++    congrat.append(&quot;&quot;&quot;I apologize for my lame English, and stub dialogs.&quot;&quot;&quot;)
++    congrat.append(&quot;&quot;&quot;You can contribute by writing better ones.&quot;&quot;&quot;)
++    congrat.append(&quot;                     Yurand&quot;)
++    congrat.append(&quot;&quot;)
++    congrat.append(&quot;Programming:&quot;)
++    congrat.append(&quot;  Yura Semashko (Yurand)&quot;)
++    congrat.append(&quot;&quot;)
++    congrat.append(&quot;Plot idea:&quot;)
++    congrat.append(&quot;  FrungySnack&quot;)
++    congrat.append(&quot;&quot;)
++    congrat.append(&quot;Dialogs:&quot;)
++    congrat.append(&quot;  Yura Semashko (Yurand)&quot;)
++    congrat.append(&quot;&quot;)
++    congrat.append(&quot;Please, consider help us with TW-Light: Legacies&quot;)
++    congrat.append(&quot;For detail check our site <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>&quot;)
++    tml.GameAction.scroll_text(misc.PyListStringToVector(congrat),&quot;images/background.jpg&quot;)
++    pass
++
++############################################################################################################
++
+
+Modified: trunk/gamedata/games/test_game/scripts/start.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/start.py	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/scripts/start.py	2005-05-20 17:57:25 UTC (rev 165)
+@@ -19,8 +19,9 @@
+     if random.random()&lt;0.25:
+         tml.GameAction.add_ship(tml.GameAction.get_player_star_system(), &quot;ilwsp&quot;, -1, -1, tml.GameAction.get_enemy_team())
+         
+-escort_transport_to_ixis_func()
+ 
++# Start quests
++start_precursor_wrack_mission()
+ 
+ 
+ 
+
+Modified: trunk/gamedata/games/test_game/scripts/systems/ixis.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/systems/ixis.py	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/games/test_game/scripts/systems/ixis.py	2005-05-20 17:57:25 UTC (rev 165)
+@@ -23,3 +23,10 @@
+ # Famous Ixis asteroid belt
+ for i in xrange(300):
+     tml.GameAction.add_asteroid('Ixis',random.random()*2000, -1, math.radians(90),-1)
++
++# Add Precursor ship wreck
++
++tml.GameAction.save_flag('precursor_wrack_id',
++                         tml.GameAction.add_ship('Ixis', &quot;samat&quot;, 1500, 5000, tml.GameAction.get_enemy_team()))
++tml.GameAction.disable_weapon(tml.GameAction.get_double_flag('precursor_wrack_id'))
++
+
+Added: trunk/gamedata/images/alien/estion.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/alien/estion.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/python/misc_fake.py
+===================================================================
+--- trunk/gamedata/python/misc_fake.py	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/python/misc_fake.py	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1,17 @@
++# This file is part of &quot;TW-Light&quot; 
++#                     <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++# Copyright (C) 2001-2005  TimeWarp development team
++
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++
++def PyListStringToVector(vect):
++    return vect
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/gamedata/python/tml.py	2005-05-20 17:57:25 UTC (rev 165)
+@@ -87,6 +87,10 @@
+     if _newclass:remove_location = staticmethod(_tml.GameAction_remove_location)
+     __swig_getmethods__[&quot;set_crew&quot;] = lambda x: _tml.GameAction_set_crew
+     if _newclass:set_crew = staticmethod(_tml.GameAction_set_crew)
++    __swig_getmethods__[&quot;end_game&quot;] = lambda x: _tml.GameAction_end_game
++    if _newclass:end_game = staticmethod(_tml.GameAction_end_game)
++    __swig_getmethods__[&quot;scroll_text&quot;] = lambda x: _tml.GameAction_scroll_text
++    if _newclass:scroll_text = staticmethod(_tml.GameAction_scroll_text)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -150,6 +154,10 @@
+ 
+ GameAction_set_crew = _tml.GameAction_set_crew
+ 
++GameAction_end_game = _tml.GameAction_end_game
++
++GameAction_scroll_text = _tml.GameAction_scroll_text
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+@@ -253,6 +261,8 @@
+     if _newclass:distanceMoreThen = staticmethod(_tml.EventManager_distanceMoreThen)
+     __swig_getmethods__[&quot;distanceLessThen&quot;] = lambda x: _tml.EventManager_distanceLessThen
+     if _newclass:distanceLessThen = staticmethod(_tml.EventManager_distanceLessThen)
++    __swig_getmethods__[&quot;AddEventCondition&quot;] = lambda x: _tml.EventManager_AddEventCondition
++    if _newclass:AddEventCondition = staticmethod(_tml.EventManager_AddEventCondition)
+     def __init__(self, *args):
+         _swig_setattr(self, EventManager, 'this', _tml.new_EventManager(*args))
+         _swig_setattr(self, EventManager, 'thisown', 1)
+@@ -284,6 +294,8 @@
+ 
+ EventManager_distanceLessThen = _tml.EventManager_distanceLessThen
+ 
++EventManager_AddEventCondition = _tml.EventManager_AddEventCondition
++
+ class SoundSystem(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, SoundSystem, name, value)
+@@ -323,14 +335,14 @@
+     __swig_getmethods__ = {}
+     __getattr__ = lambda self, name: _swig_getattr(self, vectorString, name)
+     def __repr__(self):
+-        return &quot;&lt;C std::vector&lt;(p.q(const).char)&gt; instance at %s&gt;&quot; % (self.this,)
++        return &quot;&lt;C std::vector&lt;(std::string)&gt; instance at %s&gt;&quot; % (self.this,)
+     def __init__(self, *args):
+         _swig_setattr(self, vectorString, 'this', _tml.new_vectorString(*args))
+         _swig_setattr(self, vectorString, 'thisown', 1)
+     def __len__(*args): return _tml.vectorString___len__(*args)
++    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def clear(*args): return _tml.vectorString_clear(*args)
+     def append(*args): return _tml.vectorString_append(*args)
+-    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def pop(*args): return _tml.vectorString_pop(*args)
+     def __getitem__(*args): return _tml.vectorString___getitem__(*args)
+     def __getslice__(*args): return _tml.vectorString___getslice__(*args)
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/generated/tml.py	2005-05-20 17:57:25 UTC (rev 165)
+@@ -87,6 +87,10 @@
+     if _newclass:remove_location = staticmethod(_tml.GameAction_remove_location)
+     __swig_getmethods__[&quot;set_crew&quot;] = lambda x: _tml.GameAction_set_crew
+     if _newclass:set_crew = staticmethod(_tml.GameAction_set_crew)
++    __swig_getmethods__[&quot;end_game&quot;] = lambda x: _tml.GameAction_end_game
++    if _newclass:end_game = staticmethod(_tml.GameAction_end_game)
++    __swig_getmethods__[&quot;scroll_text&quot;] = lambda x: _tml.GameAction_scroll_text
++    if _newclass:scroll_text = staticmethod(_tml.GameAction_scroll_text)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -150,6 +154,10 @@
+ 
+ GameAction_set_crew = _tml.GameAction_set_crew
+ 
++GameAction_end_game = _tml.GameAction_end_game
++
++GameAction_scroll_text = _tml.GameAction_scroll_text
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+@@ -253,6 +261,8 @@
+     if _newclass:distanceMoreThen = staticmethod(_tml.EventManager_distanceMoreThen)
+     __swig_getmethods__[&quot;distanceLessThen&quot;] = lambda x: _tml.EventManager_distanceLessThen
+     if _newclass:distanceLessThen = staticmethod(_tml.EventManager_distanceLessThen)
++    __swig_getmethods__[&quot;AddEventCondition&quot;] = lambda x: _tml.EventManager_AddEventCondition
++    if _newclass:AddEventCondition = staticmethod(_tml.EventManager_AddEventCondition)
+     def __init__(self, *args):
+         _swig_setattr(self, EventManager, 'this', _tml.new_EventManager(*args))
+         _swig_setattr(self, EventManager, 'thisown', 1)
+@@ -284,6 +294,8 @@
+ 
+ EventManager_distanceLessThen = _tml.EventManager_distanceLessThen
+ 
++EventManager_AddEventCondition = _tml.EventManager_AddEventCondition
++
+ class SoundSystem(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, SoundSystem, name, value)
+@@ -323,14 +335,14 @@
+     __swig_getmethods__ = {}
+     __getattr__ = lambda self, name: _swig_getattr(self, vectorString, name)
+     def __repr__(self):
+-        return &quot;&lt;C std::vector&lt;(p.q(const).char)&gt; instance at %s&gt;&quot; % (self.this,)
++        return &quot;&lt;C std::vector&lt;(std::string)&gt; instance at %s&gt;&quot; % (self.this,)
+     def __init__(self, *args):
+         _swig_setattr(self, vectorString, 'this', _tml.new_vectorString(*args))
+         _swig_setattr(self, vectorString, 'thisown', 1)
+     def __len__(*args): return _tml.vectorString___len__(*args)
++    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def clear(*args): return _tml.vectorString_clear(*args)
+     def append(*args): return _tml.vectorString_append(*args)
+-    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def pop(*args): return _tml.vectorString_pop(*args)
+     def __getitem__(*args): return _tml.vectorString___getitem__(*args)
+     def __getslice__(*args): return _tml.vectorString___getslice__(*args)
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/generated/tml_wrap.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -702,13 +702,11 @@
+ 
+ #define  SWIGTYPE_p_GameConfig swig_types[0] 
+ #define  SWIGTYPE_p_DialogApi swig_types[1] 
+-#define  SWIGTYPE_p_std__vectorTchar_const_p_t swig_types[2] 
++#define  SWIGTYPE_p_std__vectorTstd__string_t swig_types[2] 
+ #define  SWIGTYPE_p_EventManager swig_types[3] 
+ #define  SWIGTYPE_p_SoundSystem swig_types[4] 
+-#define  SWIGTYPE_p_char swig_types[5] 
+-#define  SWIGTYPE_p_p_char swig_types[6] 
+-#define  SWIGTYPE_p_GameAction swig_types[7] 
+-static swig_type_info *swig_types[9];
++#define  SWIGTYPE_p_GameAction swig_types[5] 
++static swig_type_info *swig_types[7];
+ 
+ /* -------- TYPES TABLE (END) -------- */
+ 
+@@ -814,17 +812,14 @@
+ #include &lt;algorithm&gt;
+ #include &lt;stdexcept&gt;
+ 
+-bool std_vectorlchar_const_m_g___nonzero_____(std::vector&lt;char const * &gt; *self){
+-                return !(self-&gt;empty());
+-            }
+-char const *std_vectorlchar_const_m_g_pop___(std::vector&lt;char const * &gt; *self){
++std::string std_vectorlstd_string_g_pop___(std::vector&lt;std::string &gt; *self){
+                 if (self-&gt;size() == 0)
+                     throw std::out_of_range(&quot;pop from empty vector&quot;);
+-                char const *x = self-&gt;back();
++                std::string x = self-&gt;back();
+                 self-&gt;pop_back();
+                 return x;
+             }
+-char const *std_vectorlchar_const_m_g___getitem_____(std::vector&lt;char const * &gt; *self,int i){
++std::string std_vectorlstd_string_g___getitem_____(std::vector&lt;std::string &gt; *self,int i){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i += size;
+                 if (i&gt;=0 &amp;&amp; i&lt;size)
+@@ -832,17 +827,17 @@
+                 else
+                     throw std::out_of_range(&quot;vector index out of range&quot;);
+             }
+-std::vector&lt;char const * &gt; std_vectorlchar_const_m_g___getslice_____(std::vector&lt;char const * &gt; *self,int i,int j){
++std::vector&lt;std::string &gt; std_vectorlstd_string_g___getslice_____(std::vector&lt;std::string &gt; *self,int i,int j){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i = size+i;
+                 if (j&lt;0) j = size+j;
+                 if (i&lt;0) i = 0;
+                 if (j&gt;size) j = size;
+-                std::vector&lt;char const *&gt; tmp(j-i);
++                std::vector&lt;std::string &gt; tmp(j-i);
+                 std::copy(self-&gt;begin()+i,self-&gt;begin()+j,tmp.begin());
+                 return tmp;
+             }
+-void std_vectorlchar_const_m_g___setitem_____(std::vector&lt;char const * &gt; *self,int i,char const *x){
++void std_vectorlstd_string_g___setitem_____(std::vector&lt;std::string &gt; *self,int i,std::string x){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i+= size;
+                 if (i&gt;=0 &amp;&amp; i&lt;size)
+@@ -850,7 +845,7 @@
+                 else
+                     throw std::out_of_range(&quot;vector index out of range&quot;);
+             }
+-void std_vectorlchar_const_m_g___setslice_____(std::vector&lt;char const * &gt; *self,int i,int j,std::vector&lt;char const * &gt; const &amp;v){
++void std_vectorlstd_string_g___setslice_____(std::vector&lt;std::string &gt; *self,int i,int j,std::vector&lt;std::string &gt; const &amp;v){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i = size+i;
+                 if (j&lt;0) j = size+j;
+@@ -866,7 +861,7 @@
+                         self-&gt;insert(self-&gt;end(),v.begin(),v.end());
+                 }
+             }
+-void std_vectorlchar_const_m_g___delitem_____(std::vector&lt;char const * &gt; *self,int i){
++void std_vectorlstd_string_g___delitem_____(std::vector&lt;std::string &gt; *self,int i){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i+= size;
+                 if (i&gt;=0 &amp;&amp; i&lt;size)
+@@ -874,7 +869,7 @@
+                 else
+                     throw std::out_of_range(&quot;vector index out of range&quot;);
+             }
+-void std_vectorlchar_const_m_g___delslice_____(std::vector&lt;char const * &gt; *self,int i,int j){
++void std_vectorlstd_string_g___delslice_____(std::vector&lt;std::string &gt; *self,int i,int j){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i = size+i;
+                 if (j&lt;0) j = size+j;
+@@ -1549,6 +1544,50 @@
+ }
+ 
+ 
++static PyObject *_wrap_GameAction_end_game(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:GameAction_end_game&quot;)) goto fail;
++    GameAction::end_game();
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_scroll_text(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;std::string &gt; *arg1 = 0 ;
++    std::string *arg2 = 0 ;
++    std::string temp2 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:GameAction_scroll_text&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1 == NULL) {
++        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
++    }
++    {
++        if (PyString_Check(obj1)) {
++            temp2 = std::string(PyString_AsString(obj1),
++            PyString_Size(obj1));
++            arg2 = &amp;temp2;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    GameAction::scroll_text((std::vector&lt;std::string &gt; const &amp;)*arg1,(std::string const &amp;)*arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_GameAction(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GameAction *result;
+@@ -1614,15 +1653,16 @@
+ 
+ static PyObject *_wrap_DialogApi_askPlayer(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; arg1 ;
++    std::vector&lt;std::string &gt; *arg1 = 0 ;
+     int result;
+-    std::vector&lt;char const * &gt; *argp1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:DialogApi_askPlayer&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;argp1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
+-    arg1 = *argp1; 
+-    result = (int)DialogApi::askPlayer(arg1);
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1 == NULL) {
++        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
++    }
++    result = (int)DialogApi::askPlayer((std::vector&lt;std::string &gt; const &amp;)*arg1);
+     
+     resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+@@ -2238,6 +2278,32 @@
+ }
+ 
+ 
++static PyObject *_wrap_EventManager_AddEventCondition(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    std::string *arg2 = 0 ;
++    std::string temp2 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;dO:EventManager_AddEventCondition&quot;,&amp;arg1,&amp;obj1)) goto fail;
++    {
++        if (PyString_Check(obj1)) {
++            temp2 = std::string(PyString_AsString(obj1),
++            PyString_Size(obj1));
++            arg2 = &amp;temp2;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    EventManager::AddEventCondition(arg1,(std::string const &amp;)*arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_EventManager(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     EventManager *result;
+@@ -2537,7 +2603,7 @@
+ static PyObject *_wrap_new_vectorString__SWIG_0(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     unsigned int arg1 = (unsigned int) 0 ;
+-    std::vector&lt;char const * &gt; *result;
++    std::vector&lt;std::string &gt; *result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;|O:new_vectorString&quot;,&amp;obj0)) goto fail;
+@@ -2545,9 +2611,9 @@
+         arg1 = (unsigned int) PyInt_AsLong(obj0);
+         if (PyErr_Occurred()) SWIG_fail;
+     }
+-    result = (std::vector&lt;char const * &gt; *)new std::vector&lt;char const * &gt;(arg1);
++    result = (std::vector&lt;std::string &gt; *)new std::vector&lt;std::string &gt;(arg1);
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTchar_const_p_t, 1);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTstd__string_t, 1);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -2557,21 +2623,27 @@
+ static PyObject *_wrap_new_vectorString__SWIG_1(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     unsigned int arg1 ;
+-    char **arg2 = 0 ;
+-    std::vector&lt;char const * &gt; *result;
++    std::string *arg2 = 0 ;
++    std::vector&lt;std::string &gt; *result;
++    std::string temp2 ;
+     PyObject * obj0 = 0 ;
+     PyObject * obj1 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;OO:new_vectorString&quot;,&amp;obj0,&amp;obj1)) goto fail;
+     arg1 = (unsigned int) PyInt_AsLong(obj0);
+     if (PyErr_Occurred()) SWIG_fail;
+-    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_p_char,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    if (arg2 == NULL) {
+-        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
++    {
++        if (PyString_Check(obj1)) {
++            temp2 = std::string(PyString_AsString(obj1),
++            PyString_Size(obj1));
++            arg2 = &amp;temp2;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
+     }
+-    result = (std::vector&lt;char const * &gt; *)new std::vector&lt;char const * &gt;(arg1,(char const *&amp;)*arg2);
++    result = (std::vector&lt;std::string &gt; *)new std::vector&lt;std::string &gt;(arg1,(std::string const &amp;)*arg2);
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTchar_const_p_t, 1);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTstd__string_t, 1);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -2580,10 +2652,10 @@
+ 
+ static PyObject *_wrap_new_vectorString__SWIG_2(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = 0 ;
+-    std::vector&lt;char const * &gt; *result;
+-    std::vector&lt;char const * &gt; temp1 ;
+-    std::vector&lt;char const * &gt; *v1 ;
++    std::vector&lt;std::string &gt; *arg1 = 0 ;
++    std::vector&lt;std::string &gt; *result;
++    std::vector&lt;std::string &gt; temp1 ;
++    std::vector&lt;std::string &gt; *v1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:new_vectorString&quot;,&amp;obj0)) goto fail;
+@@ -2592,33 +2664,32 @@
+             unsigned int size = (PyTuple_Check(obj0) ?
+             PyTuple_Size(obj0) :
+             PyList_Size(obj0));
+-            temp1 = std::vector&lt;char const *&gt;(size);
++            temp1 = std::vector&lt;std::string &gt;(size);
+             arg1 = &amp;temp1;
+             for (unsigned int i=0; i&lt;size; i++) {
+-                char const *x;
+                 PyObject* o = PySequence_GetItem(obj0,i);
+-                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
+-                SWIGTYPE_p_char,0)) != -1) {
+-                    temp1[i] = x;
++                if (PyString_Check(o)) {
++                    temp1[i] = (std::string)(\
++                    SwigString_AsString(o));
+                     Py_DECREF(o);
+                 } else {
+                     Py_DECREF(o);
+                     PyErr_SetString(PyExc_TypeError,
+-                    &quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
++                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+                     SWIG_fail;
+                 }
+             }
+         } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
+-        SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1) {
++        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
+             arg1 = v1;
+         } else {
+-            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+             SWIG_fail;
+         }
+     }
+-    result = (std::vector&lt;char const * &gt; *)new std::vector&lt;char const * &gt;((std::vector&lt;char const * &gt; const &amp;)*arg1);
++    result = (std::vector&lt;std::string &gt; *)new std::vector&lt;std::string &gt;((std::vector&lt;std::string &gt; const &amp;)*arg1);
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTchar_const_p_t, 1);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTstd__string_t, 1);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -2659,10 +2730,8 @@
+                     _v = 1;
+                 } else {
+                     /* check the first element only */
+-                    char const *x;
+                     PyObject* o = PySequence_GetItem(argv[0],0);
+-                    if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
+-                    SWIGTYPE_p_char,0)) != -1)
++                    if (PyString_Check(o))
+                     _v = 1;
+                     else
+                     _v = 0;
+@@ -2670,9 +2739,9 @@
+                 }
+             } else {
+                 /* wrapped vector? */
+-                std::vector&lt;char const *&gt;* v;
++                std::vector&lt;std::string &gt;* v;
+                 if (SWIG_ConvertPtr(argv[0],(void **) &amp;v, 
+-                SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1)
++                SWIGTYPE_p_std__vectorTstd__string_t,0) != -1)
+                 _v = 1;
+                 else
+                 _v = 0;
+@@ -2689,13 +2758,7 @@
+         }
+         if (_v) {
+             {
+-                void *ptr;
+-                if (SWIG_ConvertPtr(argv[1], (void **) &amp;ptr, SWIGTYPE_p_p_char, 0) == -1) {
+-                    _v = 0;
+-                    PyErr_Clear();
+-                } else {
+-                    _v = 1;
+-                }
++                _v = PyString_Check(argv[1]) ? 1 : 0;
+             }
+             if (_v) {
+                 return _wrap_new_vectorString__SWIG_1(self,args);
+@@ -2710,10 +2773,10 @@
+ 
+ static PyObject *_wrap_vectorString___len__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     unsigned int result;
+-    std::vector&lt;char const * &gt; temp1 ;
+-    std::vector&lt;char const * &gt; *v1 ;
++    std::vector&lt;std::string &gt; temp1 ;
++    std::vector&lt;std::string &gt; *v1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString___len__&quot;,&amp;obj0)) goto fail;
+@@ -2722,31 +2785,30 @@
+             unsigned int size = (PyTuple_Check(obj0) ?
+             PyTuple_Size(obj0) :
+             PyList_Size(obj0));
+-            temp1 = std::vector&lt;char const *&gt;(size);
++            temp1 = std::vector&lt;std::string &gt;(size);
+             arg1 = &amp;temp1;
+             for (unsigned int i=0; i&lt;size; i++) {
+-                char const *x;
+                 PyObject* o = PySequence_GetItem(obj0,i);
+-                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
+-                SWIGTYPE_p_char,0)) != -1) {
+-                    temp1[i] = x;
++                if (PyString_Check(o)) {
++                    temp1[i] = (std::string)(\
++                    SwigString_AsString(o));
+                     Py_DECREF(o);
+                 } else {
+                     Py_DECREF(o);
+                     PyErr_SetString(PyExc_TypeError,
+-                    &quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
++                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+                     SWIG_fail;
+                 }
+             }
+         } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
+-        SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1) {
++        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
+             arg1 = v1;
+         } else {
+-            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+             SWIG_fail;
+         }
+     }
+-    result = (unsigned int)((std::vector&lt;char const * &gt; const *)arg1)-&gt;size();
++    result = (unsigned int)((std::vector&lt;std::string &gt; const *)arg1)-&gt;size();
+     
+     resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+@@ -2755,31 +2817,60 @@
+ }
+ 
+ 
+-static PyObject *_wrap_vectorString_clear(PyObject *self, PyObject *args) {
++static PyObject *_wrap_vectorString___nonzero__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    bool result;
++    std::vector&lt;std::string &gt; temp1 ;
++    std::vector&lt;std::string &gt; *v1 ;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString_clear&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    (arg1)-&gt;clear();
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString___nonzero__&quot;,&amp;obj0)) goto fail;
++    {
++        if (PyTuple_Check(obj0) || PyList_Check(obj0)) {
++            unsigned int size = (PyTuple_Check(obj0) ?
++            PyTuple_Size(obj0) :
++            PyList_Size(obj0));
++            temp1 = std::vector&lt;std::string &gt;(size);
++            arg1 = &amp;temp1;
++            for (unsigned int i=0; i&lt;size; i++) {
++                PyObject* o = PySequence_GetItem(obj0,i);
++                if (PyString_Check(o)) {
++                    temp1[i] = (std::string)(\
++                    SwigString_AsString(o));
++                    Py_DECREF(o);
++                } else {
++                    Py_DECREF(o);
++                    PyErr_SetString(PyExc_TypeError,
++                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++                    SWIG_fail;
++                }
++            }
++        } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
++        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
++            arg1 = v1;
++        } else {
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++            SWIG_fail;
++        }
++    }
++    result = (bool)((std::vector&lt;std::string &gt; const *)arg1)-&gt;empty();
+     
+-    Py_INCREF(Py_None); resultobj = Py_None;
++    resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+     fail:
+     return NULL;
+ }
+ 
+ 
+-static PyObject *_wrap_vectorString_append(PyObject *self, PyObject *args) {
++static PyObject *_wrap_vectorString_clear(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+-    char *arg2 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;Os:vectorString_append&quot;,&amp;obj0,&amp;arg2)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    (arg1)-&gt;push_back((char const *)arg2);
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString_clear&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;clear();
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -2788,17 +2879,25 @@
+ }
+ 
+ 
+-static PyObject *_wrap_vectorString___nonzero__(PyObject *self, PyObject *args) {
++static PyObject *_wrap_vectorString_append(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+-    bool result;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::string arg2 ;
+     PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString___nonzero__&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = (bool)std_vectorlchar_const_m_g___nonzero_____(arg1);
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:vectorString_append&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        if (PyString_Check(obj1))
++        arg2 = std::string(PyString_AsString(obj1),
++        PyString_Size(obj1));
++        else
++        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++    }
++    (arg1)-&gt;push_back(arg2);
+     
+-    resultobj = PyInt_FromLong((long)result);
++    Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+     fail:
+     return NULL;
+@@ -2807,21 +2906,23 @@
+ 
+ static PyObject *_wrap_vectorString_pop(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+-    char *result;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::string result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString_pop&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         try {
+-            result = (char *)std_vectorlchar_const_m_g_pop___(arg1);
++            result = std_vectorlstd_string_g_pop___(arg1);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+         }
+     }
+-    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)&quot;&quot;);
++    {
++        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
++    }
+     return resultobj;
+     fail:
+     return NULL;
+@@ -2830,22 +2931,24 @@
+ 
+ static PyObject *_wrap_vectorString___getitem__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     int arg2 ;
+-    char *result;
++    std::string result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oi:vectorString___getitem__&quot;,&amp;obj0,&amp;arg2)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         try {
+-            result = (char *)std_vectorlchar_const_m_g___getitem_____(arg1,arg2);
++            result = std_vectorlstd_string_g___getitem_____(arg1,arg2);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+         }
+     }
+-    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)&quot;&quot;);
++    {
++        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
++    }
+     return resultobj;
+     fail:
+     return NULL;
+@@ -2854,24 +2957,21 @@
+ 
+ static PyObject *_wrap_vectorString___getslice__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     int arg2 ;
+     int arg3 ;
+-    std::vector&lt;char const * &gt; result;
++    std::vector&lt;std::string &gt; result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oii:vectorString___getslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = std_vectorlchar_const_m_g___getslice_____(arg1,arg2,arg3);
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = std_vectorlstd_string_g___getslice_____(arg1,arg2,arg3);
+     
+     {
+         resultobj = PyTuple_New((&amp;result)-&gt;size());
+-        for (unsigned int i=0; i&lt;(&amp;result)-&gt;size(); i++) {
+-            char const *ptr = ((std::vector&lt;char const * &gt; &amp;)result)[i];
+-            PyTuple_SetItem(resultobj,i,
+-            SWIG_NewPointerObj((void *) ptr, 
+-            SWIGTYPE_p_char, 0));
+-        }
++        for (unsigned int i=0; i&lt;(&amp;result)-&gt;size(); i++)
++        PyTuple_SetItem(resultobj,i,
++        SwigString_FromString(((std::vector&lt;std::string &gt; &amp;)result)[i]));
+     }
+     return resultobj;
+     fail:
+@@ -2881,16 +2981,24 @@
+ 
+ static PyObject *_wrap_vectorString___setitem__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     int arg2 ;
+-    char *arg3 ;
++    std::string arg3 ;
+     PyObject * obj0 = 0 ;
++    PyObject * obj2 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;Ois:vectorString___setitem__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;OiO:vectorString___setitem__&quot;,&amp;obj0,&amp;arg2,&amp;obj2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
++        if (PyString_Check(obj2))
++        arg3 = std::string(PyString_AsString(obj2),
++        PyString_Size(obj2));
++        else
++        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++    }
++    {
+         try {
+-            std_vectorlchar_const_m_g___setitem_____(arg1,arg2,(char const *)arg3);
++            std_vectorlstd_string_g___setitem_____(arg1,arg2,arg3);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+@@ -2905,47 +3013,46 @@
+ 
+ static PyObject *_wrap_vectorString___setslice__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     int arg2 ;
+     int arg3 ;
+-    std::vector&lt;char const * &gt; *arg4 = 0 ;
+-    std::vector&lt;char const * &gt; temp4 ;
+-    std::vector&lt;char const * &gt; *v4 ;
++    std::vector&lt;std::string &gt; *arg4 = 0 ;
++    std::vector&lt;std::string &gt; temp4 ;
++    std::vector&lt;std::string &gt; *v4 ;
+     PyObject * obj0 = 0 ;
+     PyObject * obj3 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;OiiO:vectorString___setslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3,&amp;obj3)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         if (PyTuple_Check(obj3) || PyList_Check(obj3)) {
+             unsigned int size = (PyTuple_Check(obj3) ?
+             PyTuple_Size(obj3) :
+             PyList_Size(obj3));
+-            temp4 = std::vector&lt;char const *&gt;(size);
++            temp4 = std::vector&lt;std::string &gt;(size);
+             arg4 = &amp;temp4;
+             for (unsigned int i=0; i&lt;size; i++) {
+-                char const *x;
+                 PyObject* o = PySequence_GetItem(obj3,i);
+-                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
+-                SWIGTYPE_p_char,0)) != -1) {
+-                    temp4[i] = x;
++                if (PyString_Check(o)) {
++                    temp4[i] = (std::string)(\
++                    SwigString_AsString(o));
+                     Py_DECREF(o);
+                 } else {
+                     Py_DECREF(o);
+                     PyErr_SetString(PyExc_TypeError,
+-                    &quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
++                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+                     SWIG_fail;
+                 }
+             }
+         } else if (SWIG_ConvertPtr(obj3,(void **) &amp;v4, 
+-        SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1) {
++        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
+             arg4 = v4;
+         } else {
+-            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+             SWIG_fail;
+         }
+     }
+-    std_vectorlchar_const_m_g___setslice_____(arg1,arg2,arg3,(std::vector&lt;char const * &gt; const &amp;)*arg4);
++    std_vectorlstd_string_g___setslice_____(arg1,arg2,arg3,(std::vector&lt;std::string &gt; const &amp;)*arg4);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -2956,15 +3063,15 @@
+ 
+ static PyObject *_wrap_vectorString___delitem__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     int arg2 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oi:vectorString___delitem__&quot;,&amp;obj0,&amp;arg2)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         try {
+-            std_vectorlchar_const_m_g___delitem_____(arg1,arg2);
++            std_vectorlstd_string_g___delitem_____(arg1,arg2);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+@@ -2979,14 +3086,14 @@
+ 
+ static PyObject *_wrap_vectorString___delslice__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     int arg2 ;
+     int arg3 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oii:vectorString___delslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    std_vectorlchar_const_m_g___delslice_____(arg1,arg2,arg3);
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    std_vectorlstd_string_g___delslice_____(arg1,arg2,arg3);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -2997,11 +3104,11 @@
+ 
+ static PyObject *_wrap_delete_vectorString(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_vectorString&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     delete arg1;
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+@@ -3014,7 +3121,7 @@
+ static PyObject * vectorString_swigregister(PyObject *self, PyObject *args) {
+     PyObject *obj;
+     if (!PyArg_ParseTuple(args,(char*)&quot;O&quot;, &amp;obj)) return NULL;
+-    SWIG_TypeClientData(SWIGTYPE_p_std__vectorTchar_const_p_t, obj);
++    SWIG_TypeClientData(SWIGTYPE_p_std__vectorTstd__string_t, obj);
+     Py_INCREF(obj);
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
+@@ -3043,6 +3150,8 @@
+ 	 { (char *)&quot;GameAction_get_player_team&quot;, _wrap_GameAction_get_player_team, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_remove_location&quot;, _wrap_GameAction_remove_location, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_set_crew&quot;, _wrap_GameAction_set_crew, METH_VARARGS },
++	 { (char *)&quot;GameAction_end_game&quot;, _wrap_GameAction_end_game, METH_VARARGS },
++	 { (char *)&quot;GameAction_scroll_text&quot;, _wrap_GameAction_scroll_text, METH_VARARGS },
+ 	 { (char *)&quot;new_GameAction&quot;, _wrap_new_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;delete_GameAction&quot;, _wrap_delete_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_swigregister&quot;, GameAction_swigregister, METH_VARARGS },
+@@ -3068,6 +3177,7 @@
+ 	 { (char *)&quot;EventManager_shipDeathByType&quot;, _wrap_EventManager_shipDeathByType, METH_VARARGS },
+ 	 { (char *)&quot;EventManager_distanceMoreThen&quot;, _wrap_EventManager_distanceMoreThen, METH_VARARGS },
+ 	 { (char *)&quot;EventManager_distanceLessThen&quot;, _wrap_EventManager_distanceLessThen, METH_VARARGS },
++	 { (char *)&quot;EventManager_AddEventCondition&quot;, _wrap_EventManager_AddEventCondition, METH_VARARGS },
+ 	 { (char *)&quot;new_EventManager&quot;, _wrap_new_EventManager, METH_VARARGS },
+ 	 { (char *)&quot;delete_EventManager&quot;, _wrap_delete_EventManager, METH_VARARGS },
+ 	 { (char *)&quot;EventManager_swigregister&quot;, EventManager_swigregister, METH_VARARGS },
+@@ -3086,9 +3196,9 @@
+ 	 { (char *)&quot;GetSoundSystem&quot;, _wrap_GetSoundSystem, METH_VARARGS },
+ 	 { (char *)&quot;new_vectorString&quot;, _wrap_new_vectorString, METH_VARARGS },
+ 	 { (char *)&quot;vectorString___len__&quot;, _wrap_vectorString___len__, METH_VARARGS },
++	 { (char *)&quot;vectorString___nonzero__&quot;, _wrap_vectorString___nonzero__, METH_VARARGS },
+ 	 { (char *)&quot;vectorString_clear&quot;, _wrap_vectorString_clear, METH_VARARGS },
+ 	 { (char *)&quot;vectorString_append&quot;, _wrap_vectorString_append, METH_VARARGS },
+-	 { (char *)&quot;vectorString___nonzero__&quot;, _wrap_vectorString___nonzero__, METH_VARARGS },
+ 	 { (char *)&quot;vectorString_pop&quot;, _wrap_vectorString_pop, METH_VARARGS },
+ 	 { (char *)&quot;vectorString___getitem__&quot;, _wrap_vectorString___getitem__, METH_VARARGS },
+ 	 { (char *)&quot;vectorString___getslice__&quot;, _wrap_vectorString___getslice__, METH_VARARGS },
+@@ -3106,21 +3216,17 @@
+ 
+ static swig_type_info _swigt__p_GameConfig[] = {{&quot;_p_GameConfig&quot;, 0, &quot;GameConfig *&quot;, 0},{&quot;_p_GameConfig&quot;},{0}};
+ static swig_type_info _swigt__p_DialogApi[] = {{&quot;_p_DialogApi&quot;, 0, &quot;DialogApi *&quot;, 0},{&quot;_p_DialogApi&quot;},{0}};
+-static swig_type_info _swigt__p_std__vectorTchar_const_p_t[] = {{&quot;_p_std__vectorTchar_const_p_t&quot;, 0, &quot;std::vector&lt;char const * &gt; *&quot;, 0},{&quot;_p_std__vectorTchar_const_p_t&quot;},{0}};
++static swig_type_info _swigt__p_std__vectorTstd__string_t[] = {{&quot;_p_std__vectorTstd__string_t&quot;, 0, &quot;std::vector&lt;std::string &gt; *&quot;, 0},{&quot;_p_std__vectorTstd__string_t&quot;},{0}};
+ static swig_type_info _swigt__p_EventManager[] = {{&quot;_p_EventManager&quot;, 0, &quot;EventManager *&quot;, 0},{&quot;_p_EventManager&quot;},{0}};
+ static swig_type_info _swigt__p_SoundSystem[] = {{&quot;_p_SoundSystem&quot;, 0, &quot;SoundSystem *&quot;, 0},{&quot;_p_SoundSystem&quot;},{0}};
+-static swig_type_info _swigt__p_char[] = {{&quot;_p_char&quot;, 0, &quot;char *&quot;, 0},{&quot;_p_char&quot;},{0}};
+-static swig_type_info _swigt__p_p_char[] = {{&quot;_p_p_char&quot;, 0, &quot;char **&quot;, 0},{&quot;_p_p_char&quot;},{0}};
+ static swig_type_info _swigt__p_GameAction[] = {{&quot;_p_GameAction&quot;, 0, &quot;GameAction *&quot;, 0},{&quot;_p_GameAction&quot;},{0}};
+ 
+ static swig_type_info *swig_types_initial[] = {
+ _swigt__p_GameConfig, 
+ _swigt__p_DialogApi, 
+-_swigt__p_std__vectorTchar_const_p_t, 
++_swigt__p_std__vectorTstd__string_t, 
+ _swigt__p_EventManager, 
+ _swigt__p_SoundSystem, 
+-_swigt__p_char, 
+-_swigt__p_p_char, 
+ _swigt__p_GameAction, 
+ 0
+ };
+
+Modified: trunk/source/melee/mhelpers.cpp
+===================================================================
+--- trunk/source/melee/mhelpers.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/melee/mhelpers.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -609,7 +609,12 @@
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ 
+-void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr, const std::string&amp; align, int speed)
++void ScrollText(const std::vector&lt;std::string&gt;&amp; text, 
++		FONT* font, 
++		int color, 
++		const std::string&amp; backgr, 
++		const std::string&amp; align, 
++		int speed)
+ {
+   STACKTRACE;
+   BITMAP* d_buf = create_bitmap(SCREEN_W, SCREEN_H);
+
+Modified: trunk/source/melee/mhelpers.h
+===================================================================
+--- trunk/source/melee/mhelpers.h	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/melee/mhelpers.h	2005-05-20 17:57:25 UTC (rev 165)
+@@ -24,7 +24,7 @@
+ 
+ // Show scrolling text
+ 
+-void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr, const std::string&amp; align, int speed);
++void ScrollText(const std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr, const std::string&amp; align, int speed);
+ 
+ 
+ #endif 
+
+Modified: trunk/source/python/game.i
+===================================================================
+--- trunk/source/python/game.i	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/python/game.i	2005-05-20 17:57:25 UTC (rev 165)
+@@ -20,6 +20,6 @@
+ 
+ namespace std { 
+ //   %template(vectorEnemySaveData) vector&lt;EnemySaveData&gt;;
+-   %template(vectorString) vector&lt;const char*&gt;;	
++   %template(vectorString) vector&lt;std::string&gt;;	
+ };
+ 
+
+Modified: trunk/source/python/python_class.cpp
+===================================================================
+--- trunk/source/python/python_class.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/python/python_class.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -134,9 +134,10 @@
+     return result;
+ }
+ 
+-void python::exec_function(const std::string&amp; name)
++bool python::exec_function(const std::string&amp; name)
+ {
+   STACKTRACE;
++  bool ret = false;
+   PyObject* evalModule;
+   PyObject* evalDict;
+   PyObject* pFunc;
+@@ -166,56 +167,20 @@
+       tw_error( (std::string(&quot;Call failed: &quot;) + name).c_str());
+     }
+   pValue = PyObject_CallObject(pFunc, pArgs);
+-  //Py_DECREF(pArgs);
+-  if (pValue != NULL) 
+-    {
+-      //  Py_DECREF(pValue);
+-    }
+-  else 
+-    {
+-      tw_error( (std::string(&quot;Call failed: &quot;) + name).c_str());
+-    }
+-}
+-
+-void python::exec_class(const std::string&amp; name)
+-{
+-  STACKTRACE;
+-  PyObject* evalModule;
+-  PyObject* evalDict;
+-  PyObject* pFunc;
+-  PyObject* pArgs;
+-  PyObject* pValue;
+-
+-  evalModule = PyImport_AddModule( (char*)&quot;__main__&quot; );
+-  if(!evalModule)
+-    {
+-      tw_error(&quot;Can't get __main__ module&quot;);
+-    }
+-  evalDict   = PyModule_GetDict( evalModule );
+-  if(!evalDict)
+-    {
+-      tw_error(&quot;Can't get __main__ dict&quot;);
+-    }
+-
+- 
+-  pFunc = PyDict_GetItemString(evalDict, (char*)name.c_str());
+-
+-  if (pFunc &amp;&amp; PyCallable_Check(pFunc)) 
+-    {
+-      pArgs = PyTuple_New(0);
+-    }
+-  else
+-    {
+-      tw_error( (std::string(&quot;Call failed: &quot;) + name).c_str());
+-    }
+-  pValue = PyObject_CallObject(pFunc, pArgs);
+   Py_DECREF(pArgs);
+   if (pValue != NULL) 
+     {
++      if(PyInt_Check(pValue))
++	{
++	  if(PyInt_AsLong(pValue)!=0)
++	    ret = true;
++	}
+       Py_DECREF(pValue);
+     }
+   else 
+     {
+       tw_error( (std::string(&quot;Call failed: &quot;) + name).c_str());
+     }
++  return ret;
+ }
++
+
+Modified: trunk/source/python/python_class.h
+===================================================================
+--- trunk/source/python/python_class.h	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/python/python_class.h	2005-05-20 17:57:25 UTC (rev 165)
+@@ -88,9 +88,8 @@
+      */
+     static PyObject *import_module (std::string filename);
+     
+-    static void exec_function(const std::string&amp; name);
++    static bool exec_function(const std::string&amp; name);
+     
+-    static void exec_class(const std::string&amp; name);
+     /** 
+      * Dumps any error information to stderr.
+      * 
+
+Added: trunk/source/ships/shpsamat.cpp
+===================================================================
+--- trunk/source/ships/shpsamat.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/ships/shpsamat.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -0,0 +1,743 @@
++/*
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2005  TimeWarp development team
++
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
++
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
++*/
++
++#include &quot;ship.h&quot;
++
++/*
++
++Sa-Matra:
++
++Main = green blobs that deal 1 damage and push the target away.
++Special = comet that does time-damage
++
++*/
++
++class SaMatra : public Ship
++{
++public:
++
++  Vector2 startpos;
++
++
++  int weaponNumber, Nweapons;
++  int specialNumber, Nspecials;
++  double armour, Armour;
++
++
++  double weaponVelocity, weaponDamage, weaponArmour, weaponTurnPerSec;
++  double specialVelocity, specialDamage, specialArmour, specialTrailTimeLen,
++    specialTurnPerSec, specialDamageDelay;
++
++
++
++  SaMatra(Vector2 opos, double angle, ShipData *data, unsigned int code);
++
++
++  virtual void relocate();
++  virtual void death();
++
++	
++  virtual void calculate();
++  virtual int activate_weapon();
++  virtual int activate_special();
++
++
++  virtual int handle_damage(SpaceLocation *src, double normal, double direct=0);
++  virtual void inflict_damage(SpaceObject *other);
++
++  virtual SpaceLocation *get_ship_phaser();
++};
++
++
++
++
++class SaMatraFlame : public SpaceObject
++{
++  double armour;
++  SaMatra *samatra;
++
++
++  double trailTime;	// in seconds
++  int trailNum;
++  Vector2 *trailPos;
++
++
++  double damage_delay, damage_delay_max;
++
++public:
++
++  SaMatraFlame(SaMatra* ocreator, Vector2 opos, double oangle, SpaceSprite *osprite);
++  virtual ~SaMatraFlame();
++
++
++  virtual void calculate();
++  virtual void animate(Frame *space);
++  virtual void death();
++  
++
++  virtual void inflict_damage(SpaceObject *other);
++  virtual int handle_damage(SpaceLocation *source, double normal, double direct);
++};
++
++
++
++class SaMatraBoxer : public SpaceObject
++{
++  double armour;
++  SaMatra *samatra;
++  double	timer, ftime;
++  
++public:
++  
++  SaMatraBoxer(SaMatra* ocreator, Vector2 opos, double oangle, SpaceSprite *osprite);
++  //	~SaMatraBoxer(void);
++  
++  
++  virtual void calculate();
++  virtual void death();
++  virtual void inflict_damage(SpaceObject *other);
++  virtual int handle_damage(SpaceLocation *source, double normal, double direct);
++};
++
++
++
++
++
++SaMatra::SaMatra(Vector2 opos, double angle, ShipData *data, unsigned int code) 
++  :
++  Ship(opos, angle, data, code)
++{
++  STACKTRACE;
++  angle = -0.5*PI;
++  sprite_index = 0;
++  
++  Armour				= get_config_float(&quot;Ship&quot;, &quot;Armour&quot;, 0);
++  
++  weaponVelocity		= scale_velocity(get_config_float(&quot;Weapon&quot;, &quot;Velocity&quot;, 0));
++  weaponDamage		= get_config_float(&quot;Weapon&quot;, &quot;Damage&quot;, 0);
++  weaponArmour		= get_config_float(&quot;Weapon&quot;, &quot;Armour&quot;, 0);
++  weaponNumber		= get_config_int(&quot;Weapon&quot;, &quot;Number&quot;, 1);
++  weaponTurnPerSec	= get_config_float(&quot;Weapon&quot;, &quot;TurnPerSec&quot;, 0);
++  
++  specialVelocity		= scale_velocity(get_config_float(&quot;Special&quot;, &quot;Velocity&quot;, 0));
++  specialDamage		= get_config_float(&quot;Special&quot;, &quot;Damage&quot;, 0);
++  specialArmour		= get_config_float(&quot;Special&quot;, &quot;Armour&quot;, 0);
++  specialTrailTimeLen	= get_config_float(&quot;Special&quot;, &quot;TrailTimeLen&quot;, 1.0);
++  specialNumber		= get_config_int(&quot;Special&quot;, &quot;Number&quot;, 1);
++  specialTurnPerSec	= get_config_float(&quot;Special&quot;, &quot;TurnPerSec&quot;, 0);
++  specialDamageDelay	= get_config_float(&quot;Special&quot;, &quot;DamageDelay&quot;, 0.1);
++  
++  
++  Nweapons = 0;
++  Nspecials = 0;
++  
++  startpos = pos;
++  armour = Armour;
++}
++
++
++
++
++int SaMatra::activate_weapon()
++{
++  STACKTRACE;
++  if (Nweapons &lt; weaponNumber)
++    {
++      game-&gt;add(new SaMatraBoxer(this, pos, random(PI2), data-&gt;spriteWeapon));
++      return true;
++	
++    } else
++      return false;
++  
++}
++
++
++
++int SaMatra::activate_special()
++{
++  STACKTRACE;
++
++  if (Nspecials &lt; specialNumber)
++    {
++      game-&gt;add(new SaMatraFlame(this, pos, random(PI2), data-&gt;spriteSpecial));
++      return true;
++      
++    } else
++      return false;
++  
++}
++
++
++
++void SaMatra::calculate()
++{
++  STACKTRACE;
++
++  Ship::calculate();
++  
++  if (state == 0)
++    state = 1;
++  
++  
++  // don't move !!
++  
++  angle = -0.5*PI;	// pointing upward
++  sprite_index = 0;
++  vel = 0;
++  
++  // fix position
++  pos = startpos;
++  
++}
++
++
++
++
++
++int SaMatra::handle_damage(SpaceLocation *src, double normal, double direct)
++{
++  STACKTRACE;
++  double total;
++  total = normal + direct;
++  
++
++
++  while (total &gt; 0 &amp;&amp; crew &gt; 0)
++    {
++      armour -= total;
++      
++      
++      if (armour &gt;= 0)
++	total = 0;
++      else
++	total = -armour;
++      
++      
++      if (armour &lt;= 0)
++	{
++	  armour = Armour;
++	  --crew;
++	}
++      
++      
++      if (crew &lt;= 0)
++	{
++	  state = 0;
++	  break;
++	}
++      
++    }
++  
++  return 0;
++}
++
++
++
++void SaMatra::inflict_damage(SpaceObject *other)
++{
++  STACKTRACE;
++    if (!other-&gt;isShip())
++      damage(other, 100000);
++}
++
++
++
++
++
++void SaMatra::death()
++{
++  STACKTRACE;
++    Ship::death();
++  
++  
++  // spawn a dead body? A space object...
++  
++  SpaceSprite *spr;
++  sprite-&gt;unlock();
++  spr = new SpaceSprite(sprite-&gt;get_bitmap(0), SpaceSprite::MASKED);
++  
++  sprite-&gt;lock();
++  
++  
++  SpaceObject *o;
++  
++  o = new SpaceObject(0, pos, angle, spr);
++  o-&gt;set_depth(DEPTH_ASTEROIDS);
++  o-&gt;layer = LAYER_CBODIES;
++  
++  
++  o-&gt;collide_flag_anyone = ALL_LAYERS;
++  o-&gt;collide_flag_sameship = ALL_LAYERS;
++  o-&gt;collide_flag_sameteam = ALL_LAYERS;
++  o-&gt;mass = mass;
++  
++  
++  game-&gt;add(o);
++}
++
++
++
++
++
++SaMatraBoxer::SaMatraBoxer(SaMatra* ocreator, Vector2 opos, double oangle, SpaceSprite *osprite)
++  :
++  SpaceObject(ocreator, opos, oangle, osprite)
++{
++  STACKTRACE;
++  samatra = ocreator;
++  
++  layer = LAYER_SPECIAL;
++  set_depth(DEPTH_SPECIAL);
++  
++  collide_flag_sameship = 0;
++  collide_flag_sameteam = 0;
++  collide_flag_anyone = ALL_LAYERS;
++  
++  mass = 50;
++  armour = samatra-&gt;weaponArmour;
++	
++  ++samatra-&gt;Nweapons;
++  
++
++  timer = 0;
++  ftime = 0.3;
++  sprite_index = 0;
++  
++  isblockingweapons = false;
++}
++
++
++
++
++void SaMatraBoxer::death()
++{
++  STACKTRACE;
++
++  if (samatra)
++    --samatra-&gt;Nweapons;
++}
++
++
++// da_ps = angle change per second
++
++void home_in(SpaceLocation *yours, SpaceLocation *target, double *angle, double da_ps)
++{
++  STACKTRACE;
++  if ((target &amp;&amp; target-&gt;exists()) &amp;&amp; (!target-&gt;isInvisible()))
++    {
++      double a, da;
++      
++
++      a = yours-&gt;trajectory_angle(target);
++      
++      //		//trajectory_angle(pos, l-&gt;normal_pos());
++      //		a = ::trajectory_angle(pos, target-&gt;normal_pos());
++      
++      
++      // required change in direction
++      
++      da = a - *angle;
++      while (da &gt;  PI)	da -= PI2;
++      while (da &lt; -PI)	da += PI2;
++      
++		
++      double db;
++      
++      
++      // max allowed change in direction
++      db = da_ps * frame_time * 1E-3;
++      
++      
++      if (da &gt;  db)	da =  db;
++      if (da &lt; -db)	da = -db;
++      
++      
++      *angle += da;
++    }
++}
++
++
++
++
++
++void SaMatraBoxer::calculate()
++{
++  STACKTRACE;
++  SpaceObject::calculate();
++
++
++  if (!(samatra &amp;&amp; samatra-&gt;exists()))
++    {
++      samatra = 0;
++      state = 0;
++      return;
++    }
++
++
++  timer += frame_time * 1E-3;
++
++  if (timer &gt; ftime)
++    {
++      timer -= ftime;
++      ++sprite_index;
++
++
++      if (sprite_index &gt;= sprite-&gt;frames())
++	sprite_index = 0;
++    }
++
++
++  //vel = Vector2(samatra-&gt;weaponVelocity, 0);
++  home_in(this, ship-&gt;get_target(), &amp;angle, samatra-&gt;weaponTurnPerSec);
++
++
++  vel = samatra-&gt;weaponVelocity * unit_vector(angle);
++}
++
++
++
++
++
++int SaMatraBoxer::handle_damage(SpaceLocation *source, double normal, double direct)
++{
++  STACKTRACE;
++  double total = normal + direct;
++  armour -= total;
++
++
++
++  // damage points used
++  if (armour &lt; 0)
++    total += armour;
++
++
++  if (armour &lt;= 0)
++    {
++      state = 0;
++
++      // shouldn't there be a small explosion here?
++    }
++
++
++  return iround(total);
++}
++
++
++
++
++void SaMatraBoxer::inflict_damage(SpaceObject *other)
++{
++  STACKTRACE;
++    if (!other-&gt;exists()) return;
++
++	
++  damage(other, samatra-&gt;weaponDamage);
++
++
++  if (other-&gt;mass &gt;= 1)
++    {
++      int weaponExplosionFrameCount, weaponExplosionFrameSize;
++
++		
++      weaponExplosionFrameCount = 6;
++      weaponExplosionFrameSize = 100;
++
++		
++      game-&gt;add(new Animation(this, normal_pos(),
++			      samatra-&gt;data-&gt;spriteWeaponExplosion, 0, weaponExplosionFrameCount,
++			      weaponExplosionFrameSize, DEPTH_EXPLOSIONS));
++
++      tw_sound-&gt;stop_sound(data_full_path(samatra-&gt;data-&gt;sampleWeapon[0]));
++      tw_sound-&gt;play_sound(data_full_path(samatra-&gt;data-&gt;sampleWeapon[0]));
++
++      // sampleSpecial also exists.
++    }
++}
++
++
++
++
++
++
++
++
++
++
++class SaMatraPhaser : public Phaser
++{
++public:
++
++  SaMatraPhaser(Vector2 opos, Vector2 n, SaMatra *ship, 
++		SpaceSprite *sprite, int osprite_index, int *ocolors, 
++		int onum_colors, int ofsize, int steps, int step_time) ;
++
++  virtual void calculate();
++};
++
++
++
++
++
++SaMatraPhaser::SaMatraPhaser(Vector2 opos, Vector2 _n, SaMatra *ship, 
++			     SpaceSprite *sprite, int osprite_index, int *ocolors, 
++			     int onum_colors, int ofsize, int steps, int step_size)
++  :
++  Phaser(ship, opos, _n, ship, sprite, osprite_index, ocolors, onum_colors, ofsize, 
++	 steps, step_size)
++{
++  STACKTRACE;
++
++}
++
++
++
++void SaMatraPhaser::calculate()
++{
++  STACKTRACE;
++    Phaser::calculate();
++
++	
++  if (!ship) return;
++
++  angle = ship-&gt;get_angle();
++  sprite_index = get_index(angle);
++  rel_pos = unit_vector(angle) * rel_pos.length();
++  pos = normalize(ship-&gt;normal_pos() - rel_pos);
++
++
++  return;
++}
++
++
++
++
++
++SpaceLocation *SaMatra::get_ship_phaser()
++{
++  STACKTRACE;
++
++  relocate();
++
++  return new SaMatraPhaser(
++			   pos - unit_vector(angle) * PHASE_MAX * size.x,
++			   unit_vector(angle) * PHASE_MAX * size.x,
++			   this, sprite, sprite_index, hot_color, HOT_COLORS,
++			   PHASE_DELAY, PHASE_MAX, PHASE_DELAY);
++}
++
++
++
++
++
++// locate the sa-matra far from the planet.
++
++void SaMatra::relocate()
++{
++  STACKTRACE;
++    // find the planet.
++
++    /*
++      for(std::lsit&lt;SpaceLocation*&gt;::iterator i = game-&gt;item.begin(); i!= game-&gt;item.end();i++)
++      {
++      if ((*i)-&gt;isPlanet())
++      break;
++      }
++	
++      if (i != game-&gt;num_items)
++      {
++      double a, R;
++      a = random(PI2);
++      R = map_size.x / 2;
++
++      pos = game-&gt;item[i]-&gt;pos + R * unit_vector(a);
++      startpos = pos;
++
++      // for the Sa-Matra, startpos is important !!
++      }
++    */
++
++    // this big ship has only 1 direction.
++    angle = -0.5*PI;
++  sprite_index = 0;
++}
++
++
++
++
++
++
++
++
++
++
++
++SaMatraFlame::SaMatraFlame(SaMatra* ocreator, Vector2 opos, double oangle, SpaceSprite *osprite)
++  :
++  SpaceObject(ocreator, opos, oangle, osprite)
++{
++  STACKTRACE;
++
++  samatra = ocreator;
++	
++  layer = LAYER_SPECIAL;
++  set_depth(DEPTH_SPECIAL);
++
++
++  collide_flag_sameship = 0;
++  collide_flag_sameteam = 0;
++  collide_flag_anyone = ALL_LAYERS;
++
++  isblockingweapons = false;
++
++
++  mass = 0;
++  armour = samatra-&gt;specialArmour;
++
++
++  damage_delay = 0;
++  damage_delay_max = samatra-&gt;specialDamageDelay;	// this many times per second
++
++
++
++  trailTime = samatra-&gt;specialTrailTimeLen;	// in seconds
++  trailNum = iround(1 + trailTime / (frame_time*1E-3));
++  trailPos = new Vector2 [trailNum];
++
++  int i;
++  for ( i = 0; i &lt; trailNum; ++i )
++    trailPos[i] = pos;
++
++  ++samatra-&gt;Nspecials;
++}
++
++
++
++SaMatraFlame::~SaMatraFlame()
++{
++  delete[] trailPos;
++}
++
++
++
++
++
++void SaMatraFlame::death()
++{
++  STACKTRACE;
++
++    if (samatra)
++      --samatra-&gt;Nspecials;
++}
++
++
++
++void SaMatraFlame::calculate()
++{
++  STACKTRACE;
++  SpaceObject::calculate();
++
++  if (!(samatra &amp;&amp; samatra-&gt;exists()))
++    {
++      samatra = 0;
++      state = 0;
++      return;
++    }
++
++  sprite_index = 0;
++
++  home_in(this, ship-&gt;get_target(), &amp;angle, samatra-&gt;specialTurnPerSec);
++  vel = samatra-&gt;specialVelocity * unit_vector(angle);
++
++
++  int i;
++  for ( i = trailNum-1; i &gt; 0; --i )
++    trailPos[i] = trailPos[i-1];
++
++  trailPos[0] = pos;
++
++  if (damage_delay &gt; 0)
++    damage_delay -= frame_time * 1E-3;
++}
++
++
++
++
++
++void SaMatraFlame::animate(Frame *space)
++{
++  STACKTRACE;
++    //	sprite-&gt;animate(pos, 0, space);
++
++    //	return;
++
++    int i, N;
++
++  N = sprite-&gt;frames();
++
++  for ( i = N-1; i &gt;= 0; --i )
++    {
++      int k;
++      k = ( i * (trailNum-1)) / (N-1);
++      sprite-&gt;animate(trailPos[k], i, space);
++    }
++}
++
++
++
++void SaMatraFlame::inflict_damage(SpaceObject *other)
++{
++  STACKTRACE;
++  if (!other-&gt;exists()) return;
++
++  if (damage_delay &gt; 0)
++    return;
++
++  damage(other, samatra-&gt;specialDamage);
++
++  damage_delay = damage_delay_max;
++
++  //	play_sound2(samatra-&gt;data-&gt;sampleWeapon[0]);
++  // sampleSpecial also exists.
++
++}
++
++
++
++
++
++int SaMatraFlame::handle_damage(SpaceLocation *source, double normal, double direct)
++{
++  STACKTRACE;
++    double total = normal + direct;
++  armour -= total;
++
++  // damage points used
++  if (armour &lt; 0)
++    total += armour;
++
++  if (armour &lt;= 0)
++    {
++      state = 0;
++      // shouldn't there be a small explosion here?
++    }
++
++  return iround(total);
++}
++
++
++
++REGISTER_SHIP ( SaMatra )
++
+
+Modified: trunk/source/tml/eventmanager.cpp
+===================================================================
+--- trunk/source/tml/eventmanager.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/eventmanager.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -176,6 +176,16 @@
+   return distanceXThen&lt;TEventDistanceLessThen2Obj&gt;(obj1, obj2, dist, script);
+ }
+ 
++void EventManager::AddEventCondition(double id, const std::string&amp; script)
++{
++  std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt;::iterator e = std::find_if(g_events.begin(), 
++								       g_events.end(), 
++								       std::bind2nd(find_event_by_id(),id));
++  if(e!=g_events.end()&amp;&amp;(*e)-&gt;exists())
++    {
++      (*e)-&gt;add_condition(script);
++    }  
++}
+ //////////////////////////////////////////////////////////////////
+ //  Calculate events                                            //
+ //////////////////////////////////////////////////////////////////
+
+Modified: trunk/source/tml/eventmanager.h
+===================================================================
+--- trunk/source/tml/eventmanager.h	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/eventmanager.h	2005-05-20 17:57:25 UTC (rev 165)
+@@ -108,6 +108,9 @@
+   /// @return event id
+   static int distanceLessThen(double obj1, double obj2, double dist, const std::string&amp; script);
+ 
++  /// Additional condition must be true to trigger event
++  static void AddEventCondition(double id, const std::string&amp; script);
++
+ #ifndef SWIG
+   template &lt;class T&gt;
+   static int distanceXThen(double obj, double x, double y, double dist, const std::string&amp; script);
+
+Modified: trunk/source/tml/gameaction.cpp
+===================================================================
+--- trunk/source/tml/gameaction.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/gameaction.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -24,6 +24,8 @@
+ 
+ #include &lt;map&gt;
+ #include &lt;iostream&gt;
++#include &quot;scp.h&quot;
++#include &quot;melee/mhelpers.h&quot;
+ 
+ 
+ static std::map&lt;std::string,std::string&gt; g_string_flag_map;
+@@ -142,11 +144,21 @@
+ void GameAction::disable_weapon(double who)
+ {
+   STACKTRACE;
++  SpaceLocation* l  =  twl::get_location((int)who);
++  if(l-&gt;isShip())
++    {
++      ((Ship*)l)-&gt;disableWeapon();
++    }
+ }
+ 
+ void GameAction::enable_weapon(double who)
+ {
+   STACKTRACE;
++  SpaceLocation* l  =  twl::get_location((int)who);
++  if(l-&gt;isShip())
++    {
++      ((Ship*)l)-&gt;enableWeapon();
++    }
+ }
+ 
+ template &lt;class T&gt;
+@@ -234,3 +246,23 @@
+       s-&gt;crew = crew;
+     }
+ }
++
++void GameAction::end_game()
++{
++  STACKTRACE;
++  gobgame-&gt;setGameDone(GAME_STATE_FINISHED);
++}
++
++void GameAction::scroll_text(const std::vector&lt;std::string&gt;&amp; text, const std::string&amp; background)
++{
++  STACKTRACE;
++  RGB tmpPal[256];
++  memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
++  set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
++  
++
++  ::ScrollText(text,  D_FONT_ENGLISH, -1, background, &quot;l&quot;, 2);
++
++  videosystem-&gt;set_palette(tmpPal);
++  videosystem-&gt;redraw();
++}
+
+Modified: trunk/source/tml/gameaction.h
+===================================================================
+--- trunk/source/tml/gameaction.h	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/gameaction.h	2005-05-20 17:57:25 UTC (rev 165)
+@@ -19,6 +19,7 @@
+ #define __TW_LIGHT_GAMEACTION_H__
+ 
+ #include &lt;string&gt;
++#include &lt;vector&gt;
+ 
+ /// Actions that can be made from python scripts
+ class GameAction
+@@ -181,6 +182,14 @@
+   /// @param crew new crew
+   static void set_crew(double id, double crew);
+ 
++  /// The game is finished, return to main menu
++  static void end_game();
++
++  /// Scroll text
++  ///
++  /// @param text vector of text strings
++  /// @param background background picture
++  static void scroll_text(const std::vector&lt;std::string&gt;&amp; text, const std::string&amp; background);
+ };
+ 
+ 
+
+Modified: trunk/source/tml/gamedialog.cpp
+===================================================================
+--- trunk/source/tml/gamedialog.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/gamedialog.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -56,14 +56,14 @@
+   tw_sound-&gt;play_music(g_current_music);
+ }
+ 
+-int DialogApi::askPlayer(std::vector&lt;const char*&gt; answers)
++int DialogApi::askPlayer(const std::vector&lt;std::string&gt;&amp; answers)
+ {
+   STACKTRACE;
+   std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
+   MENU *pMenuAnswers = new MENU[answers.size()+1];
+   for( unsigned int i=0; i&lt;answers.size(); i++)
+     {
+-      pMenuAnswers[i].text   = strdup(answers[i]);
++      pMenuAnswers[i].text   = strdup(answers[i].c_str());
+       pMenuAnswers[i].proc   = NULL;
+       pMenuAnswers[i].child  = NULL;
+       pMenuAnswers[i].flags  = 0;
+
+Modified: trunk/source/tml/gamedialog.h
+===================================================================
+--- trunk/source/tml/gamedialog.h	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/gamedialog.h	2005-05-20 17:57:25 UTC (rev 165)
+@@ -32,7 +32,7 @@
+   /// player should select from answer variants
+   ///
+   /// \return player answer position
+-  static int askPlayer(std::vector&lt;const char*&gt; answers);
++  static int askPlayer(const std::vector&lt;std::string&gt;&amp; answers);
+   
+   /// show alien text
+   ///
+
+Modified: trunk/source/tml/gameevent.cpp
+===================================================================
+--- trunk/source/tml/gameevent.cpp	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/gameevent.cpp	2005-05-20 17:57:25 UTC (rev 165)
+@@ -47,10 +47,19 @@
+ {
+   STACKTRACE;
+   // execute function
+-  //  python::exec_function(_script);
+-  python::exec_class(_script);
++  python::exec_function(_script);
+ }
+ 
++bool TGameEvent::check_python_cond()
++{
++  for(std::set&lt;std::string&gt;::iterator i = m_condition.begin(); i!=m_condition.end();i++)
++    {
++      if(!python::exec_function(*i))
++	return false;
++    }
++  return true;
++}
++
+ void TOneTimeEvent::trigger()
+ {
+   STACKTRACE;
+@@ -70,7 +79,7 @@
+ bool TEventTime::calculate()
+ {
+   STACKTRACE;
+-  if( _spot_time == gobgame-&gt;game_time / 1000)
++  if( _spot_time == gobgame-&gt;game_time / 1000 &amp;&amp; check_python_cond())
+     {
+       trigger();
+       return true;
+@@ -98,7 +107,7 @@
+ bool TEventSingleTime::calculate()
+ {
+   STACKTRACE;
+-  if(TEventTime::calculate())
++  if(TEventTime::calculate() &amp;&amp; check_python_cond() )
+     {
+       die();
+       return true;
+@@ -119,7 +128,7 @@
+ bool TEventRepeatableTime::calculate()
+ {
+   STACKTRACE;
+-  if(TEventRepeatableTimeBase::calculate())
++  if(TEventRepeatableTimeBase::calculate() &amp;&amp; check_python_cond())
+     {
+       _spot_time += interval;
+       return true;
+@@ -167,7 +176,7 @@
+ bool TEventShipDeathByType::calculate(Ship* s)
+ {
+   STACKTRACE;
+-  if(_type == s-&gt;type-&gt;id)
++  if(_type == s-&gt;type-&gt;id &amp;&amp; check_python_cond() )
+     {
+       trigger();
+       return true;
+@@ -202,7 +211,8 @@
+   STACKTRACE;
+   if(gobgame-&gt;in_itemP(m_location)  &amp;&amp; 
+      //gobgame-&gt;in_itemP(m_location2) &amp;&amp; 
+-     m_location2-&gt;distance(m_location)&lt;m_dist)
++     m_location2-&gt;distance(m_location)&lt;m_dist &amp;&amp;
++     check_python_cond())
+     {
+       trigger();
+       return true;
+@@ -215,7 +225,8 @@
+   STACKTRACE;
+   if(gobgame-&gt;in_itemP(m_location)  &amp;&amp; 
+      //gobgame-&gt;in_itemP(m_location2) &amp;&amp; 
+-     m_location2-&gt;distance(m_location)&gt;m_dist)
++     m_location2-&gt;distance(m_location)&gt;m_dist&amp;&amp;
++     check_python_cond())
+     {
+       trigger();
+       return true;
+
+Modified: trunk/source/tml/gameevent.h
+===================================================================
+--- trunk/source/tml/gameevent.h	2005-05-16 18:39:41 UTC (rev 164)
++++ trunk/source/tml/gameevent.h	2005-05-20 17:57:25 UTC (rev 165)
+@@ -48,6 +48,8 @@
+   int id;               ///&lt; uniqe id of event
+   bool exist;          ///&lt; if event valid
+   std::string _script; ///&lt; python function name to run on event 
++  std::set&lt;std::string&gt; m_condition; ///&lt; addition python function that should return true to activate event
++  
+  public:
+   TGameEvent();
+   virtual ~TGameEvent();
+@@ -58,6 +60,12 @@
+   virtual int type(){return TGameEventType::UNKNOWN;}
+   /// Activate trigger for event
+   virtual void trigger();
++  
++  virtual void add_condition(const std::string&amp; cond)
++    {
++      m_condition.insert(cond);
++    };
++  virtual bool check_python_cond();
+ };
+ 
+ 
+@@ -154,7 +162,7 @@
+  protected:
+   SpaceLocation* m_location;
+   SpaceLocation* m_location2; 
+-  
++
+   double m_dist;
+  protected:
+   virtual bool check(){return true;};
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000110.html">[Tw-light-svn] r164 - in trunk: Util/deditor gamedata/default_ini/ships gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source source/ais source/games source/generated source/melee source/other source/python source/tests source/tml source/util
+</A></li>
+	<LI>Next message: <A HREF="000112.html">[Tw-light-svn] r166 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/python source/games source/generated source/tml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

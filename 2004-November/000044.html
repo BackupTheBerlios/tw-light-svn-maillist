@@ -1,0 +1,1567 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r96 - in branches/mp-branch-2: . source source/games source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-November/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r96%20-%20in%20branches/mp-branch-2%3A%20.%20source%20source/games%20source/melee&In-Reply-To=%3C200411050729.iA57TBTT007235%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000043.html">
+   <LINK REL="Next"  HREF="000045.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r96 - in branches/mp-branch-2: . source source/games source/melee</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r96%20-%20in%20branches/mp-branch-2%3A%20.%20source%20source/games%20source/melee&In-Reply-To=%3C200411050729.iA57TBTT007235%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r96 - in branches/mp-branch-2: . source source/games source/melee">youbastrd at sheep.berlios.de
+       </A><BR>
+    <I>Fri Nov  5 08:29:11 CET 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000043.html">[Tw-light-svn] r95 - branches/mp-branch-2/source/libraries/raknet
+</A></li>
+        <LI>Next message: <A HREF="000045.html">[Tw-light-svn] r97 - branches/mp-branch-2/source/games trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#44">[ date ]</a>
+              <a href="thread.html#44">[ thread ]</a>
+              <a href="subject.html#44">[ subject ]</a>
+              <a href="author.html#44">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2004-11-05 08:29:10 +0100 (Fri, 05 Nov 2004)
+New Revision: 96
+
+Added:
+   branches/mp-branch-2/source/games/MultiplayerGame.cpp
+   branches/mp-branch-2/source/games/MultiplayerGame.h
+Modified:
+   branches/mp-branch-2/makefile
+   branches/mp-branch-2/source/melee/mcbodies.cpp
+   branches/mp-branch-2/source/melee/mcbodies.h
+   branches/mp-branch-2/source/melee/mframe.cpp
+   branches/mp-branch-2/source/melee/mframe.h
+   branches/mp-branch-2/source/scp.cpp
+   branches/mp-branch-2/sources.lst
+Log:
+adding rudementary multiplayer code: Stars class is created, synchronized, and deleted on the network between the server and zero or more clients.  
+
+Modified: branches/mp-branch-2/makefile
+===================================================================
+--- branches/mp-branch-2/makefile	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/makefile	2004-11-05 07:29:10 UTC (rev 96)
+@@ -202,6 +202,12 @@
+ add_stacktrace:
+ 	find source -name '*.cpp'|grep -v 'libraries'|grep -v 'errors.cpp'|grep -v 'utils.cpp'|xargs ./Util/addStackTrace.pl 
+ 
++run: all
++	$(NAME)
++
++run-multiplayer: all
++	$(NAME) -play game MultiplayerGameServer &amp; sleep 3 &amp;&amp; $(NAME) -play game MultiplayerGameClient
++
+ install:
+ 	./install-sh -c -m 755 $(NAME) $(EXECPATH)/$(NAME)
+ 	CPPROG=&quot;cp -r&quot; ./install-sh -c gamedata $(DATAPATH)
+
+Added: branches/mp-branch-2/source/games/MultiplayerGame.cpp
+===================================================================
+--- branches/mp-branch-2/source/games/MultiplayerGame.cpp	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/source/games/MultiplayerGame.cpp	2004-11-05 07:29:10 UTC (rev 96)
+@@ -0,0 +1,583 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++
++#include &quot;MultiplayerGame.h&quot;
++
++
++#include &quot;libraries/raknet/RakClientInterface.h&quot;
++#include &quot;libraries/raknet/RakServerInterface.h&quot;
++#include &quot;Raknet/RakNetworkFactory.h&quot;	
++
++// If you don't want to use distributed network objects, delete this include
++#include &quot;../libraries/raknet/DistributedNetworkObjectManager.h&quot;
++#include &quot;../libraries/raknet/PacketEnumerations.h&quot;
++#include &quot;../libraries/raknet/NetworkTypes.h&quot;
++#include &lt;assert.h&gt;
++#include &lt;stdio.h&gt;
++#include &quot;../libraries/raknet/GetTime.h&quot;
++
++#include &lt;algorithm&gt;
++#include &lt;functional&gt;
++
++#ifdef DEBUGMODE
++    #define _DEBUG
++#endif
++#ifdef DEBUG
++	#define _DEBUG
++#endif
++
++#ifdef _DEBUG
++#include &lt;memory.h&gt;
++#endif
++
++//#include &lt;iostream&gt;	
++
++MultiplayerGameTemplate::MultiplayerGameTemplate() :
++    server(RakNetworkFactory::GetRakServerInterface()),
++    client(RakNetworkFactory::GetRakClientInterface()),
++    _isServer(false)
++{
++    message.print(5000,15,&quot;Game on!&quot;);
++}
++
++static void destroyNetworkObject2(Presence *p){ if (p) p-&gt;DestroyObjectOnNetwork(); }
++
++MultiplayerGameTemplate::~MultiplayerGameTemplate()
++{
++	printf(&quot;MultiplayerGameTemplate::~MultiplayerGameTemplate()\n&quot;);
++//	this-&gt;Game::~Game();
++//	std::for_each(presence.begin(),presence.end(), destroyNetworkObject2 );
++    RakNetworkFactory::DestroyRakServerInterface(server);
++    RakNetworkFactory::DestroyRakClientInterface(client);
++}
++
++
++
++void MultiplayerGameTemplate::init(Log *log) { 
++    Game::init(log); 
++    prepare();
++    
++    //asteroid = new Asteroid();
++    //add(asteroid);
++
++    
++    //humanTeam = new_team();
++    //yehat = (YehatTerminator*)create_ship(channel_server, &quot;yehte&quot;, &quot;WussieBot&quot;, random(size), random(PI2), humanTeam);
++    //add( yehat-&gt;get_ship_phaser() );
++    //add_focus(yehat);
++    
++    if (isServer()) {
++        stars = new Stars();
++        add( stars );
++        //stars-&gt;UpdateDistributedObject(&quot;Stars&quot;);
++
++    	//printf(&quot;server:init&quot;);
++    	//PresenceRegistry::GetInstance()-&gt;toString();        	
++    	//Stars * stars = new Stars();
++    	//printf(&quot;server:init: adding stars with (%s:%d)\n&quot;, stars-&gt;GetClassName(), stars-&gt;GetClassID());
++    	//PresenceRegistry::GetInstance()-&gt;toString();
++	    //add( stars );
++	    //add(new Asteroid());
++	    
++        
++		/*
++        add(new Asteroid());
++        add(new Asteroid());*/
++    }
++}
++
++
++void MultiplayerGameTemplate::calculate() { 
++	rakClientMultiplayer.ProcessPackets(client);
++	rakServerMultiplayer.ProcessPackets(server);
++
++	Game::calculate();
++	if (isServer() &amp;&amp; stars) {
++		stars-&gt;num_stars ++;
++	}
++	//printf(&quot;MPGame::calculate()[&quot;);
++	//cout &lt;&lt; &quot;MPGame::calculate()[&quot;;
++//	for (UniverseObjectListIterator iter = universeObjects.begin();
++//		 iter != universeObjects.end();
++//		 ++iter)
++//	{
++//		if (*iter) {
++//			//printf(&quot; %s&quot;, (*iter)-&gt;getClassName());
++//			//cout &lt;&lt; &quot; &quot; &lt;&lt; (*iter)-&gt;getClassName();
++//			(*iter)-&gt;calculate();
++//		}
++//	}
++	//printf(&quot;]\n&quot;);
++	//cout &lt;&lt; &quot;]&quot; &lt;&lt; endl;
++	//cout.flush();
++	
++//	for (UniverseObjectTypeIterator iter = universeObjects.begin();
++//         iter != universeObjects.end();
++//         ++iter)
++//    {
++//        (*iter)-&gt;UpdateDistributedObject((*iter)-&gt;GetClassName());
++//    }
++	//if (stars) {
++	//	stars-&gt;UpdateDistributedObject(&quot;Stars&quot;);
++	//}
++}
++
++
++
++void MultiplayerGameTemplate::add(SpaceLocation *p)
++{
++    Game::add(p);
++    _add(p);
++}
++    
++
++void MultiplayerGameTemplate::add(Presence *p) 
++{
++    Game::add(p);   
++    _add(p);
++}
++
++
++void MultiplayerGameTemplate::_add(Presence *p) 
++{
++	printf(&quot;Adding: [%s]\n&quot;, p-&gt;getClassName());
++/*    //if (isServer()) {
++    	if (p-&gt;GetClassID() == 0) {
++    		cout &lt;&lt;&quot;Skipping adding a &quot; &lt;&lt; p-&gt;GetClassName() &lt;&lt; endl;
++    		cout.flush();
++    		return;
++    	}
++    	printf(&quot;adding: (%s:%d) ObjectID=%d &quot;, p-&gt;GetClassName(), p-&gt;GetClassID(), p-&gt;GetObjectID());
++        PresenceCreationDescription pc( p-&gt;GetObjectID(), p-&gt;GetClassID() );
++        printf(&quot;as (%s:%d)\n&quot;, 
++        	PresenceRegistry::GetInstance()-&gt;getClassName(pc.presenceType),
++        	pc.presenceType);
++        
++        bool b = server-&gt;Send((char*)&amp;pc, sizeof(PresenceCreationDescription), HIGH_PRIORITY, RELIABLE_ORDERED, 0, UNASSIGNED_PLAYER_ID, true);
++        if (!b)
++        	tw_error(&quot;couldn't send packet in MPGame::_add()&quot;);
++    //}
++    */
++}
++
++
++
++/*void MultiplayerGameTemplate&lt;InterfaceType&gt;::ProcessUnhandledPacket(Packet *p, unsigned char packetIdentifier, InterfaceType *interfaceType)
++{
++	cout &lt;&lt; &quot;got an unhandled packet packetIdentifier=&quot; &lt;&lt; packetIdentifier &lt;&lt; endl;
++    switch (packetIdentifier) {
++        case ID_PRESENCE_CREATION:
++        {
++            //if (isServer())
++            //    return;
++            printf(&quot; (presence creation)&quot;);
++            PresenceCreationDescription * pc = (PresenceCreationDescription*) p-&gt;data;
++        
++            assert(p-&gt;length == sizeof(PresenceCreationDescription));
++            if (p-&gt;length != sizeof(PresenceCreationDescription)) {
++                tw_error(&quot;Got a PresenceCreationDescription request that was the wrong size.&quot;);
++                return;
++            }
++            
++            assert(GET_OBJECT_FROM_ID(pc-&gt;objectId) == NULL);
++            if (GET_OBJECT_FROM_ID(pc-&gt;objectId) != NULL) {
++                tw_error(&quot;Got a PresenceCreationDescription request for an object that already exists.&quot;);
++                return;
++            }
++            
++            message.print(15000,15,&quot;Got a presence creation packet, it's a %s&quot;, PresenceRegistry::GetInstance()-&gt;getClassName(pc-&gt;presenceType));
++            printf(&quot;Got a presence creation packet, it's a %s&quot;, PresenceRegistry::GetInstance()-&gt;getClassName(pc-&gt;presenceType));
++            
++            //Presence * presence = PresenceRegistry::GetInstance()-&gt;createPresenceFromNetworkDescription(pc);
++            Presence * presence = PresenceRegistry::GetInstance()-&gt;GetPresenceClassDefaultInstance(pc-&gt;presenceType);
++            Game::add(presence);
++            
++//            switch (pc-&gt;presenceType) {
++//                case PT_ASTEROID:
++//                    add(new Asteroid());
++//                    break;
++//                
++//                case PT_YEHAT_TERMINATOR:
++//                   {TeamCode human = new_team();
++//                    Control *c = create_control(channel_server, &quot;Human&quot;);
++//                    Ship *s = create_ship(&quot;yehte&quot;, c, Vector2(size.x/2,size.y/2), 0, human);
++//                    add(s-&gt;get_ship_phaser());
++//                    add_focus(s);}
++//                    break;
++//                
++//                case PT_UNKNOWN:
++//                default:
++//                    message.print(10000,15,&quot;Tried to add unknown object: %s&quot;, p-&gt;data);
++//                    ;
++//            };
++        }
++        break;
++        
++        default:
++            message.print(5000,15,&quot;Unknown data: %s&quot;, p-&gt;data);
++    };
++    
++	// Remove the annoying warnings
++	//packetIdentifier;
++	//interfaceType;
++
++	// This class should have been overrided to handle user defined packets
++#ifdef _DEBUG
++	// Uncomment this to show output as integers
++	
++//	int i;
++//	static unsigned packetNumber=0;
++//	// Raw output (nonstring)
++//	message.print(5000,15,&quot;MultiplayerGameTemplate::ProcessUnhandledPacket (%i) (%i): &quot;, packetNumber++, p-&gt;length);
++//	for (i=0; i &lt; p-&gt;length; i++)
++//	message.print(5000,15,&quot;%i &quot;,p-&gt;data[i]);
++//	message.print(5000,15,&quot;&quot;);
++	
++
++	// Uncomment this to show output as a string
++	
++	// Raw output (string)
++
++	
++#endif
++	printf(&quot;\n&quot;);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteDisconnectionNotification(Packet *packet,InterfaceType *interfaceType)
++{
++	cout &lt;&lt; &quot;Client: someone else has disconnected.&quot; &lt;&lt; endl;
++	cout.flush();
++	// Another system has disconnected.  Client only.
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_DISCONNECTION_NOTIFICATION from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_DISCONNECTION_NOTIFICATION,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteConnectionLost(Packet *packet,InterfaceType *interfaceType)
++{
++	// Another system has been dropped by the server.  Client only.
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_CONNECTION_LOST from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_CONNECTION_LOST,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteNewIncomingConnection(Packet *packet,InterfaceType *interfaceType)
++{
++	// Another system has connected.  Client only.
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_NEW_INCOMING_CONNECTION from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_NEW_INCOMING_CONNECTION,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteExistingConnection(Packet *packet,InterfaceType *interfaceType)
++{
++	// We just connected to the server and are getting a list of players already connected
++	// Note due to thread timing you might get both this and ID_REMOTE_NEW_INCOMING_CONNECTION when first connecting.
++	//  Client only.
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_EXISTING_CONNECTION from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++	//	ProcessUnhandledPacket(packet, ID_REMOTE_EXISTING_CONNECTION,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionBanned(Packet *packet,InterfaceType *interfaceType)
++{
++	// We are banned from connecting to the system specified in packet-&gt;playerId
++	// Peer or client
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_BANNED from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++	//	ProcessUnhandledPacket(packet, ID_REMOTE_EXISTING_CONNECTION,interfaceType);
++}
++
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionRequestAccepted(Packet *packet, InterfaceType *interfaceType)
++{
++    message.print(5000,15,&quot;We're accepted to connect&quot;);
++	// Our request to connect to another system has been accepted.  Client only.
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_REQUEST_ACCEPTED from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_CONNECTION_REQUEST_ACCEPTED,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveNewIncomingConnection(Packet *packet, InterfaceType *interfaceType)
++{
++	// Another system has requested to connect to us, which we have accepted.  Server or peer only.
++    //message.print(10000,15,&quot;%s has connected&quot;, ((StaticClientDataStruct*)(server-&gt;GetStaticClientData(packet-&gt;playerId))-&gt;GetData())-&gt;name);
++    
++    //TeamCode human = new_team();
++    //Control *c = create_control(channel_server, &quot;Human&quot;);
++    //Ship *s = create_ship(&quot;yehte&quot;, c, Vector2(size.x/2,size.y/2), 0, human);
++    //add(s-&gt;get_ship_phaser());
++    //add_focus(s);
++  
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_NEW_INCOMING_CONNECTION from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_NEW_INCOMING_CONNECTION,interfaceType);
++
++	// This will send all existing distributed objects to the new player
++//#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++	DistributedNetworkObjectManager::Instance()-&gt;SendAllDistributedObjects(packet-&gt;playerId);
++//#endif
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionResumption(Packet *packet, InterfaceType *interfaceType)
++{
++	// Someone who was already connected to us connected again.  Server or peer only.
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_RESUMPTION from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_CONNECTION_RESUMPTION,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveNoFreeIncomingConnections(Packet *packet, InterfaceType *interfaceType)
++{
++	// The system we connected to has no free slots to connect to
++	// Set free slots by calling SetMaximumIncomingConnections
++	// Client or peer only.
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_NO_FREE_INCOMING_CONNECTIONS from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_NO_FREE_INCOMING_CONNECTIONS,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDisconnectionNotification(Packet *packet, InterfaceType *interfaceType)
++{
++	// A remote system terminated the connection.  packet-&gt;playerId specifies which remote system
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_DISCONNECTION_NOTIFICATION from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_DISCONNECTION_NOTIFICATION,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionLost(Packet *packet, InterfaceType *interfaceType)
++{
++	// The network cannot send reliable packets so has terminated the connection. packet-&gt;playerId specifies which remote system
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_LOST from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_CONNECTION_LOST,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceivedStaticData(Packet *packet, InterfaceType *interfaceType)
++{
++	// Another system has just sent their static data to us (which we recorded automatically)
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_RECEIVED_STATIC_DATA from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_RECEIVED_STATIC_DATA,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveInvalidPassword(Packet *packet, InterfaceType *interfaceType)
++{
++	// Our connection to another system was refused because the passwords do not match
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_INVALID_PASSWORD from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_INVALID_PASSWORD,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveModifiedPacket(Packet *packet, InterfaceType *interfaceType)
++{
++	// The network layer has detected packet tampering
++	// This does NOT automatically close the connection
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_MODIFIED_PACKET from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_MODIFIED_PACKET,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemotePortRefused(Packet *packet, InterfaceType *interfaceType)
++{
++	// The remote system has responded with ICMP_PORT_UNREACHABLE
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_PORT_REFUSED from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_PORT_REFUSED,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveVoicePacket(Packet *packet, InterfaceType *interfaceType)
++{
++	// We got a voice packet
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_VOICE_PACKET from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++//	ProcessUnhandledPacket(packet, ID_VOICE_PACKET,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceivePong(Packet *packet, InterfaceType *interfaceType)
++{
++	// Peer or client.  Response from a ping for an unconnected system.
++//#ifdef _DEBUG
++	unsigned long time;
++	memcpy((char*)&amp;time, packet-&gt;data+sizeof(unsigned char), sizeof(unsigned long));
++	message.print(5000,15,&quot;ID_PONG from PlayerID:%u:%u on %p. Value is %i&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType, time);
++//#endif
++	//	ProcessUnhandledPacket(packet, ID_PONG,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDistributedNetworkObject(Packet *packet,InterfaceType *interfaceType)
++{
++	// Packet to create a distributed network object
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_UPDATE_DISTRIBUTED_NETWORK_OBJECT from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++
++	#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++
++	// This packet is only valid if the server or client was registered with the DistributedNetworkObjectManager
++	// If you this this assert, you need to call
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakServerInterface(myInstanceOfRakServer);
++	// and / or
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakClientInterface(myInstanceOfRakClient);
++	assert(DistributedNetworkObjectManager::Instance()-&gt;GetRakClientInterface() || DistributedNetworkObjectManager::Instance()-&gt;GetRakServerInterface());
++
++	DistributedNetworkObjectManager::Instance()-&gt;HandleDistributedNetworkObjectPacket(packet);
++	#endif
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDistributedNetworkObjectCreationAccepted(Packet *packet,InterfaceType *interfaceType)
++{
++	// Client only - creation of a distributed network object was accepted
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_DISTRIBUTED_NETWORK_OBJECT_CREATION_ACCEPTED from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++
++#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++	// This packet is only valid if the client was registered with the DistributedNetworkObjectManager
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakClientInterface(myInstanceOfRakClient);
++	assert(DistributedNetworkObjectManager::Instance()-&gt;GetRakClientInterface());
++
++	DistributedNetworkObjectManager::Instance()-&gt;HandleDistributedNetworkObjectPacketCreationAccepted(packet);
++#endif
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDistributedNetworkObjectCreationRejected(Packet *packet,InterfaceType *interfaceType)
++{
++	// Client only - creation of a distributed network object was accepted
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_DISTRIBUTED_NETWORK_OBJECT_CREATION_REJECTED from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++
++#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++	// This packet is only valid if the client was registered with the DistributedNetworkObjectManager
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakClientInterface(myInstanceOfRakClient);
++	assert(DistributedNetworkObjectManager::Instance()-&gt;GetRakClientInterface());
++
++	DistributedNetworkObjectManager::Instance()-&gt;HandleDistributedNetworkObjectPacketCreationRejected(packet);
++#endif
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherRequestFileList(Packet *packet, InterfaceType *interfaceType)
++{
++	// Request for a list of files served by the autopatcher.
++	// Send to Autopatcher::SendDownloadableFileList(packet-&gt;playerId)
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_REQUEST_FILE_LIST from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_REQUEST_FILE_LIST,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherFileList(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got a list of files served by a remote autopatcher
++	// Send to Autopatcher::OnAutopatcherFileList(packet, bool);
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_FILE_LIST from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_FILE_LIST,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherRequestFiles(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got a request for a set of files from our autopatcher
++	// Send to Autopatcher::OnAutopatcherRequestFiles(packet);
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_REQUEST_FILES from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_REQUEST_FILES,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherSetDownloadList(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got confirmation of what files we are about to get from the remote autopatcher
++	// Send to Autopatcher::OnAutopatcherSetDownloadList(packet);
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_SET_DOWNLOAD_LIST from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_SET_DOWNLOAD_LIST,interfaceType);
++}
++
++
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherWriteFile(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got a file from a remote autopatcher
++	// Send to Autopatcher::OnAutopatcherWriteFile(packet);
++#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_WRITE_FILE from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_WRITE_FILE,interfaceType);
++};
++
++// Copied from Multiplayer.cpp
++// If the first byte is ID_TIMESTAMP, then we want the 5th byte
++// Otherwise we want the 1st byte
++//unsigned char GetPacketIdentifier(Packet *p)
++//{
++//	if (p==0)
++//		return 255;
++//
++//	if ((unsigned char)p-&gt;data[0] == ID_TIMESTAMP)
++//	{
++//		assert(p-&gt;length &gt; sizeof(unsigned char) + sizeof(unsigned long));
++//		return (unsigned char) p-&gt;data[sizeof(unsigned char) + sizeof(unsigned long)];
++//	}
++//	else
++//		return (unsigned char) p-&gt;data[0];
++//}
++*/
++REGISTER_GAME(MultiplayerGameClient, &quot;MultiplayerGameClient&quot;)
++REGISTER_GAME(MultiplayerGameServer, &quot;MultiplayerGameServer&quot;)
+
+Added: branches/mp-branch-2/source/games/MultiplayerGame.h
+===================================================================
+--- branches/mp-branch-2/source/games/MultiplayerGame.h	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/source/games/MultiplayerGame.h	2004-11-05 07:29:10 UTC (rev 96)
+@@ -0,0 +1,257 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef MULTIPLAYERGAME_HEADER
++#define MULTIPLAYERGAME_HEADER
++
++#include &quot;allegro.h&quot;
++#include &quot;melee.h&quot;
++#include &quot;scp.h&quot;
++#include &quot;frame.h&quot;
++#include &quot;melee/mgame.h&quot;
++#include &quot;melee/mview.h&quot;
++#include &quot;melee/mship.h&quot;
++#include &quot;melee/mcbodies.h&quot;
++#include &quot;../libraries/raknet/NetworkTypes.h&quot;
++#include &quot;../libraries/raknet/PacketEnumerations.h&quot;
++#include &quot;../libraries/raknet/RakNetworkFactory.h&quot;
++#include &quot;../libraries/raknet/RakClientInterface.h&quot;
++#include &quot;../libraries/raknet/RakServerInterface.h&quot;
++#include &quot;../libraries/raknet/NetworkTypes.h&quot;
++#include &quot;../libraries/raknet/BitStream.h&quot;
++#include &quot;../libraries/raknet/Multiplayer.h&quot;
++#include &quot;sc1ships.h&quot;
++
++#include &lt;iostream&gt;
++	
++#include &lt;stdlib.h&gt;
++#include &lt;string.h&gt;
++#include &lt;stdio.h&gt;
++#include &lt;time.h&gt;
++
++
++//! A class to implement Multiplayer Games with.  You should subclass this, rather than using it directly.
++//! You should also create a server and client class that can be used to start a game in the GUI and from the
++//! commandline (see MultiplayerGameServer for more explaination on how to do this).
++//! 
++//! This has default implementations of methods needed to:
++//! - start a server 
++//! - have clients connect to it
++//! - let players on a client to join a game.  Once in a game, players can:
++//! - - when first joining a match, select a fleet, according to the FleetSelectionPolicy
++//! - - when spawning, select a ship from their fleet, according to the SpawnTimeShipSelectionPolicy
++//! - - fly their ship, fire its weapons, etc.
++//! - - blow up other ships etc, and get blown up themselves, keeping score all the while.  Great fun!
++//! - the server will finish the game according to its victory conditions.
++//! 
++//! This class is templated to use any of three RakNet interface types. 
++//! Examples:
++//! - using MultiplayerGameTemplate&lt;RakClientInterface&gt; means we're using a RakClientInterface
++//! - using MultiplayerGameTemplate&lt;RakServerInterface&gt; means we're using a RakServerInterface
++//! - using MultiplayerGameTemplate&lt;RakPeerInterface&gt; means we're using a RakPeerInterface
++//!
++//! @see MultiplayerGameServer
++//! @see MultiplayerGameClient
++//! @see FleetSelectionPolicy
++//! @see SpawnTimeShipSelectionPolicy
++
++//template &lt;class InterfaceType&gt;
++class MultiplayerGameTemplate : 
++	//public Multiplayer&lt;InterfaceType&gt;,
++	public Game
++{
++public:
++    
++	//! 
++	MultiplayerGameTemplate();
++
++    //!
++	virtual ~MultiplayerGameTemplate();
++	
++	YehatTerminator * yehat;
++	TeamCode humanTeam;
++
++	
++	// Methods and data stuctures from class Game /////////////////////////////////////////////////
++	
++	//! pre-initialization (enough so that the destructor won't crash)
++	virtual void preinit() { Game::preinit(); }	
++	
++    //! initialization (loading data, creating a few game objects, whatever)
++    virtual void init(Log *log);
++    
++    //! changes the view.  That is, the method that the screen is drawn for the user is selected.
++    //! @param new_view the View data structure to use.
++    virtual void change_view (View *new_view) { Game::change_view(new_view); }
++    
++    //! changes the view.  That is, the method that the screen is drawn for the user is selected.
++    //! @param name the name of the view method
++    virtual void change_view (const char * name ) { Game::change_view(name); }
++    
++    //! called before doing anything with game objects contained within you.  
++    virtual void prepare() { Game::prepare(); }
++    
++    //! called once per game loop.  Performs all game logic.
++    virtual void calculate();
++    
++    //! called once per game execution.  This contains the game loop itself.
++    virtual void play() { Game::play(); }
++    
++    //! draws the entire world to a specific frame.
++    virtual void animate(Frame *frame) { Game::animate(frame); }
++    
++    //! draws the entire world.
++    virtual void animate() { Game::animate(); }
++
++  	//! called when an object is killed/died/exploded in the game.
++    //! \param who the SpaceObject that is in the process of dying.  Note that this may be a ship, an asteroid, a projectile, anything.
++    //! \param source this is what killed the SpaceObject who.  Note that it may be NULL
++  	virtual void object_died(SpaceObject *who, SpaceLocation *source) { Game::object_died(who, source); }
++  	
++  	//! called when a ship is killed/died/exploded in the game.
++    //!  TODO say which of these is true:
++    //!	 Note that object_died() will also be called when this happens.
++    //!	 Note that object_died() will *not* be called when this happens.
++    //! \param who the Ship that is in the immediate process of dying
++    //! \param source the target which killed the ship.  Note that it may not be a Ship, and it may be NULL
++  	virtual void ship_died(Ship *who, SpaceLocation *source) { Game::ship_died(who, source); }
++
++	//! Determines if the game has loaded/prepared all its data structures and ready to start.
++    //! @return true if the game is ready to start, false otherwise.
++	virtual bool game_ready() {return Game::game_ready(); }
++    
++    /// add space location to universe
++    /// @see SpaceLocation
++    virtual void add(SpaceLocation *p);
++    
++    /// add presence from universe
++    /// @see Presence
++    virtual void add(Presence *p);
++
++protected:
++    ///
++    virtual void _add(Presence * p);
++    
++public: 
++	
++// methods exclusive to this class /////////////////////////////////////////////////////////	
++	virtual bool isServer() { return _isServer; }
++	
++protected:
++    RakServerInterface * server;
++    RakClientInterface * client;
++    
++    Multiplayer&lt;RakClientInterface&gt; rakClientMultiplayer;
++	Multiplayer&lt;RakServerInterface&gt; rakServerMultiplayer;
++
++protected:
++	bool _isServer;
++    
++    Asteroid * asteroid;
++    Stars * stars;
++};
++
++//! This class is exposed to the list of available games.  Note that this class is
++//! for testing only, and it shouldn't be used as an actual gametype.  Instead,
++//! subclass MultiplayerGameTemplate, putting all functionality in there.  Then
++//! make two classes similar to MultiplayerGameClient and MultiplayerGameServer, like so:
++//! 
++//! template &lt;class InterfaceType&gt;
++//! class YourGameTemplate : 
++//! 	public MultiplayerGameTemplate&lt;InterfaceType&gt;,
++//! 	public Game
++//! {
++//!   ... // implement your game here by customizing methods here
++//! }
++//!
++//! class YourGameClient : public YourGameTemplate&lt;RakClientInterface&gt; { 
++//! public:
++//!   YourGameServer() { networkInterface = RakNetworkFactory::GetRakServerInterface(); }
++//!   ~YourGameServer() { RakNetworkFactory::DestroyRakServerInterface(networkInterface); }
++//! };
++//!
++//! class YourGameServer : public YourGameServerTemplate&lt;RakClientInterface&gt; { 
++//! public:
++//!   YourGameServer() { networkInterface = RakNetworkFactory::GetRakClientInterface(); }
++//!   ~YourGameServer() { RakNetworkFactory::DestroyRakClientInterface(networkInterface); }
++//! };
++//!
++class MultiplayerGameServer : public MultiplayerGameTemplate//&lt;RakServerInterface&gt; 
++{ 
++public:
++	MultiplayerGameServer()
++    { 
++        _isServer = true;
++        stars = NULL;
++        //server-&gt;SetStaticServerData((char*)&amp;staticServerData, sizeof(staticServerData));
++        bool b = server-&gt;Start(2, 0, true, 15515);
++        if (!b)
++            throw &quot;Can't start server!&quot;;
++        DistributedNetworkObjectManager::Instance()-&gt;RegisterRakServerInterface(server);
++        message.print(60000,15,&quot;Started server!&quot;);
++	}
++	~MultiplayerGameServer() { }
++    
++    virtual void calculate() {
++        MultiplayerGameTemplate::calculate();
++        if (stars) {
++        //	message.print(1000,15,&quot;server: num stars=%d&quot;, stars-&gt;num_stars);
++            //cout &lt;&lt; &quot;server: num stars=&quot; &lt;&lt; stars-&gt;num_stars &lt;&lt; endl;
++            //cout.flush();
++        }
++    }
++    
++//protected:
++    //StaticServerDataStruct staticServerData;
++};
++
++class MultiplayerGameClient : public MultiplayerGameTemplate//&lt;RakClientInterface&gt; 
++{ 
++public:
++	MultiplayerGameClient()
++    { 
++      //networkInterface = client;
++      //client-&gt;SetStaticClientData(UNASSIGNED_PLAYER_ID, (char*)&amp;staticClientData, sizeof(StaticClientDataStruct));
++      bool b = false;
++      while (!b) {
++        b = client-&gt;Connect(&quot;127.0.0.1&quot;, 15515, 15516, 0, true);
++        if (!b)
++            message.out(&quot;Couldn't connect, retrying...&quot;);
++      }
++      stars = NULL;
++      DistributedNetworkObjectManager::Instance()-&gt;RegisterRakClientInterface(client);
++      message.print(60000,15,&quot;Connected to server as PlayerID (%s)!&quot;, client-&gt;PlayerIDToDottedIP(client-&gt;GetPlayerID()));
++    }
++	~MultiplayerGameClient() { }
++	
++    virtual void calculate() {
++        //MultiplayerGameTemplate&lt;RakClientInterface&gt;::calculate();
++        MultiplayerGameTemplate::calculate();
++        //if (stars) {
++        //    cout &lt;&lt; &quot;client: num stars=&quot; &lt;&lt; stars-&gt;num_stars &lt;&lt; endl;
++         //   cout.flush();
++        //	message.print(1000,15,&quot;client: num stars=%d&quot;, stars-&gt;num_stars);
++        //}
++    }
++//protected:
++  //  StaticClientDataStruct staticClientData;
++};
++
++
++
++	
++	
++#endif
+
+Modified: branches/mp-branch-2/source/melee/mcbodies.cpp
+===================================================================
+--- branches/mp-branch-2/source/melee/mcbodies.cpp	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/source/melee/mcbodies.cpp	2004-11-05 07:29:10 UTC (rev 96)
+@@ -405,6 +405,7 @@
+ }
+ Stars::~Stars() 
+ {
++	printf(&quot;Stars::~stars()\n&quot;);
+   int i;
+   for(i = 0; i &lt; num_pics; i++) delete pic[i];
+   delete[] pic;
+@@ -466,3 +467,7 @@
+     }
+   return;
+ }
++
++//static void regsiterStars() { 	REGISTER_DISTRIBUTED_CLASS(Stars); }
++//CALL_BEFORE_MAIN(regsiterStars);
++
+
+Modified: branches/mp-branch-2/source/melee/mcbodies.h
+===================================================================
+--- branches/mp-branch-2/source/melee/mcbodies.h	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/source/melee/mcbodies.h	2004-11-05 07:29:10 UTC (rev 96)
+@@ -69,7 +69,8 @@
+ 	virtual void _event( Event *e);
+ 	public:
+ 	Stars();
+-	~Stars();
++	virtual ~Stars();
++	virtual char * getClassName() const { return &quot;Stars&quot;; }
+ 	SpaceSprite **pic;
+ 	double width;
+ 	double height;
+@@ -83,6 +84,9 @@
+ 	void animate(Frame *space);
+ 	void select_view( View **view);
+ 	View **v;
++	
++	REGISTER_1_DISTRIBUTED_OBJECT_MEMBERS(Presence,
++		DOM_COPY_COMPRESSED, DOM_SERVER_AUTHORITATIVE, int, num_stars	)
+ };
+ 
+ /// \brief helpers for drawing your own starfields
+
+Modified: branches/mp-branch-2/source/melee/mframe.cpp
+===================================================================
+--- branches/mp-branch-2/source/melee/mframe.cpp	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/source/melee/mframe.cpp	2004-11-05 07:29:10 UTC (rev 96)
+@@ -39,8 +39,22 @@
+ #include &quot;other/twconfig.h&quot;
+ #include &quot;scp.h&quot;
+ 
++#include &quot;libraries/raknet/Multiplayer.h&quot;
++// *** DISTRIBUTED OBJECT USER NOTE #1 ***
++// The distributed object system requires &quot;DistributedNetworkObjectHeader.h&quot;
++#include &quot;libraries/raknet/DistributedNetworkObjectHeader.h&quot;
++#include &quot;libraries/raknet/RakServerInterface.h&quot;
++#include &quot;libraries/raknet/RakClientInterface.h&quot;
++#include &quot;libraries/raknet/RakNetworkFactory.h&quot;
++#include &quot;libraries/raknet/BitStream.h&quot;
++#include &quot;libraries/raknet/Rand.h&quot;
++
++
+ int total_presences;
+ 
++///A list of every object in the game universe.
++//UniverseObjectList universeObjects;
++
+ #define DEATH_FRAMES 4
+ //setting this too low will cause crashes
+ //setting it too high will waste CPU power and RAM
+@@ -308,6 +322,7 @@
+ 	id = 0;
+ 	_depth = 0;
+ 	set_depth(DEPTH_PRESENCE);
++//	universeObjects.push_back(this);
+ 	}
+ 
+ void Presence::animate(Frame *space) {
+@@ -318,6 +333,7 @@
+ void Presence::calculate() 
+ {
+   STACKTRACE;
++  this-&gt;UpdateDistributedObject(getClassName());
+ }
+ bool Presence::die() 
+ {
+@@ -334,6 +350,7 @@
+ 
+ Presence::~Presence() {STACKTRACE
+ 	total_presences -= 1;
++	printf(&quot;Presence::~Presence()\n&quot;);
+ 	}
+ 
+ bool Presence::isLocation() const {
+@@ -367,6 +384,37 @@
+ 	return ((attributes &amp; ATTRIB_SYNCHED) != 0);
+ 	}
+ 
++bool Presence::OnDistributedObjectCreation(PlayerID senderID)
++{
++	if (game)
++		game-&gt;add(this);
++	return true; // Allow object creation by returning true
++}
++
++// Overload this to show a message
++void Presence::OnDistributedObjectDestruction(PlayerID senderID)
++{
++	printf(&quot;Presence::OnDistributedObjectDestruction\n&quot;);
++//	flush(stdout);
++//	for (UniverseObjectListIterator iter = universeObjects.begin(); 
++//	     iter != universeObjects.end();
++//	     ++iter)
++//    {
++//    	 if (*iter == this) {
++//    	 	universeObjects.erase(iter);
++//    	 	break;
++//    	 }
++//    }
++//	delete this;
++//   if (game)
++//   	   game-&gt;remove(this);
++}
++
++
++
++
++
++
+ SpaceLocation *Presence::get_focus() {
+   STACKTRACE;
+ 	return NULL;
+@@ -967,12 +1015,15 @@
+   return;
+ }
+ 
+-static void delete_presence(Presence* p){delete p;}
+-static void delete_item(SpaceLocation* p){delete p;}
++static void delete_presence(Presence* p){if (p) delete p;}
++static void delete_item(SpaceLocation* p){if (p) delete p;}
++static void destroyNetworkObject(Presence *p){ if (p) p-&gt;DestroyObjectOnNetwork(); }
+ void Physics::destroy_all() {
+   STACKTRACE;
++  std::for_each(presence.begin(),presence.end(), destroyNetworkObject );
+   std::for_each(presence.begin(),presence.end(), delete_presence);
+   presence.clear();
++  std::for_each(item.begin(),item.end(),destroyNetworkObject);
+   std::for_each(item.begin(),item.end(),delete_item);
+   item.clear();
+ }
+@@ -1388,3 +1439,6 @@
+       ship_died((Ship*)who, source);
+     }
+ }
++
++//static void registerSpaceLocation() { 	REGISTER_DISTRIBUTED_CLASS(SpaceLocation); }
++//CALL_BEFORE_MAIN(registerSpaceLocation);
+
+Modified: branches/mp-branch-2/source/melee/mframe.h
+===================================================================
+--- branches/mp-branch-2/source/melee/mframe.h	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/source/melee/mframe.h	2004-11-05 07:29:10 UTC (rev 96)
+@@ -20,6 +20,31 @@
+ #include &lt;list&gt;
+ #include &lt;vector&gt;
+ 
++#include &quot;libraries/raknet/Multiplayer.h&quot;
++// *** DISTRIBUTED OBJECT USER NOTE #1 ***
++// The distributed object system requires &quot;DistributedNetworkObjectHeader.h&quot;
++#include &quot;libraries/raknet/DistributedNetworkObjectHeader.h&quot;
++#include &quot;libraries/raknet/RakServerInterface.h&quot;
++#include &quot;libraries/raknet/RakClientInterface.h&quot;
++#include &quot;libraries/raknet/RakNetworkFactory.h&quot;
++#include &quot;libraries/raknet/BitStream.h&quot;
++#include &quot;libraries/raknet/Rand.h&quot;
++
++
++
++//#include &quot;melee.h&quot;
++//#include &quot;melee.h&quot;          //used by all TW source files.  well, mostly. 
++//#include &quot;melee/mgame.h&quot;    //Game stuff
++
++//class Game;
++//extern class Game *&game;
++
++//class Presence;
++//typedef std::vector&lt;Presence*&gt; UniverseObjectList;
++//typedef UniverseObjectList::iterator UniverseObjectListIterator;
++//extern UniverseObjectList universeObjects;
++
++
+ //debuging purposes only:
+ extern int total_presences;
+ 
+@@ -133,7 +158,7 @@
+ };
+ 
+ /// \brief Any item in the game
+-class Presence : public BaseClass 
++class Presence : public BaseClass, public DistributedNetworkObject
+ { 
+   friend class Physics;
+  public:
+@@ -147,8 +172,8 @@
+   double get_depth();
+   friend int compare_depth (const void *_a, const void *_b) ;
+   
+-  inline void add(SpaceLocation *o) {physics-&gt;add(o);}
+-  inline void add(Presence *p) {physics-&gt;add(p);}
++  virtual inline void add(SpaceLocation *o) {physics-&gt;add(o);}
++  virtual inline void add(Presence *p) {physics-&gt;add(p);}
+   
+   /// displays ? on screen (NOT permitted to affect game physics in any way)
+   virtual void animate(Frame *space); 
+@@ -170,7 +195,16 @@
+   bool isShip() const ;      ///&lt; returns true if it is the specified engine-defined type
+   bool isShot() const;       ///&lt; returns true if it is the specified engine-defined type
+   bool isSynched() const;    ///&lt; returns true if it is the specified engine-defined type
+-  
++
++  ///
++  virtual char * getClassName() const { return &quot;Presence&quot;; }
++
++  ///
++  virtual bool OnDistributedObjectCreation(PlayerID senderID);
++
++  /// Overload this to show a message
++  virtual void OnDistributedObjectDestruction(PlayerID senderID);
++
+ };
+ 
+ /// \brief any item in the game that has a location, base class for all items in game
+@@ -243,6 +277,8 @@
+   virtual void change_pos(double scale);
+ 
+   SpaceLocation(SpaceLocation *creator, Vector2 lpos, double langle);
++  SpaceLocation() { } // TODO make this work correctly!
++  virtual char * getClassName() const { return &quot;SpaceLocation&quot;; }
+   virtual void death();      ///&lt; called after an item is killed
+   virtual ~SpaceLocation();  ///&lt; called when an item is deallocated
+ 
+@@ -290,6 +326,9 @@
+   virtual void animate(Frame *space); 
+   /// advance the item frame_time milliseconds in time
+   virtual void calculate(); 
++  
++	REGISTER_1_DISTRIBUTED_OBJECT_MEMBERS(Presence,
++		DOM_INTERPOLATE_UNCOMPRESSED, DOM_CLIENT_AUTHORITATIVE, Vector2, pos)
+ };
+ 
+ /// \brief any item with a sprite (only SpaceObjects can bounce)
+
+Modified: branches/mp-branch-2/source/scp.cpp
+===================================================================
+--- branches/mp-branch-2/source/scp.cpp	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/source/scp.cpp	2004-11-05 07:29:10 UTC (rev 96)
+@@ -524,6 +524,10 @@
+ #ifndef UNITTEST
+ int main(int argc, char *argv[]) {
+ 	int r;
++	
++	REGISTER_DISTRIBUTED_CLASS(SpaceLocation);//TODO move this somewhere else
++	REGISTER_DISTRIBUTED_CLASS(Stars);
++	
+ 	r = tw_main(argc, argv);
+ 	return r;
+ }
+
+Modified: branches/mp-branch-2/sources.lst
+===================================================================
+--- branches/mp-branch-2/sources.lst	2004-11-05 07:25:22 UTC (rev 95)
++++ branches/mp-branch-2/sources.lst	2004-11-05 07:29:10 UTC (rev 96)
+@@ -1,184 +1,186 @@
++source/ais/c_input.cpp
++source/ais/c_other.cpp
+ source/ais/c_wussie.cpp
+-source/ais/c_other.cpp
+-source/ais/c_input.cpp
++source/doxygen.cpp
+ source/frame.cpp
+-source/util/random.cpp
+-source/util/vector2.cpp
+-source/util/round.c
+-source/util/history.cpp
+-source/util/types.cpp
+-source/util/aautil.c
+-source/util/sound.cpp
+-source/util/get_time.c
+-source/util/aarot.c
+-source/util/aastr.c
+-source/util/errors.cpp
+-source/util/errors_c.c
+-source/util/endian.cpp
+-source/util/pmask.c
+-source/util/base.cpp
++source/games/gdefender.cpp
++source/games/gflmelee.cpp
+ source/games/ggob.cpp
+-source/games/gflmelee.cpp
+-source/games/gdefender.cpp
+ source/games/glegacies.cpp
++source/games/MultiplayerGame.cpp
++source/gui.cpp
++source/input.cpp
++source/libraries/agup/aalg.c
++source/libraries/agup/aase.c
++source/libraries/agup/abeos.c
++source/libraries/agup/abitmap.c
++source/libraries/agup/agtk.c
++source/libraries/agup/agup.c
++source/libraries/agup/ans.c
++source/libraries/agup/aphoton.c
++source/libraries/agup/awin95.c
++source/libraries/jpgalleg/decode.c
++source/libraries/jpgalleg/encode.c
++source/libraries/jpgalleg/io.c
++source/libraries/jpgalleg/jpgalleg.c
++source/libraries/lua/lapi.c
++source/libraries/lua/lcode.c
++source/libraries/lua/ldebug.c
++source/libraries/lua/ldo.c
++source/libraries/lua/ldump.c
++source/libraries/lua/lfunc.c
++source/libraries/lua/lgc.c
++source/libraries/lua/lib/lauxlib.c
++source/libraries/lua/lib/lbaselib.c
++source/libraries/lua/lib/ldblib.c
++source/libraries/lua/lib/liolib.c
++source/libraries/lua/lib/lmathlib.c
++source/libraries/lua/lib/loadlib.c
++source/libraries/lua/lib/lstrlib.c
++source/libraries/lua/lib/ltablib.c
++source/libraries/lua/llex.c
++source/libraries/lua/lmem.c
++source/libraries/lua/lobject.c
++source/libraries/lua/lopcodes.c
++source/libraries/lua/lparser.c
++source/libraries/lua/lstate.c
++source/libraries/lua/lstring.c
++source/libraries/lua/ltable.c
++source/libraries/lua/ltests.c
++source/libraries/lua/ltm.c
++source/libraries/lua/lundump.c
++source/libraries/lua/lvm.c
++source/libraries/lua/lzio.c
++source/libraries/raknet/AES128.cpp
++source/libraries/raknet/AsynchronousFileIO.cpp
++source/libraries/raknet/BitStream.cpp
++source/libraries/raknet/CheckSum.cpp
++source/libraries/raknet/DataBlockEncryptor.cpp
++source/libraries/raknet/DistributedNetworkObject.cpp
++source/libraries/raknet/DistributedNetworkObjectManager.cpp
++source/libraries/raknet/DistributedNetworkObjectStub.cpp
++source/libraries/raknet/EncodeClassName.cpp
++source/libraries/raknet/Euclid.cpp
++source/libraries/raknet/ExtendedOverlappedPool.cpp
++source/libraries/raknet/GetTime.cpp
++source/libraries/raknet/HuffmanEncodingTree.cpp
++source/libraries/raknet/HuffmanEncodingTreeFactory.cpp
++source/libraries/raknet/InternalPacketPool.cpp
++source/libraries/raknet/MPUInt.cpp
++source/libraries/raknet/NetworkObject.cpp
++source/libraries/raknet/NetworkTypes.cpp
++source/libraries/raknet/PacketPool.cpp
++source/libraries/raknet/RakClient.cpp
++source/libraries/raknet/RakNetStatistics.cpp
++source/libraries/raknet/RakNetworkFactory.cpp
++source/libraries/raknet/RakPeer.cpp
++source/libraries/raknet/RakServer.cpp
++source/libraries/raknet/rand.cpp
++source/libraries/raknet/ReliabilityLayer.cpp
++source/libraries/raknet/RPCNode.cpp
++source/libraries/raknet/RSA.cpp
++source/libraries/raknet/SHA1.cpp
++source/libraries/raknet/SimpleMutex.cpp
++source/libraries/raknet/SocketLayer.cpp
++source/libraries/raknet/StringCompressor.cpp
++source/melee/manim.cpp
++source/melee/mcbodies.cpp
++source/melee/mcontrol.cpp
++source/melee/mfleet.cpp
++source/melee/mframe.cpp
++source/melee/mgame.cpp
++source/melee/mhelpers.cpp
++source/melee/mitems.cpp
+ source/melee/mlog.cpp
+-source/melee/mitems.cpp
++source/melee/mmain.cpp
++source/melee/mmath.cpp
+ source/melee/mnet1.cpp
+ source/melee/moptions.cpp
+-source/melee/mgame.cpp
+-source/melee/mhelpers.cpp
+-source/melee/mfleet.cpp
+-source/melee/mview.cpp
+ source/melee/mship.cpp
+-source/melee/mcontrol.cpp
+-source/melee/manim.cpp
+-source/melee/mframe.cpp
+ source/melee/mshot.cpp
+ source/melee/mshpdata.cpp
+ source/melee/mshppan.cpp
+ source/melee/msprite.cpp
+-source/melee/mcbodies.cpp
+-source/melee/mmain.cpp
+ source/melee/mtarget.cpp
+-source/melee/mmath.cpp
+-source/other/orbit.cpp
++source/melee/mview.cpp
+ source/other/configrw.cpp
+-source/other/shippart.cpp
++source/other/dialogs.cpp
+ source/other/fontmorph.cpp
+-source/other/vtarget.cpp
+-source/other/twconfig.cpp
+-source/other/vbodies.cpp
+ source/other/gup.cpp
++source/other/nullphas.cpp
+ source/other/objanim.cpp
+-source/other/nullphas.cpp
++source/other/orbit.cpp
+ source/other/planet3d.cpp
+ source/other/radar.cpp
+-source/other/dialogs.cpp
+-source/ships/shptauar.cpp
+-source/ships/shpbogce.cpp
+-source/ships/shpaktgu.cpp
+-source/ships/shptauda.cpp
+-source/ships/shpforsh.cpp
+-source/ships/shptaume.cpp
+-source/ships/shpdragr.cpp
+-source/ships/shptausl.cpp
+-source/ships/shptaust.cpp
+-source/ships/shptauto.cpp
+-source/ships/shpgarty.cpp
+-source/ships/shprogsq.cpp
+-source/ships/shpzeksh.cpp
+-source/ships/shpconca.cpp
+-source/ships/shpchoex.cpp
+-source/ships/shpconho.cpp
+-source/ships/shpilwsp.cpp
+-source/ships/shpalabc.cpp
+-source/ships/shpyusra.cpp
+-source/ships/shpbahbu.cpp
+-source/ships/shpbipka.cpp
+-source/ships/shpwolmi.cpp
+-source/ships/shpearc3.cpp
+-source/ships/shpkahbo.cpp
+-source/ships/shpstaba.cpp
+-source/tests/testmain.cpp
+-source/tests/testdatapath.cpp
+-source/libraries/lua/lib/ldblib.c
+-source/libraries/lua/lib/lauxlib.c
+-source/libraries/lua/lib/lbaselib.c
+-source/libraries/lua/lib/loadlib.c
+-source/libraries/lua/lib/ltablib.c
+-source/libraries/lua/lib/lmathlib.c
+-source/libraries/lua/lib/lstrlib.c
+-source/libraries/lua/lib/liolib.c
+-source/libraries/lua/lundump.c
+-source/libraries/lua/ldebug.c
+-source/libraries/lua/ldo.c
+-source/libraries/lua/lgc.c
+-source/libraries/lua/ltm.c
+-source/libraries/lua/lvm.c
+-source/libraries/lua/lcode.c
+-source/libraries/lua/ldump.c
+-source/libraries/lua/lfunc.c
+-source/libraries/lua/lparser.c
+-source/libraries/lua/ltable.c
+-source/libraries/lua/ltests.c
+-source/libraries/lua/lstate.c
+-source/libraries/lua/lapi.c
+-source/libraries/lua/llex.c
+-source/libraries/lua/lmem.c
+-source/libraries/lua/lzio.c
+-source/libraries/lua/lopcodes.c
+-source/libraries/lua/lobject.c
+-source/libraries/lua/lstring.c
+-source/libraries/agup/aphoton.c
+-source/libraries/agup/ans.c
+-source/libraries/agup/awin95.c
+-source/libraries/agup/aalg.c
+-source/libraries/agup/aase.c
+-source/libraries/agup/agtk.c
+-source/libraries/agup/agup.c
+-source/libraries/agup/abeos.c
+-source/libraries/agup/abitmap.c
+-source/libraries/raknet/AES128.cpp
+-source/libraries/raknet/PacketPool.cpp
+-source/libraries/raknet/ExtendedOverlappedPool.cpp
+-source/libraries/raknet/RakServer.cpp
+-source/libraries/raknet/RPCNode.cpp
+-source/libraries/raknet/RSA.cpp
+-source/libraries/raknet/RakClient.cpp
+-source/libraries/raknet/HuffmanEncodingTreeFactory.cpp
+-source/libraries/raknet/RakPeer.cpp
+-source/libraries/raknet/SocketLayer.cpp
+-source/libraries/raknet/StringCompressor.cpp
+-source/libraries/raknet/DataBlockEncryptor.cpp
+-source/libraries/raknet/InternalPacketPool.cpp
+-source/libraries/raknet/SHA1.cpp
+-source/libraries/raknet/rand.cpp
+-source/libraries/raknet/GetTime.cpp
+-source/libraries/raknet/EncodeClassName.cpp
+-source/libraries/raknet/NetworkObject.cpp
+-source/libraries/raknet/SimpleMutex.cpp
+-source/libraries/raknet/Euclid.cpp
+-source/libraries/raknet/DistributedNetworkObjectStub.cpp
+-source/libraries/raknet/ReliabilityLayer.cpp
+-source/libraries/raknet/AsynchronousFileIO.cpp
+-source/libraries/raknet/HuffmanEncodingTree.cpp
+-source/libraries/raknet/BitStream.cpp
+-source/libraries/raknet/RakNetworkFactory.cpp
+-source/libraries/raknet/DistributedNetworkObject.cpp
+-source/libraries/raknet/MPUInt.cpp
+-source/libraries/raknet/CheckSum.cpp
+-source/libraries/raknet/DistributedNetworkObjectManager.cpp
+-source/libraries/raknet/NetworkTypes.cpp
+-source/libraries/jpgalleg/io.c
+-source/libraries/jpgalleg/encode.c
+-source/libraries/jpgalleg/decode.c
+-source/libraries/jpgalleg/jpgalleg.c
+-source/scp.cpp
+-source/doxygen.cpp
+-source/input.cpp
++source/other/shippart.cpp
++source/other/twconfig.cpp
++source/other/vbodies.cpp
++source/other/vtarget.cpp
++source/sc1ships/shpandgu.cpp
++source/sc1ships/shparisk.cpp
++source/sc1ships/shpchebr.cpp
+ source/sc1ships/shpearcr.cpp
+-source/sc1ships/shpchebr.cpp
+-source/sc1ships/shpandgu.cpp
+ source/sc1ships/shpilwav.cpp
+ source/sc1ships/shpkzedr.cpp
+-source/sc1ships/shpyehte.cpp
++source/sc1ships/shpmmrxf.cpp
++source/sc1ships/shpmycpo.cpp
++source/sc1ships/shpshosc.cpp
++source/sc1ships/shpspael.cpp
+ source/sc1ships/shpsyrpe.cpp
+-source/sc1ships/shpspael.cpp
++source/sc1ships/shpumgdr.cpp
+ source/sc1ships/shpvuxin.cpp
+-source/sc1ships/shpumgdr.cpp
+-source/sc1ships/shparisk.cpp
+-source/sc1ships/shpmycpo.cpp
+-source/sc1ships/shpmmrxf.cpp
+-source/sc1ships/shpshosc.cpp
+-source/sc2ships/shpthrto.cpp
+-source/sc2ships/shporzne.cpp
++source/sc1ships/shpyehte.cpp
++source/sc2ships/shpchmav.cpp
+ source/sc2ships/shpdruma.cpp
++source/sc2ships/shpkohma.cpp
+ source/sc2ships/shpmeltr.cpp
+-source/sc2ships/shpchmav.cpp
+-source/sc2ships/shpkohma.cpp
+-source/sc2ships/shputwju.cpp
+-source/sc2ships/shpsupbl.cpp
++source/sc2ships/shporzne.cpp
+ source/sc2ships/shppkufu.cpp
+ source/sc2ships/shpslypr.cpp
++source/sc2ships/shpsupbl.cpp
++source/sc2ships/shpthrto.cpp
++source/sc2ships/shputwju.cpp
+ source/sc2ships/shpzfpst.cpp
+-source/gui.cpp
++source/scp.cpp
++source/ships/shpaktgu.cpp
++source/ships/shpalabc.cpp
++source/ships/shpbahbu.cpp
++source/ships/shpbipka.cpp
++source/ships/shpbogce.cpp
++source/ships/shpchoex.cpp
++source/ships/shpconca.cpp
++source/ships/shpconho.cpp
++source/ships/shpdragr.cpp
++source/ships/shpearc3.cpp
++source/ships/shpforsh.cpp
++source/ships/shpgarty.cpp
++source/ships/shpilwsp.cpp
++source/ships/shpkahbo.cpp
++source/ships/shprogsq.cpp
++source/ships/shpstaba.cpp
++source/ships/shptauar.cpp
++source/ships/shptauda.cpp
++source/ships/shptaume.cpp
++source/ships/shptausl.cpp
++source/ships/shptaust.cpp
++source/ships/shptauto.cpp
++source/ships/shpwolmi.cpp
++source/ships/shpyusra.cpp
++source/ships/shpzeksh.cpp
++source/tests/testdatapath.cpp
++source/tests/testmain.cpp
++source/util/aarot.c
++source/util/aastr.c
++source/util/aautil.c
++source/util/base.cpp
++source/util/endian.cpp
++source/util/errors.cpp
++source/util/errors_c.c
++source/util/get_time.c
++source/util/history.cpp
++source/util/pmask.c
++source/util/random.cpp
++source/util/round.c
++source/util/sound.cpp
++source/util/types.cpp
++source/util/vector2.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000043.html">[Tw-light-svn] r95 - branches/mp-branch-2/source/libraries/raknet
+</A></li>
+	<LI>Next message: <A HREF="000045.html">[Tw-light-svn] r97 - branches/mp-branch-2/source/games trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#44">[ date ]</a>
+              <a href="thread.html#44">[ thread ]</a>
+              <a href="subject.html#44">[ subject ]</a>
+              <a href="author.html#44">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

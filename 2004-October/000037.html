@@ -1,0 +1,1399 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r89 - in trunk: . source source/ais source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r89%20-%20in%20trunk%3A%20.%20source%20source/ais%20source/games&In-Reply-To=%3C200410231000.i9NA0U2n013588%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000036.html">
+   <LINK REL="Next"  HREF="000038.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r89 - in trunk: . source source/ais source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r89%20-%20in%20trunk%3A%20.%20source%20source/ais%20source/games&In-Reply-To=%3C200410231000.i9NA0U2n013588%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r89 - in trunk: . source source/ais source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Oct 23 12:00:30 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000036.html">[Tw-light-svn] r88 - trunk/web
+</A></li>
+        <LI>Next message: <A HREF="000038.html">[Tw-light-svn] r90 - branches/multiplayer-branch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-10-23 12:00:29 +0200 (Sat, 23 Oct 2004)
+New Revision: 89
+
+Removed:
+   trunk/source/twgui/
+Modified:
+   trunk/source/ais.h
+   trunk/source/ais/c_input.cpp
+   trunk/source/ais/c_other.cpp
+   trunk/source/ais/c_wussie.cpp
+   trunk/source/frame.cpp
+   trunk/source/frame.h
+   trunk/source/games/gdefender.cpp
+   trunk/source/games/gflmelee.cpp
+   trunk/source/games/gflmelee.h
+   trunk/source/games/ggob.cpp
+   trunk/sources.lst
+Log:
+Removed twgui, little formating
+
+
+Modified: trunk/source/ais/c_input.cpp
+===================================================================
+--- trunk/source/ais/c_input.cpp	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/ais/c_input.cpp	2004-10-23 10:00:29 UTC (rev 89)
+@@ -28,15 +28,14 @@
+ #include &quot;other/dialogs.h&quot;
+ 
+ #include &quot;other/twconfig.h&quot;
+-#include &quot;../melee/mfleet.h&quot; //for Fleet class
+-#include &quot;../scp.h&quot; //for ship_view_dialog()
++#include &quot;melee/mfleet.h&quot; //for Fleet class
++#include &quot;scp.h&quot; //for ship_view_dialog()
+ 
+-char selectShipPrompt[100] = &quot;&quot;;
+-char selectPlayer[18] = &quot;&quot;;
++char selectShipPrompt[100]  = &quot;&quot;;
++char selectPlayer[18]       = &quot;&quot;;
+ char selectTitleString[100] = &quot;&quot;;
+ 
+ 
+-
+ int my_bitmap_proc( int msg, DIALOG* d, int c )
+ {
+   if( msg == MSG_END &amp;&amp; d-&gt;dp )
+@@ -60,7 +59,7 @@
+       ShipType* type = fleet-&gt;getShipType(d-&gt;d1);
+       
+       ASSERT(type != NULL);
+-
++      
+       selectDialog[SELECT_DIALOG_TITLE].flags |= D_DIRTY;
+       sprintf(selectTitleString, &quot;%s\n%s\n%d of %d points&quot;, 
+ 	      selectShipPrompt,
+@@ -124,23 +123,23 @@
+ 	}	
+       else
+ 	sprintf (dialog_string[0], &quot;De-Calibrate&quot;);
+-    
++      
+       char buffy[1024];
+       char *d = buffy;
+-    
++      
+       d += sprintf(d, &quot;Joystick %d\n\n&quot;, which_joystick);
+-    
++      
+       for (i = 0; i &lt; ::joy[which_joystick].num_sticks; i += 1) 
+ 	{
+ 	  d += sprintf(d, &quot;%s %d\n&quot;, ::joy[which_joystick].stick[i].name, i);
+ 	}
+-    
++      
+       d += sprintf(d, &quot;\nBUTTONS\n&quot;);
+       for (i = 0; i &lt; ::joy[which_joystick].num_buttons; i += 1) 
+ 	{
+ 	  d += sprintf(d, &quot; %s&quot;, ::joy[which_joystick].button[i].name);
+ 	}
+-    
++      
+       joyDialog[JOY_DIALOG_DESCRIPTION].dp = buffy;
+       i = tw_popup_dialog(NULL,joyDialog, 1);
+       if (i == -1)
+@@ -177,6 +176,7 @@
+ */
+ void ControlHuman::load (const char *inifile, const char *inisection) 
+ {
++  STACKTRACE;
+   tw_set_config_file (inifile);
+   thrust  = get_config_int(inisection, &quot;Thrust&quot;,      0);
+   back    = get_config_int(inisection, &quot;Backwards&quot;,   0);
+@@ -203,6 +203,7 @@
+  */
+ void ControlHuman::save (const char *inifile, const char *inisection) 
+ {
++  STACKTRACE;
+   tw_set_config_file (inifile);
+   set_config_int(inisection, &quot;Thrust&quot;,         thrust);
+   set_config_int(inisection, &quot;Backwards&quot;,      back);
+@@ -259,54 +260,62 @@
+   STACKTRACE;
+ };
+ 
+-int ControlHuman::choose_ship(VideoWindow *window, char * prompt, Fleet *fleet) {
++int ControlHuman::choose_ship(VideoWindow *window, char * prompt, Fleet *fleet) 
++{
+   STACKTRACE;
+-	int ret = -1, slot = 0;
+-	if (fleet-&gt;getSize() == 0) {tw_error (&quot;Empty fleet! (prompt:%s)&quot;, prompt);}
+-	selectDialog[SELECT_DIALOG_LIST].dp3 = fleet;
++  int ret = -1, slot = 0;
++  if (fleet-&gt;getSize() == 0) 
++    {
++      tw_error (&quot;Empty fleet! (prompt:%s)&quot;, prompt);
++    }
++  selectDialog[SELECT_DIALOG_LIST].dp3 = fleet;
+ 
+-    strcpy(selectShipPrompt,prompt);
++  strcpy(selectShipPrompt,prompt);
+ 
++  slot = -1;
++  while (!always_random) 
++    {
++      while (key[KEY_ENTER] || key[KEY_SPACE]) 
++	poll_keyboard();
+ 
+-	slot = -1;
+-	while (!always_random) {
+-		while (key[KEY_ENTER] || key[KEY_SPACE]) poll_keyboard();
+-
+-
+-		ret = tw_do_dialog(window, selectDialog, SELECT_DIALOG_LIST);
+-		if (ret == SELECT_DIALOG_INFO) {
+-			ship_view_dialog(
+-				selectDialog[SELECT_DIALOG_LIST].d1, 
+-				fleet 
+-			);
+-			continue;
+-		}
+-		break;
++      ret = tw_do_dialog(window, selectDialog, SELECT_DIALOG_LIST);
++      if (ret == SELECT_DIALOG_INFO) 
++	{
++	  ship_view_dialog(
++			   selectDialog[SELECT_DIALOG_LIST].d1, 
++			   fleet 
++			   );
++	  continue;
+ 	}
+-	if ((ret == SELECT_DIALOG_SHIP) || (ret == SELECT_DIALOG_LIST))
+-		slot = selectDialog[SELECT_DIALOG_LIST].d1;
+-	if ((ret == SELECT_DIALOG_ARANDOM) || (ret == -1)) always_random = 1;
+-	return(slot);
++      break;
++    }
++  if ((ret == SELECT_DIALOG_SHIP) || (ret == SELECT_DIALOG_LIST))
++    slot = selectDialog[SELECT_DIALOG_LIST].d1;
++  if ((ret == SELECT_DIALOG_ARANDOM) || (ret == -1)) 
++    always_random = 1;
++  return(slot);
+ }
+ 
+ /*! returns help text for this controller ie keys to use this controller*/
+-void ControlHuman::getHelpText(char * text) {
++void ControlHuman::getHelpText(char * text) 
++{
+   STACKTRACE;
+-	char line[80] = &quot;&quot;;
+-	char desc[80] = &quot;&quot;;
+-
+-	sprintf(line, &quot;Player Controls:\n&quot;); strcat(text, line);
+-
+-	key_to_description(left, desc);	sprintf ( line, &quot;  Left: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(right, desc);	sprintf ( line, &quot;  Right: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(thrust, desc);	sprintf ( line, &quot;  Thrust: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(fire, desc);	sprintf ( line, &quot;  Fire: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(special, desc);	sprintf ( line, &quot;  Special: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(altfire, desc);	sprintf ( line, &quot;  Altfire: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(next, desc);	sprintf ( line, &quot;  Next Target: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(prev, desc);	sprintf ( line, &quot;  Previous Target: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(closest, desc);	sprintf ( line, &quot;  Closest: %s\n&quot;, desc);strcat(text, line);
+-	key_to_description(suicide, desc);	sprintf ( line, &quot;  Suicide: %s\n&quot;, desc);strcat(text, line);
++  char line[80] = &quot;&quot;;
++  char desc[80] = &quot;&quot;;
++  
++  sprintf(line, &quot;Player Controls:\n&quot;); 
++  strcat(text, line);
++  
++  key_to_description(left, desc);   sprintf ( line, &quot;  Left: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(right, desc);  sprintf ( line, &quot;  Right: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(thrust, desc); sprintf ( line, &quot;  Thrust: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(fire, desc);   sprintf ( line, &quot;  Fire: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(special, desc);sprintf ( line, &quot;  Special: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(altfire, desc);sprintf ( line, &quot;  Altfire: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(next, desc);   sprintf ( line, &quot;  Next Target: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(prev, desc);   sprintf ( line, &quot;  Previous Target: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(closest, desc);sprintf ( line, &quot;  Closest: %s\n&quot;, desc);strcat(text, line);
++  key_to_description(suicide, desc);sprintf ( line, &quot;  Suicide: %s\n&quot;, desc);strcat(text, line);
+ }
+ 
+ /*! \brief setap players keys */
+@@ -380,7 +389,8 @@
+       for (i = 1; i &lt; KEY_DIALOG_OK; i += 1) 
+ 	{
+ 	  int t = strlen(dialog_string[i]);
+-	  if (maxlen &lt; t) maxlen = t;
++	  if (maxlen &lt; t) 
++	    maxlen = t;
+ 	}
+       for (i = 1; i &lt; KEY_DIALOG_OK; i += 1) 
+ 	{
+@@ -389,9 +399,11 @@
+ 	  memset(dialog_string[i]+t, ' ', maxlen-t);
+ 	}
+       clear_keybuf();
+-      if (last &lt; KEY_DIALOG_OK) last += 1;
++      if (last &lt; KEY_DIALOG_OK) 
++	last += 1;
+       i = tw_do_dialog(NULL, keyDialog, last);
+-      if (i == -1) return;
++      if (i == -1) 
++	return;
+       if (i &lt; KEY_DIALOG_OK) 
+ 	{
+ 	  t = get_key();
+
+Modified: trunk/source/ais/c_other.cpp
+===================================================================
+--- trunk/source/ais/c_other.cpp	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/ais/c_other.cpp	2004-10-23 10:00:29 UTC (rev 89)
+@@ -46,61 +46,57 @@
+ {
+ }
+ 
++/// Get name
+ const char *ControlMoron::getTypeName() 
+ {
+   STACKTRACE;
+   return &quot;MoronBot&quot;;
+ }
+ 
+-/*! \brief Simple AI 
+-  \param ship with this stupid AI
+-*/
+-int stupid_bot(Ship *ship) 
++/*! \brief Morron bot AI */
++int ControlMoron::think()
+ {
+   STACKTRACE;
+-    
+-  int r = 0;
+-  double a;
+-  if (!ship-&gt;target) return 0;
+-  if (!ship-&gt;target-&gt;exists()) 
++  if (ship)
+     {
+-      ship-&gt;target = NULL;
+-      return 0;
+-    }
+-  a = ship-&gt;trajectory_angle(ship-&gt;target) - ship-&gt;get_angle();
+-  a = fmod(a + PI2, PI2);
+-  if (a &lt; PI) 
+-    {
+-      r |= keyflag::right;
+-    }
+-  else 
+-    {
+-      r |= keyflag::left;
++      int r = 0;
++      double a;
++      if (!ship-&gt;target) 
++	return 0;
++      if (!ship-&gt;target-&gt;exists()) 
++	{
++	  ship-&gt;target = NULL;
++	  return 0;
++	}
++      a = ship-&gt;trajectory_angle(ship-&gt;target) - ship-&gt;get_angle();
++      a = fmod(a + PI2, PI2);
++      if (a &lt; PI) 
++	{
++	  r |= keyflag::right;
++	}
++      else 
++	{
++	  r |= keyflag::left;
++	  return r;
++	}
++      a = int(ship-&gt;distance(ship-&gt;target));
++      if (a &gt; 2000) 
++	{
++	  r |= keyflag::thrust;
++	}
++      else 
++	{
++	  r |= keyflag::thrust;
++	  r |= keyflag::fire;
++	}
+       return r;
+     }
+-  a = int(ship-&gt;distance(ship-&gt;target));
+-  if (a &gt; 2000) 
++  else
+     {
+-      r |= keyflag::thrust;
++      return 0;
+     }
+-  else 
+-    {
+-      r |= keyflag::thrust;
+-      r |= keyflag::fire;
+-    }
+-  return r;
+ }
+ 
+-/*! \brief Summon stupid_bot() */
+-int ControlMoron::think()
+-{
+-  STACKTRACE;
+-  if (ship)
+-    return stupid_bot(ship);
+-  else
+-    return 0;
+-}
+-
+ ControlMoron::ControlMoron(const char *name, int channel) : Control(name, channel, ai_index_moron) 
+ {
+   STACKTRACE;
+
+Modified: trunk/source/ais/c_wussie.cpp
+===================================================================
+--- trunk/source/ais/c_wussie.cpp	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/ais/c_wussie.cpp	2004-10-23 10:00:29 UTC (rev 89)
+@@ -1,6 +1,6 @@
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -29,40 +29,49 @@
+ #include &quot;melee/mship.h&quot;
+ #include &quot;melee/mmain.h&quot;
+ 
+-#define OPTION_UNKNOWN 0
+-#define OPTION_NONE 1
+-#define OPTION_FRONT 2
+-#define OPTION_NO_FRONT 3
+-#define OPTION_SIDES 4
+-#define OPTION_BACK 5
+-#define OPTION_FEILD 6
+-#define OPTION_NARROW 7
+-#define OPTION_HOMING 8
+-#define OPTION_PROXIMITY 9
+-#define OPTION_NO_PROXIMITY 10
+-#define OPTION_NO_RANGE 11
+-#define OPTION_HOLD 12
+-#define OPTION_PRECEDENCE 13
+-#define OPTION_DEFENSE 14
+-#define OPTION_CLOAK 15
+-#define OPTION_MAX_BATT 16
+-#define OPTION_BATTERY 17
+-#define OPTION_RESERVE_BATT 18
+-#define OPTION_PLUS_FIRE 19
+-#define OPTION_PLUS_SPECIAL 20
+-#define OPTION_LAUNCHED 21
+-#define OPTION_NEXT_STATE 22
+-#define OPTION_RESET_STATE 23
+-#define OPTION_ALWAYS_WHEN_FULL 24
+-#define OPTION_MINE 25
++enum 
++  {
++    OPTION_UNKNOWN = 0,
++    OPTION_NONE,
++    OPTION_FRONT,
++    OPTION_NO_FRONT,
++    OPTION_SIDES,
++    OPTION_BACK,
++    OPTION_FEILD,
++    OPTION_NARROW,
++    OPTION_HOMING,
++    OPTION_PROXIMITY,
++    OPTION_NO_PROXIMITY,
++    OPTION_NO_RANGE,
++    OPTION_HOLD,
++    OPTION_PRECEDENCE,
++    OPTION_DEFENSE,
++    OPTION_CLOAK,
++    OPTION_MAX_BATT,
++    OPTION_BATTERY,
++    OPTION_RESERVE_BATT,
++    OPTION_PLUS_FIRE,
++    OPTION_PLUS_SPECIAL,
++    OPTION_LAUNCHED,
++    OPTION_NEXT_STATE,
++    OPTION_RESET_STATE,
++    OPTION_ALWAYS_WHEN_FULL,
++    OPTION_MINE,
++  };
+ 
+-#define STATE_TOO_CLOSE 0
+-#define STATE_TOO_FAR 1
++enum
++  {
++    STATE_TOO_CLOSE = 0,
++    STATE_TOO_FAR,
++  };
+ 
+-#define TACTIC_UNKNOWN 1
+-#define TACTIC_INDIRECT_INTERCEPT 2
+-#define TACTIC_DIRECT_INTERCEPT 3
+-#define TACTIC_RANGE 4
++enum
++  {
++    TACTIC_UNKNOWN = 1,
++    TACTIC_INDIRECT_INTERCEPT,
++    TACTIC_DIRECT_INTERCEPT,
++    TACTIC_RANGE,
++  };
+ 
+ /*! \brief Check danger
+   \return Max damage ship can get from his enemies
+@@ -175,6 +184,7 @@
+   return dodgeangle;
+ }
+ 
++/// Wussie bot AI
+ int ControlWussie::think ()
+ {
+   STACKTRACE;
+
+Modified: trunk/source/ais.h
+===================================================================
+--- trunk/source/ais.h	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/ais.h	2004-10-23 10:00:29 UTC (rev 89)
+@@ -1,7 +1,6 @@
+-/* $Id: ais.h,v 1.1.1.1 2004/08/01 10:21:18 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -27,7 +26,8 @@
+ 
+ //ais/c_input.cpp
+ /*! \brief Human Ship Control */
+-class ControlHuman : public Control {	
++class ControlHuman : public Control 
++{	
+  private:
+   int thrust;
+   int left;
+@@ -53,11 +53,9 @@
+   friend class NormalGame;
+ };
+ 
+-//ais/c_other.cpp
+-int stupid_bot(Ship *ship) ;
+-
+ /*! \brief AI with no brain */
+-class ControlVegetable : public Control {	
++class ControlVegetable : public Control 
++{	
+  public:
+   virtual const char *getTypeName();
+   virtual int think();
+@@ -66,7 +64,8 @@
+ };
+ 
+ /*! \brief Simple AI */
+-class ControlMoron : public Control {	
++class ControlMoron : public Control 
++{	
+  public:
+   virtual const char *getTypeName();
+   virtual int think();
+@@ -77,7 +76,8 @@
+ 
+ //ais/c_wussie.cpp
+ /*! \brief Complex AI */
+-class ControlWussie : public Control {
++class ControlWussie : public Control 
++{
+  public:
+   virtual const char *getTypeName();
+   virtual int think();
+@@ -112,8 +112,9 @@
+ };
+ 
+ /*! \brief Is Key pressed */
+-class KeyState {
+-  public:
++class KeyState 
++{
++ public:
+   bool thrust;
+   bool turn_left;
+   bool turn_right;
+
+Modified: trunk/source/frame.cpp
+===================================================================
+--- trunk/source/frame.cpp	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/frame.cpp	2004-10-23 10:00:29 UTC (rev 89)
+@@ -1,7 +1,6 @@
+-/* $Id: frame.cpp,v 1.1.1.1 2004/08/01 10:21:18 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -411,7 +410,6 @@
+       release_bitmap(tmp);
+       destroy_bitmap(tmp);
+       
+-      //drawn_items = item_count;
+       old_item_count = 0;
+     }
+   return;
+
+Modified: trunk/source/frame.h
+===================================================================
+--- trunk/source/frame.h	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/frame.h	2004-10-23 10:00:29 UTC (rev 89)
+@@ -1,7 +1,6 @@
+-/* $Id: frame.h,v 1.1.1.1 2004/08/01 10:21:18 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -18,9 +17,10 @@
+ #ifndef __FRAME_H__
+ #define __FRAME_H__
+ 
+-typedef struct DirtyItem {
++typedef struct DirtyItem 
++{
+   int x, y, a, b;
+-
++  
+   void (*erase_item)(DirtyItem *item, BITMAP *frame);
+   void (*draw_item)(DirtyItem *item, BITMAP *frame, BITMAP *child);
+ } DirtyItem;
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/games/gdefender.cpp	2004-10-23 10:00:29 UTC (rev 89)
+@@ -1,5 +1,20 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
+ 
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
+ 
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++
+ #include &lt;stdio.h&gt;   //standard io libary (needed for sprintf)
+ #include &lt;allegro.h&gt; //allegro library header
+ 
+
+Modified: trunk/source/games/gflmelee.cpp
+===================================================================
+--- trunk/source/games/gflmelee.cpp	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/games/gflmelee.cpp	2004-10-23 10:00:29 UTC (rev 89)
+@@ -1,4 +1,3 @@
+-/* $Id: gflmelee.cpp,v 1.1.1.1 2004/08/01 10:21:21 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+                     <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+
+Modified: trunk/source/games/gflmelee.h
+===================================================================
+--- trunk/source/games/gflmelee.h	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/games/gflmelee.h	2004-10-23 10:00:29 UTC (rev 89)
+@@ -1,7 +1,6 @@
+-/* $Id: gflmelee.h,v 1.1.1.1 2004/08/01 10:21:21 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -22,14 +21,14 @@
+ class ShipPanelBmp : public Presence 
+ {
+  public:
+-  BITMAP *panel;		// this is the whole panel, including the captain pic.
++  BITMAP *panel;		///&lt; this is the whole panel, including the captain pic.
+   BITMAP *captain;
+   
+   int crew_old;
+   int batt_old;
+   char batt_light;
+   
+-  char old_thrust;         // previous keypresses for ship
++  char old_thrust;         ///&lt; previous keypresses for ship
+   char old_turn_left;
+   char old_turn_right;
+   char old_fire_weapon;
+@@ -41,12 +40,12 @@
+   
+   ShipPanelBmp(Ship *oship);
+   virtual ~ShipPanelBmp();
+-  
++ 
++  ///used for drawing crew &amp; battery bars 
+   virtual void draw_stuff(int x, int y, int w, int h, int dx, int dy, int m, int value, int max, int color, int bcolor);
+-  //used for drawing crew &amp; battery bars
++ 
+   
+   virtual void animate_panel(); 
+-  //the parameter &quot;space&quot; is not used
+ };
+ 
+ #endif //__GFLMELEE_H__
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/source/games/ggob.cpp	2004-10-23 10:00:29 UTC (rev 89)
+@@ -101,17 +101,20 @@
+   defenderSprite = NULL;
+ }
+ 
+-bool GobGame::isGameDone() {
+-	bool done = true;
+-	for (int i = 0; i &lt; gobplayers; i += 1) {
+-		if (gobplayer[i]-&gt;ship != NULL)
+-			done = false;
+-	}
+-	if (done) {
+-		game_done = true;
+-		tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
++bool GobGame::isGameDone() 
++{
++  bool done = true;
++  for (int i = 0; i &lt; gobplayers; i += 1) 
++    {
++      if (gobplayer[i]-&gt;ship != NULL)
++	done = false;
+     }
+-	return Game::isGameDone();
++  if (done) 
++    {
++      game_done = true;
++      tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
++    }
++  return Game::isGameDone();
+ }
+ 
+ void GobGame::add_gobplayer(Control *control) 
+@@ -211,62 +214,62 @@
+ 
+   add(new Stars());
+ 	
+-	num_planets = 0;
+-	i = 0;
+-	add_planet_and_station(meleedata.planetSprite, i, 
+-			       stationSprite[i], station_build_name[i], station_pic_name[i]);
+-	i = 1;
+-	add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], station_build_name[i], station_pic_name[i]);
+-	i = 2;
+-	add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], station_build_name[i], station_pic_name[i]);
+-	i = random() % 3;
+-	add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], &quot;utwju&quot;, station_pic_name[i]);
++  num_planets = 0;
++  i = 0;
++  add_planet_and_station(meleedata.planetSprite, i, 
++			 stationSprite[i], station_build_name[i], station_pic_name[i]);
++  i = 1;
++  add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], station_build_name[i], station_pic_name[i]);
++  i = 2;
++  add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], station_build_name[i], station_pic_name[i]);
++  i = random() % 3;
++  add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], &quot;utwju&quot;, station_pic_name[i]);
++  
++  for (i = 0; i &lt; 19; i += 1) add(new GobAsteroid());
+ 
+-	for (i = 0; i &lt; 19; i += 1) add(new GobAsteroid());
+-
+-
+-
+-	int server_players, client_players;
+-	tw_set_config_file(&quot;client.ini&quot;);
+-	server_players = client_players = get_config_int(&quot;Gob&quot;, &quot;NumPlayers&quot;, 1);
+-	if (!lag_frames) client_players = 0;
+-	log_int(channel_server, server_players);
+-	log_int(channel_client, client_players);
+-	for (i = 0; i &lt; server_players; i += 1) {
+-		char buffy[256];
+-		sprintf(buffy, &quot;Config%d&quot;, i);
+-		add_gobplayer(create_control(channel_server, &quot;Human&quot;, buffy));
+-		gobplayer[i]-&gt;new_ship(shiptype(&quot;supbl&quot;));
+-		Ship *s = gobplayer[i]-&gt;ship;
+-		s-&gt;translate(size/2-s-&gt;normal_pos());
+-		double angle = PI2 * i / (client_players + server_players);
+-		s-&gt;translate(rotate(Vector2(260, 120), angle));
+-		s-&gt;accelerate(s, PI2/3 + angle, 0.17, MAX_SPEED);
+-	}
+-	for (i = server_players; i &lt; client_players + server_players; i += 1) {
+-		char buffy[256];
+-		sprintf(buffy, &quot;Config%d&quot;, i - server_players);
+-		add_gobplayer(create_control(channel_client, &quot;Human&quot;, buffy));
+-		gobplayer[i]-&gt;new_ship(shiptype(&quot;supbl&quot;));
+-		Ship *s = gobplayer[i]-&gt;ship;
+-		s-&gt;translate(size/2-s-&gt;normal_pos());
+-		double angle = PI2 * i / (client_players + server_players);
+-		s-&gt;translate(rotate(Vector2(260, 120), angle));
+-		s-&gt;accelerate(s, PI2/3 + angle, 0.17, MAX_SPEED);
+-	}
+-
+-	for (i = 0; i &lt; gobplayers; i += 1) add ( new RainbowRift() );
+-
+-	next_add_new_enemy_time = 1000;
+-	add_new_enemy();
+-	this-&gt;change_view(&quot;Hero&quot;);
+-	view-&gt;window-&gt;locate(
+-		0,0,
+-		0,0,
+-		0,0.9,
+-		0,1
+-		);
+-	return;
++  int server_players, client_players;
++  tw_set_config_file(&quot;client.ini&quot;);
++  server_players = client_players = get_config_int(&quot;Gob&quot;, &quot;NumPlayers&quot;, 1);
++  if (!lag_frames) client_players = 0;
++  log_int(channel_server, server_players);
++  log_int(channel_client, client_players);
++  for (i = 0; i &lt; server_players; i += 1) 
++    {
++      char buffy[256];
++      sprintf(buffy, &quot;Config%d&quot;, i);
++      add_gobplayer(create_control(channel_server, &quot;Human&quot;, buffy));
++      gobplayer[i]-&gt;new_ship(shiptype(&quot;supbl&quot;));
++      Ship *s = gobplayer[i]-&gt;ship;
++      s-&gt;translate(size/2-s-&gt;normal_pos());
++      double angle = PI2 * i / (client_players + server_players);
++      s-&gt;translate(rotate(Vector2(260, 120), angle));
++      s-&gt;accelerate(s, PI2/3 + angle, 0.17, MAX_SPEED);
++    }
++  for (i = server_players; i &lt; client_players + server_players; i += 1) 
++    {
++      char buffy[256];
++      sprintf(buffy, &quot;Config%d&quot;, i - server_players);
++      add_gobplayer(create_control(channel_client, &quot;Human&quot;, buffy));
++      gobplayer[i]-&gt;new_ship(shiptype(&quot;supbl&quot;));
++      Ship *s = gobplayer[i]-&gt;ship;
++      s-&gt;translate(size/2-s-&gt;normal_pos());
++      double angle = PI2 * i / (client_players + server_players);
++      s-&gt;translate(rotate(Vector2(260, 120), angle));
++      s-&gt;accelerate(s, PI2/3 + angle, 0.17, MAX_SPEED);
++    }
++  
++  for (i = 0; i &lt; gobplayers; i += 1) add ( new RainbowRift() );
++  
++  next_add_new_enemy_time = 1000;
++  add_new_enemy();
++  this-&gt;change_view(&quot;Hero&quot;);
++  view-&gt;window-&gt;locate(
++		       0,0,
++		       0,0,
++		       0,0.9,
++		       0,1
++		       );
++  return;
+ }
+ GobGame::~GobGame() {
+   delete stationSprite[0];
+@@ -296,7 +299,8 @@
+     {
+       SpaceLocation *n;
+       n = p-&gt;nearest_planet();
+-      if (!n || (p-&gt;distance(n) &gt; 1500)) break;
++      if (!n || (p-&gt;distance(n) &gt; 1500)) 
++	break;
+       p-&gt;translate(random(size));
+     }
+   add ( p );
+@@ -326,11 +330,12 @@
+       if (!is_local(gobplayer[i]-&gt;channel)) 
+ 	continue;
+       
+-      if (gobplayer[i]-&gt;ship) {
+-	message.print((int)msecs_per_fps, 15-i, &quot;coordinates: %d x %d&quot;, 
+-		      iround(gobplayer[i]-&gt;ship-&gt;normal_pos().x), 
+-		      iround(gobplayer[i]-&gt;ship-&gt;normal_pos().y));
+-      }
++      if (gobplayer[i]-&gt;ship) 
++	{
++	  message.print((int)msecs_per_fps, 15-i, &quot;coordinates: %d x %d&quot;, 
++			iround(gobplayer[i]-&gt;ship-&gt;normal_pos().x), 
++			iround(gobplayer[i]-&gt;ship-&gt;normal_pos().y));
++	}
+       message.print((int)msecs_per_fps, 15-i, &quot;starbucks: %d&quot;, gobplayer[i]-&gt;starbucks);
+       message.print((int)msecs_per_fps, 15-i, &quot;buckazoids: %d&quot;, gobplayer[i]-&gt;buckazoids);
+       message.print((int)msecs_per_fps, 15-i, &quot;kills: %d&quot;, gobplayer[i]-&gt;kills);
+@@ -342,21 +347,27 @@
+ {
+   STACKTRACE;
+   
+-
+-  if (next_add_new_enemy_time &lt;= game_time) {
+-    next_add_new_enemy_time = game_time;
+-    int t = 28;
+-    if ((random() % t) &lt; 4) add_new_enemy();
+-    int e = gobenemies;
+-    e -= random() % (1 + game_time / (250 * 1000));
+-    if (0) ;
+-    else if (e &gt;=12) next_add_new_enemy_time += 15000;
+-    else if (e &gt;= 7) next_add_new_enemy_time += 7000;
+-    else if (e &gt;= 4) next_add_new_enemy_time += 5000;
+-    else if (e &gt;= 2) next_add_new_enemy_time += 3000;
+-    else if (e &gt;= 1) next_add_new_enemy_time += 2000;
+-    else next_add_new_enemy_time += 1000;
+-  }
++  if (next_add_new_enemy_time &lt;= game_time) 
++    {
++      next_add_new_enemy_time = game_time;
++      int t = 28;
++      if ((random() % t) &lt; 4) add_new_enemy();
++      int e = gobenemies;
++      e -= random() % (1 + game_time / (250 * 1000));
++      if (0) ;
++      else if (e &gt;=12) 
++	next_add_new_enemy_time += 15000;
++      else if (e &gt;= 7) 
++	next_add_new_enemy_time += 7000;
++      else if (e &gt;= 4) 
++	next_add_new_enemy_time += 5000;
++      else if (e &gt;= 2) 
++	next_add_new_enemy_time += 3000;
++      else if (e &gt;= 1) 
++	next_add_new_enemy_time += 2000;
++      else 
++	next_add_new_enemy_time += 1000;
++    }
+   Game::calculate();
+   return;
+ }
+@@ -379,42 +390,51 @@
+   STACKTRACE;
+   
+   GobPlayer *p = this-&gt;get_player(who);
+-  if (p &amp;&amp; (p-&gt;ship == who)) { //Player died
+-    p-&gt;died(source);
+-  }
+-	int i = get_enemy_index(who);
+-	if ((i != -1) &amp;&amp; (gobenemy[i]-&gt;ship == who)) {
+-		GobEnemy *e = gobenemy[i];
+-		e-&gt;died(source);
+-		gobenemies -= 1;
+-		GobEnemy *tmp = gobenemy[gobenemies];
+-		gobenemy[i] = tmp;
+-		p = get_player(source);
+-	}
++  if (p &amp;&amp; (p-&gt;ship == who)) 
++    { //Player died
++      p-&gt;died(source);
++    }
++  int i = get_enemy_index(who);
++  if ((i != -1) &amp;&amp; (gobenemy[i]-&gt;ship == who)) 
++    {
++      GobEnemy *e = gobenemy[i];
++      e-&gt;died(source);
++      gobenemies -= 1;
++      GobEnemy *tmp = gobenemy[gobenemies];
++      gobenemy[i] = tmp;
++      p = get_player(source);
++    }
+ 
+-	Game::ship_died(who, source);
+-	return;
++  Game::ship_died(who, source);
++  return;
+ }
+-GobPlayer *GobGame::get_player(SpaceLocation *what) {
++
++GobPlayer *GobGame::get_player(SpaceLocation *what) 
++{
+   STACKTRACE;
+-	int i;
+-	for (i = 0; i &lt; gobplayers; i += 1) {		
+-		if (what-&gt;get_team() == gobplayer[i]-&gt;team) return gobplayer[i];
+-	}
+-	return NULL;
++  int i;
++  for (i = 0; i &lt; gobplayers; i += 1) 
++    {		
++      if (what-&gt;get_team() == gobplayer[i]-&gt;team) 
++	return gobplayer[i];
++    }
++  return NULL;
+ }
++
+ void GobGame::add_new_enemy() 
+ {
+   STACKTRACE;
+   
+-  static char *enemy_types[] = {
+-		&quot;thrto&quot;, &quot;zfpst&quot;, &quot;shosc&quot;, &quot;dragr&quot;, 
+-		&quot;kahbo&quot;, &quot;ilwsp&quot;, 
+-		&quot;syrpe&quot;, &quot;kzedr&quot;, &quot;mmrxf&quot;, 
+-		&quot;druma&quot;, &quot;earcr&quot;, 
+-		&quot;yehte&quot;, &quot;chmav&quot; 
+-		};
++  static char *enemy_types[] = 
++    {
++      &quot;thrto&quot;, &quot;zfpst&quot;, &quot;shosc&quot;, &quot;dragr&quot;, 
++      &quot;kahbo&quot;, &quot;ilwsp&quot;, 
++      &quot;syrpe&quot;, &quot;kzedr&quot;, &quot;mmrxf&quot;, 
++      &quot;druma&quot;, &quot;earcr&quot;, 
++      &quot;yehte&quot;, &quot;chmav&quot; 
++    };
+   const int num_enemy_types = sizeof(enemy_types)/sizeof(enemy_types[0]);
++
+   if (gobenemies == max_enemies) 
+     return;
+   GobEnemy *ge = new GobEnemy();
+@@ -450,53 +470,73 @@
+     //if (e &gt; num_enemy_types * 2) e = e % num_enemy_types;
+     e = e;
+   }
+-  Ship *ship = create_ship(channel_server, enemy_types[e], &quot;WussieBot&quot;, random(size), random(PI2), enemy_team);
+-  if (!strcmp(enemy_types[e], &quot;shosc&quot;)) ((ShofixtiScout*)ship)-&gt;specialDamage /= 4;
+-  if (!strcmp(enemy_types[e], &quot;zfpst&quot;)) ((ZoqFotPikStinger*)ship)-&gt;specialDamage /= 2;
+-  if (!strcmp(enemy_types[e], &quot;syrpe&quot;)) ((SyreenPenetrator*)ship)-&gt;specialDamage /= 2;
+-  if (!strcmp(enemy_types[e], &quot;dragr&quot;)) ship-&gt;special_drain *= 2;
+-  if (!strcmp(enemy_types[e], &quot;chmav&quot;)) {
+-    ((ChmmrAvatar*)ship)-&gt;weaponDamage += 1;
+-    ((ChmmrAvatar*)ship)-&gt;weaponDamage /= 2;
+-    ((ChmmrAvatar*)ship)-&gt;specialForce *= 2;
+-    ((ChmmrAvatar*)ship)-&gt;specialRange *= 2;
+-  }
++  Ship *ship = create_ship(channel_server, enemy_types[e], &quot;WussieBot&quot;, 
++			   random(size), random(PI2), enemy_team);
++  /*
++  if (!strcmp(enemy_types[e], &quot;shosc&quot;)) 
++    ((ShofixtiScout*)ship)-&gt;specialDamage /= 4;
++  if (!strcmp(enemy_types[e], &quot;zfpst&quot;)) 
++    ((ZoqFotPikStinger*)ship)-&gt;specialDamage /= 2;
++  if (!strcmp(enemy_types[e], &quot;syrpe&quot;)) 
++    ((SyreenPenetrator*)ship)-&gt;specialDamage /= 2;
++  if (!strcmp(enemy_types[e], &quot;dragr&quot;)) 
++    ship-&gt;special_drain *= 2;
++  if (!strcmp(enemy_types[e], &quot;chmav&quot;)) 
++    {
++      ((ChmmrAvatar*)ship)-&gt;weaponDamage += 1;
++      ((ChmmrAvatar*)ship)-&gt;weaponDamage /= 2;
++      ((ChmmrAvatar*)ship)-&gt;specialForce *= 2;
++      ((ChmmrAvatar*)ship)-&gt;specialRange *= 2;
++    }
++  */
++
+   int sb, bz;
+   sb = 1 + e / 4;
+-  if (sb &gt; 2) sb -= 1;
++  if (sb &gt; 2) 
++    sb -= 1;
+   bz = (e - 9) / 2;
+-  if (bz &gt; 1) bz -= 1;
+-  if (sb &lt; 0) sb = 0;
+-	if (bz &lt; 0) bz = 0;
+-	ge-&gt;init(ship, sb, bz);
+-	add(ship-&gt;get_ship_phaser());
+-	//add(ship);
+-	return;
++  if (bz &gt; 1) 
++    bz -= 1;
++  if (sb &lt; 0) 
++    sb = 0;
++  if (bz &lt; 0) 
++    bz = 0;
++  ge-&gt;init(ship, sb, bz);
++  add(ship-&gt;get_ship_phaser());
++  
++  return;
+ }
+ 
+-void GobEnemy::init(Ship *ship, int kill_starbucks, int kill_buckazoids) {
++void GobEnemy::init(Ship *ship, int kill_starbucks, int kill_buckazoids) 
++{
+   STACKTRACE;
+-	this-&gt;ship = ship;
+-	this-&gt;starbucks = kill_starbucks;
+-	this-&gt;buckazoids = kill_buckazoids;
+-	return;
+-	}
+-void GobEnemy::died(SpaceLocation *what) {
++  this-&gt;ship = ship;
++  this-&gt;starbucks = kill_starbucks;
++  this-&gt;buckazoids = kill_buckazoids;
++  return;
++}
++
++void GobEnemy::died(SpaceLocation *what) 
++{
+   STACKTRACE;
+-	GobPlayer *p = gobgame-&gt;get_player(what);
+-	if (p) {
+-		p-&gt;starbucks += starbucks;
+-		p-&gt;buckazoids += buckazoids;
+-		p-&gt;kills += 1;
+-	}
+-	return;
++  GobPlayer *p = gobgame-&gt;get_player(what);
++  if (p) 
++    {
++      p-&gt;starbucks += starbucks;
++      p-&gt;buckazoids += buckazoids;
++      p-&gt;kills += 1;
++    }
++  return;
+ }
+ 
+ 
+-GobPlayer::~GobPlayer() {
+-	free (pair_list);
++GobPlayer::~GobPlayer() 
++{
++  free (pair_list);
+ }
+-void GobPlayer::init(Control *c, TeamCode team) {
++
++void GobPlayer::init(Control *c, TeamCode team) 
++{
+   STACKTRACE;
+   channel = c-&gt;channel;
+   starbucks = 0;
+@@ -515,23 +555,30 @@
+   for (i = 0; ::upgrade_list[i]; i += 1) ::upgrade_list[i]-&gt;index = i;
+   upgrade_list = new Upgrade*[i+1];
+   upgrade_list[i] = NULL;
+-  for (j = 0; j &lt; i; j += 1) {
+-    upgrade_list[j] = ::upgrade_list[j]-&gt;duplicate();
+-    upgrade_list[j]-&gt;clear(NULL, NULL, this);
+-  }
++  for (j = 0; j &lt; i; j += 1) 
++    {
++      upgrade_list[j] = ::upgrade_list[j]-&gt;duplicate();
++      upgrade_list[j]-&gt;clear(NULL, NULL, this);
++    }
+   return;
+ }
+-GobPlayer::pair *GobPlayer::_get_pair(const char *id) {
++
++GobPlayer::pair *GobPlayer::_get_pair(const char *id) 
++{
+   STACKTRACE;
+-  if (!pair_list) return NULL;
++  if (!pair_list) 
++    return NULL;
+   int i;
+-  for (i = 0; i &lt; num_pairs; i += 1) {
+-    if (!strcmp(pair_list[i].id, id)) 
+-			return &amp;pair_list[i];
+-  }
++  for (i = 0; i &lt; num_pairs; i += 1) 
++    {
++      if (!strcmp(pair_list[i].id, id)) 
++	return &amp;pair_list[i];
++    }
+   return NULL;
+ }
+-void GobPlayer::_add_pair(const char *id, int value) {
++
++void GobPlayer::_add_pair(const char *id, int value) 
++{
+   STACKTRACE;
+   if (_get_pair(id)) 
+     {
+@@ -545,125 +592,149 @@
+   return;
+ }
+ 
+-int GobPlayer::read_pair(const char *id) {
++int GobPlayer::read_pair(const char *id) 
++{
+   STACKTRACE;
+   pair *p = _get_pair(id);
+-  if (p) return p-&gt;value;
++  if (p) 
++    return p-&gt;value;
+   return -1;
+ }
+ 
+-void GobPlayer::write_pair(const char *id, int value) {
++void GobPlayer::write_pair(const char *id, int value) 
++{
+   STACKTRACE;
+   pair *p = _get_pair(id);
+-  if (p) p-&gt;value = value;
+-  else _add_pair(id, value);
++  if (p) 
++    p-&gt;value = value;
++  else 
++    _add_pair(id, value);
+   return;
+ }
+-int GobPlayer::charge (char *name, int price_starbucks, int price_buckazoids) {
++
++int GobPlayer::charge (char *name, int price_starbucks, int price_buckazoids) 
++{
+   char buffy1[512];
+   sprintf(buffy1, &quot;Price: %d starbucks plus %d buckazoids&quot;, price_starbucks, price_buckazoids);
+-  if ((starbucks &lt; price_starbucks) || (buckazoids &lt; price_buckazoids)) {
+-    if (game-&gt;is_local(channel)) 
+-      alert(&quot;You don't have enough.&quot;, name, buffy1, &quot;Cancel&quot;, NULL, 0, 0);
+-    return 0;
+-  }
++  if ((starbucks &lt; price_starbucks) || (buckazoids &lt; price_buckazoids)) 
++    {
++      if (game-&gt;is_local(channel)) 
++	alert(&quot;You don't have enough.&quot;, name, buffy1, &quot;Cancel&quot;, NULL, 0, 0);
++      return 0;
++    }
+   int r = 0;
+   if (game-&gt;is_local(channel)) 
+     r = alert (&quot;Do you wish to make this purchase?&quot;, name, buffy1, &quot;&amp;No&quot;, &quot;&amp;Yes&quot;, 'n', 'y');
+   game-&gt;log_int(channel, r);
+-  if (r == 2) {
+-    starbucks -= price_starbucks;
+-    buckazoids -= price_buckazoids;
+-    return 1;
+-  }
++  if (r == 2) 
++    {
++      starbucks -= price_starbucks;
++      buckazoids -= price_buckazoids;
++      return 1;
++    }
+   return 0;
+ }
+-void GobPlayer::new_ship(ShipType *type) {
++
++void GobPlayer::new_ship(ShipType *type) 
++{
+   STACKTRACE;
+   Ship *old = ship;
+   Vector2 pos = 0;
+   double a = 0;
+   int i;
+-  if (old) {
+-    pos = old-&gt;normal_pos();
+-    a = old-&gt;get_angle();
+-  }
++  if (old) 
++    {
++      pos = old-&gt;normal_pos();
++      a = old-&gt;get_angle();
++    }
+   
+   ship = game-&gt;create_ship ( type-&gt;id, control, pos, a, team);
+   
+   
+-  if (panel) panel-&gt;die();
+-	panel = NULL;
+-	panel = new ShipPanel(ship);
+-	panel-&gt;always_redraw = true;
+-	panel-&gt;window-&gt;init(game-&gt;window);
+-	if (game-&gt;is_local(control-&gt;channel)) {
+-		panel-&gt;window-&gt;locate(
+-			0,0.9,
+-			0,0,
+-			0,0.1,
+-			0,0.25
+-		);
+-	}
+-	else {
+-		panel-&gt;window-&gt;locate(
+-			0,0.9,
+-			0,0.25,
+-			0,0.1,
+-			0,0.25
+-		);
+-	}
+-	panel-&gt;set_depth(10);
+-	game-&gt;add(panel);
++  if (panel) 
++    panel-&gt;die();
++  panel = NULL;
++  panel = new ShipPanel(ship);
++  panel-&gt;always_redraw = true;
++  panel-&gt;window-&gt;init(game-&gt;window);
++  if (game-&gt;is_local(control-&gt;channel)) 
++    {
++      panel-&gt;window-&gt;locate(
++			    0,0.9,
++			    0,0,
++			    0,0.1,
++			    0,0.25
++			    );
++    }
++  else 
++    {
++      panel-&gt;window-&gt;locate(
++			    0,0.9,
++			    0,0.25,
++			    0,0.1,
++			    0,0.25
++			    );
++    }
++  panel-&gt;set_depth(10);
++  game-&gt;add(panel);
++  
++  for (i = 0; upgrade_list[i]; i += 1) 
++    {
++      upgrade_list[i]-&gt;clear(old, ship, this);
++    }
++  if (old) 
++    {
++      old-&gt;die();
++      game-&gt;add(ship);
++    }
++  else 
++    game-&gt;add(ship-&gt;get_ship_phaser());
++  return;
++}
+ 
+-	for (i = 0; upgrade_list[i]; i += 1) {
+-		upgrade_list[i]-&gt;clear(old, ship, this);
+-		}
+-	if (old) {
+-		old-&gt;die();
+-		game-&gt;add(ship);
+-		}
+-	else game-&gt;add(ship-&gt;get_ship_phaser());
+-	return;
+-	}
+-
+-void GobStation::buy_new_ship_menu(GobPlayer *s) {
++void GobStation::buy_new_ship_menu(GobPlayer *s) 
++{
+   STACKTRACE;
+ 
+   char buffy1[512], buffy2[512];
+   ShipType *otype = s-&gt;ship-&gt;type;
+   ShipType *ntype = shiptype(build_type);
+-  if (otype == ntype) {
+-    sprintf (buffy1, &quot;You already have a %s&quot;, ntype-&gt;name);
+-    if (game-&gt;is_local(s-&gt;channel)) 
+-      alert(buffy1, NULL, NULL, &quot;&amp;Cancel&quot;, NULL, 'c', 0);
+-    return;
+-  }
++  if (otype == ntype) 
++    {
++      sprintf (buffy1, &quot;You already have a %s&quot;, ntype-&gt;name);
++      if (game-&gt;is_local(s-&gt;channel)) 
++	alert(buffy1, NULL, NULL, &quot;&amp;Cancel&quot;, NULL, 'c', 0);
++      return;
++    }
+   int ossb = (s-&gt;value_starbucks*3) / 4 + (s-&gt;ship-&gt;type-&gt;cost*1)/1;
+   int osbz = (s-&gt;value_buckazoids*3) / 4 + (s-&gt;ship-&gt;type-&gt;cost*1)/1;
+   int nssb = ntype-&gt;cost;
+   int nsbz = ntype-&gt;cost;
+   sprintf (buffy1, &quot;You have a %s worth %d s$ / %d b$&quot;, otype-&gt;name, ossb, osbz);
+   sprintf (buffy2, &quot;A %s costs %d s$ / %d b$&quot;, ntype-&gt;name, nssb, nsbz);
+-  if ((nssb &lt;= (ossb + s-&gt;starbucks)) &amp;&amp; (nsbz &lt;= (osbz + s-&gt;buckazoids))) {
+-    int i = 0;
+-    if (game-&gt;is_local(s-&gt;channel))
+-      i = alert(buffy1, buffy2, &quot;Do you wish to buy it?&quot;, &quot;Yeah!&quot;, &quot;No&quot;, 'y', 'n');
+-    game-&gt;log_int(s-&gt;channel, i);
+-    if (i == 1) {
+-      s-&gt;starbucks -= nssb - ossb;
+-      s-&gt;buckazoids -= nsbz - osbz;
+-      s-&gt;new_ship(ntype);
++  if ((nssb &lt;= (ossb + s-&gt;starbucks)) &amp;&amp; (nsbz &lt;= (osbz + s-&gt;buckazoids))) 
++    {
++      int i = 0;
++      if (game-&gt;is_local(s-&gt;channel))
++	i = alert(buffy1, buffy2, &quot;Do you wish to buy it?&quot;, &quot;Yeah!&quot;, &quot;No&quot;, 'y', 'n');
++      game-&gt;log_int(s-&gt;channel, i);
++      if (i == 1) 
++	{
++	  s-&gt;starbucks -= nssb - ossb;
++	  s-&gt;buckazoids -= nsbz - osbz;
++	  s-&gt;new_ship(ntype);
++	}
+     }
+-  }
+-  else {
+-    if (game-&gt;is_local(s-&gt;channel)) 
+-      alert (buffy1, buffy2, &quot;You don't have enough to buy it&quot;, &quot;Cancel&quot;, NULL, 0, 0);
+-  }
++  else 
++    {
++      if (game-&gt;is_local(s-&gt;channel)) 
++	alert (buffy1, buffy2, &quot;You don't have enough to buy it&quot;, &quot;Cancel&quot;, NULL, 0, 0);
++    }
+   return;
+ }
+ 
+-GobStation::GobStation ( SpaceSprite *pic, SpaceLocation *orbit_me, const char *ship, const char *background) : 
++GobStation::GobStation ( SpaceSprite *pic, SpaceLocation *orbit_me, const char *ship, 
++			 const char *background) : 
+   Orbiter(pic, orbit_me, random() % 200 + 500) 
+ {
+   build_type = ship;
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2004-10-22 22:40:35 UTC (rev 88)
++++ trunk/sources.lst	2004-10-23 10:00:29 UTC (rev 89)
+@@ -80,14 +80,6 @@
+ source/ships/shpstaba.cpp
+ source/tests/testmain.cpp
+ source/tests/testdatapath.cpp
+-source/twgui/twgui.cpp
+-source/twgui/twhelpers.cpp
+-source/twgui/twbuttontypes.cpp
+-source/twgui/twbutton.cpp
+-source/twgui/twmenuexamples.cpp
+-source/twgui/twpopup.cpp
+-source/twgui/twwindow.cpp
+-source/twgui/utils.cpp
+ source/libraries/lua/lib/ldblib.c
+ source/libraries/lua/lib/lauxlib.c
+ source/libraries/lua/lib/lbaselib.c
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000036.html">[Tw-light-svn] r88 - trunk/web
+</A></li>
+	<LI>Next message: <A HREF="000038.html">[Tw-light-svn] r90 - branches/multiplayer-branch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

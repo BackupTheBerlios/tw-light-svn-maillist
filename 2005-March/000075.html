@@ -1,0 +1,370 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r129 - trunk/source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-March/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r129%20-%20trunk/source/games&In-Reply-To=%3C200503061542.j26FgiY8007080%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000076.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r129 - trunk/source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r129%20-%20trunk/source/games&In-Reply-To=%3C200503061542.j26FgiY8007080%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r129 - trunk/source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Mar  6 16:42:44 CET 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000076.html">[Tw-light-svn] r130 - in trunk: gamedata/xml/GOB source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#75">[ date ]</a>
+              <a href="thread.html#75">[ thread ]</a>
+              <a href="subject.html#75">[ subject ]</a>
+              <a href="author.html#75">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-03-06 16:42:43 +0100 (Sun, 06 Mar 2005)
+New Revision: 129
+
+Modified:
+   trunk/source/games/gamehierarchy.cpp
+   trunk/source/games/gamehierarchy.h
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+Log:
+Fixed gliches bug with switchng systems in GOB
+
+Modified: trunk/source/games/gamehierarchy.cpp
+===================================================================
+--- trunk/source/games/gamehierarchy.cpp	2005-02-27 15:15:31 UTC (rev 128)
++++ trunk/source/games/gamehierarchy.cpp	2005-03-06 15:42:43 UTC (rev 129)
+@@ -42,6 +42,7 @@
+ MainGame::MainGame()
+ {
+   g_maingame = this;
++  _active_subgame = &quot;&quot;;
+ }
+ 
+ void MainGame::addsubgame(Game *asubgame, const std::string&amp; name)
+@@ -59,7 +60,7 @@
+ 
+   asubgame-&gt;init(log, &quot;&quot;);	// all subgames share the same log (is this ok?)
+ 
+-  subgame.insert(asubgame);
++  _subgame[name]=asubgame;
+ }
+ 
+ 
+@@ -67,77 +68,50 @@
+ {
+   STACKTRACE;
+ 
+-  subgame.erase(g);
++  _subgame.erase(_subgame.find(g-&gt;_name));
+   g-&gt;log-&gt;deinit();	// this is empty, dunno why
+-  
+   game = NULL;
+-
+   delete g;	// this _must_ be deleted completely, otherwise the gamedata aren't removed  
+ }
+ 
+ 
+-int MainGame::isGameDone()
+-{
+-  for (std::set&lt;Game*&gt;::iterator i = subgame.begin();
+-       i!= subgame.end(); i++)
+-    {
+-      if ((*i)-&gt;isGameDone() != GAME_STATE_FINISHED)
+-	{
+-	  return GAME_STATE_PLAYING;
+-	}
+-    }
+-  return GAME_STATE_FINISHED;
+-}
+-
+ int MainGame::play()
+ {
+   STACKTRACE;
+-  
++
++  // Nothing to play
++  if(!_subgame.size())
++    return GAME_STATE_FINISHED;
++
+   set_resolution(window-&gt;w, window-&gt;h);
+-  
+   prepare();
+   if (is_paused()) unpause();
+   
+-  
+   while(isGameDone() == GAME_STATE_PLAYING)
+     {
+-      //unsigned int time = get_time();
+-      poll_input();
+-      
+-      videosystem-&gt;poll_redraw();
+-      
+-      for (std::set&lt;Game*&gt;::iterator i = subgame.begin();
+-	   i!= subgame.end(); i++)
++      poll_input(); 
++      videosystem-&gt;poll_redraw();     
++      if(!switch_to(_active_subgame))
+ 	{
+-	  if ((*i)-&gt;isGameDone() != GAME_STATE_FINISHED)
+-	    {
+-	      (*i)-&gt;setGameDone(GAME_STATE_PLAYING);
+-	    }
+-	  (*i)-&gt;play();
++	  tw_error((&quot;Unknown sybgame: &quot; + _active_subgame).c_str());
+ 	}
++      (_subgame[_active_subgame])-&gt;play();
+     }
+   return isGameDone();
+ }
+ 
+-
+-
+-struct SubGameP : public std::binary_function&lt;Game*,std::string,bool&gt;
++void MainGame::setActiveGame(const std::string&amp; name)
+ {
+-  bool operator ()(Game* g, std::string name) const
+-  {
+-    if(g-&gt;_name == name)
+-      return true;
+-    return false;
+-  }
+-};
++  _active_subgame = name;
++}
+ 
+ bool MainGame::switch_to(const std::string&amp; name)
+ {
+-  std::set&lt;Game*&gt;::iterator i = std::find_if(subgame.begin(), subgame.end(), std::bind2nd(SubGameP(), name));
+-
+-  if(i!=subgame.end())
++  if(_subgame.find(name)!=_subgame.end())
+     {
+-      (*i)-&gt;prepare();
++      setActiveGame(name);
++      (_subgame[_active_subgame])-&gt;prepare();
++      (_subgame[_active_subgame])-&gt;setGameDone(GAME_STATE_PLAYING);
+       return true;
+     }
+   return false;
+
+Modified: trunk/source/games/gamehierarchy.h
+===================================================================
+--- trunk/source/games/gamehierarchy.h	2005-02-27 15:15:31 UTC (rev 128)
++++ trunk/source/games/gamehierarchy.h	2005-03-06 15:42:43 UTC (rev 129)
+@@ -19,6 +19,8 @@
+ 
+ #include &quot;melee/mgame.h&quot;
+ #include &lt;set&gt;
++#include &lt;map&gt;
++#include &lt;string&gt;
+ 
+ #include &quot;util/history.h&quot;
+ 
+@@ -113,18 +115,20 @@
+ ///  other games are also running in the background). Games and their physics are independent.
+ class MainGame : public Game
+ {
++ protected:
++  std::string _active_subgame;
++  std::map&lt;std::string,Game*&gt; _subgame;
++  
++    /// Switch to subgame by name
++  bool switch_to(const std::string&amp; name);
+  public:
++  
++  MainGame();
+  
+-  MainGame();
+-  std::set&lt;Game*&gt; subgame;
+-  
+-
+-  virtual void addsubgame(Game *asubgame,  const std::string&amp; save);
++  virtual void setActiveGame(const std::string&amp; name);
++  virtual void addsubgame(Game *asubgame,  const std::string&amp; name);
+   virtual void removesubgame(Game* g);
+-  virtual int isGameDone();
+ 
+-  /// Switch to subgame by name
+-  bool switch_to(const std::string&amp; name);
+   virtual int play();
+ };
+ 
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-02-27 15:15:31 UTC (rev 128)
++++ trunk/source/games/ggob.cpp	2005-03-06 15:42:43 UTC (rev 129)
+@@ -98,34 +98,22 @@
+   GobGameBase::prepare();
+   if(maingame-&gt;gobplayer._teleport)
+     {
+-      maingame-&gt;gobplayer.ship = 
+-	create_ship(maingame-&gt;gobplayer.ship-&gt;type-&gt;id,
+-		    _player_control,
+-		    0,//maingame-&gt;gobplayer.ship-&gt;pos(),
+-		    maingame-&gt;gobplayer.ship-&gt;get_angle(),
+-		    maingame-&gt;gobplayer.team);
+-      add(maingame-&gt;gobplayer.ship);
+-      AddPanel();
++      ShipType* type = maingame-&gt;gobplayer.ship-&gt;type;
++      maingame-&gt;gobplayer.ship = NULL;
++      maingame-&gt;gobplayer.new_ship(type);
+       add_focus(_player_control, _player_control-&gt;channel);
+       maingame-&gt;gobplayer._teleport = 0;
+     }
+ }
+ 
+-int GobGame::isGameDone() 
+-{
+-  bool done = true;
+ 
+-  if (maingame-&gt;gobplayer.ship != NULL)
+-    done = false;
+-  
+-  if (done) 
++void GobGame::setGameDone(int done)
++{
++  if(done == GAME_STATE_FINISHED)
+     {
+-      if(_game_state != GAME_STATE_FINISHED)
+-	{
+-	  setGameDone(GAME_STATE_FINISHED );
+-	}
++      maingame-&gt;setGameDone(done);
+     }
+-  return GobGameBase::isGameDone();
++    return GobGameBase::setGameDone(done);
+ }
+ 
+ void GobGame::add_gobplayer(Control *control) 
+@@ -166,7 +154,11 @@
+       ship-&gt;state = 1;
+     }
+   else 
+-    ship = NULL;
++    {
++      ship = NULL;
++      game-&gt;setGameDone(GAME_STATE_FINISHED);
++      tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
++    }
+   return;
+ }
+ 
+@@ -397,6 +389,14 @@
+ 	setGameDone(GAME_STATE_SUSPENDED);
+ 	maingame-&gt;gobplayer._teleport = 1;
+ 	maingame-&gt;gobplayer.ship-&gt;die();
++	if(_name==&quot;Arix&quot;)
++	  {
++	    maingame-&gt;setActiveGame(&quot;Beta&quot;);
++	  }
++	else
++	  {
++	    maingame-&gt;setActiveGame(&quot;Arix&quot;);
++	  }
+ 	return true;
+       }
+       break;
+@@ -1029,24 +1029,6 @@
+ 	return;
+ }
+ 
+-
+-int MainGobGame::isGameDone()
+-{
+-  bool done = true;
+-  if (gobplayer.ship != NULL)
+-    done = false;
+-
+-  if (done) 
+-    {
+-      if(_game_state != GAME_STATE_FINISHED)
+-	{
+-	  setGameDone(GAME_STATE_FINISHED );
+-	  tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
+-	}
+-    }
+-  return Game::isGameDone();
+-}
+-
+ void MainGobGame::init (Log *log, const std::string&amp; save)
+ {
+   MainGame::init(log,save);
+@@ -1055,7 +1037,6 @@
+     {
+       tw_error(&quot;unable to locate start.xml&quot;);
+     };  
+-  //  addsubgame(new GobGame, );
+ }	
+ 
+ void MainGobGame::add_gobplayer(const std::string&amp; system)
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-02-27 15:15:31 UTC (rev 128)
++++ trunk/source/games/ggob.h	2005-03-06 15:42:43 UTC (rev 129)
+@@ -93,7 +93,6 @@
+   virtual void 	init (Log *log, const std::string&amp; save);
+   void add_gobplayer(const std::string&amp; system);
+  protected:
+-  virtual int isGameDone();
+ };
+ 
+ typedef SubGame&lt;MainGobGame&gt; GobGameBase;
+@@ -114,13 +113,12 @@
+   virtual void AddPanel();
+ 
+   virtual void calculate();
+-  virtual int isGameDone();
++  virtual void setGameDone(int done);
+   virtual void ship_died(Ship *who, SpaceLocation *source);
+   virtual void preinit();
+   virtual void init (Log *log, const std::string&amp; save);
+-
+   virtual void play_sound (SAMPLE *sample, SpaceLocation *source, int vol = 256, int freq = 1000);
+-
++  
+   virtual void add_gobplayer(Control *control);
+   virtual GobPlayer *get_player(SpaceLocation *what);
+   int gobenemies, max_enemies;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000076.html">[Tw-light-svn] r130 - in trunk: gamedata/xml/GOB source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#75">[ date ]</a>
+              <a href="thread.html#75">[ thread ]</a>
+              <a href="subject.html#75">[ subject ]</a>
+              <a href="author.html#75">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

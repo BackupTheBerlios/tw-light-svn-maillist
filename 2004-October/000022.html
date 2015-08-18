@@ -1,0 +1,1638 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r74 - in trunk: Util/deditor source web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r74%20-%20in%20trunk%3A%20Util/deditor%20source%20web&In-Reply-To=%3C200410022214.i92MEs6H005192%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000023.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r74 - in trunk: Util/deditor source web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r74%20-%20in%20trunk%3A%20Util/deditor%20source%20web&In-Reply-To=%3C200410022214.i92MEs6H005192%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r74 - in trunk: Util/deditor source web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Oct  3 00:14:54 CEST 2004</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000023.html">[Tw-light-svn] r75 - in branches/multiplayer-branch: . source source/ais source/games source/libraries/raknet source/melee source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-10-03 00:14:53 +0200 (Sun, 03 Oct 2004)
+New Revision: 74
+
+Removed:
+   trunk/web/dialog-editor-win32-62.zip
+Modified:
+   trunk/Util/deditor/mainwidget.cpp
+   trunk/Util/deditor/node.cpp
+   trunk/Util/deditor/node.h
+   trunk/source/scp.cpp
+   trunk/web/downloads.html
+   trunk/web/index.html
+   trunk/web/info.html
+   trunk/web/links.html
+   trunk/web/team.html
+   trunk/web/update.sh
+Log:
+Dialog editor ID order fix
+
+
+Modified: trunk/Util/deditor/mainwidget.cpp
+===================================================================
+--- trunk/Util/deditor/mainwidget.cpp	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/Util/deditor/mainwidget.cpp	2004-10-02 22:14:53 UTC (rev 74)
+@@ -1,514 +1,516 @@
+-
+-#include &quot;mainwidget.h&quot;
+-#include &lt;qtextbrowser.h&gt;
+-#include &lt;qtable.h&gt; 
+-#include &lt;qlistview.h&gt;
+-#include &lt;qlineedit.h&gt;
+-#include &lt;qxml.h&gt; 
+-#include &lt;qfile.h&gt;
+-#include &lt;qmessagebox.h&gt;
+-#include &lt;qmultilineedit.h&gt;
+-#include &lt;qimage.h&gt;
+-#include &lt;qdir.h&gt;
+-#include &lt;qcheckbox.h&gt;
+-#include &lt;qspinbox.h&gt;
+-
+-#include &lt;assert.h&gt;
+-
+-#include &quot;node.h&quot;
+-#include &quot;xmlparser.h&quot;
+-#include &lt;io.h&gt;
+-
+-extern &quot;C&quot; {
+-#	include &quot;lua.h&quot;
+-#	include &quot;lualib.h&quot;
+-#	include &quot;lauxlib.h&quot;
+-}
+-
+-DialogEditor::DialogEditor( QWidget* parent, const char* name, WFlags fl ): DialogEditorGenerated(parent, name, fl)
+-{
+-	WriteLog(&quot;DialogEditor::DialogEditor\n&quot;);
+-	alienTextBrowser-&gt;setFrameStyle( QFrame::Panel | QFrame::Sunken );
+-	alienTextBrowser-&gt;setText(&quot;&lt;HTML&gt;&lt;BODY&gt;&lt;center&gt;&lt;img width=\&quot;100\&quot; height=\&quot;100\&quot; src=\&quot;./tw-logo.png\&quot;&gt;&lt;br&gt;Alien text and picture will be here&lt;/center&gt;&lt;/BODY&gt;&lt;/HTML&gt;&quot;);
+-	alienTextBrowser-&gt;mimeSourceFactory()-&gt;setExtensionType(&quot;qml&quot;, &quot;text/utf8&quot;);
+-
+-	CreateNewNode();
+-	answersListView-&gt;setSorting(-1);
+-}
+-
+-DialogEditor::~DialogEditor()
+-{
+-	WriteLog(&quot;DialogEditor::~DialogEditor\n&quot;);
+-}
+-
+-
+-PlayerAnswer* DialogEditor::getPlayerAnswer(QString&amp; text)
+-{
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	PlayerAnswer * a;
+-	for(a = node-&gt;m_answers.first();
+-			a; a = node-&gt;m_answers.next())
+-		if(a-&gt;m_strText == text)
+-			break;
+-	assert(a&amp;&amp;&quot;Answer was not found in node!!!&quot;);
+-	return a;
+-}
+-
+-int DialogEditor::getPlayerAnswerPos(QString&amp; text)
+-{
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	PlayerAnswer * a;
+-	int pos = 0;
+-	for(a = node-&gt;m_answers.first();
+-			a; a = node-&gt;m_answers.next())
+-			{
+-				if(a-&gt;m_strText == text)
+-					break;
+-				pos++;
+-			}
+-	assert(a&amp;&amp;&quot;Answer was not found in node!!!&quot;);
+-	return pos;
+-}
+-
+-void DialogEditor::removeAnswer()
+-{		
+-	WriteLog(&quot;DialogEditor::removeAnswer()\n&quot;);
+-	QListViewItem * curAnsw = answersListView-&gt;currentItem();
+-	if (!curAnsw)
+-			return;
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	node-&gt;m_answers.remove(getPlayerAnswer(curAnsw-&gt;text(0)));
+-
+-	delete curAnsw;
+-}
+-
+-void DialogEditor::removeNode()
+-{
+-	WriteLog(&quot;DialogEditor::removeNode()\n&quot;);
+-	if(nodeListView-&gt;childCount()==1)
+-		return;
+-	
+-	QListViewItem* item= nodeListView-&gt;currentItem();
+-	QListViewItemIterator it( item );
+-	it++;
+-	if(it.current())
+-	{
+-		nodeListView-&gt;setCurrentItem(it.current());
+-	}
+-	else
+-	{
+-		QListViewItemIterator i( item );
+-		i--;
+-		nodeListView-&gt;setCurrentItem(i.current());
+-	}
+-	delete item;
+-}
+-
+-void DialogEditor::CreateNewNode()
+-{
+-	WriteLog(&quot;DialogEditor::CreateNewNode()\n&quot;);
+-	int nodeCount = nodeListView-&gt;childCount();
+-	
+-	QString strId;
+-	if (nodeCount)
+-	{
+-		int id = 0;
+-		QListViewItem* item = nodeListView-&gt;firstChild ();
+-		QListViewItemIterator it( item );
+-		for(;it.current();it++)
+-		{
+-			if(it.current()-&gt;text(0).toInt()&gt;id)
+-				id = it.current()-&gt;text(0).toInt();
+-		}
+-		strId.sprintf(&quot;%d&quot;,id+1);
+-	}
+-	else
+-	{
+-		strId = &quot;0&quot;;
+-	}
+-	NodeItem* critem = new NodeItem ( nodeListView ) ;
+-
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	if(node)
+-	{
+-		critem-&gt;setFont(node-&gt;m_strFont);
+-		critem-&gt;setPicture(node-&gt;m_strPicture);
+-		critem-&gt;setTextLocation(node-&gt;m_strTextLocation);
+-		critem-&gt;setMusic(node-&gt;m_strMusic);
+-	}
+-	critem-&gt;setName(&quot;New node name&quot;);
+-	critem-&gt;setID( strId );
+-	nodeListView-&gt;setCurrentItem(critem);
+-}
+-
+-void DialogEditor::nodeChangedSlot(QListViewItem* i)
+-{
+-	WriteLog(&quot;DialogEditor::nodeChangedSlot\n&quot;);
+-	NodeItem * node = (NodeItem*)i;
+-	if (!i)
+-		return;
+-
+-	// disconnect edits from previous
+-	disconnect( nodeIdLineEdit,     0, 0, 0 );
+-	disconnect( NodeNameLineEdit,   0, 0, 0 );
+-	disconnect( MusicEdit,          0, 0, 0 );
+-	disconnect( BackgroundLineEdit, 0, 0, 0 );
+-	disconnect( textLocationLineEdit, 0, 0, 0 );
+-	disconnect( fontLineEdit, 0, 0, 0 );
+-
+-	connect( nodeIdLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		node, SLOT(setID(const QString&amp;)));
+-	connect( NodeNameLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		node, SLOT(setName(const QString&amp;)));
+-	connect( MusicEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		node, SLOT(setMusic(const QString&amp;)));
+-	connect( BackgroundLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		node, SLOT(setPicture(const QString&amp;)));
+-	connect( textLocationLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		node, SLOT(setTextLocation(const QString&amp;)));
+-	connect( fontLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		node, SLOT(setFont(const QString&amp;)));
+-
+-	nodeIdLineEdit      -&gt;setText(node-&gt;text(0));
+-	NodeNameLineEdit    -&gt;setText(node-&gt;text(1));
+-	MusicEdit           -&gt;setText(node-&gt;m_strMusic);
+-	BackgroundLineEdit  -&gt;setText(node-&gt;m_strPicture);
+-	textLocationLineEdit-&gt;setText(node-&gt;m_strTextLocation);
+-	fontLineEdit        -&gt;setText(node-&gt;m_strFont);
+-
+-	// Set Browser
+-	QString browserText;
+-	browserText += &quot;&lt;HTML&gt;&lt;BODY&gt;&lt;CENTER&gt;&quot;;
+-	if(node-&gt;m_strPicture!= &quot;&quot;)
+-	{
+-		browserText += QString(&quot;&quot;).sprintf(&quot;&lt;img width=\&quot;100\&quot; height=\&quot;100\&quot;&quot;
+-			&quot;src=\&quot;alien\&quot; alt=\&quot;Home\&quot; border=\&quot;0\&quot;&gt;&lt;br&gt;&quot;);
+-	}
+-
+-	browserText += node-&gt;m_strAlienText;
+-	browserText += &quot;&lt;/CENTER&gt;&lt;/BODY&gt;&lt;/HTML&gt;&quot;;
+-
+-	alienTextBrowser-&gt;mimeSourceFactory()-&gt;setFilePath( QDir::currentDirPath() );
+-	alienTextBrowser-&gt;mimeSourceFactory()-&gt;setImage(&quot;alien&quot;,QImage(BackgroundLineEdit-&gt;text()));
+-	alienTextBrowser-&gt;setText(browserText);
+-
+-	// Set Answers
+-	disconnectAnswer();
+-	answersListView-&gt;clear();
+-	for(PlayerAnswer * a = node-&gt;m_answers. last();
+-		a; a = node-&gt;m_answers.prev())
+-	{
+-		if (script_check_condition(a-&gt;m_strAppearCondition) || !TestModeCheckBox-&gt;isChecked ())
+-			QListViewItem * item = new QListViewItem(answersListView,a-&gt;m_strText);
+-	//	answersListView     -&gt;setCurrentItem(item);
+-	}
+-}
+-
+-
+-void DialogEditor::disconnectAnswer()
+-{
+-	WriteLog(&quot;DialogEditor::disconnectAnswer()\n&quot;);
+-	disconnect(condition1LineEdit, 0, 0, 0);
+-	condition1LineEdit-&gt;setText(&quot;&quot;);
+-	condition1LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(condition2LineEdit, 0, 0, 0);
+-	condition2LineEdit-&gt;setText(&quot;&quot;);
+-	condition2LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(condition3LineEdit, 0, 0, 0);
+-	condition3LineEdit-&gt;setText(&quot;&quot;);
+-	condition3LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(condition4LineEdit, 0, 0, 0);
+-	condition4LineEdit-&gt;setText(&quot;&quot;);
+-	condition4LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(condition5LineEdit, 0, 0, 0);
+-	condition5LineEdit-&gt;setText(&quot;&quot;);
+-	condition5LineEdit-&gt;setEnabled(FALSE);
+-
+-	disconnect(action1LineEdit, 0, 0, 0);
+-	action1LineEdit-&gt;setText(&quot;&quot;);
+-	action1LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(action2LineEdit, 0, 0, 0);
+-	action2LineEdit-&gt;setText(&quot;&quot;);
+-	action2LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(action3LineEdit, 0, 0, 0);
+-	action3LineEdit-&gt;setText(&quot;&quot;);
+-	action3LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(action4LineEdit, 0, 0, 0);
+-	action4LineEdit-&gt;setText(&quot;&quot;);
+-	action4LineEdit-&gt;setEnabled(FALSE);
+-	disconnect(action5LineEdit, 0, 0, 0);
+-	action5LineEdit-&gt;setText(&quot;&quot;);
+-	action5LineEdit-&gt;setEnabled(FALSE);
+-
+-	disconnect(appearConditionLineEdit, 0, 0, 0);
+-	appearConditionLineEdit-&gt;setText(&quot;&quot;);
+-	appearConditionLineEdit-&gt;setEnabled(FALSE);
+-}
+-
+-
+-void DialogEditor::answerChangedSlot(QListViewItem* item)
+-{
+-	WriteLog(&quot;DialogEditor::answerChangedSlot(QListViewItem* item)\n&quot;);
+-	disconnectAnswer();
+-	if(!item)
+-	{
+-		condition1LineEdit-&gt;setEnabled ( FALSE ) ;
+-		return;
+-	}
+-	
+-
+-	PlayerAnswer * pa = getPlayerAnswer(item-&gt;text(0));
+-
+-	connect( condition1LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setCondition1Line(const QString&amp;)));
+-	condition1LineEdit-&gt;setEnabled(TRUE);
+-	connect( condition2LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setCondition2Line(const QString&amp;)));
+-	condition2LineEdit-&gt;setEnabled(TRUE);
+-	connect( condition3LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setCondition3Line(const QString&amp;)));
+-	condition3LineEdit-&gt;setEnabled(TRUE);
+-	connect( condition4LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setCondition4Line(const QString&amp;)));
+-	condition4LineEdit-&gt;setEnabled(TRUE);
+-	connect( condition5LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setCondition5Line(const QString&amp;)));
+-	condition5LineEdit-&gt;setEnabled(TRUE);
+-
+-	connect( action1LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setAction1Line(const QString&amp;)));
+-	action1LineEdit-&gt;setEnabled(TRUE);
+-	connect( action2LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setAction2Line(const QString&amp;)));
+-	action2LineEdit-&gt;setEnabled(TRUE);
+-	connect( action3LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setAction3Line(const QString&amp;)));
+-	action3LineEdit-&gt;setEnabled(TRUE);
+-	connect( action4LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setAction4Line(const QString&amp;)));
+-	action4LineEdit-&gt;setEnabled(TRUE);
+-	connect( action5LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setAction5Line(const QString&amp;)));
+-	action5LineEdit-&gt;setEnabled(TRUE);
+-
+-	connect( appearConditionLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
+-		pa, SLOT(setAppearCondition(const QString&amp;)));
+-	appearConditionLineEdit-&gt;setEnabled(TRUE);
+-
+-	condition1LineEdit-&gt;setText(pa-&gt;m_strCond[0]);
+-	condition2LineEdit-&gt;setText(pa-&gt;m_strCond[1]);
+-	condition3LineEdit-&gt;setText(pa-&gt;m_strCond[2]);
+-	condition4LineEdit-&gt;setText(pa-&gt;m_strCond[3]);
+-	condition5LineEdit-&gt;setText(pa-&gt;m_strCond[4]);
+-
+-	action1LineEdit-&gt;setText(pa-&gt;m_strAct[0]);
+-	action2LineEdit-&gt;setText(pa-&gt;m_strAct[1]);
+-	action3LineEdit-&gt;setText(pa-&gt;m_strAct[2]);
+-	action4LineEdit-&gt;setText(pa-&gt;m_strAct[3]);
+-	action5LineEdit-&gt;setText(pa-&gt;m_strAct[4]);
+-
+-	appearConditionLineEdit-&gt;setText(pa-&gt;m_strAppearCondition);
+-
+-	commonMultiLineEdit-&gt;setText(item-&gt;text(0));
+-}
+-
+-QString DialogEditor::GetXML()
+-{
+-	WriteLog(&quot;DialogEditor::edited()\n&quot;);
+-	QString strRes;
+-	strRes += &quot;&lt;NODES&gt;&quot;;
+-	QListViewItem* item = nodeListView-&gt;firstChild ();
+-	QListViewItemIterator it( item );
+-	for(;it.current();it++)
+-	{
+-		NodeItem *item = (NodeItem*)it.current();
+-		strRes += &quot;&lt;NODE id=\&quot;&quot;   + TWEscapeXML(item-&gt;text(0)) + &quot;\&quot;&quot;;
+-		strRes += &quot; name=\&quot;&quot;      + TWEscapeXML(item-&gt;text(1)) + &quot;\&quot;&quot;;
+-		strRes += &quot; music=\&quot;&quot;     + TWEscapeXML(item-&gt;m_strMusic) + &quot;\&quot;&quot;;
+-		strRes += &quot; background=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strPicture) + &quot;\&quot;&quot;;
+-		strRes += &quot; alien_text=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strAlienText) + &quot;\&quot;&quot;;
+-		strRes += &quot; font=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strFont) + &quot;\&quot;&quot;;
+-		strRes += &quot; text_location=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strTextLocation) + &quot;\&quot;&quot;;
+-		strRes += &quot;&gt;&quot;;
+-
+-
+-		for(PlayerAnswer * a = item-&gt;m_answers.first();
+-			a; a = item-&gt;m_answers.next())
+-		{	
+-			strRes +=&quot;&lt;PLAYER_ANSWER &quot;;
+-			strRes +=&quot;text=\&quot;&quot; + TWEscapeXML(a-&gt;m_strText) + &quot;\&quot; &quot;;
+-			strRes +=&quot;appear_condition=\&quot;&quot; + TWEscapeXML(a-&gt;m_strAppearCondition) + &quot;\&quot;&gt;&quot;;
+-			
+-			for(int j=0;j&lt;5;j++)
+-				if( !(a-&gt;m_strCond[j].isEmpty()) &amp;&amp; !(a-&gt;m_strAct[j].isEmpty()))
+-				{
+-					strRes += &quot;&lt;ACTION &quot;;
+-					strRes += &quot;condition=\&quot;&quot; + TWEscapeXML(a-&gt;m_strCond[j]) + &quot;\&quot; &quot;;
+-					strRes += &quot;action=\&quot;&quot; + TWEscapeXML(a-&gt;m_strAct[j]) + &quot;\&quot;&gt;&quot;;
+-					strRes += &quot;&lt;/ACTION&gt;&quot;;
+-				}
+-			strRes +=&quot;&lt;/PLAYER_ANSWER&gt;&quot;;
+-		}
+-		strRes += &quot;&lt;/NODE&gt;&quot;;
+-	}
+-	strRes += &quot;&lt;/NODES&gt;&quot;;
+-	return strRes;
+-}
+-
+-void DialogEditor::loadDoc(QString fileName)
+-{
+-  WriteLog(&quot;DialogEditor::loadDoc(QString fileName)\n&quot;);
+-
+-  if(fileName.find(&quot;.xml&quot;, 0, FALSE)==-1)
+-  {
+-	  QString mes;
+-	  mes.sprintf(&quot;file:\n%s\nDoes not have xml extension&quot;, fileName);
+-
+-	  QMessageBox::warning (this, &quot;TW-Light editor&quot;,
+-			mes);
+-  }
+-
+-  QFile f(fileName);
+-  XMLParser handler(this);
+-  QXmlInputSource source(f);
+-
+-  QXmlSimpleReader reader;
+-  reader.setContentHandler( &amp;handler );
+-  reader.parse( source );
+-}
+-
+-void DialogEditor::setAlienText()
+-{
+-	WriteLog(&quot;DialogEditor::setAlienText()\n&quot;);
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	node-&gt;m_strAlienText = commonMultiLineEdit-&gt;text();
+-	nodeChangedSlot(node);
+-}
+-
+-void DialogEditor::setPlayerAnswerText()
+-{
+-	WriteLog(&quot;DialogEditor::setPlayerAnswerText()\n&quot;);
+-	QListViewItem * curAnsw = answersListView-&gt;currentItem();
+-	if(!curAnsw)
+-		return;
+-	PlayerAnswer * pa = getPlayerAnswer(curAnsw-&gt;text(0));
+-	pa-&gt;m_strText = commonMultiLineEdit-&gt;text();
+-	curAnsw-&gt;setText(0, commonMultiLineEdit-&gt;text());
+-}
+-
+-void DialogEditor::AddPlayerAnswer()
+-{
+-	WriteLog(&quot;DialogEditor::AddPlayerAnswer()\n&quot;);
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	PlayerAnswer * item = new PlayerAnswer;
+-	item-&gt;m_strText = commonMultiLineEdit-&gt;text();
+-	item-&gt;m_strAppearCondition = &quot;1&quot;;
+-
+-	node-&gt;m_answers.append(item);
+-	nodeChangedSlot(node);
+-}
+-
+-// To be implemented
+-bool DialogEditor::script_check_condition(QString &amp; condition)
+-{
+-	WriteLog(&quot;DialogEditor::script_check_condition(QString &amp; condition)\n&quot;);
+-	return true;
+-}
+-
+-NodeItem * DialogEditor::getNodeItem(QString&amp; id)
+-{
+-	WriteLog(&quot;DialogEditor::getNodeItem(QString&amp; id)\n&quot;);
+-	QListViewItem* item = nodeListView-&gt;firstChild ();
+-	QListViewItemIterator it( item );
+-	for(;it.current();it++)
+-	{
+-		if(it.current()-&gt;text(0) == id)
+-			return (NodeItem *)it.current();
+-	}
+-	return NULL;
+-}
+-
+-
+-void DialogEditor::processAnswerSlot(QListViewItem* item)
+-{
+-	WriteLog(&quot;DialogEditor::processAnswerSlot(QListViewItem* item)\n&quot;);
+-	PlayerAnswer* answer = getPlayerAnswer(item-&gt;text(0));
+-	for(int i=0;i&lt;5;i++)
+-	{
+-			lua_State * L = lua_open();
+-			lua_baselibopen(L);
+-			lua_iolibopen(L);
+-			lua_strlibopen(L);
+-			lua_mathlibopen(L);
+-			bool eva = lua_dostring(L, &quot;function goto(id) gotoid = id; end&quot;);
+-			eva = lua_dostring(L, answer-&gt;m_strAct[i]);
+-			lua_getglobal(L, &quot;gotoid&quot;);
+-			if (lua_isstring(L, -1)) 
+-			{
+-				const char * id = lua_tostring(L, -1);
+-				NodeItem * node = getNodeItem(QString(id));
+-				if(node)
+-					nodeListView-&gt;setCurrentItem(node);
+-			}
+-			lua_close(L);
+-	}
+-}
+-
+-void DialogEditor::answerUp()
+-{
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	QListViewItem * item = answersListView-&gt;currentItem();
+-
+-	if(!node || !item)
+-		return;
+-	
+-	int pos = getPlayerAnswerPos(item-&gt;text(0));
+-	if(pos==0)
+-		return;
+-	
+-	QString strText = item-&gt;text(0);
+-	PlayerAnswer* answer = node-&gt;m_answers.take(pos);
+-	node-&gt;m_answers.insert(pos-1, answer);
+-
+-	nodeChangedSlot(node);	
+-
+-	QListViewItemIterator it( answersListView-&gt;firstChild () );
+-	for(;it.current();it++)
+-	{
+-		if(it.current()-&gt;text(0)==strText)
+-		{
+-			answersListView-&gt;setCurrentItem(it.current());
+-			break;
+-		}
+-	}
+-}
+-
+-void DialogEditor::answerDown()
+-{
+-	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
+-	QListViewItem * item = answersListView-&gt;currentItem();
+-	
+-	if(!node || !item)
+-		return;
+-
+-	int pos = getPlayerAnswerPos(item-&gt;text(0));
+-	if(pos==node-&gt;m_answers.count()-1 )
+-		return;
+-	
+-	QString strText = item-&gt;text(0);
+-
+-	PlayerAnswer* answer = node-&gt;m_answers.take(pos);
+-	node-&gt;m_answers.insert(pos+1, answer);
+-
+-	nodeChangedSlot(node);	
+-	QListViewItemIterator it( answersListView-&gt;firstChild () );
+-	for(;it.current();it++)
+-	{
+-		if(it.current()-&gt;text(0)==strText)
+-		{
+-			answersListView-&gt;setCurrentItem(it.current());
+-			break;
+-		}
+-	}
+-}
+-
++
++#include &quot;mainwidget.h&quot;
++#include &lt;qtextbrowser.h&gt;
++#include &lt;qtable.h&gt; 
++#include &lt;qlistview.h&gt;
++#include &lt;qlineedit.h&gt;
++#include &lt;qxml.h&gt; 
++#include &lt;qfile.h&gt;
++#include &lt;qmessagebox.h&gt;
++#include &lt;qmultilineedit.h&gt;
++#include &lt;qimage.h&gt;
++#include &lt;qdir.h&gt;
++#include &lt;qcheckbox.h&gt;
++#include &lt;qspinbox.h&gt;
++
++#include &lt;assert.h&gt;
++
++#include &quot;node.h&quot;
++#include &quot;xmlparser.h&quot;
++#include &lt;io.h&gt;
++
++extern &quot;C&quot; {
++#	include &quot;lua.h&quot;
++#	include &quot;lualib.h&quot;
++#	include &quot;lauxlib.h&quot;
++}
++
++DialogEditor::DialogEditor( QWidget* parent, const char* name, WFlags fl ): DialogEditorGenerated(parent, name, fl)
++{
++	WriteLog(&quot;DialogEditor::DialogEditor\n&quot;);
++	alienTextBrowser-&gt;setFrameStyle( QFrame::Panel | QFrame::Sunken );
++	alienTextBrowser-&gt;setText(&quot;&lt;HTML&gt;&lt;BODY&gt;&lt;center&gt;&lt;img width=\&quot;100\&quot; height=\&quot;100\&quot; src=\&quot;./tw-logo.png\&quot;&gt;&lt;br&gt;Alien text and picture will be here&lt;/center&gt;&lt;/BODY&gt;&lt;/HTML&gt;&quot;);
++	alienTextBrowser-&gt;mimeSourceFactory()-&gt;setExtensionType(&quot;qml&quot;, &quot;text/utf8&quot;);
++
++	CreateNewNode();
++	answersListView-&gt;setSorting(-1);
++}
++
++DialogEditor::~DialogEditor()
++{
++	WriteLog(&quot;DialogEditor::~DialogEditor\n&quot;);
++}
++
++
++PlayerAnswer* DialogEditor::getPlayerAnswer(QString&amp; text)
++{
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	PlayerAnswer * a;
++	for(a = node-&gt;m_answers.first();
++			a; a = node-&gt;m_answers.next())
++		if(a-&gt;m_strText == text)
++			break;
++	assert(a&amp;&amp;&quot;Answer was not found in node!!!&quot;);
++	return a;
++}
++
++int DialogEditor::getPlayerAnswerPos(QString&amp; text)
++{
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	PlayerAnswer * a;
++	int pos = 0;
++	for(a = node-&gt;m_answers.first();
++			a; a = node-&gt;m_answers.next())
++			{
++				if(a-&gt;m_strText == text)
++					break;
++				pos++;
++			}
++	assert(a&amp;&amp;&quot;Answer was not found in node!!!&quot;);
++	return pos;
++}
++
++void DialogEditor::removeAnswer()
++{		
++	WriteLog(&quot;DialogEditor::removeAnswer()\n&quot;);
++	QListViewItem * curAnsw = answersListView-&gt;currentItem();
++	if (!curAnsw)
++			return;
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	node-&gt;m_answers.remove(getPlayerAnswer(curAnsw-&gt;text(0)));
++
++	delete curAnsw;
++}
++
++void DialogEditor::removeNode()
++{
++	WriteLog(&quot;DialogEditor::removeNode()\n&quot;);
++	if(nodeListView-&gt;childCount()==1)
++		return;
++	
++	QListViewItem* item= nodeListView-&gt;currentItem();
++	QListViewItemIterator it( item );
++	it++;
++	if(it.current())
++	{
++		nodeListView-&gt;setCurrentItem(it.current());
++	}
++	else
++	{
++		QListViewItemIterator i( item );
++		i--;
++		nodeListView-&gt;setCurrentItem(i.current());
++	}
++	delete item;
++}
++
++void DialogEditor::CreateNewNode()
++{
++	WriteLog(&quot;DialogEditor::CreateNewNode()\n&quot;);
++	int nodeCount = nodeListView-&gt;childCount();
++	
++	QString strId;
++	if (nodeCount)
++	{
++		int id = 0;
++		QListViewItem* item = nodeListView-&gt;firstChild ();
++		QListViewItemIterator it( item );
++		for(;it.current();it++)
++		{
++			if(it.current()-&gt;text(0).toInt()&gt;id)
++				id = it.current()-&gt;text(0).toInt();
++		}
++		strId.sprintf(&quot;%d&quot;,id+1);
++	}
++	else
++	{
++		strId = &quot;0&quot;;
++	}
++	NodeItem* critem = new NodeItem ( nodeListView ) ;
++
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	if(node)
++	{
++		critem-&gt;setFont(node-&gt;m_strFont);
++		critem-&gt;setPicture(node-&gt;m_strPicture);
++		critem-&gt;setTextLocation(node-&gt;m_strTextLocation);
++		critem-&gt;setMusic(node-&gt;m_strMusic);
++	}
++	critem-&gt;setName(&quot;New node name&quot;);
++	critem-&gt;setID( strId );
++	nodeListView-&gt;setCurrentItem(critem);
++}
++
++void DialogEditor::nodeChangedSlot(QListViewItem* i)
++{
++	WriteLog(&quot;DialogEditor::nodeChangedSlot\n&quot;);
++	NodeItem * node = (NodeItem*)i;
++	if (!i)
++		return;
++
++	// disconnect edits from previous
++	disconnect( nodeIdLineEdit,     0, 0, 0 );
++	disconnect( NodeNameLineEdit,   0, 0, 0 );
++	disconnect( MusicEdit,          0, 0, 0 );
++	disconnect( BackgroundLineEdit, 0, 0, 0 );
++	disconnect( textLocationLineEdit, 0, 0, 0 );
++	disconnect( fontLineEdit, 0, 0, 0 );
++
++	connect( nodeIdLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		node, SLOT(setID(const QString&amp;)));
++	connect( NodeNameLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		node, SLOT(setName(const QString&amp;)));
++	connect( MusicEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		node, SLOT(setMusic(const QString&amp;)));
++	connect( BackgroundLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		node, SLOT(setPicture(const QString&amp;)));
++	connect( textLocationLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		node, SLOT(setTextLocation(const QString&amp;)));
++	connect( fontLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		node, SLOT(setFont(const QString&amp;)));
++
++	nodeIdLineEdit      -&gt;setText(node-&gt;text(0));
++	NodeNameLineEdit    -&gt;setText(node-&gt;text(1));
++	MusicEdit           -&gt;setText(node-&gt;m_strMusic);
++	BackgroundLineEdit  -&gt;setText(node-&gt;m_strPicture);
++	textLocationLineEdit-&gt;setText(node-&gt;m_strTextLocation);
++	fontLineEdit        -&gt;setText(node-&gt;m_strFont);
++
++	// Set Browser
++	QString browserText;
++	browserText += &quot;&lt;HTML&gt;&lt;BODY&gt;&lt;CENTER&gt;&quot;;
++	if(node-&gt;m_strPicture!= &quot;&quot;)
++	{
++		browserText += QString(&quot;&quot;).sprintf(&quot;&lt;img width=\&quot;100\&quot; height=\&quot;100\&quot;&quot;
++			&quot;src=\&quot;alien\&quot; alt=\&quot;Home\&quot; border=\&quot;0\&quot;&gt;&lt;br&gt;&quot;);
++	}
++
++	browserText += node-&gt;m_strAlienText;
++	browserText += &quot;&lt;/CENTER&gt;&lt;/BODY&gt;&lt;/HTML&gt;&quot;;
++
++	alienTextBrowser-&gt;mimeSourceFactory()-&gt;setFilePath( QDir::currentDirPath() );
++	alienTextBrowser-&gt;mimeSourceFactory()-&gt;setImage(&quot;alien&quot;,QImage(BackgroundLineEdit-&gt;text()));
++	alienTextBrowser-&gt;setText(browserText);
++
++	// Set Answers
++	disconnectAnswer();
++	answersListView-&gt;clear();
++	for(PlayerAnswer * a = node-&gt;m_answers. last();
++		a; a = node-&gt;m_answers.prev())
++	{
++		if (script_check_condition(a-&gt;m_strAppearCondition) || !TestModeCheckBox-&gt;isChecked ())
++			QListViewItem * item = new QListViewItem(answersListView,a-&gt;m_strText);
++	//	answersListView     -&gt;setCurrentItem(item);
++	}
++}
++
++
++void DialogEditor::disconnectAnswer()
++{
++	WriteLog(&quot;DialogEditor::disconnectAnswer()\n&quot;);
++	disconnect(condition1LineEdit, 0, 0, 0);
++	condition1LineEdit-&gt;setText(&quot;&quot;);
++	condition1LineEdit-&gt;setEnabled(FALSE);
++	disconnect(condition2LineEdit, 0, 0, 0);
++	condition2LineEdit-&gt;setText(&quot;&quot;);
++	condition2LineEdit-&gt;setEnabled(FALSE);
++	disconnect(condition3LineEdit, 0, 0, 0);
++	condition3LineEdit-&gt;setText(&quot;&quot;);
++	condition3LineEdit-&gt;setEnabled(FALSE);
++	disconnect(condition4LineEdit, 0, 0, 0);
++	condition4LineEdit-&gt;setText(&quot;&quot;);
++	condition4LineEdit-&gt;setEnabled(FALSE);
++	disconnect(condition5LineEdit, 0, 0, 0);
++	condition5LineEdit-&gt;setText(&quot;&quot;);
++	condition5LineEdit-&gt;setEnabled(FALSE);
++
++	disconnect(action1LineEdit, 0, 0, 0);
++	action1LineEdit-&gt;setText(&quot;&quot;);
++	action1LineEdit-&gt;setEnabled(FALSE);
++	disconnect(action2LineEdit, 0, 0, 0);
++	action2LineEdit-&gt;setText(&quot;&quot;);
++	action2LineEdit-&gt;setEnabled(FALSE);
++	disconnect(action3LineEdit, 0, 0, 0);
++	action3LineEdit-&gt;setText(&quot;&quot;);
++	action3LineEdit-&gt;setEnabled(FALSE);
++	disconnect(action4LineEdit, 0, 0, 0);
++	action4LineEdit-&gt;setText(&quot;&quot;);
++	action4LineEdit-&gt;setEnabled(FALSE);
++	disconnect(action5LineEdit, 0, 0, 0);
++	action5LineEdit-&gt;setText(&quot;&quot;);
++	action5LineEdit-&gt;setEnabled(FALSE);
++
++	disconnect(appearConditionLineEdit, 0, 0, 0);
++	appearConditionLineEdit-&gt;setText(&quot;&quot;);
++	appearConditionLineEdit-&gt;setEnabled(FALSE);
++}
++
++
++void DialogEditor::answerChangedSlot(QListViewItem* item)
++{
++	WriteLog(&quot;DialogEditor::answerChangedSlot(QListViewItem* item)\n&quot;);
++	disconnectAnswer();
++	if(!item)
++	{
++		condition1LineEdit-&gt;setEnabled ( FALSE ) ;
++		return;
++	}
++	
++
++	PlayerAnswer * pa = getPlayerAnswer(item-&gt;text(0));
++
++	connect( condition1LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setCondition1Line(const QString&amp;)));
++	condition1LineEdit-&gt;setEnabled(TRUE);
++	connect( condition2LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setCondition2Line(const QString&amp;)));
++	condition2LineEdit-&gt;setEnabled(TRUE);
++	connect( condition3LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setCondition3Line(const QString&amp;)));
++	condition3LineEdit-&gt;setEnabled(TRUE);
++	connect( condition4LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setCondition4Line(const QString&amp;)));
++	condition4LineEdit-&gt;setEnabled(TRUE);
++	connect( condition5LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setCondition5Line(const QString&amp;)));
++	condition5LineEdit-&gt;setEnabled(TRUE);
++
++	connect( action1LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setAction1Line(const QString&amp;)));
++	action1LineEdit-&gt;setEnabled(TRUE);
++	connect( action2LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setAction2Line(const QString&amp;)));
++	action2LineEdit-&gt;setEnabled(TRUE);
++	connect( action3LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setAction3Line(const QString&amp;)));
++	action3LineEdit-&gt;setEnabled(TRUE);
++	connect( action4LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setAction4Line(const QString&amp;)));
++	action4LineEdit-&gt;setEnabled(TRUE);
++	connect( action5LineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setAction5Line(const QString&amp;)));
++	action5LineEdit-&gt;setEnabled(TRUE);
++
++	connect( appearConditionLineEdit, SIGNAL( textChanged ( const QString&amp;)), 
++		pa, SLOT(setAppearCondition(const QString&amp;)));
++	appearConditionLineEdit-&gt;setEnabled(TRUE);
++
++	condition1LineEdit-&gt;setText(pa-&gt;m_strCond[0]);
++	condition2LineEdit-&gt;setText(pa-&gt;m_strCond[1]);
++	condition3LineEdit-&gt;setText(pa-&gt;m_strCond[2]);
++	condition4LineEdit-&gt;setText(pa-&gt;m_strCond[3]);
++	condition5LineEdit-&gt;setText(pa-&gt;m_strCond[4]);
++
++	action1LineEdit-&gt;setText(pa-&gt;m_strAct[0]);
++	action2LineEdit-&gt;setText(pa-&gt;m_strAct[1]);
++	action3LineEdit-&gt;setText(pa-&gt;m_strAct[2]);
++	action4LineEdit-&gt;setText(pa-&gt;m_strAct[3]);
++	action5LineEdit-&gt;setText(pa-&gt;m_strAct[4]);
++
++	appearConditionLineEdit-&gt;setText(pa-&gt;m_strAppearCondition);
++
++	commonMultiLineEdit-&gt;setText(item-&gt;text(0));
++}
++
++QString DialogEditor::GetXML()
++{
++	WriteLog(&quot;DialogEditor::edited()\n&quot;);
++	QString strRes;
++	strRes += &quot;&lt;NODES&gt;&quot;;
++	QListViewItem* item = nodeListView-&gt;firstChild ();
++	QListViewItemIterator it( item );
++	for(;it.current();it++)
++	{
++		NodeItem *item = (NodeItem*)it.current();
++		strRes += &quot;&lt;NODE id=\&quot;&quot;   + TWEscapeXML(item-&gt;text(0)) + &quot;\&quot;&quot;;
++		strRes += &quot; name=\&quot;&quot;      + TWEscapeXML(item-&gt;text(1)) + &quot;\&quot;&quot;;
++		strRes += &quot; music=\&quot;&quot;     + TWEscapeXML(item-&gt;m_strMusic) + &quot;\&quot;&quot;;
++		strRes += &quot; background=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strPicture) + &quot;\&quot;&quot;;
++		strRes += &quot; alien_text=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strAlienText) + &quot;\&quot;&quot;;
++		strRes += &quot; font=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strFont) + &quot;\&quot;&quot;;
++		strRes += &quot; text_location=\&quot;&quot;+ TWEscapeXML(item-&gt;m_strTextLocation) + &quot;\&quot;&quot;;
++		strRes += &quot;&gt;&quot;;
++
++
++		for(PlayerAnswer * a = item-&gt;m_answers.first();
++			a; a = item-&gt;m_answers.next())
++		{	
++			strRes +=&quot;&lt;PLAYER_ANSWER &quot;;
++			strRes +=&quot;text=\&quot;&quot; + TWEscapeXML(a-&gt;m_strText) + &quot;\&quot; &quot;;
++			strRes +=&quot;appear_condition=\&quot;&quot; + TWEscapeXML(a-&gt;m_strAppearCondition) + &quot;\&quot;&gt;&quot;;
++			
++			for(int j=0;j&lt;5;j++)
++				if( !(a-&gt;m_strCond[j].isEmpty()) &amp;&amp; !(a-&gt;m_strAct[j].isEmpty()))
++				{
++					strRes += &quot;&lt;ACTION &quot;;
++					strRes += &quot;condition=\&quot;&quot; + TWEscapeXML(a-&gt;m_strCond[j]) + &quot;\&quot; &quot;;
++					strRes += &quot;action=\&quot;&quot; + TWEscapeXML(a-&gt;m_strAct[j]) + &quot;\&quot;&gt;&quot;;
++					strRes += &quot;&lt;/ACTION&gt;&quot;;
++				}
++			strRes +=&quot;&lt;/PLAYER_ANSWER&gt;&quot;;
++		}
++		strRes += &quot;&lt;/NODE&gt;&quot;;
++	}
++	strRes += &quot;&lt;/NODES&gt;&quot;;
++	return strRes;
++}
++
++void DialogEditor::loadDoc(QString fileName)
++{
++  WriteLog(&quot;DialogEditor::loadDoc(QString fileName)\n&quot;);
++
++  if(fileName.find(&quot;.xml&quot;, 0, FALSE)==-1)
++  {
++	  QString mes;
++	  mes.sprintf(&quot;file:\n%s\nDoes not have xml extension&quot;, fileName);
++
++	  QMessageBox::warning (this, &quot;TW-Light editor&quot;,
++			mes);
++  }
++
++  QFile f(fileName);
++  XMLParser handler(this);
++  QXmlInputSource source(f);
++
++  QXmlSimpleReader reader;
++  reader.setContentHandler( &amp;handler );
++  reader.parse( source );
++  if(nodeListView-&gt; childCount ())
++	nodeListView-&gt;setCurrentItem( nodeListView-&gt;firstChild ());
++}
++
++void DialogEditor::setAlienText()
++{
++	WriteLog(&quot;DialogEditor::setAlienText()\n&quot;);
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	node-&gt;m_strAlienText = commonMultiLineEdit-&gt;text();
++	nodeChangedSlot(node);
++}
++
++void DialogEditor::setPlayerAnswerText()
++{
++	WriteLog(&quot;DialogEditor::setPlayerAnswerText()\n&quot;);
++	QListViewItem * curAnsw = answersListView-&gt;currentItem();
++	if(!curAnsw)
++		return;
++	PlayerAnswer * pa = getPlayerAnswer(curAnsw-&gt;text(0));
++	pa-&gt;m_strText = commonMultiLineEdit-&gt;text();
++	curAnsw-&gt;setText(0, commonMultiLineEdit-&gt;text());
++}
++
++void DialogEditor::AddPlayerAnswer()
++{
++	WriteLog(&quot;DialogEditor::AddPlayerAnswer()\n&quot;);
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	PlayerAnswer * item = new PlayerAnswer;
++	item-&gt;m_strText = commonMultiLineEdit-&gt;text();
++	item-&gt;m_strAppearCondition = &quot;1&quot;;
++
++	node-&gt;m_answers.append(item);
++	nodeChangedSlot(node);
++}
++
++// To be implemented
++bool DialogEditor::script_check_condition(QString &amp; condition)
++{
++	WriteLog(&quot;DialogEditor::script_check_condition(QString &amp; condition)\n&quot;);
++	return true;
++}
++
++NodeItem * DialogEditor::getNodeItem(QString&amp; id)
++{
++	WriteLog(&quot;DialogEditor::getNodeItem(QString&amp; id)\n&quot;);
++	QListViewItem* item = nodeListView-&gt;firstChild ();
++	QListViewItemIterator it( item );
++	for(;it.current();it++)
++	{
++		if(it.current()-&gt;text(0) == id)
++			return (NodeItem *)it.current();
++	}
++	return NULL;
++}
++
++
++void DialogEditor::processAnswerSlot(QListViewItem* item)
++{
++	WriteLog(&quot;DialogEditor::processAnswerSlot(QListViewItem* item)\n&quot;);
++	PlayerAnswer* answer = getPlayerAnswer(item-&gt;text(0));
++	for(int i=0;i&lt;5;i++)
++	{
++			lua_State * L = lua_open();
++			lua_baselibopen(L);
++			lua_iolibopen(L);
++			lua_strlibopen(L);
++			lua_mathlibopen(L);
++			bool eva = lua_dostring(L, &quot;function goto(id) gotoid = id; end&quot;);
++			eva = lua_dostring(L, answer-&gt;m_strAct[i]);
++			lua_getglobal(L, &quot;gotoid&quot;);
++			if (lua_isstring(L, -1)) 
++			{
++				const char * id = lua_tostring(L, -1);
++				NodeItem * node = getNodeItem(QString(id));
++				if(node)
++					nodeListView-&gt;setCurrentItem(node);
++			}
++			lua_close(L);
++	}
++}
++
++void DialogEditor::answerUp()
++{
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	QListViewItem * item = answersListView-&gt;currentItem();
++
++	if(!node || !item)
++		return;
++	
++	int pos = getPlayerAnswerPos(item-&gt;text(0));
++	if(pos==0)
++		return;
++	
++	QString strText = item-&gt;text(0);
++	PlayerAnswer* answer = node-&gt;m_answers.take(pos);
++	node-&gt;m_answers.insert(pos-1, answer);
++
++	nodeChangedSlot(node);	
++
++	QListViewItemIterator it( answersListView-&gt;firstChild () );
++	for(;it.current();it++)
++	{
++		if(it.current()-&gt;text(0)==strText)
++		{
++			answersListView-&gt;setCurrentItem(it.current());
++			break;
++		}
++	}
++}
++
++void DialogEditor::answerDown()
++{
++	NodeItem * node = (NodeItem*)nodeListView-&gt;currentItem();
++	QListViewItem * item = answersListView-&gt;currentItem();
++	
++	if(!node || !item)
++		return;
++
++	int pos = getPlayerAnswerPos(item-&gt;text(0));
++	if(pos==node-&gt;m_answers.count()-1 )
++		return;
++	
++	QString strText = item-&gt;text(0);
++
++	PlayerAnswer* answer = node-&gt;m_answers.take(pos);
++	node-&gt;m_answers.insert(pos+1, answer);
++
++	nodeChangedSlot(node);	
++	QListViewItemIterator it( answersListView-&gt;firstChild () );
++	for(;it.current();it++)
++	{
++		if(it.current()-&gt;text(0)==strText)
++		{
++			answersListView-&gt;setCurrentItem(it.current());
++			break;
++		}
++	}
++}
++
+
+Modified: trunk/Util/deditor/node.cpp
+===================================================================
+--- trunk/Util/deditor/node.cpp	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/Util/deditor/node.cpp	2004-10-02 22:14:53 UTC (rev 74)
+@@ -1,111 +1,123 @@
+-
+-#include &quot;node.h&quot;
+-
+-PlayerAnswer::PlayerAnswer()
+-{
+-	m_strAppearCondition = &quot;&quot;;
+-	m_strText = &quot;&quot;;
+-
+-	m_strCond[0] = &quot;&quot;;
+-	m_strCond[1] = &quot;&quot;;
+-	m_strCond[2] = &quot;&quot;;
+-	m_strCond[3] = &quot;&quot;;
+-	m_strCond[4] = &quot;&quot;;
+-
+-	m_strAct[0] = &quot;&quot;;
+-	m_strAct[1] = &quot;&quot;;
+-	m_strAct[2] = &quot;&quot;;
+-	m_strAct[3] = &quot;&quot;;
+-	m_strAct[4] = &quot;&quot;;
+-}
+-
+-void PlayerAnswer::setCondition1Line(const QString&amp; text)
+-{
+-	m_strCond[0] = text;
+-}
+-void PlayerAnswer::setCondition2Line(const QString&amp; text)
+-{
+-	m_strCond[1] = text;
+-}
+-void PlayerAnswer::setCondition3Line(const QString&amp; text)
+-{
+-	m_strCond[2] = text;
+-}
+-void PlayerAnswer::setCondition4Line(const QString&amp; text)
+-{
+-	m_strCond[3] = text;
+-}
+-void PlayerAnswer::setCondition5Line(const QString&amp; text)
+-{
+-	m_strCond[4] = text;
+-}
+-
+-
+-void PlayerAnswer::setAction1Line(const QString&amp; text)
+-{
+-	m_strAct[0] = text;
+-}
+-void PlayerAnswer::setAction2Line(const QString&amp; text)
+-{
+-	m_strAct[1] = text;
+-}
+-void PlayerAnswer::setAction3Line(const QString&amp; text)
+-{
+-	m_strAct[2] = text;
+-}
+-void PlayerAnswer::setAction4Line(const QString&amp; text)
+-{
+-	m_strAct[3] = text;
+-}
+-
+-void PlayerAnswer::setAction5Line(const QString&amp; text)
+-{
+-	m_strAct[4] = text;
+-}
+-
+-void PlayerAnswer::setAppearCondition(const QString&amp; text)
+-{
+-	m_strAppearCondition = text;
+-}
+-
+-
+-NodeItem::NodeItem ( QListView * parent ):
+-	QListViewItem(parent) 
+-{
+-		m_strMusic = &quot;&quot;;
+-		m_strPicture = &quot;&quot;;
+-		m_strAlienText =&quot;&quot;;
+-		m_strTextLocation = &quot;&quot;;
+-		m_strFont = &quot;&quot;;
+-}; 
+-
+-void NodeItem::setID       ( const QString &amp; text)
+-{
+-	setText(0,text);
+-}
+-void NodeItem::setName     ( const QString &amp; text)
+-{
+-	setText(1,text);
+-}
+-void NodeItem::setMusic    ( const QString &amp; text)
+-{
+-	m_strMusic = text;
+-}
+-void NodeItem::setPicture  ( const QString &amp; text)
+-{
+-	m_strPicture = text;
+-}
+-void NodeItem::setAlienText( const QString &amp; text)
+-{
+-	m_strAlienText = text;
+-}
+-void NodeItem::setTextLocation(const QString&amp; text)
+-{
+-	m_strTextLocation = text;
+-}
+-
+-void NodeItem::setFont(const QString&amp; text)
+-{
+-	m_strFont = text;
+-}
+-
++
++#include &lt;qmessagebox.h&gt;
++
++#include &quot;node.h&quot;
++
++PlayerAnswer::PlayerAnswer()
++{
++	m_strAppearCondition = &quot;&quot;;
++	m_strText = &quot;&quot;;
++
++	m_strCond[0] = &quot;&quot;;
++	m_strCond[1] = &quot;&quot;;
++	m_strCond[2] = &quot;&quot;;
++	m_strCond[3] = &quot;&quot;;
++	m_strCond[4] = &quot;&quot;;
++
++	m_strAct[0] = &quot;&quot;;
++	m_strAct[1] = &quot;&quot;;
++	m_strAct[2] = &quot;&quot;;
++	m_strAct[3] = &quot;&quot;;
++	m_strAct[4] = &quot;&quot;;
++}
++
++void PlayerAnswer::setCondition1Line(const QString&amp; text)
++{
++	m_strCond[0] = text;
++}
++void PlayerAnswer::setCondition2Line(const QString&amp; text)
++{
++	m_strCond[1] = text;
++}
++void PlayerAnswer::setCondition3Line(const QString&amp; text)
++{
++	m_strCond[2] = text;
++}
++void PlayerAnswer::setCondition4Line(const QString&amp; text)
++{
++	m_strCond[3] = text;
++}
++void PlayerAnswer::setCondition5Line(const QString&amp; text)
++{
++	m_strCond[4] = text;
++}
++
++
++void PlayerAnswer::setAction1Line(const QString&amp; text)
++{
++	m_strAct[0] = text;
++}
++void PlayerAnswer::setAction2Line(const QString&amp; text)
++{
++	m_strAct[1] = text;
++}
++void PlayerAnswer::setAction3Line(const QString&amp; text)
++{
++	m_strAct[2] = text;
++}
++void PlayerAnswer::setAction4Line(const QString&amp; text)
++{
++	m_strAct[3] = text;
++}
++
++void PlayerAnswer::setAction5Line(const QString&amp; text)
++{
++	m_strAct[4] = text;
++}
++
++void PlayerAnswer::setAppearCondition(const QString&amp; text)
++{
++	m_strAppearCondition = text;
++}
++
++
++QString NodeItem::key ( int column, bool ascending ) const
++{
++	bool ok;
++	int id = text(column).toInt( &amp;ok, 10 ); 
++
++	QString strKey;
++	strKey.sprintf(&quot;%10d&quot;, id);
++	return strKey;
++}
++
++NodeItem::NodeItem ( QListView * parent ):
++	QListViewItem(parent) 
++{
++		m_strMusic = &quot;&quot;;
++		m_strPicture = &quot;&quot;;
++		m_strAlienText =&quot;&quot;;
++		m_strTextLocation = &quot;&quot;;
++		m_strFont = &quot;&quot;;
++}; 
++
++void NodeItem::setID       ( const QString &amp; text)
++{
++	setText(0,text);
++}
++void NodeItem::setName     ( const QString &amp; text)
++{
++	setText(1,text);
++}
++void NodeItem::setMusic    ( const QString &amp; text)
++{
++	m_strMusic = text;
++}
++void NodeItem::setPicture  ( const QString &amp; text)
++{
++	m_strPicture = text;
++}
++void NodeItem::setAlienText( const QString &amp; text)
++{
++	m_strAlienText = text;
++}
++void NodeItem::setTextLocation(const QString&amp; text)
++{
++	m_strTextLocation = text;
++}
++
++void NodeItem::setFont(const QString&amp; text)
++{
++	m_strFont = text;
++}
++
+
+Modified: trunk/Util/deditor/node.h
+===================================================================
+--- trunk/Util/deditor/node.h	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/Util/deditor/node.h	2004-10-02 22:14:53 UTC (rev 74)
+@@ -1,62 +1,65 @@
+-#ifndef TW_DIALOG_EDITOR_NODE
+-#define TW_DIALOG_EDITOR_NODE
+-
+-#include &lt;qlistview.h&gt;
+-#include &lt;qstring.h&gt;
+-#include &lt;qlistbox.h&gt;
+-#include &lt;qsortedlist.h&gt;
+-
+-class PlayerAnswer : public QObject
+-{
+-	Q_OBJECT
+-public:
+-	PlayerAnswer();
+-	
+-	QString m_strText;
+-	QString m_strAppearCondition;
+-
+-	QString m_strCond[5];
+-	QString m_strAct[5];
+-
+-public slots:
+-	virtual void setCondition1Line(const QString&amp;);
+-	virtual void setCondition2Line(const QString&amp;);
+-	virtual void setCondition3Line(const QString&amp;);
+-	virtual void setCondition4Line(const QString&amp;);
+-	virtual void setCondition5Line(const QString&amp;);
+-	virtual void setAction1Line(const QString&amp;);
+-	virtual void setAction2Line(const QString&amp;);
+-	virtual void setAction3Line(const QString&amp;);
+-	virtual void setAction4Line(const QString&amp;);
+-	virtual void setAction5Line(const QString&amp;);
+-	virtual void setAppearCondition(const QString&amp;);
+-};
+-
+-
+-class NodeItem : public QObject, public QListViewItem
+-{ 
+-  Q_OBJECT
+-	// column 0 - String id, 1 - string name
+-public:
+-
+-	NodeItem ( QListView * parent ); 
+-
+-	QString m_strMusic;
+-	QString m_strPicture;
+-	QString m_strAlienText;
+-	QString m_strTextLocation;
+-	QString m_strFont;
+-
+-	QList&lt;PlayerAnswer&gt; m_answers;
+-public slots:
+-	virtual void setID       ( const QString &amp; text);
+-	virtual void setName     ( const QString &amp; text);
+-	virtual void setMusic    ( const QString &amp; text);
+-	virtual void setPicture  ( const QString &amp; text);
+-	virtual void setAlienText( const QString &amp; text);
+-	virtual void setTextLocation(const QString&amp; text);
+-	virtual void setFont(const QString&amp; text);
+-};
+-
+-
+-#endif
++#ifndef TW_DIALOG_EDITOR_NODE
++#define TW_DIALOG_EDITOR_NODE
++
++#include &lt;qlistview.h&gt;
++#include &lt;qstring.h&gt;
++#include &lt;qlistbox.h&gt;
++#include &lt;qsortedlist.h&gt;
++
++class PlayerAnswer : public QObject
++{
++	Q_OBJECT
++public:
++	PlayerAnswer();
++	
++	QString m_strText;
++	QString m_strAppearCondition;
++
++	QString m_strCond[5];
++	QString m_strAct[5];
++
++public slots:
++	virtual void setCondition1Line(const QString&amp;);
++	virtual void setCondition2Line(const QString&amp;);
++	virtual void setCondition3Line(const QString&amp;);
++	virtual void setCondition4Line(const QString&amp;);
++	virtual void setCondition5Line(const QString&amp;);
++	virtual void setAction1Line(const QString&amp;);
++	virtual void setAction2Line(const QString&amp;);
++	virtual void setAction3Line(const QString&amp;);
++	virtual void setAction4Line(const QString&amp;);
++	virtual void setAction5Line(const QString&amp;);
++	virtual void setAppearCondition(const QString&amp;);
++};
++
++
++class NodeItem : public QObject, public QListViewItem
++{ 
++  Q_OBJECT
++	// column 0 - String id, 1 - string name
++public:
++
++	NodeItem ( QListView * parent ); 
++
++	QString m_strMusic;
++	QString m_strPicture;
++	QString m_strAlienText;
++	QString m_strTextLocation;
++	QString m_strFont;
++
++	QList&lt;PlayerAnswer&gt; m_answers;
++
++	QString key ( int column, bool ascending ) const;
++
++public slots:
++	virtual void setID       ( const QString &amp; text);
++	virtual void setName     ( const QString &amp; text);
++	virtual void setMusic    ( const QString &amp; text);
++	virtual void setPicture  ( const QString &amp; text);
++	virtual void setAlienText( const QString &amp; text);
++	virtual void setTextLocation(const QString&amp; text);
++	virtual void setFont(const QString&amp; text);
++};
++
++
++#endif
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/source/scp.cpp	2004-10-02 22:14:53 UTC (rev 74)
+@@ -250,6 +250,10 @@
+   int pic = rand()%waitpics.size();
+ 
+   BITMAP * temp = load_bitmap(waitpics[pic].c_str(), NULL);
++  if(!temp)
++    {
++      tw_error(&quot;Unable to load background!!!\n%s&quot;, waitpics[pic].c_str());
++    }
+   stretch_blit(temp, screen, 0, 0, temp-&gt;w, temp-&gt;h, 0, 0, screen-&gt;w, screen-&gt;h);
+   destroy_bitmap(temp);
+   release_screen();
+@@ -651,7 +655,6 @@
+     
+     videosystem-&gt;set_resolution(screen_width, screen_height, screen_bpp, fullscreen);
+     register_bitmap_file_type(&quot;jpg&quot;, load_jpg, NULL);
+-    showLoadingScreen();
+     
+     if(!theme)
+ 	theme = agup_theme_by_name(&quot;Photon&quot;);
+@@ -670,6 +673,8 @@
+     tw_sound-&gt;set_sound_volume(tw_sound-&gt;load_sound_volume());
+     tw_sound-&gt;set_music_volume(tw_sound-&gt;load_music_volume());
+     
++    showLoadingScreen();
++    
+     View *v = NULL;
+     v = get_view ( get_config_string(&quot;View&quot;, &quot;View&quot;, NULL) , NULL );
+     if (!v) v = get_view ( &quot;Hero&quot;, NULL );
+
+Deleted: trunk/web/dialog-editor-win32-62.zip
+===================================================================
+(Binary files differ)
+
+Modified: trunk/web/downloads.html
+===================================================================
+--- trunk/web/downloads.html	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/web/downloads.html	2004-10-02 22:14:53 UTC (rev 74)
+@@ -17,7 +17,7 @@
+         &lt;img src=&quot;./3dlogo.jpg&quot; alt=&quot;&quot; width=&quot;200&quot; height=&quot;120&quot; /&gt; 
+       &lt;/td&gt;
+       &lt;td&gt;
+-      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  id=&quot;curpagelink&quot; href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://bugs.cs.iupui.edu/cgi-bin/bugzilla/">http://bugs.cs.iupui.edu/cgi-bin/bugzilla/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
++      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  id=&quot;curpagelink&quot; href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://tw-light.berlios.de/mantis/">http://tw-light.berlios.de/mantis/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
+       &lt;/td&gt;
+     &lt;/tr&gt;
+   &lt;/table&gt;
+@@ -32,7 +32,7 @@
+ &lt;p class=&quot;indented&quot;&gt;
+ To successfully compile the sources and play the game on Linux/Unix you first need 
+ &lt;a href=&quot;<A HREF="http://www.allegro.cc/files/index.html">http://www.allegro.cc/files/index.html</A>&quot;&gt;Allegro&lt;/a&gt;, SDL 1.2.5 (or newer),
+-libogg and libvorbis installed, See makefile after unpacking for more instructions.
++SDL_mixer with ogg support installed. See makefile after unpacking for more instructions.
+ 	&lt;!--	
+ 	 and &lt;a href=&quot;<A HREF="http://www.lua.org">http://www.lua.org</A>&quot;&gt;Lua&lt;/a&gt;
+ 	View &lt;a href=&quot;&quot;&gt;ChangeLog&lt;/a&gt; to see the list of the latest changes.&lt;br&gt;
+@@ -40,8 +40,10 @@
+ &lt;/p&gt;
+ &lt;p class=&quot;indented&quot;&gt;
+ If you want to contribute TW-Light by writting good dialogs, download and use 
+-our dialog editor. The latest version is &lt;b&gt;62&lt;/b&gt;. You can download Windows binaries 
+-&lt;a href=&quot;./dialog-editor-win32-62.zip&quot;&gt;here&lt;/a&gt;.
++our dialog editor. The latest version is &lt;b&gt;73&lt;/b&gt;. You can download Windows binaries 
++&lt;a href=&quot;./dialog-editor-win32-73.zip&quot;&gt;here&lt;/a&gt;. This 
++&lt;a href=&quot;./tutorial.zip&quot;&gt;tutorial&lt;/a&gt; contains few instruction about how to use it.
++
+ &lt;/p&gt;
+ &lt;/div&gt;
+ 
+
+Modified: trunk/web/index.html
+===================================================================
+--- trunk/web/index.html	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/web/index.html	2004-10-02 22:14:53 UTC (rev 74)
+@@ -17,7 +17,7 @@
+         &lt;img src=&quot;./3dlogo.jpg&quot; alt=&quot;&quot; width=&quot;200&quot; height=&quot;120&quot; /&gt; 
+       &lt;/td&gt;
+       &lt;td&gt;
+-      &lt;a id=&quot;curpagelink&quot; href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://bugs.cs.iupui.edu/cgi-bin/bugzilla/">http://bugs.cs.iupui.edu/cgi-bin/bugzilla/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
++      &lt;a id=&quot;curpagelink&quot; href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://tw-light.berlios.de/mantis/">http://tw-light.berlios.de/mantis/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
+       &lt;/td&gt;
+     &lt;/tr&gt;
+   &lt;/table&gt;
+
+Modified: trunk/web/info.html
+===================================================================
+--- trunk/web/info.html	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/web/info.html	2004-10-02 22:14:53 UTC (rev 74)
+@@ -16,7 +16,7 @@
+         &lt;img src=&quot;./3dlogo.jpg&quot; alt=&quot;&quot; width=&quot;200&quot; height=&quot;120&quot; /&gt; 
+       &lt;/td&gt;
+       &lt;td&gt;
+-      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a id=&quot;curpagelink&quot; href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://bugs.cs.iupui.edu/cgi-bin/bugzilla/">http://bugs.cs.iupui.edu/cgi-bin/bugzilla/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
++      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a id=&quot;curpagelink&quot; href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://tw-light.berlios.de/mantis/">http://tw-light.berlios.de/mantis/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
+       &lt;/td&gt;
+     &lt;/tr&gt;
+   &lt;/table&gt;
+
+Modified: trunk/web/links.html
+===================================================================
+--- trunk/web/links.html	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/web/links.html	2004-10-02 22:14:53 UTC (rev 74)
+@@ -17,7 +17,7 @@
+         &lt;img src=&quot;./3dlogo.jpg&quot; alt=&quot;&quot; width=&quot;200&quot; height=&quot;120&quot; /&gt; 
+       &lt;/td&gt;
+       &lt;td&gt;
+-      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://bugs.cs.iupui.edu/cgi-bin/bugzilla/">http://bugs.cs.iupui.edu/cgi-bin/bugzilla/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a id=&quot;curpagelink&quot; href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
++      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://tw-light.berlios.de/mantis/">http://tw-light.berlios.de/mantis/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a id=&quot;curpagelink&quot; href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
+       &lt;/td&gt;
+     &lt;/tr&gt;
+   &lt;/table&gt;
+@@ -27,7 +27,7 @@
+   &lt;h3&gt;TW-Light resources&lt;/h3&gt;
+   &lt;ul&gt;
+     &lt;li&gt;&lt;a href=&quot;<A HREF="http://developer.berlios.de/projects/tw-light/">http://developer.berlios.de/projects/tw-light/</A>&quot;&gt;BerliOS: TW-Light Project Info&lt;/a&gt;&lt;/li&gt;
+-    &lt;li&gt;&lt;a href=&quot;<A HREF="http://bugs.cs.iupui.edu/cgi-bin/bugzilla/">http://bugs.cs.iupui.edu/cgi-bin/bugzilla/</A>&quot;&gt;TW-Light Bugzilla&lt;/a&gt; &lt;/li&gt;
++    &lt;li&gt;&lt;a href=&quot;<A HREF="http://tw-light.berlios.de/mantis/">http://tw-light.berlios.de/mantis/</A>&quot;&gt;TW-Light Bugzilla&lt;/a&gt; &lt;/li&gt;
+     &lt;li&gt;&lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;TimeWarp Forum (official)&lt;/a&gt; &lt;/li&gt;
+ &lt;/ul&gt;
+ 
+
+Modified: trunk/web/team.html
+===================================================================
+--- trunk/web/team.html	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/web/team.html	2004-10-02 22:14:53 UTC (rev 74)
+@@ -16,7 +16,7 @@
+         &lt;img src=&quot;./3dlogo.jpg&quot; alt=&quot;&quot; width=&quot;200&quot; height=&quot;120&quot; /&gt; 
+       &lt;/td&gt;
+       &lt;td&gt;
+-      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a id=&quot;curpagelink&quot; href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://bugs.cs.iupui.edu/cgi-bin/bugzilla/">http://bugs.cs.iupui.edu/cgi-bin/bugzilla/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
++      &lt;a href=&quot;./index.html&quot;&gt;News&lt;/a&gt; | &lt;a href=&quot;./info.html&quot;&gt;Info&lt;/a&gt; | &lt;a id=&quot;curpagelink&quot; href=&quot;./team.html&quot;&gt;Team&lt;/a&gt; | &lt;a  href=&quot;./downloads.html&quot;&gt;Downloads&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://openfacts.berlios.de/index-en.phtml?title=TW-Light">http://openfacts.berlios.de/index-en.phtml?title=TW-Light</A>&quot;&gt;Wiki&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://tw-light.berlios.de/mantis/">http://tw-light.berlios.de/mantis/</A>&quot;&gt;Bug Database&lt;/a&gt; | &lt;a href=&quot;<A HREF="http://timewarp.sourceforge.net/forum/index.php">http://timewarp.sourceforge.net/forum/index.php</A>&quot;&gt;Forum&lt;/a&gt; | &lt;a href=&quot;./links.html&quot;&gt;Links&lt;/a&gt;
+       &lt;/td&gt;
+     &lt;/tr&gt;
+   &lt;/table&gt;
+
+Modified: trunk/web/update.sh
+===================================================================
+--- trunk/web/update.sh	2004-09-29 20:59:37 UTC (rev 73)
++++ trunk/web/update.sh	2004-10-02 22:14:53 UTC (rev 74)
+@@ -1,2 +1,2 @@
+ #!/bin/bash
+-pscp siglogo.jpeg <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
++pscp info.html downloads.html index.html links.html team.html <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000023.html">[Tw-light-svn] r75 - in branches/multiplayer-branch: . source source/ais source/games source/libraries/raknet source/melee source/ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,45 @@
+From yurand at mail.berlios.de  Fri Feb  2 21:51:27 2007
+From: yurand at mail.berlios.de (yurand at BerliOS)
+Date: Fri, 2 Feb 2007 21:51:27 +0100
+Subject: [Tw-light-svn] r212 - trunk
+Message-ID: <200702022051.l12KpRWv016090@sheep.berlios.de>
+
+Author: yurand
+Date: 2007-02-02 21:51:27 +0100 (Fri, 02 Feb 2007)
+New Revision: 212
+
+Modified:
+   trunk/makefile
+Log:
+removed python-config dependance
+
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2007-01-26 10:50:42 UTC (rev 211)
++++ trunk/makefile	2007-02-02 20:51:27 UTC (rev 212)
+@@ -124,16 +124,17 @@
+ 	CFLAGS += -DWIN32 -I mingw-libs/include -I mingw-libs/include/SDL 
+ 	LIBS += -L mingw-libs/lib -lalleg -lwinmm -lws2_32 -lSDL -lSDLmain -lpython24 -lz 
+ else
++	PYTHON_VER=${shell python -c "import sys;print sys.version[:3]"}
+ 	TIMESTAMP = ${shell LC_TIME="POSIX" date +%c}
+ 	EXPDIR=tw-light-$(PRODUCTVERSION)r$(SVNVERSION)
+ 	CFLAGS += -DLINUX
+ 	INCLUDES := ${shell allegro-config --cflags} ${shell sdl-config --cflags} 
+-	CFLAGS += $(INCLUDES)
+-	LIBS_CONFIG := ${shell allegro-config --libs} -pthread ${shell sdl-config --libs} ${shell python-config} 
+-	LIBS += $(LIBS_CONFIG) -lc -lXt -L/usr/X11R6/lib -lX11 -lm -lz
++	CFLAGS += $(INCLUDES) -I/usr/include/python$(PYTHON_VER)
++	LIBS_CONFIG := ${shell allegro-config --libs} -pthread ${shell sdl-config --libs}
++	LIBS += $(LIBS_CONFIG) -lpython$(PYTHON_VER) -lc -lXt -L/usr/X11R6/lib -lX11 -lm -lz
+ endif
+ 
+-CFLAGS += -I./source -I./source/libraries -I/usr/include/python2.4
++CFLAGS += -I./source -I./source/libraries
+ 
+ LIBS += -lSDL_mixer
+ 
+
+
+

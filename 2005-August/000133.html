@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r187 - trunk/source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r187%20-%20trunk/source/games&In-Reply-To=%3C200508220228.j7M2SHXs014831%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000132.html">
+   <LINK REL="Next"  HREF="000134.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r187 - trunk/source/games</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r187%20-%20trunk/source/games&In-Reply-To=%3C200508220228.j7M2SHXs014831%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r187 - trunk/source/games">youbastrd at berlios.de
+       </A><BR>
+    <I>Mon Aug 22 04:28:17 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000132.html">[Tw-light-svn] r186 - trunk/source/melee
+</A></li>
+        <LI>Next message: <A HREF="000134.html">[Tw-light-svn] r188 - in trunk: . gamedata/images/ships/shpconho gamedata/images/ships/shptauda source source/games source/python source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#133">[ date ]</a>
+              <a href="thread.html#133">[ thread ]</a>
+              <a href="subject.html#133">[ subject ]</a>
+              <a href="author.html#133">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2005-08-22 04:27:59 +0200 (Mon, 22 Aug 2005)
+New Revision: 187
+
+Modified:
+   trunk/source/games/ggob.cpp
+Log:
+Fix: Bug 57: Exiting starbase screen dialog creates visual error
+At the end of the GobStation::station_screen(), a call to 
+game-&gt;redraw() is made.
+Also, I've reformatted the code slightly to aid readability.
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-08-19 05:55:05 UTC (rev 186)
++++ trunk/source/games/ggob.cpp	2005-08-22 02:27:59 UTC (rev 187)
+@@ -948,80 +948,68 @@
+     int r = 0;
+     if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
+       r = tw_do_dialog(game-&gt;window, station_dialog, STATION_DIALOG_DEPART);
+-        game-&gt;log_int(gobgame-&gt;_player_control-&gt;channel, r);
+-        switch (r) {
+-        case STATION_DIALOG_UPGRADE: {
+-          upgrade_menu(this, s);
+-                aa_set_mode(AA_DITHER);
+-                aa_stretch_blit(background, game-&gt;window-&gt;surface, 
+-                        0,0,background-&gt;w,background-&gt;h, 
+-                        game-&gt;window-&gt;x,game-&gt;window-&gt;y,
+-                        game-&gt;window-&gt;w, game-&gt;window-&gt;h);
+-        }
+-          break;
+-        case STATION_DIALOG_NEWSHIP: 
+-          {
+-            buy_new_ship_menu(s);
+-          }
+-          break;
+-        case STATION_DIALOG_REPAIR: 
+-          {
+-            if (s-&gt;ship-&gt;crew == s-&gt;ship-&gt;crew_max) 
+-              {
+-            if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
+-              alert(&quot;You don't need repairs&quot;, &quot;&quot;, &quot;&quot;, &quot;Oh, okay&quot;, &quot;I knew that&quot;, 0, 0);         
+-            break;
+-              }
+-            int p = 0;
+-            if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
+-              p = alert3(&quot;Which would you prefer&quot;, &quot;to pay for your repairs&quot;, &quot;&quot;, &quot;1 &amp;Starbuck&quot;, &quot;1 &amp;Buckazoid&quot;, &quot;&amp;Nothing!&quot;, 's', 'b', 'n');
+-            game-&gt;log_int(gobgame-&gt;_player_control-&gt;channel, p);
+-            switch (p) {
+-            case 1: 
+-              {
+-            if (s-&gt;starbucks) 
+-              {
+-                s-&gt;starbucks -= 1;
+-                s-&gt;ship-&gt;crew = s-&gt;ship-&gt;crew_max;
+-              }
+-            else 
+-              {
+-                if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
+-                  alert(&quot;You don't have enough!&quot;, NULL, NULL, &quot;&amp;Shit&quot;, NULL, 's', 0);
+-              }
+-              }
+-              break;
+-            case 2: 
+-              {
+-            if (s-&gt;buckazoids) 
+-              {
+-                s-&gt;buckazoids -= 1;
+-                s-&gt;ship-&gt;crew = s-&gt;ship-&gt;crew_max;
+-              }
+-            else 
+-              {
+-                if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
+-                  alert(&quot;You don't have enough!&quot;, NULL, NULL, &quot;&amp;Shit&quot;, NULL, 's', 0);
+-              }
+-              }
+-              break;
+-            case 3: 
+-              {
+-            r = STATION_DIALOG_DEPART;
+-              }
+-              break;
+-            }
+-          }
+-          break;
+-        case STATION_DIALOG_COMMANDER:
+-          {
+-            chat_with_player();
+-          }
+-          break;
+-        }
+-        if (r == STATION_DIALOG_DEPART) 
+-          break;
++        
++    game-&gt;log_int(gobgame-&gt;_player_control-&gt;channel, r);
++    
++    // Which button did the user click?
++    switch (r) {
++	case STATION_DIALOG_UPGRADE:
++		upgrade_menu(this, s);
++		aa_set_mode(AA_DITHER);
++		aa_stretch_blit(background, game-&gt;window-&gt;surface, 
++			0,0,background-&gt;w,background-&gt;h, 
++			game-&gt;window-&gt;x,game-&gt;window-&gt;y,
++			game-&gt;window-&gt;w, game-&gt;window-&gt;h);
++		break;
++	case STATION_DIALOG_NEWSHIP: 
++		buy_new_ship_menu(s);
++		break;
++	case STATION_DIALOG_REPAIR: 
++		if (s-&gt;ship-&gt;crew == s-&gt;ship-&gt;crew_max) 
++		{
++			if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
++				alert(&quot;You don't need repairs&quot;, &quot;&quot;, &quot;&quot;, &quot;Oh, okay&quot;, &quot;I knew that&quot;, 0, 0);         
++		} else {
++			int repairPaymentMethod = 0;
++			if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
++				repairPaymentMethod = alert3(&quot;Which would you prefer&quot;, &quot;to pay for your repairs&quot;, &quot;&quot;, &quot;1 &amp;Starbuck&quot;, &quot;1 &amp;Buckazoid&quot;, &quot;&amp;Nothing!&quot;, 's', 'b', 'n');
++			game-&gt;log_int(gobgame-&gt;_player_control-&gt;channel, repairPaymentMethod);
++			
++			// choice of how player wants to pay for ship repairs
++			switch (repairPaymentMethod) {
++				case 1: 
++					if (s-&gt;starbucks &gt; 0) {
++						s-&gt;starbucks -= 1;
++						s-&gt;ship-&gt;crew = s-&gt;ship-&gt;crew_max;
++					} else {
++						if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
++						alert(&quot;You don't have enough!&quot;, NULL, NULL, &quot;&amp;Shit&quot;, NULL, 's', 0);
++					}
++					break;
++				case 2: 
++					if (s-&gt;buckazoids &gt; 0) {
++						s-&gt;buckazoids -= 1;
++						s-&gt;ship-&gt;crew = s-&gt;ship-&gt;crew_max;
++					} else {
++						if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
++							alert(&quot;You don't have enough!&quot;, NULL, NULL, &quot;&amp;Ok&quot;, NULL, 's', 0);
++					}
++					break;
++				case 3: 
++					r = STATION_DIALOG_DEPART;
++					break;
++			} //switch (choice of repair payment method)
++		}
++		break;
++	case STATION_DIALOG_COMMANDER:
++		chat_with_player();
++		break;
++     } // switch (choice of menu button)
++
++     if (r == STATION_DIALOG_DEPART) 
++        break;
+   }
++  game-&gt;redraw();
+   return;
+ }
+ void GobStation::inflict_damage(SpaceObject *other) {
+@@ -1042,6 +1030,7 @@
+     p-&gt;write_pair(buffy, a+1);
+     station_screen(p);
+     gobgame-&gt;unpause();
++    //gobgame-&gt;redraw();
+     return;
+     }
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000132.html">[Tw-light-svn] r186 - trunk/source/melee
+</A></li>
+	<LI>Next message: <A HREF="000134.html">[Tw-light-svn] r188 - in trunk: . gamedata/images/ships/shpconho gamedata/images/ships/shptauda source source/games source/python source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#133">[ date ]</a>
+              <a href="thread.html#133">[ thread ]</a>
+              <a href="subject.html#133">[ subject ]</a>
+              <a href="author.html#133">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

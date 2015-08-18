@@ -1,0 +1,1635 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r162 - in trunk: . gamedata/default_ini/ships gamedata/images/ships gamedata/images/ships/shpsamat gamedata/python gamedata/ships gamedata/sound/ships gamedata/sound/ships/shpsamat source/ais source/games source/generated source/python source/tml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r162%20-%20in%20trunk%3A%20.%20gamedata/default_ini/ships%20gamedata/images/ships%20gamedata/images/ships/shpsamat%20gamedata/python%20gamedata/ships%20gamedata/sound/ships%20gamedata/sound/ships/shpsamat%20source/ais%20source/games%20source/generated%20source/python%20source/tml&In-Reply-To=%3C200505140704.j4E740MF003571%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000107.html">
+   <LINK REL="Next"  HREF="000109.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r162 - in trunk: . gamedata/default_ini/ships gamedata/images/ships gamedata/images/ships/shpsamat gamedata/python gamedata/ships gamedata/sound/ships gamedata/sound/ships/shpsamat source/ais source/games source/generated source/python source/tml</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r162%20-%20in%20trunk%3A%20.%20gamedata/default_ini/ships%20gamedata/images/ships%20gamedata/images/ships/shpsamat%20gamedata/python%20gamedata/ships%20gamedata/sound/ships%20gamedata/sound/ships/shpsamat%20source/ais%20source/games%20source/generated%20source/python%20source/tml&In-Reply-To=%3C200505140704.j4E740MF003571%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r162 - in trunk: . gamedata/default_ini/ships gamedata/images/ships gamedata/images/ships/shpsamat gamedata/python gamedata/ships gamedata/sound/ships gamedata/sound/ships/shpsamat source/ais source/games source/generated source/python source/tml">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat May 14 09:04:00 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000107.html">[Tw-light-svn] r161 - in trunk: gamedata/images/alien gamedata/python source source/games source/generated source/melee source/python source/tml source/util
+</A></li>
+        <LI>Next message: <A HREF="000109.html">[Tw-light-svn] r163 - in trunk/gamedata: . games games/test_game games/test_game/scripts games/test_game/scripts/systems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#108">[ date ]</a>
+              <a href="thread.html#108">[ thread ]</a>
+              <a href="subject.html#108">[ subject ]</a>
+              <a href="author.html#108">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-14 09:03:30 +0200 (Sat, 14 May 2005)
+New Revision: 162
+
+Added:
+   trunk/gamedata/default_ini/ships/shpsamat.ini
+   trunk/gamedata/images/ships/shpsamat/
+   trunk/gamedata/images/ships/shpsamat/SHIP_P00_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_P01_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_P02_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_P03_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_P04_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_P05_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_P06_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_P07_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHIP_S01_PCX.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_A_01_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_A_02_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_A_03_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_01_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_02_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_03_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_04_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_05_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_06_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_07_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_B_08_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_S_01_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_S_02_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_S_03_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_S_04_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_S_05_BMP.bmp
+   trunk/gamedata/images/ships/shpsamat/SHOT_S_06_BMP.bmp
+   trunk/gamedata/ships/shpsamat.txt
+   trunk/gamedata/sound/ships/shpsamat/
+   trunk/gamedata/sound/ships/shpsamat/WAVE_A01_WAV.wav
+   trunk/gamedata/sound/ships/shpsamat/WAVE_B01_WAV.wav
+Modified:
+   trunk/gamedata/python/misc.py
+   trunk/gamedata/python/tml.py
+   trunk/source/ais/c_wussie.cpp
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/python/python_class.cpp
+   trunk/source/python/python_class.h
+   trunk/source/tml/eventmanager.cpp
+   trunk/source/tml/eventmanager.h
+   trunk/source/tml/gameaction.cpp
+   trunk/source/tml/gameaction.h
+   trunk/source/tml/gameevent.cpp
+   trunk/source/tml/gameevent.h
+   trunk/sources.lst
+Log:
+TML guard command 
+Adding Sa-matra code
+
+
+Added: trunk/gamedata/default_ini/ships/shpsamat.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpsamat.ini	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/gamedata/default_ini/ships/shpsamat.ini	2005-05-14 07:03:30 UTC (rev 162)
+@@ -0,0 +1,111 @@
++[Info]
++TWCost = 10000
++Name1 = Sa-Matra
++Name2 = Battle Platform
++Origin = UQM
++Gfx = SC2
++Sfx = none
++Coders = GeomanNL
++Code = SaMatra
++Version = 161M
++
++[Ship]
++Crew = 30
++; = armour per crew member --&gt; Crew x Armour = total hit points ; only included for melee-gameplay reasons (set armour at very high to make it invulnerable).
++Armour = 30
++CrewMax = 30
++Batt = 30
++BattMax = 30
++SpeedMax = 0
++AccelRate = 10000
++TurnRate = 10000
++
++RechargeAmount = 1
++RechargeRate = 2
++
++WeaponDrain = 15
++WeaponRate = 10
++
++SpecialDrain = 15
++SpecialRate = 10
++
++HotspotRate = 10000
++Mass = 1000
++
++
++[Weapon]
++Number = 4
++Velocity = 50
++Damage = 1
++Armour = 8
++TurnPerSec = 50.0		; radians turn per second (6.14=full circle in one second)
++
++
++[Special]
++Number = 3
++Velocity = 55
++Damage = 2
++Armour = 12
++TurnPerSec = 1.5 ; comet trail lenght in seconds.
++TrailTimeLen = 0.15 ; time period between dealing Damage.
++DamageDelay = 0.01
++
++
++[AI3_Default]
++Weapon = Homing
++Special = Homing
++Special2 = Max_Battery
++
++[Objects]
++ShipSprites = 1 +noaa
++WeaponSprites = 3
++WeaponSamples = 1
++WeaponExplosion = 8 +irregular
++SpecialSprites = 6 +irregular
++SpecialSamples = 1
++SpecialExplosion = 0
++ExtraSprites = 0
++ExtraSamples = 0
++ExtraExplosion = 0
++PanelBitmaps = 8
++
++[Music]
++Victory = music/ditty/cheditty.mod
++
++[Sound]
++WeaponSample0 = sound/ships/shpsamat/WAVE_A01_WAV.wav
++
++SpecialSample0 = sound/ships/shpsamat/WAVE_B01_WAV.wav
++
++[Graphic]
++PanelBitmaps0 = images/ships/shpsamat/SHIP_P00_PCX.bmp
++PanelBitmaps1 = images/ships/shpsamat/SHIP_P01_PCX.bmp
++PanelBitmaps2 = images/ships/shpsamat/SHIP_P02_PCX.bmp
++PanelBitmaps3 = images/ships/shpsamat/SHIP_P03_PCX.bmp
++PanelBitmaps4 = images/ships/shpsamat/SHIP_P04_PCX.bmp
++PanelBitmaps5 = images/ships/shpsamat/SHIP_P05_PCX.bmp
++PanelBitmaps6 = images/ships/shpsamat/SHIP_P06_PCX.bmp
++PanelBitmaps7 = images/ships/shpsamat/SHIP_P07_PCX.bmp
++
++ShipSprites0 = images/ships/shpsamat/SHIP_S01_PCX.bmp
++
++WeaponSprites0 = images/ships/shpsamat/SHOT_A_01_BMP.bmp
++WeaponSprites1 = images/ships/shpsamat/SHOT_A_02_BMP.bmp
++WeaponSprites2 = images/ships/shpsamat/SHOT_A_03_BMP.bmp
++
++WeaponExplosion0 = images/ships/shpsamat/SHOT_B_01_BMP.bmp
++WeaponExplosion1 = images/ships/shpsamat/SHOT_B_02_BMP.bmp
++WeaponExplosion2 = images/ships/shpsamat/SHOT_B_03_BMP.bmp
++WeaponExplosion3 = images/ships/shpsamat/SHOT_B_04_BMP.bmp
++WeaponExplosion4 = images/ships/shpsamat/SHOT_B_05_BMP.bmp
++WeaponExplosion5 = images/ships/shpsamat/SHOT_B_06_BMP.bmp
++WeaponExplosion6 = images/ships/shpsamat/SHOT_B_07_BMP.bmp
++WeaponExplosion7 = images/ships/shpsamat/SHOT_B_08_BMP.bmp
++
++SpecialSprites0 = images/ships/shpsamat/SHOT_S_01_BMP.bmp
++SpecialSprites1 = images/ships/shpsamat/SHOT_S_02_BMP.bmp
++SpecialSprites2 = images/ships/shpsamat/SHOT_S_03_BMP.bmp
++SpecialSprites3 = images/ships/shpsamat/SHOT_S_04_BMP.bmp
++SpecialSprites4 = images/ships/shpsamat/SHOT_S_05_BMP.bmp
++SpecialSprites5 = images/ships/shpsamat/SHOT_S_06_BMP.bmp
++
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P00_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P00_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P01_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P01_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P02_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P02_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P03_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P03_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P04_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P04_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P05_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P05_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P06_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P06_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_P07_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_P07_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHIP_S01_PCX.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHIP_S01_PCX.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_A_01_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_A_01_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_A_02_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_A_02_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_A_03_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_A_03_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_01_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_01_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_02_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_02_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_03_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_03_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_04_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_04_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_05_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_05_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_06_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_06_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_07_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_07_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_B_08_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_B_08_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_S_01_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_S_01_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_S_02_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_S_02_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_S_03_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_S_03_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_S_04_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_S_04_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_S_05_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_S_05_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/ships/shpsamat/SHOT_S_06_BMP.bmp
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/ships/shpsamat/SHOT_S_06_BMP.bmp
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: trunk/gamedata/python/misc.py
+===================================================================
+--- trunk/gamedata/python/misc.py	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/gamedata/python/misc.py	2005-05-14 07:03:30 UTC (rev 162)
+@@ -12,7 +12,10 @@
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ 
+-import tml
++if __name__ == '__main__':
++    import tml_fake as tml
++else:
++    import tml
+ 
+ def PyListStringToVector(vect):
+     ret = tml.vectorString()
+@@ -22,3 +25,4 @@
+ 
+ 
+         
++
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/gamedata/python/tml.py	2005-05-14 07:03:30 UTC (rev 162)
+@@ -49,6 +49,8 @@
+     if _newclass:add_asteroid = staticmethod(_tml.GameAction_add_asteroid)
+     __swig_getmethods__[&quot;add_player&quot;] = lambda x: _tml.GameAction_add_player
+     if _newclass:add_player = staticmethod(_tml.GameAction_add_player)
++    __swig_getmethods__[&quot;add_ship&quot;] = lambda x: _tml.GameAction_add_ship
++    if _newclass:add_ship = staticmethod(_tml.GameAction_add_ship)
+     __swig_getmethods__[&quot;save_flag&quot;] = lambda x: _tml.GameAction_save_flag
+     if _newclass:save_flag = staticmethod(_tml.GameAction_save_flag)
+     __swig_getmethods__[&quot;get_string_flag&quot;] = lambda x: _tml.GameAction_get_string_flag
+@@ -59,6 +61,22 @@
+     if _newclass:get_double_flag = staticmethod(_tml.GameAction_get_double_flag)
+     __swig_getmethods__[&quot;get_player_ship_id&quot;] = lambda x: _tml.GameAction_get_player_ship_id
+     if _newclass:get_player_ship_id = staticmethod(_tml.GameAction_get_player_ship_id)
++    __swig_getmethods__[&quot;set_target&quot;] = lambda x: _tml.GameAction_set_target
++    if _newclass:set_target = staticmethod(_tml.GameAction_set_target)
++    __swig_getmethods__[&quot;disable_weapon&quot;] = lambda x: _tml.GameAction_disable_weapon
++    if _newclass:disable_weapon = staticmethod(_tml.GameAction_disable_weapon)
++    __swig_getmethods__[&quot;enable_weapon&quot;] = lambda x: _tml.GameAction_enable_weapon
++    if _newclass:enable_weapon = staticmethod(_tml.GameAction_enable_weapon)
++    __swig_getmethods__[&quot;go_to_point&quot;] = lambda x: _tml.GameAction_go_to_point
++    if _newclass:go_to_point = staticmethod(_tml.GameAction_go_to_point)
++    __swig_getmethods__[&quot;go_to_location&quot;] = lambda x: _tml.GameAction_go_to_location
++    if _newclass:go_to_location = staticmethod(_tml.GameAction_go_to_location)
++    __swig_getmethods__[&quot;guard_location&quot;] = lambda x: _tml.GameAction_guard_location
++    if _newclass:guard_location = staticmethod(_tml.GameAction_guard_location)
++    __swig_getmethods__[&quot;guard_point&quot;] = lambda x: _tml.GameAction_guard_point
++    if _newclass:guard_point = staticmethod(_tml.GameAction_guard_point)
++    __swig_getmethods__[&quot;set_ship_team&quot;] = lambda x: _tml.GameAction_set_ship_team
++    if _newclass:set_ship_team = staticmethod(_tml.GameAction_set_ship_team)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -86,6 +104,8 @@
+ 
+ GameAction_add_player = _tml.GameAction_add_player
+ 
++GameAction_add_ship = _tml.GameAction_add_ship
++
+ GameAction_get_string_flag = _tml.GameAction_get_string_flag
+ 
+ GameAction_save_flag = _tml.GameAction_save_flag
+@@ -94,6 +114,22 @@
+ 
+ GameAction_get_player_ship_id = _tml.GameAction_get_player_ship_id
+ 
++GameAction_set_target = _tml.GameAction_set_target
++
++GameAction_disable_weapon = _tml.GameAction_disable_weapon
++
++GameAction_enable_weapon = _tml.GameAction_enable_weapon
++
++GameAction_go_to_point = _tml.GameAction_go_to_point
++
++GameAction_go_to_location = _tml.GameAction_go_to_location
++
++GameAction_guard_location = _tml.GameAction_guard_location
++
++GameAction_guard_point = _tml.GameAction_guard_point
++
++GameAction_set_ship_team = _tml.GameAction_set_ship_team
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+
+Added: trunk/gamedata/ships/shpsamat.txt
+===================================================================
+--- trunk/gamedata/ships/shpsamat.txt	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/gamedata/ships/shpsamat.txt	2005-05-14 07:03:30 UTC (rev 162)
+@@ -0,0 +1,33 @@
++Sa-Matra
++
++The Sa-Matra is the name given to the awesome Precursor Battleship discovered by the Ur-Quan Kzer-Za thousands of years ago. It is the very symbol of Ur-Quan dominance; a virtually invincible war machine that guarantees that the Ur-Quan species will never need know fear of anything.
++
++History
++
++During the era of the Dnyarri Slave Empire, among the numerous articles of Precursor technology gathered by the Ur-Quan scouts was one enormous Precursor battleship. When the Ur-Quan Slave Revolt began, one of the Ur-Quan's greatest victories was the successful seizure of this battleship by free Ur-Quan, who used it to devastating effect against remaining Dnyarri-controlled forces.
++
++Afterwards, the psychologically traumatized Ur-Quan interpreted their possession of such a weapon as not only the key to their liberation but a sign of their destiny to never again be enslaved, by giving them ultimate power over the fate of other species. Thus, when the Ur-Quan divided into the factions of Kohr-Ah and Kzer-Za, each side claimed this weapon as their own. Naming it &quot;Sa-Matra&quot; (meaning &quot;Great Prize&quot;) in the Ur-Quan language, the two factions entered ritualized combat, the winning side being promised possession of the ultimate weapon and therefore a decisive advantage in implementing their doctrine of control. In this initial battle the Kzer-Za proved victorious and were therefore free to use the Sa-Matra to enforce their Path of Now and Forever, which as a result received greater and longer propagation than the Kohr-Ah's Eternal Doctrine. However, their racial pride making them unwilling to totally override the beliefs and desires of their Ur-Quan brothers, th!
+ e Kzer-Za agreed that, after the two races traveled their separate ways, when they met again this ritual war -- now known as the Doctrinal Conflict -- would be refought, and the Sa-Matra would go to the next winner.
++
++Most recently, it was employed against the Alliance of Free Stars at the end of their war with the Ur-Quan Kzer-Za and their Hierarchy of Battle Thralls. Although up to that point the Alliance had been capable of holding Hierarchy forces at bay, the Sa-Matra proved to be an unanswerable weapon. It quickly broke the Chenjesu/Mmrnmhrm lines, incinerating conventional vessels at far beyond their own weapons' ranges; with the fall of those two races, the Alliance quickly surrendered.
++
++Chenjesu strategists of the time wondered why the Kzer-Za did not use the Sa-Matra sooner. Given that it holds such symbolic, ritual significance for the Kzer-Za, they probably sought to minimize its use as a matter of respect and honor. They therefore only brought it into play to break the Alliance's most powerful defenses, the technologically precocious Broodhome ships, while refusing to dirty their hands with lower-level fighting, leaving that to their Thralls.
++
++The Battle of the Sa-Matra
++
++The second Doctrinal Conflict took place during the time of the Second War of the Alliance; in order to prevent further devastation and end Ur-Quan hegemony for all of history, the New Alliance of Free Stars undertook a desparate gambit to destroy the Sa-Matra and forever shatter the myth of destined Ur-Quan dominance. After several bold and clever missions gave them the intelligence they needed to locate the Sa-Matra, the Alliance was able to revive the power of the Dnyarri in the form of an augmented Talking Pet to penetrate the Ur-Quan defenses around the Sa-Matra. However, even the most powerful Alliance ships, the new Chmmr Avatar vessels, were unable to do more than defeat the Sa-Matra's escorts; luckily, the unmatched piloting skills of Pkunk and Yehat reinforcements, arriving at the last minute after the successful Yehat Revolution, proved effective at disabling the Sa-Matra's surface defenses.
++
++This allowed the Alliance to deploy their own ultimate weapon: using the Precursor technology in their possession, they coupled the Vindicator's Precursor energy generation systems to the Utwig bomb, creating an antimatter bomb capable of destroying even the Sa-Matra's hardened superstructure. Ironically once the Sa-Matra's shields were down the Vindicator was able to penetrate it, making use of a docking bay that had specifically been designed for service vehicles like the Vindicator by the Precursors. The resulting blast not only destroyed much of the combined Ur-Quan fleet but also shattered their cultural understanding of themselves as a master species, sending them fleeing and demoralized to the Magellanic Clouds.
++
++Description
++right
++
++Physically the vessel was huge, almost the size of a small moon, with numerous weapons and defensive systems mounted on protuberances across the surface. Its armor was built by unknown Precursor methods and was extremely strong, strong enough to withstand impacts and energy blasts capable of vaporizing similar quantities of normal matter -- the Utwig bomb, a device created by the Precursors to destroy moons and rearrange planetary continents, was not powerful enough to destroy it without augmentation.
++
++Deeming this insufficient protection against unknown weaponry or possible subterfuge, the Ur-Quan kept it safe when not in use by using their own technology to build a shell of magnetically fused asteroids around it, rendering the surface inaccessible to any attacker. It also made the Sa-Matra unable to use its main weapons from inside the shell, preventing any Ur-Quan from cheating and making use of it during the Doctrinal Conflict itself. The housings that controlled its defensive systems, however, protruded from the shell and continued to function.
++
++The one weakness of defense was a single access port leading to a service docking area, installed by the Precursors and the only convenient means of accessing and controlling the Sa-Matra's systems, which the Ur-Quan were unable to cover with their asteroid shield. It was still protected by the Sa-Matra's defense mechanisms' energy shielding and its active defenders; however, for these mechanisms to be effective outside the asteroid armor, they had to protrude from it into the open, where they were vulnerable to attack from ships whose agility or resilience allowed them to survive the active defenses, like the Pkunk Fury and Yehat Terminator, the factor that led to the Sa-Matra's downfall.
++
++The observed active defense systems consisted primarily of energy matrices given quasi-intelligent tracking capabilities that surrounded and defended the main ship. The ship's energy-projection systems were capable of regenerating these projectiles and the ship's main shielding as long as any of the projectors were active, and even with all projectors disabled, the projectiles were self-sustaining until disrupted by enemy fire. They consisted of two types, Repulsor Spheres, a mobile electromagnetic field that, upon contact with an enemy vessel, automatically dissipated itself into a powerful repulsive blast, and Plasma Destruction Toroids, a mobile field that collected environmental plasma and superheated it through rapid rotation, allowing it to directly damage enemy ships with heat and impact. These fields were delicate and a strong application of energy from enemy weapons could disrupt them, but their ability to quickly and effortlessly track enemy vessels and to be quic!
+ kly regenerated by the Sa-Matra made them fearsome obstacles to invaders. The toroids, particularly, could maintain an active field of rotating plasma for quite some time directly within the structure of an enemy ship as long as no major force was released to disrupt it, and the Chenjesu reported it to be used with devastating effect as a long-range offensive weapon.
++
++As for the Sa-Matra's main assault weapons, we were given little chance to observe them as they were only active within the asteroid shell itself. Comprising many different types of projectors and cannons, they inflicted massive damage upon the Vindicator even in the short time it took the Vindicator to dock with the Sa-Matra and detonate itself. What sketchy records we have of the Alliance's struggles against the Sa-Matra in the First War suggest it was more than the equal of any fleet in direct combat and could easily have lain waste to countless planetary surfaces. 
++
+
+Added: trunk/gamedata/sound/ships/shpsamat/WAVE_A01_WAV.wav
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/sound/ships/shpsamat/WAVE_A01_WAV.wav
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/sound/ships/shpsamat/WAVE_B01_WAV.wav
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/sound/ships/shpsamat/WAVE_B01_WAV.wav
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: trunk/source/ais/c_wussie.cpp
+===================================================================
+--- trunk/source/ais/c_wussie.cpp	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/ais/c_wussie.cpp	2005-05-14 07:03:30 UTC (rev 162)
+@@ -1,7 +1,7 @@
+ /*
+ This file is part of &quot;TW-Light&quot; 
+                     <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
++Copyright (C) 2001-2005  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/games/ggob.cpp	2005-05-14 07:03:30 UTC (rev 162)
+@@ -640,6 +640,14 @@
+   return;
+ }
+ 
++int GobGame::add_ship(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos, double team )
++{
++  Ship *ship = create_ship(channel_server, shptype.c_str(), &quot;WussieBot&quot;, 
++			   pos, random(PI2), enemy_team);
++  add(ship-&gt;get_ship_phaser());
++  return ship-&gt;get_id();
++}
++
+ void GobGame::add_stars()
+ {
+   STACKTRACE;
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/games/ggob.h	2005-05-14 07:03:30 UTC (rev 162)
+@@ -177,6 +177,9 @@
+ 
+   // For Python interface
+   void add_new_enemy();
++  
++  int add_ship(const std::string&amp; system, const std::string&amp; shptype, Vector2 pos, double team );
++
+   void add_stars();
+   int add_asteroid(const std::string system, Vector2 pos, double angle, int speed);
+   void add_system(std::string name, int x, int y);;
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/generated/tml.py	2005-05-14 07:03:30 UTC (rev 162)
+@@ -49,6 +49,8 @@
+     if _newclass:add_asteroid = staticmethod(_tml.GameAction_add_asteroid)
+     __swig_getmethods__[&quot;add_player&quot;] = lambda x: _tml.GameAction_add_player
+     if _newclass:add_player = staticmethod(_tml.GameAction_add_player)
++    __swig_getmethods__[&quot;add_ship&quot;] = lambda x: _tml.GameAction_add_ship
++    if _newclass:add_ship = staticmethod(_tml.GameAction_add_ship)
+     __swig_getmethods__[&quot;save_flag&quot;] = lambda x: _tml.GameAction_save_flag
+     if _newclass:save_flag = staticmethod(_tml.GameAction_save_flag)
+     __swig_getmethods__[&quot;get_string_flag&quot;] = lambda x: _tml.GameAction_get_string_flag
+@@ -59,6 +61,22 @@
+     if _newclass:get_double_flag = staticmethod(_tml.GameAction_get_double_flag)
+     __swig_getmethods__[&quot;get_player_ship_id&quot;] = lambda x: _tml.GameAction_get_player_ship_id
+     if _newclass:get_player_ship_id = staticmethod(_tml.GameAction_get_player_ship_id)
++    __swig_getmethods__[&quot;set_target&quot;] = lambda x: _tml.GameAction_set_target
++    if _newclass:set_target = staticmethod(_tml.GameAction_set_target)
++    __swig_getmethods__[&quot;disable_weapon&quot;] = lambda x: _tml.GameAction_disable_weapon
++    if _newclass:disable_weapon = staticmethod(_tml.GameAction_disable_weapon)
++    __swig_getmethods__[&quot;enable_weapon&quot;] = lambda x: _tml.GameAction_enable_weapon
++    if _newclass:enable_weapon = staticmethod(_tml.GameAction_enable_weapon)
++    __swig_getmethods__[&quot;go_to_point&quot;] = lambda x: _tml.GameAction_go_to_point
++    if _newclass:go_to_point = staticmethod(_tml.GameAction_go_to_point)
++    __swig_getmethods__[&quot;go_to_location&quot;] = lambda x: _tml.GameAction_go_to_location
++    if _newclass:go_to_location = staticmethod(_tml.GameAction_go_to_location)
++    __swig_getmethods__[&quot;guard_location&quot;] = lambda x: _tml.GameAction_guard_location
++    if _newclass:guard_location = staticmethod(_tml.GameAction_guard_location)
++    __swig_getmethods__[&quot;guard_point&quot;] = lambda x: _tml.GameAction_guard_point
++    if _newclass:guard_point = staticmethod(_tml.GameAction_guard_point)
++    __swig_getmethods__[&quot;set_ship_team&quot;] = lambda x: _tml.GameAction_set_ship_team
++    if _newclass:set_ship_team = staticmethod(_tml.GameAction_set_ship_team)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -86,6 +104,8 @@
+ 
+ GameAction_add_player = _tml.GameAction_add_player
+ 
++GameAction_add_ship = _tml.GameAction_add_ship
++
+ GameAction_get_string_flag = _tml.GameAction_get_string_flag
+ 
+ GameAction_save_flag = _tml.GameAction_save_flag
+@@ -94,6 +114,22 @@
+ 
+ GameAction_get_player_ship_id = _tml.GameAction_get_player_ship_id
+ 
++GameAction_set_target = _tml.GameAction_set_target
++
++GameAction_disable_weapon = _tml.GameAction_disable_weapon
++
++GameAction_enable_weapon = _tml.GameAction_enable_weapon
++
++GameAction_go_to_point = _tml.GameAction_go_to_point
++
++GameAction_go_to_location = _tml.GameAction_go_to_location
++
++GameAction_guard_location = _tml.GameAction_guard_location
++
++GameAction_guard_point = _tml.GameAction_guard_point
++
++GameAction_set_ship_team = _tml.GameAction_set_ship_team
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/generated/tml_wrap.cpp	2005-05-14 07:03:30 UTC (rev 162)
+@@ -1133,6 +1133,47 @@
+ }
+ 
+ 
++static PyObject *_wrap_GameAction_add_ship(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::string *arg1 = 0 ;
++    std::string *arg2 = 0 ;
++    double arg3 ;
++    double arg4 ;
++    double arg5 ;
++    int result;
++    std::string temp1 ;
++    std::string temp2 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OOddd:GameAction_add_ship&quot;,&amp;obj0,&amp;obj1,&amp;arg3,&amp;arg4,&amp;arg5)) goto fail;
++    {
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    {
++        if (PyString_Check(obj1)) {
++            temp2 = std::string(PyString_AsString(obj1),
++            PyString_Size(obj1));
++            arg2 = &amp;temp2;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = (int)GameAction::add_ship((std::string const &amp;)*arg1,(std::string const &amp;)*arg2,arg3,arg4,arg5);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_GameAction_save_flag__SWIG_0(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     std::string *arg1 = 0 ;
+@@ -1307,6 +1348,134 @@
+ }
+ 
+ 
++static PyObject *_wrap_GameAction_set_target(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;dd:GameAction_set_target&quot;,&amp;arg1,&amp;arg2)) goto fail;
++    GameAction::set_target(arg1,arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_disable_weapon(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;d:GameAction_disable_weapon&quot;,&amp;arg1)) goto fail;
++    GameAction::disable_weapon(arg1);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_enable_weapon(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;d:GameAction_enable_weapon&quot;,&amp;arg1)) goto fail;
++    GameAction::enable_weapon(arg1);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_go_to_point(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    double arg4 ;
++    int result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;dddd:GameAction_go_to_point&quot;,&amp;arg1,&amp;arg2,&amp;arg3,&amp;arg4)) goto fail;
++    result = (int)GameAction::go_to_point(arg1,arg2,arg3,arg4);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_go_to_location(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    int result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;ddd:GameAction_go_to_location&quot;,&amp;arg1,&amp;arg2,&amp;arg3)) goto fail;
++    result = (int)GameAction::go_to_location(arg1,arg2,arg3);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_guard_location(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    int result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;ddd:GameAction_guard_location&quot;,&amp;arg1,&amp;arg2,&amp;arg3)) goto fail;
++    result = (int)GameAction::guard_location(arg1,arg2,arg3);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_guard_point(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    double arg3 ;
++    double arg4 ;
++    int result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;dddd:GameAction_guard_point&quot;,&amp;arg1,&amp;arg2,&amp;arg3,&amp;arg4)) goto fail;
++    result = (int)GameAction::guard_point(arg1,arg2,arg3,arg4);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_set_ship_team(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    double arg1 ;
++    double arg2 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;dd:GameAction_set_ship_team&quot;,&amp;arg1,&amp;arg2)) goto fail;
++    GameAction::set_ship_team(arg1,arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_GameAction(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GameAction *result;
+@@ -2783,10 +2952,19 @@
+ 	 { (char *)&quot;GameAction_add_orbiter_station&quot;, _wrap_GameAction_add_orbiter_station, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_add_asteroid&quot;, _wrap_GameAction_add_asteroid, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_add_player&quot;, _wrap_GameAction_add_player, METH_VARARGS },
++	 { (char *)&quot;GameAction_add_ship&quot;, _wrap_GameAction_add_ship, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_get_string_flag&quot;, _wrap_GameAction_get_string_flag, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_save_flag&quot;, _wrap_GameAction_save_flag, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_get_double_flag&quot;, _wrap_GameAction_get_double_flag, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_get_player_ship_id&quot;, _wrap_GameAction_get_player_ship_id, METH_VARARGS },
++	 { (char *)&quot;GameAction_set_target&quot;, _wrap_GameAction_set_target, METH_VARARGS },
++	 { (char *)&quot;GameAction_disable_weapon&quot;, _wrap_GameAction_disable_weapon, METH_VARARGS },
++	 { (char *)&quot;GameAction_enable_weapon&quot;, _wrap_GameAction_enable_weapon, METH_VARARGS },
++	 { (char *)&quot;GameAction_go_to_point&quot;, _wrap_GameAction_go_to_point, METH_VARARGS },
++	 { (char *)&quot;GameAction_go_to_location&quot;, _wrap_GameAction_go_to_location, METH_VARARGS },
++	 { (char *)&quot;GameAction_guard_location&quot;, _wrap_GameAction_guard_location, METH_VARARGS },
++	 { (char *)&quot;GameAction_guard_point&quot;, _wrap_GameAction_guard_point, METH_VARARGS },
++	 { (char *)&quot;GameAction_set_ship_team&quot;, _wrap_GameAction_set_ship_team, METH_VARARGS },
+ 	 { (char *)&quot;new_GameAction&quot;, _wrap_new_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;delete_GameAction&quot;, _wrap_delete_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_swigregister&quot;, GameAction_swigregister, METH_VARARGS },
+
+Modified: trunk/source/python/python_class.cpp
+===================================================================
+--- trunk/source/python/python_class.cpp	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/python/python_class.cpp	2005-05-14 07:03:30 UTC (rev 162)
+@@ -47,12 +47,13 @@
+ {
+     Py_Initialize ();
+     insert_path( (char*)(datafile_path + &quot;/python&quot;).c_str());
+-
++   
+ #ifdef WIN32
+     // For windows we should include part of standart library we use
+     insert_path( (char*)(datafile_path + &quot;/python/lib&quot;).c_str());
+ #endif
+     insert_path( (char*)(GameConfig::GetGameDirectory() + &quot;/scripts&quot;).c_str());
++   
+     init_tml();
+ }
+ 
+@@ -173,3 +174,45 @@
+       tw_error( (std::string(&quot;Call failed: &quot;) + name).c_str());
+     }
+ }
++
++void python::exec_class(const std::string&amp; name)
++{
++  PyObject* evalModule;
++  PyObject* evalDict;
++  PyObject* pFunc;
++  PyObject* pArgs;
++  PyObject* pValue;
++
++  evalModule = PyImport_AddModule( (char*)&quot;__main__&quot; );
++  if(!evalModule)
++    {
++      tw_error(&quot;Can't get __main__ module&quot;);
++    }
++  evalDict   = PyModule_GetDict( evalModule );
++  if(!evalDict)
++    {
++      tw_error(&quot;Can't get __main__ dict&quot;);
++    }
++
++ 
++  pFunc = PyDict_GetItemString(evalDict, (char*)name.c_str());
++
++  if (pFunc &amp;&amp; PyCallable_Check(pFunc)) 
++    {
++      pArgs = PyTuple_New(0);
++    }
++  else
++    {
++      tw_error( (std::string(&quot;Call failed: &quot;) + name).c_str());
++    }
++  pValue = PyObject_CallObject(pFunc, pArgs);
++  Py_DECREF(pArgs);
++  if (pValue != NULL) 
++    {
++      Py_DECREF(pValue);
++    }
++  else 
++    {
++      tw_error( (std::string(&quot;Call failed: &quot;) + name).c_str());
++    }
++}
+
+Modified: trunk/source/python/python_class.h
+===================================================================
+--- trunk/source/python/python_class.h	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/python/python_class.h	2005-05-14 07:03:30 UTC (rev 162)
+@@ -89,6 +89,8 @@
+     static PyObject *import_module (std::string filename);
+     
+     static void exec_function(const std::string&amp; name);
++    
++    static void exec_class(const std::string&amp; name);
+     /** 
+      * Dumps any error information to stderr.
+      * 
+
+Modified: trunk/source/tml/eventmanager.cpp
+===================================================================
+--- trunk/source/tml/eventmanager.cpp	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/tml/eventmanager.cpp	2005-05-14 07:03:30 UTC (rev 162)
+@@ -28,6 +28,7 @@
+ #include &quot;games/ggob.h&quot;
+ #include &quot;melee/mship.h&quot;
+ 
++#include &quot;python/python_class.h&quot;
+ //////////////////////////////////////////////////////////////////
+ std::list&lt;boost::shared_ptr&lt;TGameEvent&gt; &gt; EventManager::g_events;
+ std::set&lt;SpaceLocation*&gt; EventManager::m_allSpaceLocations;
+@@ -203,6 +204,16 @@
+       }
+     return end;
+   }
++
++  SpaceLocation* get_location(int id)
++  {
++    std::set&lt;SpaceLocation*&gt;::iterator i = twl::get_location&lt; std::set&lt;SpaceLocation*&gt;::iterator &gt; (EventManager::m_allSpaceLocations.begin(),EventManager::m_allSpaceLocations.end(), id);
++    if(i!= EventManager::m_allSpaceLocations.end())
++      {
++	return *i;
++      }
++    return NULL;
++  }
+ };
+ 
+ void EventManager::calculate()
+
+Modified: trunk/source/tml/eventmanager.h
+===================================================================
+--- trunk/source/tml/eventmanager.h	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/tml/eventmanager.h	2005-05-14 07:03:30 UTC (rev 162)
+@@ -151,6 +151,8 @@
+   /// @param id id of space object, returned by create* function
+   template&lt;class T&gt;
+     T get_location(T begin, T end, int id);
++  
++  SpaceLocation* get_location(int id);
+ };
+ 
+ #endif
+
+Modified: trunk/source/tml/gameaction.cpp
+===================================================================
+--- trunk/source/tml/gameaction.cpp	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/tml/gameaction.cpp	2005-05-14 07:03:30 UTC (rev 162)
+@@ -15,6 +15,8 @@
+ */
+ 
+ 
++#include &quot;eventmanager.h&quot;
++#include &quot;gameevent.h&quot;
+ #include &quot;gameaction.h&quot;
+ #include &quot;melee/mframe.h&quot;
+ #include &quot;games/ggob.h&quot;
+@@ -64,6 +66,11 @@
+   return gobgame-&gt;add_player(system, shptype, (int)x, (int)y);
+ }
+ 
++int GameAction::add_ship(const std::string&amp; system, const std::string&amp; shptype, double x, double y, double team)
++{
++  return gobgame-&gt;add_ship(system, shptype, Vector2(x,y), team);
++}
++
+ double GameAction::get_player_ship_id()
+ {
+   return gobgame-&gt;gobplayer.ship-&gt;get_id();
+@@ -100,3 +107,72 @@
+   }
+   return g_double_flag_map[name];
+ }
++
++
++void GameAction::set_target(double who, double to)
++{
++  SpaceLocation* l  =  twl::get_location((int)who);
++  SpaceLocation* l2  =  twl::get_location((int)to);
++  
++  if(l)
++    {
++      l-&gt;set_target((SpaceObject*)l2);
++    }
++}
++
++void GameAction::disable_weapon(double who)
++{
++}
++
++void GameAction::enable_weapon(double who)
++{
++}
++
++template &lt;class T&gt;
++int add_point_based_event(double who, double x, double y, double dist)
++{
++  SpaceLocation* l   =  twl::get_location((int)who);
++  T* e = new T();
++  boost::shared_ptr&lt;TGameEvent&gt; ev( e );
++  int ret = e-&gt;setUp(l, Vector2(x,y), dist);
++  EventManager::g_events.push_back(ev);
++  return ret;
++}
++
++int GameAction::go_to_point(double who, double x, double y, double dist)
++{
++  return add_point_based_event&lt;TEventOrderMoveToPoint&gt;(who, x, y, dist);
++}
++
++template &lt;class T&gt;
++int add_location_based_event(double who, double to, double dist)
++{
++  SpaceLocation* l1  =  twl::get_location((int)who);
++  SpaceLocation* l2  =  twl::get_location((int)to);
++  
++  T* e = new T();
++  boost::shared_ptr&lt;TGameEvent&gt; ev( e );
++  int ret = e-&gt;setUp(l1, l2, dist);
++  EventManager::g_events.push_back(ev);
++
++  return ret;
++}
++
++int GameAction::go_to_location(double who, double to, double dist)
++{
++  return add_location_based_event&lt;TEventOrderMoveToLocation&gt;(who, to, dist);
++}
++
++int GameAction::guard_location(double who, double to, double dist)
++{
++  return add_location_based_event&lt;TEventGuardLocation&gt;(who, to, dist);
++}
++
++int GameAction::guard_point(double who, double x, double y, double dist)
++{
++  return add_point_based_event&lt;TEventGuardPoint&gt;(who, x, y, dist);
++}
++
++void GameAction::set_ship_team(double who, double team)
++{
++}
+
+Modified: trunk/source/tml/gameaction.h
+===================================================================
+--- trunk/source/tml/gameaction.h	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/tml/gameaction.h	2005-05-14 07:03:30 UTC (rev 162)
+@@ -81,6 +81,14 @@
+   /// @return player id
+   static int add_player(const std::string&amp; system, const std::string&amp;, double x, double y);
+ 
++  /// Add computer ship to the game
++  ///
++  /// @param system where player appear
++  /// @param x player coordinate in system
++  /// @param y player coordinate in system
++  /// @param team team code
++  /// @return ship id
++  static int add_ship(const std::string&amp; system, const std::string&amp; shptype, double x, double y, double team);
+ 
+   //////////////////////////////////////////////////////////////////////////////////////////
+   // Ingame action
+@@ -109,7 +117,53 @@
+   /// @return flag value
+   static double get_double_flag(const std::string&amp; name);
+ 
++  ////////////////////////////////////////////////////////////////////////////////////////
++  // Object action 
++  ////////////////////////////////////////////////////////////////////////////////////////
++
++  /// Get player ship id
+   static double get_player_ship_id();
++
++  static void set_target(double who, double to);
++  
++  static void disable_weapon(double who);
++  
++  static void enable_weapon(double who);
++  
++  /// Make ship go to location 
++  ///
++  /// @param who ship id
++  /// @param x point coord
++  /// @param y point coord
++  /// @param dist stop this order when to distance to point less then dist
++  /// @return event id
++  static int go_to_point(double who, double x, double y, double dist);
++
++  /// Make ship go to location 
++  ///
++  /// @param who ship id
++  /// @param to location id to follow
++  /// @param dist stop this order when to distance to point less then dist
++  /// @return event id
++  static int go_to_location(double who, double to, double dist);
++
++  /// Make ship who guard location to (prety dumb)
++  ///
++  /// @param who ship id
++  /// @param to location id
++  /// @param dist distance ship allowed to go from location
++  static int guard_location(double who, double to, double dist);
++
++  /// Make ship who guard position (x,y) (prety dumb)
++  ///
++  /// @param who ship id
++  /// @param x point coord
++  /// @param y point coord
++  /// @param dist distance ship allowed to go from location
++  static int guard_point(double who, double x, double y, double dist);
++  
++  static void set_ship_team(double who, double team);
++  
+ };
+ 
+ 
+
+Modified: trunk/source/tml/gameevent.cpp
+===================================================================
+--- trunk/source/tml/gameevent.cpp	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/tml/gameevent.cpp	2005-05-14 07:03:30 UTC (rev 162)
+@@ -14,7 +14,9 @@
+ GNU General Public License for more details.
+ */
+ 
++#include &lt;iostream&gt;
+ 
++#include &quot;eventmanager.h&quot;
+ #include &quot;gameevent.h&quot;
+ #include &quot;games/ggob.h&quot;
+ #include &quot;python/python_class.h&quot;
+@@ -32,16 +34,19 @@
+ {
+   exist = true;
+   id = generateEventID();
++  std::cerr&lt;&lt;&quot;Created event type: &quot;&lt;&lt;type()&lt;&lt;std::endl;
+ }
+ 
+ TGameEvent::~TGameEvent()
+ {
++  std::cerr&lt;&lt;&quot;Destroyed event type: &quot;&lt;&lt;type()&lt;&lt;std::endl;
+ }
+ 
+ void TGameEvent::trigger()
+ {
+   // execute function
+-  python::exec_function(_script);
++  //  python::exec_function(_script);
++  python::exec_class(_script);
+ }
+ 
+ void TOneTimeEvent::trigger()
+@@ -178,9 +183,6 @@
+ {
+   if(m_location2-&gt;distance(m_location)&lt;m_dist)
+     {
+-      printf(&quot;dist: %d \n&quot;, (int)m_location2-&gt;distance(m_location));
+-      printf(&quot;location (%d,%d)\n&quot;,  (int)m_location-&gt;normal_pos().x, (int)m_location-&gt;normal_pos().y);
+-      printf(&quot;location2 (%d,%d)\n&quot;, (int)m_location2-&gt;normal_pos().x, (int)m_location2-&gt;normal_pos().y);
+       trigger();
+       return true;
+     }
+@@ -191,9 +193,6 @@
+ {
+   if(m_location2-&gt;distance(m_location)&gt;m_dist)
+     {
+-      printf(&quot;dist: %d \n&quot;, (int)m_location2-&gt;distance(m_location));
+-      printf(&quot;location (%d,%d)\n&quot;,  (int)m_location-&gt;normal_pos().x, (int)m_location-&gt;normal_pos().y);
+-      printf(&quot;location2 (%d,%d)\n&quot;, (int)m_location2-&gt;normal_pos().x, (int)m_location2-&gt;normal_pos().y);
+       trigger();
+       return true;
+     }
+@@ -281,3 +280,191 @@
+   return check_less();
+ }
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++
++TEventMoveTerminator::TEventMoveTerminator()
++{
++}
++TEventMoveTerminator::~TEventMoveTerminator()
++{
++}
++
++void TEventMoveTerminator::trigger()
++{
++  die();
++}
++
++void TEventMoveTerminator::die()
++{
++  TEventMoveTerminatorBase::die();
++  EventManager::disableEvent(m_term_event);
++}
++
++int TEventMoveTerminator::setUp(SpaceLocation* l1, SpaceLocation* l2, double dist, int event_to_terminate)
++{
++  m_term_event = event_to_terminate;
++  return TEventMoveTerminatorBase::setUp(l1,l2, dist, &quot;&quot;);
++}
++
++/////////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++
++TEventOrderMoveToLocation::TEventOrderMoveToLocation()
++{
++}
++
++TEventOrderMoveToLocation::~TEventOrderMoveToLocation()
++{
++}
++
++void TEventOrderMoveToLocation::die()
++{
++  if(m_terminator-&gt;exists())
++    {
++      m_terminator-&gt;die();
++    }
++  TEventOrderMoveToLocationBase::die();
++}
++
++bool TEventOrderMoveToLocation::calculate()
++{
++  /*  if(!l1-&gt;exist()||!l2-&gt;exist())
++    {
++      die();
++    }
++  */
++  if(!m_location-&gt;isShip())
++    {
++      die();
++      return true;
++    }
++  Ship* shp = (Ship*)m_location;
++  // reset the keys for this ship
++  shp-&gt;nextkeys = 0;
++
++  // re-define the keys
++  double a, da, db, dc;
++  a = min_delta(m_location2-&gt;pos - shp-&gt;pos, map_size).atan();
++  
++  // direction
++  da = a - shp-&gt;vel.atan();
++  while (da &lt; -PI)	da += PI2;
++  while (da &gt;  PI)	da -= PI2;
++  
++  db = a - shp-&gt;angle;
++  while (db &lt; -PI)	db += PI2;
++  while (db &gt;  PI)	db -= PI2;
++  
++  dc = shp-&gt;vel.atan() - shp-&gt;angle;
++  while (dc &lt; -PI)	dc += PI2;
++  while (dc &gt;  PI)	dc -= PI2;
++
++  // don't turn so quickly that you'd come at a complete stop (180 degr)
++  // but, some anti-thrust can be healthy otherwise you may keep circling?
++  if (fabs(dc) &gt; 0.6 * PI)
++    da = dc;
++  else
++    {
++      a = fabs(da/PI);
++      if (a &gt; 0.5) a = 0.5;
++      da = a*da + (1-a)*db;
++      // for a really big velocity deviation, attention goes to correcting that;
++      // otherwise, the ship's direction should be focus
++    }
++  
++  if (da &gt; 0.01*PI)
++    {
++      shp-&gt;nextkeys |= keyflag::right;
++    }
++  if (da &lt; -0.01*PI)
++    {
++      shp-&gt;nextkeys |= keyflag::left;
++    }
++  shp-&gt;nextkeys |= keyflag::thrust;	// you _must_ thrust, otherwise you can't steer.
++  return false;
++};
++
++int TEventOrderMoveToLocation::setUp(SpaceLocation* l1, SpaceLocation* l2, double dist)
++{
++  TEventMoveTerminator* te = new TEventMoveTerminator();
++  m_terminator = boost::shared_ptr&lt;TGameEvent&gt;(te);
++  EventManager::g_events.push_back(m_terminator);
++  TEventOrderMoveToLocationBase::setUp(l1, l2, dist, &quot;&quot;);
++  return te-&gt;setUp(l1, l2, dist, getID());
++}
++
++
++////////////////////////////////////////////////////////////////////////////////////////
++
++TEventOrderMoveToPoint::TEventOrderMoveToPoint()
++{
++  m_location2 = new Asteroid();
++}
++
++TEventOrderMoveToPoint::~TEventOrderMoveToPoint()
++{
++  delete m_location2;
++}
++
++int TEventOrderMoveToPoint::setUp(SpaceLocation* l1, Vector2 pos, double dist)
++{
++  m_location2-&gt;pos = Vector2(0,0);
++  m_location2-&gt;translate(pos);
++  return TEventOrderMoveToPointBase::setUp(l1, m_location2, dist);
++}
++ 
++
++///////////////////////////////////////////////////////////////////////////////////////////////////////
++TEventGuardLocation::TEventGuardLocation()
++{
++}
++
++TEventGuardLocation::~TEventGuardLocation()
++{
++}
++
++void TEventGuardLocation::trigger()
++{
++  if( (bool)m_move_to_location &amp;&amp; m_move_to_location-&gt;exists())
++    return;
++  
++  TEventOrderMoveToLocation* te = new TEventOrderMoveToLocation();
++  
++  double dist = 0;
++  if(m_dist&gt;2000)
++    {
++      dist = m_dist - 500;
++    }
++  else
++    {
++      dist = 3*m_dist/4;
++    }
++  te-&gt;setUp(m_location, m_location2, dist);
++  m_move_to_location = boost::shared_ptr&lt;TGameEvent&gt;(te);
++  EventManager::g_events.push_back(m_move_to_location);
++}
++
++int TEventGuardLocation::setUp(SpaceLocation* l1, SpaceLocation* l2, double dist)
++{
++  return TEventGuardLocationBase::setUp(l1, l2, dist, &quot;&quot;);
++}
++
++//////////////////////////////////////////////////////////////////////////////////////////////////
++TEventGuardPoint::TEventGuardPoint()
++{
++   m_location2 = new Asteroid();
++}
++TEventGuardPoint::~TEventGuardPoint()
++{
++  delete m_location2;
++};
++
++int TEventGuardPoint::setUp(SpaceLocation* l1, Vector2 pos, double dist)
++{
++  m_location2-&gt;pos = Vector2(0,0);
++  m_location2-&gt;translate(pos);
++  return TEventGuardPointBase::setUp(l1, m_location2, dist);
++}
++////////////////////////////////////////////////////////////////////////////////////////////////////
++
++
+
+Modified: trunk/source/tml/gameevent.h
+===================================================================
+--- trunk/source/tml/gameevent.h	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/source/tml/gameevent.h	2005-05-14 07:03:30 UTC (rev 162)
+@@ -35,6 +35,7 @@
+       SHIP_DEATH_BY_NAME,
+       SHIP_DEATH_BY_TYPE,
+       DISTANCE,
++      MOVE,
+   };
+ };
+ 
+@@ -181,6 +182,7 @@
+ 
+ typedef TEventDistanceMoreThen1Obj TEventDistanceLessThen1ObjBase;
+ /// Distance between location and point less then dist
++
+ class TEventDistanceLessThen1Obj : public TEventDistanceLessThen1ObjBase
+ {
+  protected:
+@@ -214,7 +216,80 @@
+   virtual ~TEventDistanceLessThen2Obj();
+ };
+ 
++/////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
++typedef TEventDistanceLessThen2Obj TEventMoveTerminatorBase;
+ 
++/// \brief this event should terminate distance event when distance 
++/// 
++class TEventMoveTerminator : public TEventMoveTerminatorBase
++{
++  int m_term_event;
++ public:
++  TEventMoveTerminator();
++  virtual ~TEventMoveTerminator();
+ 
++  virtual void trigger();
++  virtual void die();
++  virtual int setUp(SpaceLocation* l1, SpaceLocation* l2, double dist, int event_to_terminate);
++};
++
++///////////////////////////////////////////////////////////////////////////////////////
++
++typedef TEventDistanceLessThen2Obj TEventOrderMoveToLocationBase;
++
++/// \brief Make ship move to location
++class TEventOrderMoveToLocation : public TEventOrderMoveToLocationBase
++{
++  boost::shared_ptr&lt;TGameEvent&gt; m_terminator;
++ public:
++  TEventOrderMoveToLocation();
++  virtual ~TEventOrderMoveToLocation();
++  virtual bool calculate();
++  virtual void die();
++  virtual int setUp(SpaceLocation* l1, SpaceLocation* l2, double dist);
++  virtual int type(){return TGameEventType::MOVE;}
++};
++
++typedef TEventOrderMoveToLocation TEventOrderMoveToPointBase;
++
++/// \bief Make ship move to point
++class TEventOrderMoveToPoint : public TEventOrderMoveToPointBase
++{
++ public:
++  TEventOrderMoveToPoint();
++  virtual ~TEventOrderMoveToPoint();
++  
++  virtual int setUp(SpaceLocation* l1, Vector2 pos, double dist);
++};
++
++
++///////////////////////////////////////////////////////////////////////////////
++
++typedef TEventDistanceMoreThen2Obj TEventGuardLocationBase;
++
++class TEventGuardLocation : public TEventGuardLocationBase
++{
++  boost::shared_ptr&lt;TGameEvent&gt; m_move_to_location;
++ public:
++  TEventGuardLocation();
++  virtual ~TEventGuardLocation();
++  virtual void trigger();
++  virtual int setUp(SpaceLocation* l1, SpaceLocation* l2, double dist);
++};
++
++///////////////////////////////////////////////////////////////////////
++
++typedef TEventGuardLocation TEventGuardPointBase;
++
++class TEventGuardPoint: public TEventGuardPointBase
++{
++ public:
++  TEventGuardPoint();
++  virtual ~TEventGuardPoint();
++
++  virtual int setUp(SpaceLocation* l1, Vector2 pos, double dist);
++};
++
++
+ #endif
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-05-10 16:28:22 UTC (rev 161)
++++ trunk/sources.lst	2005-05-14 07:03:30 UTC (rev 162)
+@@ -81,6 +81,7 @@
+ source/ships/shpearc3.cpp
+ source/ships/shpkahbo.cpp
+ source/ships/shpstaba.cpp
++source/ships/shpsamat.cpp
+ source/tests/testmain.cpp
+ source/tests/testdatapath.cpp
+ source/tests/gameconfigtest.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000107.html">[Tw-light-svn] r161 - in trunk: gamedata/images/alien gamedata/python source source/games source/generated source/melee source/python source/tml source/util
+</A></li>
+	<LI>Next message: <A HREF="000109.html">[Tw-light-svn] r163 - in trunk/gamedata: . games games/test_game games/test_game/scripts games/test_game/scripts/systems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#108">[ date ]</a>
+              <a href="thread.html#108">[ thread ]</a>
+              <a href="subject.html#108">[ subject ]</a>
+              <a href="author.html#108">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

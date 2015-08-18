@@ -1,0 +1,3018 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r75 - in branches/multiplayer-branch: . source source/ais source/games source/libraries/raknet source/melee source/ships
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r75%20-%20in%20branches/multiplayer-branch%3A%20.%20source%20source/ais%20source/games%20source/libraries/raknet%20source/melee%20source/ships&In-Reply-To=%3C200410062122.i96LMOog015574%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000022.html">
+   <LINK REL="Next"  HREF="000024.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r75 - in branches/multiplayer-branch: . source source/ais source/games source/libraries/raknet source/melee source/ships</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r75%20-%20in%20branches/multiplayer-branch%3A%20.%20source%20source/ais%20source/games%20source/libraries/raknet%20source/melee%20source/ships&In-Reply-To=%3C200410062122.i96LMOog015574%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r75 - in branches/multiplayer-branch: . source source/ais source/games source/libraries/raknet source/melee source/ships">youbastrd at sheep.berlios.de
+       </A><BR>
+    <I>Wed Oct  6 23:22:24 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000022.html">[Tw-light-svn] r74 - in trunk: Util/deditor source web
+</A></li>
+        <LI>Next message: <A HREF="000024.html">[Tw-light-svn] r76 - branches/multiplayer-branch/source/libraries/raknet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2004-10-06 23:22:23 +0200 (Wed, 06 Oct 2004)
+New Revision: 75
+
+Added:
+   branches/multiplayer-branch/source/games/MultiplayerGame.cpp
+   branches/multiplayer-branch/source/games/MultiplayerGame.h
+   branches/multiplayer-branch/source/games/gmelee.cpp
+   branches/multiplayer-branch/source/games/gmelee.h
+Removed:
+   branches/multiplayer-branch/source/melee/mmain.cpp
+   branches/multiplayer-branch/source/melee/mmain.h
+Modified:
+   branches/multiplayer-branch/source/ais/c_wussie.cpp
+   branches/multiplayer-branch/source/games/gflmelee.cpp
+   branches/multiplayer-branch/source/games/ggob.cpp
+   branches/multiplayer-branch/source/libraries/raknet/Multiplayer.h
+   branches/multiplayer-branch/source/melee/mhelpers.cpp
+   branches/multiplayer-branch/source/melee/mnet1.h
+   branches/multiplayer-branch/source/scp.cpp
+   branches/multiplayer-branch/source/ships/shpconho.cpp
+   branches/multiplayer-branch/source/ships/shpkahbo.cpp
+   branches/multiplayer-branch/sources.lst
+Log:
+Adding bare-bones multiplayer -- still doesn't work, but you can at least you can start a server, and connect a client to it.
+
+Modified: branches/multiplayer-branch/source/ais/c_wussie.cpp
+===================================================================
+--- branches/multiplayer-branch/source/ais/c_wussie.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/ais/c_wussie.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -27,7 +27,7 @@
+ #include &quot;melee/mcontrol.h&quot;
+ #include &quot;melee/mframe.h&quot;
+ #include &quot;melee/mship.h&quot;
+-#include &quot;melee/mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
+ 
+ #define OPTION_UNKNOWN 0
+ #define OPTION_NONE 1
+
+Added: branches/multiplayer-branch/source/games/MultiplayerGame.cpp
+===================================================================
+--- branches/multiplayer-branch/source/games/MultiplayerGame.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/games/MultiplayerGame.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -0,0 +1,507 @@
++/* $Id: melee.h,v 1.3 2004/08/08 17:36:03 Yura Exp $ */ 
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#include &quot;MultiplayerGame.h&quot;
++
++
++#include &quot;libraries/raknet/RakClientInterface.h&quot;
++#include &quot;libraries/raknet/RakServerInterface.h&quot;
++//#include &quot;Raknet/RakNetworkFactory.h&quot;	
++
++// If you don't want to use distributed network objects, delete this include
++#include &quot;../libraries/raknet/DistributedNetworkObjectManager.h&quot;
++#include &quot;../libraries/raknet/PacketEnumerations.h&quot;
++#include &quot;../libraries/raknet/NetworkTypes.h&quot;
++#include &lt;assert.h&gt;
++#include &lt;stdio.h&gt;
++#include &quot;../libraries/raknet/GetTime.h&quot;
++	
++
++//#ifdef DEBUG
++	#define _DEBUG
++//#endif
++
++#ifdef _DEBUG
++#include &lt;memory.h&gt;
++#endif
++
++template &lt;class InterfaceType&gt;
++MultiplayerGameTemplate&lt;InterfaceType&gt;::MultiplayerGameTemplate() :
++	_isServer(false)
++{
++    message.print(5000,15,&quot;Game on!&quot;);
++}
++
++template &lt;class InterfaceType&gt;
++MultiplayerGameTemplate&lt;InterfaceType&gt;::~MultiplayerGameTemplate()
++{
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ProcessPackets(InterfaceType *interfaceType)
++{
++	Packet* p;
++	unsigned char packetIdentifier;
++
++	p = interfaceType-&gt;Receive();
++
++	while (p)
++	{
++		if ((unsigned char)p-&gt;data[0] == ID_TIMESTAMP)
++		{
++			if (p-&gt;length &gt; sizeof(unsigned char) + sizeof(unsigned long))
++				packetIdentifier = (unsigned char) p-&gt;data[sizeof(unsigned char) + sizeof(unsigned long)];
++			else
++				break;
++		}
++		else
++			packetIdentifier = (unsigned char) p-&gt;data[0];
++
++		// Check if this is a native packet
++		switch (packetIdentifier)
++		{
++		case ID_REMOTE_DISCONNECTION_NOTIFICATION:
++			ReceiveRemoteDisconnectionNotification(p,interfaceType);
++		    message.print(5000,15,&quot;client : told to bugger off&quot;);
++		break;
++		case ID_REMOTE_CONNECTION_LOST:
++			ReceiveRemoteConnectionLost(p,interfaceType);
++		    message.print(5000,15,&quot;client lost connection&quot;);
++		break;
++		case ID_REMOTE_NEW_INCOMING_CONNECTION:
++			ReceiveRemoteNewIncomingConnection(p,interfaceType);
++			message.print(5000,15,&quot;Got a new connection!&quot;);
++		break;
++		case ID_REMOTE_EXISTING_CONNECTION:
++			ReceiveRemoteExistingConnection(p,interfaceType);
++		    message.print(5000,15,&quot;Player leaving&quot;);
++		break;
++		case ID_CONNECTION_BANNED:
++			ReceiveConnectionBanned(p, interfaceType);
++		break;
++		case ID_CONNECTION_REQUEST_ACCEPTED:
++			ReceiveConnectionRequestAccepted(p,interfaceType);
++		    message.print(5000,15,&quot;We're allowed to connect!!&quot;);
++			break;
++		case ID_NEW_INCOMING_CONNECTION:
++			ReceiveNewIncomingConnection(p,interfaceType);
++			break;
++		case ID_NO_FREE_INCOMING_CONNECTIONS:
++			ReceiveNoFreeIncomingConnections(p,interfaceType);
++			break;
++		case ID_DISCONNECTION_NOTIFICATION:
++			ReceiveDisconnectionNotification(p,interfaceType);
++			break;
++		case ID_CONNECTION_LOST:
++			ReceiveConnectionLost(p,interfaceType);
++			break;
++		case ID_RECEIVED_STATIC_DATA:
++			ReceivedStaticData(p,interfaceType);
++			break;
++		case ID_INVALID_PASSWORD:
++			ReceiveInvalidPassword(p,interfaceType);
++			break;
++		case ID_MODIFIED_PACKET:
++			ReceiveModifiedPacket(p,interfaceType);
++			break;
++		case ID_REMOTE_PORT_REFUSED:
++			ReceiveRemotePortRefused(p,interfaceType);
++			break;
++		case ID_VOICE_PACKET:
++			ReceiveVoicePacket(p,interfaceType);
++			break;
++		case ID_PONG:
++			ReceivePong(p,interfaceType);
++			break;
++		case ID_UPDATE_DISTRIBUTED_NETWORK_OBJECT:
++			ReceiveDistributedNetworkObject(p,interfaceType);
++			break;
++		case ID_DISTRIBUTED_NETWORK_OBJECT_CREATION_ACCEPTED:
++			ReceiveDistributedNetworkObjectCreationAccepted(p,interfaceType);
++			break;
++		case ID_DISTRIBUTED_NETWORK_OBJECT_CREATION_REJECTED:
++			ReceiveDistributedNetworkObjectCreationRejected(p,interfaceType);
++			break;
++		case ID_AUTOPATCHER_REQUEST_FILE_LIST:
++			ReceiveAutopatcherRequestFileList(p,interfaceType);
++			break;
++		case ID_AUTOPATCHER_FILE_LIST:
++			ReceiveAutopatcherFileList(p,interfaceType);
++			break;
++		case ID_AUTOPATCHER_REQUEST_FILES:
++			ReceiveAutopatcherRequestFiles(p,interfaceType);
++			break;
++		case ID_AUTOPATCHER_SET_DOWNLOAD_LIST:
++			ReceiveAutopatcherSetDownloadList(p,interfaceType);
++			break;
++		case ID_AUTOPATCHER_WRITE_FILE:
++			ReceiveAutopatcherWriteFile(p,interfaceType);
++			break;
++		default:
++			// If not a native packet send it to ProcessUnhandledPacket which should have been written by the user
++			ProcessUnhandledPacket(p, packetIdentifier,interfaceType);
++			break;
++		}
++
++		interfaceType-&gt;DeallocatePacket(p);
++
++		p = interfaceType-&gt;Receive();
++	}
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ProcessUnhandledPacket(Packet *p, unsigned char packetIdentifier, InterfaceType *interfaceType)
++{
++	// Remove the annoying warnings
++	//packetIdentifier;
++	//interfaceType;
++
++	// This class should have been overrided to handle user defined packets
++#ifdef _DEBUG
++	// Uncomment this to show output as integers
++	
++//	int i;
++//	static unsigned packetNumber=0;
++//	// Raw output (nonstring)
++//	message.print(5000,15,&quot;MultiplayerGameTemplate::ProcessUnhandledPacket (%i) (%i): &quot;, packetNumber++, p-&gt;length);
++//	for (i=0; i &lt; p-&gt;length; i++)
++//	message.print(5000,15,&quot;%i &quot;,p-&gt;data[i]);
++//	message.print(5000,15,&quot;\n&quot;);
++	
++
++	// Uncomment this to show output as a string
++	
++	// Raw output (string)
++	message.print(5000,15,&quot;%s\n&quot;, p-&gt;data);
++	
++#endif
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteDisconnectionNotification(Packet *packet,InterfaceType *interfaceType)
++{
++	// Another system has disconnected.  Client only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_DISCONNECTION_NOTIFICATION from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_DISCONNECTION_NOTIFICATION,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteConnectionLost(Packet *packet,InterfaceType *interfaceType)
++{
++	// Another system has been dropped by the server.  Client only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_CONNECTION_LOST from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_CONNECTION_LOST,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteNewIncomingConnection(Packet *packet,InterfaceType *interfaceType)
++{
++	// Another system has connected.  Client only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_NEW_INCOMING_CONNECTION from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_NEW_INCOMING_CONNECTION,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemoteExistingConnection(Packet *packet,InterfaceType *interfaceType)
++{
++	// We just connected to the server and are getting a list of players already connected
++	// Note due to thread timing you might get both this and ID_REMOTE_NEW_INCOMING_CONNECTION when first connecting.
++	//  Client only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_EXISTING_CONNECTION from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++	//	ProcessUnhandledPacket(packet, ID_REMOTE_EXISTING_CONNECTION,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionBanned(Packet *packet,InterfaceType *interfaceType)
++{
++	// We are banned from connecting to the system specified in packet-&gt;playerId
++	// Peer or client
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_BANNED from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++	//	ProcessUnhandledPacket(packet, ID_REMOTE_EXISTING_CONNECTION,interfaceType);
++}
++
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionRequestAccepted(Packet *packet, InterfaceType *interfaceType)
++{
++    message.print(5000,15,&quot;We're accepted to connect&quot;);
++	// Our request to connect to another system has been accepted.  Client only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_REQUEST_ACCEPTED from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_CONNECTION_REQUEST_ACCEPTED,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveNewIncomingConnection(Packet *packet, InterfaceType *interfaceType)
++{
++	// Another system has requested to connect to us, which we have accepted.  Server or peer only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_NEW_INCOMING_CONNECTION from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_NEW_INCOMING_CONNECTION,interfaceType);
++
++	// This will send all existing distributed objects to the new player
++//#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++	DistributedNetworkObjectManager::Instance()-&gt;SendAllDistributedObjects(packet-&gt;playerId);
++//#endif
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionResumption(Packet *packet, InterfaceType *interfaceType)
++{
++	// Someone who was already connected to us connected again.  Server or peer only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_RESUMPTION from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_CONNECTION_RESUMPTION,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveNoFreeIncomingConnections(Packet *packet, InterfaceType *interfaceType)
++{
++	// The system we connected to has no free slots to connect to
++	// Set free slots by calling SetMaximumIncomingConnections
++	// Client or peer only.
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_NO_FREE_INCOMING_CONNECTIONS from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_NO_FREE_INCOMING_CONNECTIONS,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDisconnectionNotification(Packet *packet, InterfaceType *interfaceType)
++{
++	// A remote system terminated the connection.  packet-&gt;playerId specifies which remote system
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_DISCONNECTION_NOTIFICATION from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_DISCONNECTION_NOTIFICATION,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveConnectionLost(Packet *packet, InterfaceType *interfaceType)
++{
++	// The network cannot send reliable packets so has terminated the connection. packet-&gt;playerId specifies which remote system
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_CONNECTION_LOST from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_CONNECTION_LOST,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceivedStaticData(Packet *packet, InterfaceType *interfaceType)
++{
++	// Another system has just sent their static data to us (which we recorded automatically)
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_RECEIVED_STATIC_DATA from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_RECEIVED_STATIC_DATA,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveInvalidPassword(Packet *packet, InterfaceType *interfaceType)
++{
++	// Our connection to another system was refused because the passwords do not match
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_INVALID_PASSWORD from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_INVALID_PASSWORD,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveModifiedPacket(Packet *packet, InterfaceType *interfaceType)
++{
++	// The network layer has detected packet tampering
++	// This does NOT automatically close the connection
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_MODIFIED_PACKET from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_MODIFIED_PACKET,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveRemotePortRefused(Packet *packet, InterfaceType *interfaceType)
++{
++	// The remote system has responded with ICMP_PORT_UNREACHABLE
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_REMOTE_PORT_REFUSED from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_REMOTE_PORT_REFUSED,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveVoicePacket(Packet *packet, InterfaceType *interfaceType)
++{
++	// We got a voice packet
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_VOICE_PACKET from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++//	ProcessUnhandledPacket(packet, ID_VOICE_PACKET,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceivePong(Packet *packet, InterfaceType *interfaceType)
++{
++	// Peer or client.  Response from a ping for an unconnected system.
++//#ifdef _DEBUG
++	unsigned long time;
++	memcpy((char*)&amp;time, packet-&gt;data+sizeof(unsigned char), sizeof(unsigned long));
++	message.print(5000,15,&quot;ID_PONG from PlayerID:%u:%u on %p. Value is %i\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType, time);
++//#endif
++	//	ProcessUnhandledPacket(packet, ID_PONG,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDistributedNetworkObject(Packet *packet,InterfaceType *interfaceType)
++{
++	// Packet to create a distributed network object
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_UPDATE_DISTRIBUTED_NETWORK_OBJECT from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++
++	#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++
++	// This packet is only valid if the server or client was registered with the DistributedNetworkObjectManager
++	// If you this this assert, you need to call
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakServerInterface(myInstanceOfRakServer);
++	// and / or
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakClientInterface(myInstanceOfRakClient);
++	assert(DistributedNetworkObjectManager::Instance()-&gt;GetRakClientInterface() || DistributedNetworkObjectManager::Instance()-&gt;GetRakServerInterface());
++
++	DistributedNetworkObjectManager::Instance()-&gt;HandleDistributedNetworkObjectPacket(packet);
++	#endif
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDistributedNetworkObjectCreationAccepted(Packet *packet,InterfaceType *interfaceType)
++{
++	// Client only - creation of a distributed network object was accepted
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_DISTRIBUTED_NETWORK_OBJECT_CREATION_ACCEPTED from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++
++#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++	// This packet is only valid if the client was registered with the DistributedNetworkObjectManager
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakClientInterface(myInstanceOfRakClient);
++	assert(DistributedNetworkObjectManager::Instance()-&gt;GetRakClientInterface());
++
++	DistributedNetworkObjectManager::Instance()-&gt;HandleDistributedNetworkObjectPacketCreationAccepted(packet);
++#endif
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveDistributedNetworkObjectCreationRejected(Packet *packet,InterfaceType *interfaceType)
++{
++	// Client only - creation of a distributed network object was accepted
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_DISTRIBUTED_NETWORK_OBJECT_CREATION_REJECTED from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++
++#ifdef __DISTRIBUTED_NETWORK_OBJECT_MANAGER_H
++	// This packet is only valid if the client was registered with the DistributedNetworkObjectManager
++	// DistributedNetworkObjectManager::Instance()-&gt;RegisterRakClientInterface(myInstanceOfRakClient);
++	assert(DistributedNetworkObjectManager::Instance()-&gt;GetRakClientInterface());
++
++	DistributedNetworkObjectManager::Instance()-&gt;HandleDistributedNetworkObjectPacketCreationRejected(packet);
++#endif
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherRequestFileList(Packet *packet, InterfaceType *interfaceType)
++{
++	// Request for a list of files served by the autopatcher.
++	// Send to Autopatcher::SendDownloadableFileList(packet-&gt;playerId)
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_REQUEST_FILE_LIST from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_REQUEST_FILE_LIST,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherFileList(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got a list of files served by a remote autopatcher
++	// Send to Autopatcher::OnAutopatcherFileList(packet, bool);
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_FILE_LIST from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_FILE_LIST,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherRequestFiles(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got a request for a set of files from our autopatcher
++	// Send to Autopatcher::OnAutopatcherRequestFiles(packet);
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_REQUEST_FILES from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_REQUEST_FILES,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherSetDownloadList(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got confirmation of what files we are about to get from the remote autopatcher
++	// Send to Autopatcher::OnAutopatcherSetDownloadList(packet);
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_SET_DOWNLOAD_LIST from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_SET_DOWNLOAD_LIST,interfaceType);
++}
++
++template &lt;class InterfaceType&gt;
++void MultiplayerGameTemplate&lt;InterfaceType&gt;::ReceiveAutopatcherWriteFile(Packet *packet, InterfaceType *interfaceType)
++{
++	// Got a file from a remote autopatcher
++	// Send to Autopatcher::OnAutopatcherWriteFile(packet);
++//#ifdef _DEBUG
++	message.print(5000,15,&quot;ID_AUTOPATCHER_WRITE_FILE from PlayerID:%u:%u on %p.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++//#endif
++	// ProcessUnhandledPacket(packet, ID_AUTOPATCHER_WRITE_FILE,interfaceType);
++};
++
++// Copied from Multiplayer.cpp
++// If the first byte is ID_TIMESTAMP, then we want the 5th byte
++// Otherwise we want the 1st byte
++unsigned char GetPacketIdentifier(Packet *p)
++{
++	if (p==0)
++		return 255;
++
++	if ((unsigned char)p-&gt;data[0] == ID_TIMESTAMP)
++	{
++		assert(p-&gt;length &gt; sizeof(unsigned char) + sizeof(unsigned long));
++		return (unsigned char) p-&gt;data[sizeof(unsigned char) + sizeof(unsigned long)];
++	}
++	else
++		return (unsigned char) p-&gt;data[0];
++}
++
++REGISTER_GAME(MultiplayerGameClient, &quot;MultiplayerGameClient&quot;)
++REGISTER_GAME(MultiplayerGameServer, &quot;MultiplayerGameServer&quot;)
+
+Added: branches/multiplayer-branch/source/games/MultiplayerGame.h
+===================================================================
+--- branches/multiplayer-branch/source/games/MultiplayerGame.h	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/games/MultiplayerGame.h	2004-10-06 21:22:23 UTC (rev 75)
+@@ -0,0 +1,285 @@
++/* $Id: melee.h,v 1.3 2004/08/08 17:36:03 Yura Exp $ */ 
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef MULTIPLAYERGAME_HEADER
++#define MULTIPLAYERGAME_HEADER
++
++#include &quot;allegro.h&quot;
++#include &quot;melee.h&quot;
++#include &quot;scp.h&quot;
++#include &quot;frame.h&quot;
++#include &quot;melee/mgame.h&quot;
++#include &quot;melee/mview.h&quot;
++
++//#include &quot;games/gmelee.h&quot;
++//#include &quot;melee/mview.h&quot;
++//#include &quot;melee/mcontrol.h&quot;
++//#include &quot;other/planet3d.h&quot;
++////#include &quot;mshppan.h&quot;
++//#include &quot;melee/mship.h&quot;
++//#include &quot;melee/mlog.h&quot;
++////#include &quot;mnet1.h&quot;
++//#include &quot;melee/mitems.h&quot;
++//#include &quot;melee/mfleet.h&quot;
++
++
++#include &quot;../libraries/raknet/PacketEnumerations.h&quot;
++#include &quot;../libraries/raknet/RakNetworkFactory.h&quot;
++#include &quot;../libraries/raknet/RakClientInterface.h&quot;
++#include &quot;../libraries/raknet/RakServerInterface.h&quot;
++#include &quot;../libraries/raknet/NetworkTypes.h&quot;
++#include &quot;../libraries/raknet/BitStream.h&quot;
++#include &quot;../libraries/raknet/Multiplayer.h&quot;
++	
++#include &lt;stdlib.h&gt;
++#include &lt;string.h&gt;
++#include &lt;stdio.h&gt;
++#include &lt;time.h&gt;
++//#include &lt;allegro.h&gt;
++
++
++//! 
++unsigned char GetPacketIdentifier(Packet *p);
++
++// Holds enumeration data
++const int MOTD_MAXIMUM_LENGTH=50; // Characters allocated for the message of the day, used for enumerations
++const int SERVER_NAME_MAXIMUM_LENGTH=40; // Characters allocated for the server name
++
++//! data on the server which changes infrequently.  This information is transmitted to all joining clients.
++struct StaticServerDataStruct
++{
++	char MOTD[MOTD_MAXIMUM_LENGTH];  // (Message of the day) Optional, replace with whatever and/or add more fields
++	char serverName[SERVER_NAME_MAXIMUM_LENGTH];
++};
++
++const int SCDS_MAXIMUM_NAME_LENGTH=40;
++
++//! data on the client, which is automatically transmitted to the server and all other clients.  
++struct StaticClientDataStruct
++{
++	unsigned char typeId;  // ID_SET_CLIENT_DATA
++	char name[SCDS_MAXIMUM_NAME_LENGTH];
++};
++
++//! A class to implement Multiplayer Games with.  You should subclass this, rather than using it directly.
++//! You should also create a server and client class that can be used to start a game in the GUI and from the
++//! commandline (see MultiplayerGameServer for more explaination on how to do this).
++//! 
++//! This has default implementations of methods needed to:
++//! - start a server 
++//! - have clients connect to it
++//! - let players on a client to join a game.  Once in a game, players can:
++//! - - when first joining a match, select a fleet, according to the FleetSelectionPolicy
++//! - - when spawning, select a ship from their fleet, according to the SpawnTimeShipSelectionPolicy
++//! - - fly their ship, fire its weapons, etc.
++//! - - blow up other ships etc, and get blown up themselves, keeping score all the while.  Great fun!
++//! - the server will finish the game according to its victory conditions.
++//! 
++//! This class is templated to use any of three RakNet interface types. 
++//! Examples:
++//! - using MultiplayerGameTemplate&lt;RakClientInterface&gt; means we're using a RakClientInterface
++//! - using MultiplayerGameTemplate&lt;RakServerInterface&gt; means we're using a RakServerInterface
++//! - using MultiplayerGameTemplate&lt;RakPeerInterface&gt; means we're using a RakPeerInterface
++//!
++//! @see MultiplayerGameServer
++//! @see MultiplayerGameClient
++//! @see FleetSelectionPolicy
++//! @see SpawnTimeShipSelectionPolicy
++template &lt;class InterfaceType&gt;
++class MultiplayerGameTemplate : 
++	public Multiplayer&lt;InterfaceType&gt;,
++	public Game
++{
++public:
++    
++	//! 
++	MultiplayerGameTemplate();
++
++    //!
++	~MultiplayerGameTemplate();
++	
++	// Methods and data stuctures from class Game /////////////////////////////////////////////////
++	
++	//! pre-initialization (enough so that the destructor won't crash)
++	virtual void preinit() { Game::preinit(); }	
++	
++    //! initialization (loading data, creating a few game objects, whatever)
++    virtual void init(Log *log) { Game::init(log); }
++    
++    //! changes the view.  That is, the method that the screen is drawn for the user is selected.
++    //! @param new_view the View data structure to use.
++    virtual void change_view (View *new_view) { Game::change_view(new_view); }
++    
++    //! changes the view.  That is, the method that the screen is drawn for the user is selected.
++    //! @param name the name of the view method
++    virtual void change_view (const char * name ) { Game::change_view(name); }
++    
++    //! called before doing anything with game objects contained within you.  
++    virtual void prepare() { Game::prepare(); }
++    
++    //! called once per game loop.  Performs all game logic.
++    virtual void calculate() { 
++    	Game::calculate(); 
++    	ProcessPackets(networkInterface);
++    }
++    
++    //! called once per game execution.  This contains the game loop itself.
++    virtual void play() { Game::play(); }
++    
++    //! draws the entire world to a specific frame.
++    virtual void animate(Frame *frame) { Game::animate(frame); }
++    
++    //! draws the entire world.
++    virtual void animate() { Game::animate(); }
++
++  	//! called when an object is killed/died/exploded in the game.
++    //! \param who the SpaceObject that is in the process of dying.  Note that this may be a ship, an asteroid, a projectile, anything.
++    //! \param source this is what killed the SpaceObject who.  Note that it may be NULL
++  	virtual void object_died(SpaceObject *who, SpaceLocation *source) { Game::object_died(who, source); }
++  	
++  	//! called when a ship is killed/died/exploded in the game.
++    //!  TODO say which of these is true:
++    //!	 Note that object_died() will also be called when this happens.
++    //!	 Note that object_died() will *not* be called when this happens.
++    //! \param who the Ship that is in the immediate process of dying
++    //! \param source the target which killed the ship.  Note that it may not be a Ship, and it may be NULL
++  	virtual void ship_died(Ship *who, SpaceLocation *source) { Game::ship_died(who, source); }
++
++	//! Determines if the game has loaded/prepared all its data structures and ready to start.
++    //! @return true if the game is ready to start, false otherwise.
++	virtual bool game_ready() {return Game::game_ready(); }
++	
++	
++	// Methods and data stuctures from class Multiplayer ///////////////////////////////////////////
++		
++	//! Automagically processes all incoming packets, and calls appropriate handlers.  This method
++    //! must be called every frame, and this is done by default inside calculate().
++	void ProcessPackets(InterfaceType *interfaceType);
++	virtual void ProcessUnhandledPacket(Packet *p, unsigned char packetIdentifier, InterfaceType *interfaceType);
++	virtual void ReceiveRemoteDisconnectionNotification(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveRemoteConnectionLost(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveRemoteNewIncomingConnection(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveRemoteExistingConnection(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveConnectionBanned(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveConnectionRequestAccepted(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveNewIncomingConnection(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveConnectionResumption(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveNoFreeIncomingConnections(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveDisconnectionNotification(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveConnectionLost(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceivedStaticData(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveInvalidPassword(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveModifiedPacket(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveRemotePortRefused(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveVoicePacket(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceivePong(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveDistributedNetworkObject(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveDistributedNetworkObjectCreationAccepted(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveDistributedNetworkObjectCreationRejected(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveAutopatcherRequestFileList(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveAutopatcherFileList(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveAutopatcherRequestFiles(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveAutopatcherSetDownloadList(Packet *packet, InterfaceType *interfaceType);
++	virtual void ReceiveAutopatcherWriteFile(Packet *packet, InterfaceType *interfaceType);
++	
++// methods exclusive to this class /////////////////////////////////////////////////////////	
++	virtual bool isServer() { return _isServer; }
++	
++protected:
++	//! this is the object which is used in all interactions with the RakNet API.  Note that the actual type
++	//! of this variable depends on the type of InterfaceType.  This means if this templated class is used as a client,
++	//! this variable is a RakClientInterface.  
++	//! Examples:
++	//! - using MultiplayerGameTemplate&lt;RakClientInterface&gt; means this variable is a RakClientInterface
++	//! - using MultiplayerGameTemplate&lt;RakServerInterface&gt; means this variable is a RakServerInterface
++	//! - using MultiplayerGameTemplate&lt;RakPeerInterface&gt; means this variable is a RakPeerInterface
++	InterfaceType * networkInterface;
++
++protected:
++	bool _isServer;
++};
++
++//! This class is exposed to the list of available games.  Note that this class is
++//! for testing only, and it shouldn't be used as an actual gametype.  Instead,
++//! subclass MultiplayerGameTemplate, putting all functionality in there.  Then
++//! make two classes similar to MultiplayerGameClient and MultiplayerGameServer, like so:
++//! 
++//! template &lt;class InterfaceType&gt;
++//! class YourGameTemplate : 
++//! 	public MultiplayerGameTemplate&lt;InterfaceType&gt;,
++//! 	public Game
++//! {
++//!   ... // implement your game here by customizing methods here
++//! }
++//!
++//! class YourGameClient : public YourGameTemplate&lt;RakClientInterface&gt; { 
++//! public:
++//!   YourGameServer() { networkInterface = RakNetworkFactory::GetRakServerInterface(); }
++//!   ~YourGameServer() { RakNetworkFactory::DestroyRakServerInterface(networkInterface); }
++//! };
++//!
++//! class YourGameServer : public YourGameServerTemplate&lt;RakClientInterface&gt; { 
++//! public:
++//!   YourGameServer() { networkInterface = RakNetworkFactory::GetRakClientInterface(); }
++//!   ~YourGameServer() { RakNetworkFactory::DestroyRakClientInterface(networkInterface); }
++//! };
++//!
++class MultiplayerGameServer : public MultiplayerGameTemplate&lt;RakServerInterface&gt; 
++{ 
++public:
++	MultiplayerGameServer()
++    { 
++        _isServer = true;
++		networkInterface = RakNetworkFactory::GetRakServerInterface(); 
++        networkInterface-&gt;SetStaticServerData((char*)&amp;staticServerData, sizeof(staticServerData));
++        bool b = networkInterface-&gt;Start(2, 0, true, 15515);
++        if (!b)
++            throw &quot;Can't start server!&quot;;
++        message.print(5000,15,&quot;Started server!&quot;);
++	}
++	~MultiplayerGameServer() { RakNetworkFactory::DestroyRakServerInterface(networkInterface); }
++    
++    StaticServerDataStruct staticServerData;
++};
++
++class MultiplayerGameClient : public MultiplayerGameTemplate&lt;RakClientInterface&gt; 
++{ 
++public:
++	MultiplayerGameClient()
++    { 
++      networkInterface = RakNetworkFactory::GetRakClientInterface(); 
++      networkInterface-&gt;SetStaticClientData(UNASSIGNED_PLAYER_ID, (char*)&amp;staticClientData, sizeof(StaticClientDataStruct));
++      bool b = false;
++      while (!b) {
++        b = networkInterface-&gt;Connect(&quot;127.0.0.1&quot;, 15515, 15516, 0, true);
++        if (!b)
++            message.out(&quot;Couldn't connect, retrying...&quot;);
++      }
++      message.out(&quot;Connected to server!&quot;);
++      
++    }
++	~MultiplayerGameClient() { RakNetworkFactory::DestroyRakClientInterface(networkInterface);  }
++    StaticClientDataStruct staticClientData;
++};
++
++
++
++
++
++	
++	
++#endif
+
+Modified: branches/multiplayer-branch/source/games/gflmelee.cpp
+===================================================================
+--- branches/multiplayer-branch/source/games/gflmelee.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/games/gflmelee.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -28,8 +28,8 @@
+ #include &quot;melee/mshppan.h&quot;
+ 
+ #include &quot;melee/mframe.h&quot;
+-#include &quot;melee/mgame.h&quot;
+-#include &quot;melee/mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
++#include &quot;games/gmelee.h&quot;
+ #include &quot;melee/mcbodies.h&quot;
+ #include &quot;melee/mview.h&quot;
+ #include &quot;other/orbit.h&quot;
+
+Modified: branches/multiplayer-branch/source/games/ggob.cpp
+===================================================================
+--- branches/multiplayer-branch/source/games/ggob.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/games/ggob.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -26,7 +26,7 @@
+ #include &quot;frame.h&quot;
+ 
+ #include &quot;melee/mgame.h&quot;
+-#include &quot;melee/mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
+ #include &quot;melee/mview.h&quot;
+ #include &quot;melee/mcontrol.h&quot;
+ #include &quot;melee/mcbodies.h&quot;
+
+Copied: branches/multiplayer-branch/source/games/gmelee.cpp (from rev 71, branches/multiplayer-branch/source/melee/mmain.cpp)
+===================================================================
+--- branches/multiplayer-branch/source/melee/mmain.cpp	2004-09-28 19:53:03 UTC (rev 71)
++++ branches/multiplayer-branch/source/games/gmelee.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -0,0 +1,723 @@
++/* $Id$ */ 
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#include &lt;stdlib.h&gt;
++#include &lt;string.h&gt;
++#include &lt;stdio.h&gt;
++#include &lt;time.h&gt;
++#include &lt;allegro.h&gt;
++
++#include &quot;melee.h&quot;
++#include &quot;scp.h&quot;
++#include &quot;frame.h&quot;
++
++
++#include &quot;gmelee.h&quot;
++#include &quot;melee/mview.h&quot;
++#include &quot;melee/mcontrol.h&quot;
++#include &quot;other/planet3d.h&quot;
++#include &quot;melee/mshppan.h&quot;
++#include &quot;melee/mship.h&quot;
++#include &quot;melee/mlog.h&quot;
++//#include &quot;mnet1.h&quot;
++#include &quot;melee/mitems.h&quot;
++#include &quot;melee/mfleet.h&quot;
++
++#include &quot;gflmelee.h&quot;
++
++#include &quot;other/twconfig.h&quot;
++	
++#include &quot;ais.h&quot;
++
++int MeleeGame::add_player (Control *c, int team_index, const char *name, const char *fleet_section, const char *fleet_file) {STACKTRACE
++	int i = num_players;
++	num_players += 1;
++	player_control = (Control**) realloc(player_control,   sizeof(Control*)   * num_players);
++	player_name    =    (char**) realloc(player_name,      sizeof(char*)      * num_players);
++//	player_panel = (ShipPanel**) realloc(player_panel,     sizeof(ShipPanel*) * num_players);
++	player_fleet =     (Fleet**) realloc(player_fleet,     sizeof(Fleet *)    * num_players);
++	player_team =    (TeamCode*) realloc(player_team,      sizeof(TeamCode)   * num_players);
++	player_control[i] = c;
++	add_focus(c, c-&gt;channel);
++//	player_panel[i] = NULL;
++	player_fleet[i] = new Fleet();
++	player_fleet[i]-&gt;reset();
++	player_name[i] = strdup(name);
++	if (team_index &gt;= team_table_size) {
++		int i = team_table_size;
++		team_table_size = team_index + 1;
++		team_table = (TeamCode*) realloc(team_table, sizeof(TeamCode) * team_table_size);
++		for (; i &lt; team_table_size; i += 1) {
++			if (i) team_table[i] = new_team();
++			else team_table[i] = 0;
++		}
++	}
++	if (team_index) player_team[i] = team_table[team_index];
++	else player_team[i] = new_team();
++	char sect[40];
++	sprintf(sect, &quot;Player%d&quot;, i+1);
++	if (c-&gt;channel == channel_none) {
++		tw_error(&quot;channel_none not allowed here&quot;);
++		//log_file(fleet_file);
++		//::fleet-&gt;load(NULL, fleet_section);
++		}
++	else if (log-&gt;get_direction(c-&gt;channel) &amp; Log::direction_write) {
++		player_fleet[i]-&gt;load(fleet_file, fleet_section);
++		log_fleet(c-&gt;channel, player_fleet[i]);
++		c-&gt;target_sign_color = ((3+i) % 7) + 1;
++		}
++	else {
++		log_fleet(c-&gt;channel, player_fleet[i]);
++		}
++	tw_set_config_file(&quot;tmp.ini&quot;);
++	set_config_string(sect, &quot;Name&quot;, name);
++	set_config_string(sect, &quot;Type&quot;, c-&gt;getTypeName());
++	set_config_int(sect, &quot;Team&quot;, team_index);
++	set_config_int(sect, &quot;Channel&quot;, c-&gt;channel);
++	set_config_int(sect, &quot;StartingFleetCost&quot;, player_fleet[i]-&gt;getCost());
++	set_config_int(sect, &quot;StartingFleetSize&quot;, player_fleet[i]-&gt;getSize());
++	player_fleet[i]-&gt;save(NULL, sect);
++	player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, sect);
++	return i;
++	}
++
++void MeleeGame::init_objects() {
++  STACKTRACE;
++	int i;
++	add(new Stars());
++	Planet *planet = create_planet();
++	//Planet *planet = new Planet (size/2, planetSprite, random(planetSprite-&gt;frames()));
++	//add (planet);
++	if (view) view-&gt;camera.pos = size/2;
++	add(new WedgeIndicator(planet, 75, 4));
++	for (i = 0; i &lt; num_asteroids; i += 1) add(new Asteroid());
++	}
++
++void MeleeGame::init_players() {
++  STACKTRACE;
++	switch (log-&gt;type) {
++		case Log::log_normal: {
++			for (int i = 0; true; i += 1) {
++				char buffy[64];
++				sprintf(buffy, &quot;Player%d&quot;, i + 1);
++				tw_set_config_file(&quot;scp.ini&quot;);
++				const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
++				if (!type) break;
++				if (strcmp(type, &quot;none&quot;) == 0) continue;
++				const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
++				char config[64];
++				sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
++				//int channel = channel_server;
++				//if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
++				//if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
++				int ti = get_config_int(buffy, &quot;Team&quot;, 0);
++				add_player(create_control(channel_server, type, config), ti, name, buffy);
++			}
++		}
++		break;
++		case Log::log_net1client:
++		case Log::log_net1server: {
++			log_file(&quot;server.ini&quot;);
++			//int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
++			//if (use_teams_menu) {
++			if (1) {
++				int j;
++				for (j = 0; j &lt; 2; j += 1) {
++					int ch;
++					if (j == 0) ch = channel_server;
++					else ch = channel_client;
++					if (is_local(ch)) {
++						tw_set_config_file(&quot;client.ini&quot;);//each side determines whether they are using manually specified teams
++						int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
++						const char *simple_config = 
++							&quot;[Player1]\nType=Human\nConfig=0\nTeam=0\n&quot;;
++						for (int i = 0; true; i += 1) {
++							char buffy[64];
++							sprintf(buffy, &quot;Player%d&quot;, i + 1);
++							if (use_teams_menu) tw_set_config_file(&quot;scp.ini&quot;);
++							else set_config_data(simple_config, strlen(simple_config));
++							const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
++							if (!type) {
++								int tmp = 0;
++								log_int(ch, tmp);
++								break;
++							}
++							if (strcmp(type, &quot;none&quot;) == 0) continue;
++							const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
++							char config[64];
++							sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
++							//int channel = channel_server;
++							//if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
++							//if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
++							int ti = get_config_int(buffy, &quot;Team&quot;, 0);
++							{int tmp = 1; log_int(ch, tmp);}
++							log_int(ch, ti);
++							int name_length = strlen(name);
++							log_int(ch, name_length);
++							log_data(ch, (char*)name, name_length);
++							add_player(create_control(ch, type, config), ti, name, buffy);
++						}
++					}
++					else {
++						for (int i = 0; true; i += 1) {
++							int tmp;
++							log_int(ch, tmp);
++							if (tmp == 0) break;
++							int team;
++							char *name;
++							log_int(ch, team);
++							int name_length;
++							log_int(ch, name_length);
++							name = (char*)malloc((name_length+1)*sizeof(char));
++							log_data(ch, name, name_length);
++							name[name_length] = 0;
++							add_player(create_control(ch, &quot;Whatever&quot;), team, name, NULL);
++						}
++					}
++				}
++			}
++		}
++		break;
++	}
++	return;
++}
++
++void MeleeGame::set_resolution(int screen_x, int screen_y) {
++  STACKTRACE;
++	int view_x, view_y;
++	view_x = screen_x;
++	view_y = screen_y;
++	int n, m;
++	n = 99;//int(ceil(double(num_players) / int(view_y / PANEL_HEIGHT)));
++	if (n) m = int(ceil(num_players / (double)n));
++	else m = 0;
++	//view-&gt;set_window(screen, 0, 0, view_x - PANEL_WIDTH * m, view_y);
++	redraw();
++	return;
++	}
++
++void MeleeGame::preinit() {
++  STACKTRACE;
++	Game::preinit();
++	player_control = NULL;
++	player_name = NULL;
++//	player_panel = NULL;
++	player_fleet = NULL;
++
++	player_team = NULL;
++	team_table = NULL;
++	num_kills = 0;
++	kills = NULL;
++	num_players = 0;
++	
++	gameEnding = false;
++	gameEndingTime = DefaultEndingTime;
++	}
++void MeleeGame::init(Log *_log) {
++  STACKTRACE;
++	Game::init(_log);
++
++	team_table_size = 0;
++
++	view-&gt;window-&gt;locate(0,0,0,0,0,0.9,0,1);
++
++	tw_delete_file(&quot;tmp.ini&quot;);
++	tw_delete_file(&quot;fleets.tmp&quot;);
++	tw_set_config_file (&quot;tmp.ini&quot;);
++	set_config_string (NULL, &quot;Ignorethis&quot;, &quot;&quot;);
++	if (!log-&gt;playback) init_players();
++	log_file(&quot;tmp.ini&quot;);
++	if (log-&gt;playback) {
++		for (int i = 0; true; i += 1) {
++			char buffy[64];
++			sprintf(buffy, &quot;Player%d&quot;, i + 1);
++			log_file(&quot;tmp.ini&quot;);
++			const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
++			if (!type) break;
++			const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
++			int channel = get_config_int(buffy, &quot;Channel&quot;, -2);
++			int ti = get_config_int(buffy, &quot;Team&quot;, 0);
++			add_player(create_control(channel, type), ti, name, buffy);
++			player_fleet[i]-&gt;load(NULL, buffy);
++			player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, buffy);
++			}
++		}
++
++
++	prepare();
++	init_objects();
++
++	next_choose_new_ships_time = game_time + 200;
++
++	// team and health indicators.
++	indteamtoggle = 0;
++	indhealthtoggle = 0;
++
++	return;
++	}
++
++MeleeGame::~MeleeGame() {STACKTRACE
++	if (player_control) free (player_control);
++	int i;
++	if (player_name) {
++		for (i = 0; i &lt; num_players; i += 1) {
++			free(player_name[i]);
++			}
++		free(player_name);
++		}
++//	if (player_panel) free (player_panel);
++
++	if (player_team) free(player_team);
++	if (kills) free(kills);
++	}
++
++static int kill_all_delay_counter = 0;
++void MeleeGame::calculate() {
++  STACKTRACE;
++	Game::calculate();
++	if (next_choose_new_ships_time &lt;= game_time) {
++		choose_new_ships();
++		next_choose_new_ships_time = game_time + 24*60*60*1000;
++	}
++
++	// specially for play-testers:
++	// kill all ships and ship-objects in the melee-game
++	if (kill_all_delay_counter &gt; 0)
++	{
++		kill_all_delay_counter -= frame_time;
++	} else {
++
++		if (key[KEY_LCONTROL] &amp;&amp; key[KEY_ALT] &amp;&amp; key[KEY_K])
++		{
++			kill_all_delay_counter += 1000;	// 1 second delay
++
++			
++			for(std::list&lt;SpaceLocation*&gt;::iterator i=physics-&gt;item.begin();i!=physics-&gt;item.end();i++)
++			  {
++			    SpaceLocation *o;
++			    o = *i;
++			    if (!(o &amp;&amp; o-&gt;exists()))
++			      continue;
++			    if (o-&gt;isPlanet() || o-&gt;isAsteroid())
++			      continue;
++			    o-&gt;die();
++			  }
++		}
++	}
++
++
++	return;
++	}
++
++void MeleeGame::ship_died(Ship *who, SpaceLocation *source) {
++  STACKTRACE;
++	char victimName[80] = &quot;&quot;;
++	char killerName[80] = &quot;&quot;;
++	int victimID = -1;
++	int killerID = -1;
++
++	// determine who died.
++	if (who &amp;&amp; who-&gt;control) {
++		for (int i=0; i&lt;num_players; i++) {
++			if (player_control[i] == who-&gt;control) {
++				victimID = i;
++				break;
++			}
++		}
++		strcpy(victimName, player_name[victimID]);
++	}
++	
++	// determine who killed, but skip it if nobody died.
++	if (strlen(victimName)&gt;0 &amp;&amp; source) {
++		
++		if ( ! source-&gt;isPlanet())
++		{
++			if (source-&gt;ship &amp;&amp; source-&gt;ship-&gt;control) {
++				for (int i=0; i&lt;num_players; i++) {
++					if (player_control[i] == source-&gt;ship-&gt;control) {
++						killerID = i;
++						break;
++					}
++				}
++				strcpy(killerName, player_name[killerID]);
++			}
++		}
++	}
++	
++	if (killerID == victimID) {
++		message.print(5000,15,&quot;%s killed itself.&quot;, victimName);
++	}
++	else { 
++		if (source &amp;&amp; source-&gt;isPlanet())
++			message.print(5000,15,&quot;%s dove into a planet.&quot;, victimName);
++		else {
++			if (strlen(killerName) &gt; 0) {
++				message.print(5000,15,&quot;%s killed %s.&quot;, killerName, victimName);
++			}
++			else {
++				message.print(5000,15,&quot;%s died.&quot;, victimName);
++			}
++		}
++	}
++	
++	if ( (victimID != -1) &amp;&amp;  
++		 (player_fleet[victimID]-&gt;getSize() &lt;= 0) )
++	{
++		message.print(8000,15,&quot;%s has been eliminated!&quot;, victimName);
++	}
++	
++	int n = game_time + 4000;
++	if (next_choose_new_ships_time &gt; n) next_choose_new_ships_time = n;
++	Game::ship_died(who, source);
++	return;
++	}
++
++void MeleeGame::display_stats() {
++  STACKTRACE;
++	pause();
++	int i;
++	for (i = 0; i &lt; num_players; i += 1) {
++		Fleet *fleet = player_fleet[i];
++		switch (log-&gt;type) {
++			case Log::log_net1client:
++			case Log::log_net1server: {
++//				if (log-&gt;get_direction(player_control[i]-&gt;channel) &amp; Log::direction_write) 
++					message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
++//				else
++//					message.print(6000, 15, &quot;%s status: : %d / %d points&quot;, buffy, fleet-&gt;cost, player_total_fleet[i]);
++			}
++			break;
++			default: {
++				message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
++			}
++			break;
++		}
++	}
++	unpause();
++	return;
++}
++bool MeleeGame::handle_key(int k)
++{
++  STACKTRACE;
++	switch (k &gt;&gt; 8) {
++		default: {
++			return Game::handle_key(k);
++			}
++		break;
++		case KEY_F5: {
++			display_stats();
++			return true;
++			}
++		break;
++		case KEY_F7: {
++			if (log-&gt;type == Log::log_normal) Game::handle_key(k);
++			return true;
++			}
++		break;
++		case KEY_F9: {
++			if (log-&gt;type != Log::log_normal) return false;
++			message.out(&quot;MUHAHAHAHAHA!!!!&quot;, 5000, 12);
++			add(new Planet(random(size), meleedata.planetSprite, random(meleedata.planetSprite-&gt;frames())));
++			return true;
++			}
++		break;
++		//don't use hardwired normal keys
++		case KEY_H:
++			if ((k &amp; 255) == 'H'-'A'+1) indhealthtoggle = ~indhealthtoggle;
++			break;
++		case KEY_T:
++			if ((k &amp; 255) == 'T'-'A'+1) indteamtoggle = ~indteamtoggle;
++			break;
++		}
++	return false;
++	}
++
++
++
++// added ROB
++class TeamIndicator : public Presence
++{
++public:
++	int		*indtoggle;
++	Ship	*mother;
++	TeamIndicator(Ship *creator, int *toggle);
++
++	virtual void calculate();
++	virtual void animate(Frame *space);
++};
++
++
++
++void MeleeGame::choose_new_ships() 
++{
++  STACKTRACE;
++  char tmp[40];
++  int i;
++  pause();
++
++  int *slot = new int[num_players];
++  //choose ships and send them across network
++  for (i = 0; i &lt; num_players; i += 1) 
++    {
++      slot[i] = -2;
++      if (player_control[i]-&gt;ship) 
++	{
++	}
++      else 
++	{
++	  sprintf (tmp, &quot;Player%d&quot;, i+1);
++	  Fleet *fleet = player_fleet[i];
++	  if (fleet-&gt;getSize() == 0) continue;
++	  char buffy[512];
++	  
++	  if (strlen(fleet-&gt;getTitle()) != 0) 
++	    sprintf(buffy, &quot;%s\n%s\n&quot;, player_name[i], fleet-&gt;getTitle());
++	  else
++	    sprintf(buffy, &quot;%s\n&quot;, player_name[i]);
++	  
++	  slot[i] = player_control[i]-&gt;choose_ship(window, buffy, fleet);
++	  if (player_control[i]-&gt;channel != channel_none) {
++	    slot[i] = intel_ordering(slot[i]);
++	    log-&gt;buffer(player_control[i]-&gt;channel, &amp;slot[i], sizeof(int));
++	    log-&gt;flush();
++	  }
++	}
++    }
++  //recieve the ships that were chosen
++  log-&gt;listen();
++  for (i = 0; i &lt; num_players; i += 1) 
++    {
++      if (slot[i] == -2) continue;
++      if (player_control[i]-&gt;channel != channel_none) 
++	{
++	  log-&gt;unbuffer(player_control[i]-&gt;channel, &amp;slot[i], sizeof(int));
++	  slot[i] = intel_ordering(slot[i]);
++	}
++    }
++  //create the ships that were chosen
++  for (i = 0; i &lt; num_players; i += 1) 
++    {
++      if (slot[i] == -2) continue;
++      sprintf (tmp, &quot;Player%d&quot;, i+1);
++
++      Fleet *fleet = player_fleet[i];
++      if (slot[i] == -1) slot[i] = random() % fleet-&gt;getSize();
++      if (slot[i] &lt; 0 || slot[i] &gt;= fleet-&gt;getSize()) {tw_error(&quot;trying to load invalid ship&quot;);}
++      Ship *s = create_ship(fleet-&gt;getShipType(slot[i])-&gt;id, player_control[i], random(size), random(PI2), player_team[i]);
++      if (!s) {tw_error(&quot;unable to create ship&quot;);}
++      fleet-&gt;clear_slot(slot[i]);
++      fleet-&gt;Sort();
++      
++      s-&gt;locate();
++      add ( new WedgeIndicator ( s, 30, i+1 ) );
++      ShipPanel *panel = new ShipPanel(s);
++      panel-&gt;window-&gt;init(window);
++      panel-&gt;window-&gt;locate(
++			    0, 0.9,
++			    0, i * (100.0/480), 
++			    0, 0.1,
++			    0, (100.0/480)
++			    );
++      add(panel);
++      add(s-&gt;get_ship_phaser());
++      
++      // add a healthbar for the ship, and also a team indicator.
++      add(new HealthBar(s, &amp;indhealthtoggle));
++      add(new TeamIndicator(s, &amp;indteamtoggle));
++      
++      
++      // CHECK FILE SIZES !! to intercept desynch before they happen.
++      int myfsize, otherfsize;
++      
++      myfsize = 0;
++      otherfsize = myfsize;
++      if (player_control[i]-&gt;channel != channel_none) 
++	{
++	  log_int(player_control[i]-&gt;channel, otherfsize);
++	}
++      
++      if (otherfsize != myfsize)
++	{
++	  // the player who loads the ship doesn't get this message, cause his own file is identical by default
++	  tw_error(&quot;DAT files have different size! This may cause a desynch. Press Retry to continue&quot;);
++	}
++		
++		
++    }
++  delete[] slot;
++  //message.out(&quot;Finished selecting ships...&quot;, 1500);
++  unpause();
++  return;
++}
++
++bool MeleeGame::isGameDone() 
++{
++  STACKTRACE;
++  /*! we'll only check this every now and again, to avoid bogging down the engine.  */  
++  enum { IterationsToSkip = 30 };
++  static long iterationsToSkip = IterationsToSkip;
++  
++  /*! */
++  if (gameEnding) {
++    /*! how long do we wait after a victory before exiting the game? */
++    if (--gameEndingTime &gt; 0)
++      return Game::isGameDone();
++    else {
++      game_done = true;
++    }
++  }
++  
++  if (iterationsToSkip-- &lt;=0 ) {
++    iterationsToSkip = IterationsToSkip;
++    
++    //determine how many teams are still alive
++    unsigned numAliveTeams = 0;
++    TeamCode * teams = (TeamCode*)calloc(MAX_TEAMS, sizeof(TeamCode));
++    
++    for (int i=0; i&lt;num_players; i++) {
++      
++      //check for: 
++      //* does the player have any ships left in her fleet?
++      //* is the player controlling a ship right now?
++      if ( ( player_fleet[i] &amp;&amp; 
++	     player_fleet[i]-&gt;getSize() &gt; 0)
++	   ||
++	   (player_control[i] &amp;&amp;
++	    player_control[i]-&gt;ship)
++	   )
++	{
++	  if (teams[ player_team[i] ] == 0)
++	    numAliveTeams++;
++	  teams[ player_team[i] ]++;
++	}
++    }
++    
++    //either there's one team left standing, or none. :)
++    // either way, the game is over.
++    //we delay ending the game a few seconds for dramatic effect
++    if (numAliveTeams &lt;= 1) {
++      gameEnding = true;
++      if (numAliveTeams==1) {
++	for (int i=0; i&lt;num_players; i++) {
++	  if ( ( player_fleet[i] &amp;&amp; 
++		 player_fleet[i]-&gt;getSize() &gt; 0)
++	       ||
++	       (player_control[i] &amp;&amp;
++		player_control[i]-&gt;ship) )
++	    {
++	      if (player_control[i]-&gt;isHuman())
++		message.print(8000,15,&quot;%s won the match!&quot;, player_name[i]);
++	      else
++		message.print(8000,15,&quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
++	    				break;
++	    }
++	}
++      } else {
++	message.print(8000,15,&quot;Match ends in a draw!&quot;);
++      }
++    }
++    free(teams);
++  }
++  return Game::isGameDone();
++}
++
++// this should be places elsewhere I think ...
++TeamIndicator::TeamIndicator(Ship *s, int *atoggle)
++{
++  STACKTRACE;
++	indtoggle = atoggle;
++	mother = s;
++}
++
++void TeamIndicator::calculate()
++{
++  STACKTRACE;
++	if ( !(mother &amp;&amp; mother-&gt;exists()) )
++	{
++		mother = 0;
++		state = 0;
++		return;
++	}
++}
++
++void TeamIndicator::animate(Frame *space) {
++  STACKTRACE;
++  if (!*indtoggle)
++    return;
++  
++  if (mother-&gt;isInvisible())
++    return;
++  
++  Vector2i co1, co2;
++  
++  co1 = corner(mother-&gt;pos - 0.5 * mother-&gt;size).round();
++  co2 = corner(mother-&gt;pos + 0.5 * mother-&gt;size).round();
++  
++  if (co2.x &lt; 0) return;
++  if (co2.y &lt; 0) return;
++  if (co1.x &gt;= space-&gt;surface-&gt;w) return;
++  if (co1.y &gt;= space-&gt;surface-&gt;h) return;
++  
++  int col;
++  col = palette_color[mother-&gt;get_team() + 1];	// team 0 is black ...
++  
++  rect(space-&gt;surface, co1.x, co1.y, co2.x, co2.y, col);
++  space-&gt;add_box(co1.x, co1.y, co2.x, co2.y);
++  
++}
++void MeleeGame::showHelpText() {
++  STACKTRACE;
++	const char * file = data_full_path(&quot;ingame.txt&quot;).c_str();
++	char text[10000] = &quot;&quot;;
++	char controlHelp[3000] = &quot;&quot;;
++	
++	sprintf(text, &quot;In-Game Keys:\n&quot;);
++	for (int i=0; i&lt;num_players; i++) {
++		if (player_control[i])// &amp;&amp; player_control[i]-&gt;isHuman() ) {
++		{
++			strcpy(controlHelp, &quot;&quot;);
++			player_control[i]-&gt;getHelpText(controlHelp);
++			strcat(controlHelp, &quot;\n&quot;);
++			
++			strcat(text, controlHelp);
++		}
++	}
++	
++	int i;
++	PACKFILE *f;
++	char * willy = NULL;
++	f = pack_fopen (file, F_READ);
++	if (!f) {
++		willy = (char*) malloc(strlen(file)+strlen(&quot;Failed to load file \&quot;\&quot;&quot;)+1);
++		sprintf(text, &quot;Failed to load file \&quot;%s\&quot;&quot;,file);
++	}
++	else {
++		i = file_size(file);
++		willy = (char*)malloc(i+1);
++		i = pack_fread (willy, i, f);
++		pack_fclose(f);
++		willy[i] = 0;
++	}
++	strcat(text, willy);
++	show_text(text);
++	free(willy); // now this is funny :)
++	return;
++}
++
++
++
++REGISTER_GAME(MeleeGame, &quot;Melee&quot;)
+
+Copied: branches/multiplayer-branch/source/games/gmelee.h (from rev 71, branches/multiplayer-branch/source/melee/mmain.h)
+===================================================================
+--- branches/multiplayer-branch/source/melee/mmain.h	2004-09-28 19:53:03 UTC (rev 71)
++++ branches/multiplayer-branch/source/games/gmelee.h	2004-10-06 21:22:23 UTC (rev 75)
+@@ -0,0 +1,85 @@
++/* $$ */ 
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef __MMAIN_H__
++#define __MMAIN_H__
++
++#include &quot;melee.h&quot;
++#include &quot;melee/mgame.h&quot;
++
++enum { DefaultEndingTime = 1000 };
++
++class MeleeGame : public Game {
++	public:
++	enum { 
++		num_asteroids = 4 
++		};
++		
++	~MeleeGame();
++
++	virtual void calculate();
++	virtual void preinit();	
++	virtual void init (Log *_log = NULL);
++	virtual void set_resolution(int screen_x, int screen_y);
++
++	virtual void init_players();
++	virtual void init_objects();
++
++	virtual void ship_died(Ship *who, SpaceLocation *source);
++	//kill history stuff
++	int num_kills;
++	struct ShipKill {
++		int time;
++		struct Party {
++			unsigned int ally_flag;
++			ShipData *data;
++			ShipType *type;
++		};
++		Party victim, killer;
++		} *kills;
++	void display_stats();
++
++	virtual int add_player (Control *c, int team_index, const char *name, const char *fleet, const char *fleet_file = &quot;fleets.ini&quot;) ;
++	virtual bool isGameDone();
++	int num_players;
++	Control **player_control;
++//	ShipPanel **player_panel;
++	Fleet **player_fleet;
++	char **player_name;
++	char *player_attributes;
++	TeamCode *player_team;
++	TeamCode *team_table;
++	int team_table_size;
++//	virtual void player_said(int who, const char *what);
++
++	protected:
++	virtual bool handle_key(int k);
++	
++	virtual void showHelpText();
++	
++	bool gameEnding;
++	long gameEndingTime;
++
++	int next_choose_new_ships_time;
++	virtual void choose_new_ships() ;
++
++	int indhealthtoggle, indteamtoggle;
++
++	};
++
++
++#endif // __MMAIN_H__
+
+Modified: branches/multiplayer-branch/source/libraries/raknet/Multiplayer.h
+===================================================================
+--- branches/multiplayer-branch/source/libraries/raknet/Multiplayer.h	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/libraries/raknet/Multiplayer.h	2004-10-06 21:22:23 UTC (rev 75)
+@@ -209,8 +209,8 @@
+ void Multiplayer&lt;InterfaceType&gt;::ProcessUnhandledPacket(Packet *p, unsigned char packetIdentifier, InterfaceType *interfaceType)
+ {
+ 	// Remove the annoying warnings
+-	packetIdentifier;
+-	interfaceType;
++	//packetIdentifier;
++	//interfaceType;
+ 
+ 	// This class should have been overrided to handle user defined packets
+ #ifdef _DEBUG
+
+Modified: branches/multiplayer-branch/source/melee/mhelpers.cpp
+===================================================================
+--- branches/multiplayer-branch/source/melee/mhelpers.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/melee/mhelpers.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -27,7 +27,7 @@
+ #include &lt;assert.h&gt;
+ #include &quot;other/dialogs.h&quot;
+ 
+-#include &quot;melee/mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
+ #include &quot;scp.h&quot;
+ #include &quot;melee.h&quot;
+ #include &quot;melee/mcontrol.h&quot;
+
+Deleted: branches/multiplayer-branch/source/melee/mmain.cpp
+===================================================================
+--- branches/multiplayer-branch/source/melee/mmain.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/melee/mmain.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -1,723 +0,0 @@
+-/* $Id: mmain.cpp,v 1.3 2004/08/08 17:36:06 Yura Exp $ */ 
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#include &lt;stdlib.h&gt;
+-#include &lt;string.h&gt;
+-#include &lt;stdio.h&gt;
+-#include &lt;time.h&gt;
+-#include &lt;allegro.h&gt;
+-
+-#include &quot;melee.h&quot;
+-#include &quot;scp.h&quot;
+-#include &quot;frame.h&quot;
+-
+-
+-#include &quot;mmain.h&quot;
+-#include &quot;mview.h&quot;
+-#include &quot;mcontrol.h&quot;
+-#include &quot;other/planet3d.h&quot;
+-#include &quot;mshppan.h&quot;
+-#include &quot;mship.h&quot;
+-#include &quot;mlog.h&quot;
+-//#include &quot;mnet1.h&quot;
+-#include &quot;mitems.h&quot;
+-#include &quot;mfleet.h&quot;
+-
+-#include &quot;games/gflmelee.h&quot;
+-
+-#include &quot;other/twconfig.h&quot;
+-	
+-#include &quot;ais.h&quot;
+-
+-int NormalGame::add_player (Control *c, int team_index, const char *name, const char *fleet_section, const char *fleet_file) {STACKTRACE
+-	int i = num_players;
+-	num_players += 1;
+-	player_control = (Control**) realloc(player_control,   sizeof(Control*)   * num_players);
+-	player_name    =    (char**) realloc(player_name,      sizeof(char*)      * num_players);
+-//	player_panel = (ShipPanel**) realloc(player_panel,     sizeof(ShipPanel*) * num_players);
+-	player_fleet =     (Fleet**) realloc(player_fleet,     sizeof(Fleet *)    * num_players);
+-	player_team =    (TeamCode*) realloc(player_team,      sizeof(TeamCode)   * num_players);
+-	player_control[i] = c;
+-	add_focus(c, c-&gt;channel);
+-//	player_panel[i] = NULL;
+-	player_fleet[i] = new Fleet();
+-	player_fleet[i]-&gt;reset();
+-	player_name[i] = strdup(name);
+-	if (team_index &gt;= team_table_size) {
+-		int i = team_table_size;
+-		team_table_size = team_index + 1;
+-		team_table = (TeamCode*) realloc(team_table, sizeof(TeamCode) * team_table_size);
+-		for (; i &lt; team_table_size; i += 1) {
+-			if (i) team_table[i] = new_team();
+-			else team_table[i] = 0;
+-		}
+-	}
+-	if (team_index) player_team[i] = team_table[team_index];
+-	else player_team[i] = new_team();
+-	char sect[40];
+-	sprintf(sect, &quot;Player%d&quot;, i+1);
+-	if (c-&gt;channel == channel_none) {
+-		tw_error(&quot;channel_none not allowed here&quot;);
+-		//log_file(fleet_file);
+-		//::fleet-&gt;load(NULL, fleet_section);
+-		}
+-	else if (log-&gt;get_direction(c-&gt;channel) &amp; Log::direction_write) {
+-		player_fleet[i]-&gt;load(fleet_file, fleet_section);
+-		log_fleet(c-&gt;channel, player_fleet[i]);
+-		c-&gt;target_sign_color = ((3+i) % 7) + 1;
+-		}
+-	else {
+-		log_fleet(c-&gt;channel, player_fleet[i]);
+-		}
+-	tw_set_config_file(&quot;tmp.ini&quot;);
+-	set_config_string(sect, &quot;Name&quot;, name);
+-	set_config_string(sect, &quot;Type&quot;, c-&gt;getTypeName());
+-	set_config_int(sect, &quot;Team&quot;, team_index);
+-	set_config_int(sect, &quot;Channel&quot;, c-&gt;channel);
+-	set_config_int(sect, &quot;StartingFleetCost&quot;, player_fleet[i]-&gt;getCost());
+-	set_config_int(sect, &quot;StartingFleetSize&quot;, player_fleet[i]-&gt;getSize());
+-	player_fleet[i]-&gt;save(NULL, sect);
+-	player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, sect);
+-	return i;
+-	}
+-
+-void NormalGame::init_objects() {
+-  STACKTRACE;
+-	int i;
+-	add(new Stars());
+-	Planet *planet = create_planet();
+-	//Planet *planet = new Planet (size/2, planetSprite, random(planetSprite-&gt;frames()));
+-	//add (planet);
+-	if (view) view-&gt;camera.pos = size/2;
+-	add(new WedgeIndicator(planet, 75, 4));
+-	for (i = 0; i &lt; num_asteroids; i += 1) add(new Asteroid());
+-	}
+-
+-void NormalGame::init_players() {
+-  STACKTRACE;
+-	switch (log-&gt;type) {
+-		case Log::log_normal: {
+-			for (int i = 0; true; i += 1) {
+-				char buffy[64];
+-				sprintf(buffy, &quot;Player%d&quot;, i + 1);
+-				tw_set_config_file(&quot;scp.ini&quot;);
+-				const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
+-				if (!type) break;
+-				if (strcmp(type, &quot;none&quot;) == 0) continue;
+-				const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
+-				char config[64];
+-				sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
+-				//int channel = channel_server;
+-				//if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
+-				//if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
+-				int ti = get_config_int(buffy, &quot;Team&quot;, 0);
+-				add_player(create_control(channel_server, type, config), ti, name, buffy);
+-			}
+-		}
+-		break;
+-		case Log::log_net1client:
+-		case Log::log_net1server: {
+-			log_file(&quot;server.ini&quot;);
+-			//int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
+-			//if (use_teams_menu) {
+-			if (1) {
+-				int j;
+-				for (j = 0; j &lt; 2; j += 1) {
+-					int ch;
+-					if (j == 0) ch = channel_server;
+-					else ch = channel_client;
+-					if (is_local(ch)) {
+-						tw_set_config_file(&quot;client.ini&quot;);//each side determines whether they are using manually specified teams
+-						int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
+-						const char *simple_config = 
+-							&quot;[Player1]\nType=Human\nConfig=0\nTeam=0\n&quot;;
+-						for (int i = 0; true; i += 1) {
+-							char buffy[64];
+-							sprintf(buffy, &quot;Player%d&quot;, i + 1);
+-							if (use_teams_menu) tw_set_config_file(&quot;scp.ini&quot;);
+-							else set_config_data(simple_config, strlen(simple_config));
+-							const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
+-							if (!type) {
+-								int tmp = 0;
+-								log_int(ch, tmp);
+-								break;
+-							}
+-							if (strcmp(type, &quot;none&quot;) == 0) continue;
+-							const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
+-							char config[64];
+-							sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
+-							//int channel = channel_server;
+-							//if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
+-							//if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
+-							int ti = get_config_int(buffy, &quot;Team&quot;, 0);
+-							{int tmp = 1; log_int(ch, tmp);}
+-							log_int(ch, ti);
+-							int name_length = strlen(name);
+-							log_int(ch, name_length);
+-							log_data(ch, (char*)name, name_length);
+-							add_player(create_control(ch, type, config), ti, name, buffy);
+-						}
+-					}
+-					else {
+-						for (int i = 0; true; i += 1) {
+-							int tmp;
+-							log_int(ch, tmp);
+-							if (tmp == 0) break;
+-							int team;
+-							char *name;
+-							log_int(ch, team);
+-							int name_length;
+-							log_int(ch, name_length);
+-							name = (char*)malloc((name_length+1)*sizeof(char));
+-							log_data(ch, name, name_length);
+-							name[name_length] = 0;
+-							add_player(create_control(ch, &quot;Whatever&quot;), team, name, NULL);
+-						}
+-					}
+-				}
+-			}
+-		}
+-		break;
+-	}
+-	return;
+-}
+-
+-void NormalGame::set_resolution(int screen_x, int screen_y) {
+-  STACKTRACE;
+-	int view_x, view_y;
+-	view_x = screen_x;
+-	view_y = screen_y;
+-	int n, m;
+-	n = 99;//int(ceil(double(num_players) / int(view_y / PANEL_HEIGHT)));
+-	if (n) m = int(ceil(num_players / (double)n));
+-	else m = 0;
+-	//view-&gt;set_window(screen, 0, 0, view_x - PANEL_WIDTH * m, view_y);
+-	redraw();
+-	return;
+-	}
+-
+-void NormalGame::preinit() {
+-  STACKTRACE;
+-	Game::preinit();
+-	player_control = NULL;
+-	player_name = NULL;
+-//	player_panel = NULL;
+-	player_fleet = NULL;
+-
+-	player_team = NULL;
+-	team_table = NULL;
+-	num_kills = 0;
+-	kills = NULL;
+-	num_players = 0;
+-	
+-	gameEnding = false;
+-	gameEndingTime = DefaultEndingTime;
+-	}
+-void NormalGame::init(Log *_log) {
+-  STACKTRACE;
+-	Game::init(_log);
+-
+-	team_table_size = 0;
+-
+-	view-&gt;window-&gt;locate(0,0,0,0,0,0.9,0,1);
+-
+-	tw_delete_file(&quot;tmp.ini&quot;);
+-	tw_delete_file(&quot;fleets.tmp&quot;);
+-	tw_set_config_file (&quot;tmp.ini&quot;);
+-	set_config_string (NULL, &quot;Ignorethis&quot;, &quot;&quot;);
+-	if (!log-&gt;playback) init_players();
+-	log_file(&quot;tmp.ini&quot;);
+-	if (log-&gt;playback) {
+-		for (int i = 0; true; i += 1) {
+-			char buffy[64];
+-			sprintf(buffy, &quot;Player%d&quot;, i + 1);
+-			log_file(&quot;tmp.ini&quot;);
+-			const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
+-			if (!type) break;
+-			const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
+-			int channel = get_config_int(buffy, &quot;Channel&quot;, -2);
+-			int ti = get_config_int(buffy, &quot;Team&quot;, 0);
+-			add_player(create_control(channel, type), ti, name, buffy);
+-			player_fleet[i]-&gt;load(NULL, buffy);
+-			player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, buffy);
+-			}
+-		}
+-
+-
+-	prepare();
+-	init_objects();
+-
+-	next_choose_new_ships_time = game_time + 200;
+-
+-	// team and health indicators.
+-	indteamtoggle = 0;
+-	indhealthtoggle = 0;
+-
+-	return;
+-	}
+-
+-NormalGame::~NormalGame() {STACKTRACE
+-	if (player_control) free (player_control);
+-	int i;
+-	if (player_name) {
+-		for (i = 0; i &lt; num_players; i += 1) {
+-			free(player_name[i]);
+-			}
+-		free(player_name);
+-		}
+-//	if (player_panel) free (player_panel);
+-
+-	if (player_team) free(player_team);
+-	if (kills) free(kills);
+-	}
+-
+-static int kill_all_delay_counter = 0;
+-void NormalGame::calculate() {
+-  STACKTRACE;
+-	Game::calculate();
+-	if (next_choose_new_ships_time &lt;= game_time) {
+-		choose_new_ships();
+-		next_choose_new_ships_time = game_time + 24*60*60*1000;
+-	}
+-
+-	// specially for play-testers:
+-	// kill all ships and ship-objects in the melee-game
+-	if (kill_all_delay_counter &gt; 0)
+-	{
+-		kill_all_delay_counter -= frame_time;
+-	} else {
+-
+-		if (key[KEY_LCONTROL] &amp;&amp; key[KEY_ALT] &amp;&amp; key[KEY_K])
+-		{
+-			kill_all_delay_counter += 1000;	// 1 second delay
+-
+-			
+-			for(std::list&lt;SpaceLocation*&gt;::iterator i=physics-&gt;item.begin();i!=physics-&gt;item.end();i++)
+-			  {
+-			    SpaceLocation *o;
+-			    o = *i;
+-			    if (!(o &amp;&amp; o-&gt;exists()))
+-			      continue;
+-			    if (o-&gt;isPlanet() || o-&gt;isAsteroid())
+-			      continue;
+-			    o-&gt;die();
+-			  }
+-		}
+-	}
+-
+-
+-	return;
+-	}
+-
+-void NormalGame::ship_died(Ship *who, SpaceLocation *source) {
+-  STACKTRACE;
+-	char victimName[80] = &quot;&quot;;
+-	char killerName[80] = &quot;&quot;;
+-	int victimID = -1;
+-	int killerID = -1;
+-
+-	// determine who died.
+-	if (who &amp;&amp; who-&gt;control) {
+-		for (int i=0; i&lt;num_players; i++) {
+-			if (player_control[i] == who-&gt;control) {
+-				victimID = i;
+-				break;
+-			}
+-		}
+-		strcpy(victimName, player_name[victimID]);
+-	}
+-	
+-	// determine who killed, but skip it if nobody died.
+-	if (strlen(victimName)&gt;0 &amp;&amp; source) {
+-		
+-		if ( ! source-&gt;isPlanet())
+-		{
+-			if (source-&gt;ship &amp;&amp; source-&gt;ship-&gt;control) {
+-				for (int i=0; i&lt;num_players; i++) {
+-					if (player_control[i] == source-&gt;ship-&gt;control) {
+-						killerID = i;
+-						break;
+-					}
+-				}
+-				strcpy(killerName, player_name[killerID]);
+-			}
+-		}
+-	}
+-	
+-	if (killerID == victimID) {
+-		message.print(5000,15,&quot;%s killed itself.&quot;, victimName);
+-	}
+-	else { 
+-		if (source &amp;&amp; source-&gt;isPlanet())
+-			message.print(5000,15,&quot;%s dove into a planet.&quot;, victimName);
+-		else {
+-			if (strlen(killerName) &gt; 0) {
+-				message.print(5000,15,&quot;%s killed %s.&quot;, killerName, victimName);
+-			}
+-			else {
+-				message.print(5000,15,&quot;%s died.&quot;, victimName);
+-			}
+-		}
+-	}
+-	
+-	if ( (victimID != -1) &amp;&amp;  
+-		 (player_fleet[victimID]-&gt;getSize() &lt;= 0) )
+-	{
+-		message.print(8000,15,&quot;%s has been eliminated!&quot;, victimName);
+-	}
+-	
+-	int n = game_time + 4000;
+-	if (next_choose_new_ships_time &gt; n) next_choose_new_ships_time = n;
+-	Game::ship_died(who, source);
+-	return;
+-	}
+-
+-void NormalGame::display_stats() {
+-  STACKTRACE;
+-	pause();
+-	int i;
+-	for (i = 0; i &lt; num_players; i += 1) {
+-		Fleet *fleet = player_fleet[i];
+-		switch (log-&gt;type) {
+-			case Log::log_net1client:
+-			case Log::log_net1server: {
+-//				if (log-&gt;get_direction(player_control[i]-&gt;channel) &amp; Log::direction_write) 
+-					message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
+-//				else
+-//					message.print(6000, 15, &quot;%s status: : %d / %d points&quot;, buffy, fleet-&gt;cost, player_total_fleet[i]);
+-			}
+-			break;
+-			default: {
+-				message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
+-			}
+-			break;
+-		}
+-	}
+-	unpause();
+-	return;
+-}
+-bool NormalGame::handle_key(int k)
+-{
+-  STACKTRACE;
+-	switch (k &gt;&gt; 8) {
+-		default: {
+-			return Game::handle_key(k);
+-			}
+-		break;
+-		case KEY_F5: {
+-			display_stats();
+-			return true;
+-			}
+-		break;
+-		case KEY_F7: {
+-			if (log-&gt;type == Log::log_normal) Game::handle_key(k);
+-			return true;
+-			}
+-		break;
+-		case KEY_F9: {
+-			if (log-&gt;type != Log::log_normal) return false;
+-			message.out(&quot;MUHAHAHAHAHA!!!!&quot;, 5000, 12);
+-			add(new Planet(random(size), meleedata.planetSprite, random(meleedata.planetSprite-&gt;frames())));
+-			return true;
+-			}
+-		break;
+-		//don't use hardwired normal keys
+-		case KEY_H:
+-			if ((k &amp; 255) == 'H'-'A'+1) indhealthtoggle = ~indhealthtoggle;
+-			break;
+-		case KEY_T:
+-			if ((k &amp; 255) == 'T'-'A'+1) indteamtoggle = ~indteamtoggle;
+-			break;
+-		}
+-	return false;
+-	}
+-
+-
+-
+-// added ROB
+-class TeamIndicator : public Presence
+-{
+-public:
+-	int		*indtoggle;
+-	Ship	*mother;
+-	TeamIndicator(Ship *creator, int *toggle);
+-
+-	virtual void calculate();
+-	virtual void animate(Frame *space);
+-};
+-
+-
+-
+-void NormalGame::choose_new_ships() 
+-{
+-  STACKTRACE;
+-  char tmp[40];
+-  int i;
+-  pause();
+-
+-  int *slot = new int[num_players];
+-  //choose ships and send them across network
+-  for (i = 0; i &lt; num_players; i += 1) 
+-    {
+-      slot[i] = -2;
+-      if (player_control[i]-&gt;ship) 
+-	{
+-	}
+-      else 
+-	{
+-	  sprintf (tmp, &quot;Player%d&quot;, i+1);
+-	  Fleet *fleet = player_fleet[i];
+-	  if (fleet-&gt;getSize() == 0) continue;
+-	  char buffy[512];
+-	  
+-	  if (strlen(fleet-&gt;getTitle()) != 0) 
+-	    sprintf(buffy, &quot;%s\n%s\n&quot;, player_name[i], fleet-&gt;getTitle());
+-	  else
+-	    sprintf(buffy, &quot;%s\n&quot;, player_name[i]);
+-	  
+-	  slot[i] = player_control[i]-&gt;choose_ship(window, buffy, fleet);
+-	  if (player_control[i]-&gt;channel != channel_none) {
+-	    slot[i] = intel_ordering(slot[i]);
+-	    log-&gt;buffer(player_control[i]-&gt;channel, &amp;slot[i], sizeof(int));
+-	    log-&gt;flush();
+-	  }
+-	}
+-    }
+-  //recieve the ships that were chosen
+-  log-&gt;listen();
+-  for (i = 0; i &lt; num_players; i += 1) 
+-    {
+-      if (slot[i] == -2) continue;
+-      if (player_control[i]-&gt;channel != channel_none) 
+-	{
+-	  log-&gt;unbuffer(player_control[i]-&gt;channel, &amp;slot[i], sizeof(int));
+-	  slot[i] = intel_ordering(slot[i]);
+-	}
+-    }
+-  //create the ships that were chosen
+-  for (i = 0; i &lt; num_players; i += 1) 
+-    {
+-      if (slot[i] == -2) continue;
+-      sprintf (tmp, &quot;Player%d&quot;, i+1);
+-
+-      Fleet *fleet = player_fleet[i];
+-      if (slot[i] == -1) slot[i] = random() % fleet-&gt;getSize();
+-      if (slot[i] &lt; 0 || slot[i] &gt;= fleet-&gt;getSize()) {tw_error(&quot;trying to load invalid ship&quot;);}
+-      Ship *s = create_ship(fleet-&gt;getShipType(slot[i])-&gt;id, player_control[i], random(size), random(PI2), player_team[i]);
+-      if (!s) {tw_error(&quot;unable to create ship&quot;);}
+-      fleet-&gt;clear_slot(slot[i]);
+-      fleet-&gt;Sort();
+-      
+-      s-&gt;locate();
+-      add ( new WedgeIndicator ( s, 30, i+1 ) );
+-      ShipPanel *panel = new ShipPanel(s);
+-      panel-&gt;window-&gt;init(window);
+-      panel-&gt;window-&gt;locate(
+-			    0, 0.9,
+-			    0, i * (100.0/480), 
+-			    0, 0.1,
+-			    0, (100.0/480)
+-			    );
+-      add(panel);
+-      add(s-&gt;get_ship_phaser());
+-      
+-      // add a healthbar for the ship, and also a team indicator.
+-      add(new HealthBar(s, &amp;indhealthtoggle));
+-      add(new TeamIndicator(s, &amp;indteamtoggle));
+-      
+-      
+-      // CHECK FILE SIZES !! to intercept desynch before they happen.
+-      int myfsize, otherfsize;
+-      
+-      myfsize = 0;
+-      otherfsize = myfsize;
+-      if (player_control[i]-&gt;channel != channel_none) 
+-	{
+-	  log_int(player_control[i]-&gt;channel, otherfsize);
+-	}
+-      
+-      if (otherfsize != myfsize)
+-	{
+-	  // the player who loads the ship doesn't get this message, cause his own file is identical by default
+-	  tw_error(&quot;DAT files have different size! This may cause a desynch. Press Retry to continue&quot;);
+-	}
+-		
+-		
+-    }
+-  delete[] slot;
+-  //message.out(&quot;Finished selecting ships...&quot;, 1500);
+-  unpause();
+-  return;
+-}
+-
+-bool NormalGame::isGameDone() 
+-{
+-  STACKTRACE;
+-  /*! we'll only check this every now and again, to avoid bogging down the engine.  */  
+-  enum { IterationsToSkip = 30 };
+-  static long iterationsToSkip = IterationsToSkip;
+-  
+-  /*! */
+-  if (gameEnding) {
+-    /*! how long do we wait after a victory before exiting the game? */
+-    if (--gameEndingTime &gt; 0)
+-      return Game::isGameDone();
+-    else {
+-      game_done = true;
+-    }
+-  }
+-  
+-  if (iterationsToSkip-- &lt;=0 ) {
+-    iterationsToSkip = IterationsToSkip;
+-    
+-    //determine how many teams are still alive
+-    unsigned numAliveTeams = 0;
+-    TeamCode * teams = (TeamCode*)calloc(MAX_TEAMS, sizeof(TeamCode));
+-    
+-    for (int i=0; i&lt;num_players; i++) {
+-      
+-      //check for: 
+-      //* does the player have any ships left in her fleet?
+-      //* is the player controlling a ship right now?
+-      if ( ( player_fleet[i] &amp;&amp; 
+-	     player_fleet[i]-&gt;getSize() &gt; 0)
+-	   ||
+-	   (player_control[i] &amp;&amp;
+-	    player_control[i]-&gt;ship)
+-	   )
+-	{
+-	  if (teams[ player_team[i] ] == 0)
+-	    numAliveTeams++;
+-	  teams[ player_team[i] ]++;
+-	}
+-    }
+-    
+-    //either there's one team left standing, or none. :)
+-    // either way, the game is over.
+-    //we delay ending the game a few seconds for dramatic effect
+-    if (numAliveTeams &lt;= 1) {
+-      gameEnding = true;
+-      if (numAliveTeams==1) {
+-	for (int i=0; i&lt;num_players; i++) {
+-	  if ( ( player_fleet[i] &amp;&amp; 
+-		 player_fleet[i]-&gt;getSize() &gt; 0)
+-	       ||
+-	       (player_control[i] &amp;&amp;
+-		player_control[i]-&gt;ship) )
+-	    {
+-	      if (player_control[i]-&gt;isHuman())
+-		message.print(8000,15,&quot;%s won the match!&quot;, player_name[i]);
+-	      else
+-		message.print(8000,15,&quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
+-	    				break;
+-	    }
+-	}
+-      } else {
+-	message.print(8000,15,&quot;Match ends in a draw!&quot;);
+-      }
+-    }
+-    free(teams);
+-  }
+-  return Game::isGameDone();
+-}
+-
+-// this should be places elsewhere I think ...
+-TeamIndicator::TeamIndicator(Ship *s, int *atoggle)
+-{
+-  STACKTRACE;
+-	indtoggle = atoggle;
+-	mother = s;
+-}
+-
+-void TeamIndicator::calculate()
+-{
+-  STACKTRACE;
+-	if ( !(mother &amp;&amp; mother-&gt;exists()) )
+-	{
+-		mother = 0;
+-		state = 0;
+-		return;
+-	}
+-}
+-
+-void TeamIndicator::animate(Frame *space) {
+-  STACKTRACE;
+-  if (!*indtoggle)
+-    return;
+-  
+-  if (mother-&gt;isInvisible())
+-    return;
+-  
+-  Vector2i co1, co2;
+-  
+-  co1 = corner(mother-&gt;pos - 0.5 * mother-&gt;size).round();
+-  co2 = corner(mother-&gt;pos + 0.5 * mother-&gt;size).round();
+-  
+-  if (co2.x &lt; 0) return;
+-  if (co2.y &lt; 0) return;
+-  if (co1.x &gt;= space-&gt;surface-&gt;w) return;
+-  if (co1.y &gt;= space-&gt;surface-&gt;h) return;
+-  
+-  int col;
+-  col = palette_color[mother-&gt;get_team() + 1];	// team 0 is black ...
+-  
+-  rect(space-&gt;surface, co1.x, co1.y, co2.x, co2.y, col);
+-  space-&gt;add_box(co1.x, co1.y, co2.x, co2.y);
+-  
+-}
+-void NormalGame::showHelpText() {
+-  STACKTRACE;
+-	const char * file = data_full_path(&quot;ingame.txt&quot;).c_str();
+-	char text[10000] = &quot;&quot;;
+-	char controlHelp[3000] = &quot;&quot;;
+-	
+-	sprintf(text, &quot;In-Game Keys:\n&quot;);
+-	for (int i=0; i&lt;num_players; i++) {
+-		if (player_control[i])// &amp;&amp; player_control[i]-&gt;isHuman() ) {
+-		{
+-			strcpy(controlHelp, &quot;&quot;);
+-			player_control[i]-&gt;getHelpText(controlHelp);
+-			strcat(controlHelp, &quot;\n&quot;);
+-			
+-			strcat(text, controlHelp);
+-		}
+-	}
+-	
+-	int i;
+-	PACKFILE *f;
+-	char * willy = NULL;
+-	f = pack_fopen (file, F_READ);
+-	if (!f) {
+-		willy = (char*) malloc(strlen(file)+strlen(&quot;Failed to load file \&quot;\&quot;&quot;)+1);
+-		sprintf(text, &quot;Failed to load file \&quot;%s\&quot;&quot;,file);
+-	}
+-	else {
+-		i = file_size(file);
+-		willy = (char*)malloc(i+1);
+-		i = pack_fread (willy, i, f);
+-		pack_fclose(f);
+-		willy[i] = 0;
+-	}
+-	strcat(text, willy);
+-	show_text(text);
+-	free(willy); // now this is funny :)
+-	return;
+-}
+-
+-
+-
+-REGISTER_GAME(NormalGame, &quot;Melee&quot;)
+
+Deleted: branches/multiplayer-branch/source/melee/mmain.h
+===================================================================
+--- branches/multiplayer-branch/source/melee/mmain.h	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/melee/mmain.h	2004-10-06 21:22:23 UTC (rev 75)
+@@ -1,85 +0,0 @@
+-/* $Id: mmain.h,v 1.1.1.1 2004/08/01 10:21:22 Yura Exp $ */ 
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#ifndef __MMAIN_H__
+-#define __MMAIN_H__
+-
+-#include &quot;melee.h&quot;
+-#include &quot;mgame.h&quot;
+-
+-enum { DefaultEndingTime = 1000 };
+-
+-class NormalGame : public Game {
+-	public:
+-	enum { 
+-		num_asteroids = 4 
+-		};
+-		
+-	~NormalGame();
+-
+-	virtual void calculate();
+-	virtual void preinit();	
+-	virtual void init (Log *_log = NULL);
+-	virtual void set_resolution(int screen_x, int screen_y);
+-
+-	virtual void init_players();
+-	virtual void init_objects();
+-
+-	virtual void ship_died(Ship *who, SpaceLocation *source);
+-	//kill history stuff
+-	int num_kills;
+-	struct ShipKill {
+-		int time;
+-		struct Party {
+-			unsigned int ally_flag;
+-			ShipData *data;
+-			ShipType *type;
+-		};
+-		Party victim, killer;
+-		} *kills;
+-	void display_stats();
+-
+-	virtual int add_player (Control *c, int team_index, const char *name, const char *fleet, const char *fleet_file = &quot;fleets.ini&quot;) ;
+-	virtual bool isGameDone();
+-	int num_players;
+-	Control **player_control;
+-//	ShipPanel **player_panel;
+-	Fleet **player_fleet;
+-	char **player_name;
+-	char *player_attributes;
+-	TeamCode *player_team;
+-	TeamCode *team_table;
+-	int team_table_size;
+-//	virtual void player_said(int who, const char *what);
+-
+-	protected:
+-	virtual bool handle_key(int k);
+-	
+-	virtual void showHelpText();
+-	
+-	bool gameEnding;
+-	long gameEndingTime;
+-
+-	int next_choose_new_ships_time;
+-	virtual void choose_new_ships() ;
+-
+-	int indhealthtoggle, indteamtoggle;
+-
+-	};
+-
+-
+-#endif // __MMAIN_H__
+
+Modified: branches/multiplayer-branch/source/melee/mnet1.h
+===================================================================
+--- branches/multiplayer-branch/source/melee/mnet1.h	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/melee/mnet1.h	2004-10-06 21:22:23 UTC (rev 75)
+@@ -18,7 +18,7 @@
+ #ifndef __MNET1_H__
+ #define __MNET1_H__
+ 
+-#include &quot;mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
+ #include &quot;mlog.h&quot;
+ #include &quot;mship.h&quot;
+ 
+
+Modified: branches/multiplayer-branch/source/scp.cpp
+===================================================================
+--- branches/multiplayer-branch/source/scp.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/scp.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -52,7 +52,7 @@
+ #include &quot;melee/mgame.h&quot;
+ 
+ 
+-#include &quot;melee/mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
+ #include &quot;melee/mnet1.h&quot;
+ #include &quot;util/aastr.h&quot;
+ #include &quot;melee/mship.h&quot; //remove
+
+Modified: branches/multiplayer-branch/source/ships/shpconho.cpp
+===================================================================
+--- branches/multiplayer-branch/source/ships/shpconho.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/ships/shpconho.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -17,7 +17,7 @@
+ 
+ #include &quot;ship.h&quot;
+ 
+-#include &quot;melee/mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
+ #include &quot;melee/mcbodies.h&quot;
+ 
+ #include &quot;frame.h&quot;
+
+Modified: branches/multiplayer-branch/source/ships/shpkahbo.cpp
+===================================================================
+--- branches/multiplayer-branch/source/ships/shpkahbo.cpp	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/source/ships/shpkahbo.cpp	2004-10-06 21:22:23 UTC (rev 75)
+@@ -17,7 +17,7 @@
+ 
+ #include &quot;ship.h&quot;
+ 
+-#include &quot;melee/mmain.h&quot;
++#include &quot;games/gmelee.h&quot;
+ 
+ #define SMALL_BOOMERANG 1
+ #define MEDIUM_BOOMERANG 2
+
+Modified: branches/multiplayer-branch/sources.lst
+===================================================================
+--- branches/multiplayer-branch/sources.lst	2004-10-02 22:14:53 UTC (rev 74)
++++ branches/multiplayer-branch/sources.lst	2004-10-06 21:22:23 UTC (rev 75)
+@@ -1,191 +1,192 @@
++source/ais/c_input.cpp
++source/ais/c_other.cpp
+ source/ais/c_wussie.cpp
+-source/ais/c_other.cpp
+-source/ais/c_input.cpp
++source/doxygen.cpp
+ source/frame.cpp
+-source/util/random.cpp
+-source/util/vector2.cpp
+-source/util/round.c
+-source/util/history.cpp
+-source/util/types.cpp
+-source/util/aautil.c
+-source/util/sound.cpp
+-source/util/get_time.c
+-source/util/aarot.c
+-source/util/aastr.c
+-source/util/errors.cpp
+-source/util/errors_c.c
+-source/util/endian.cpp
+-source/util/pmask.c
+-source/util/base.cpp
++source/games/gdefender.cpp
++source/games/gflmelee.cpp
+ source/games/ggob.cpp
+-source/games/gflmelee.cpp
+-source/games/gdefender.cpp
++source/games/gmelee.cpp
++source/games/MultiplayerGame.cpp
++source/gui.cpp
++source/input.cpp
++source/libraries/agup/aalg.c
++source/libraries/agup/aase.c
++source/libraries/agup/abeos.c
++source/libraries/agup/abitmap.c
++source/libraries/agup/agtk.c
++source/libraries/agup/agup.c
++source/libraries/agup/ans.c
++source/libraries/agup/aphoton.c
++source/libraries/agup/awin95.c
++source/libraries/jpgalleg/decode.c
++source/libraries/jpgalleg/encode.c
++source/libraries/jpgalleg/io.c
++source/libraries/jpgalleg/jpgalleg.c
++source/libraries/lua/lapi.c
++source/libraries/lua/lcode.c
++source/libraries/lua/ldebug.c
++source/libraries/lua/ldo.c
++source/libraries/lua/ldump.c
++source/libraries/lua/lfunc.c
++source/libraries/lua/lgc.c
++source/libraries/lua/lib/lauxlib.c
++source/libraries/lua/lib/lbaselib.c
++source/libraries/lua/lib/ldblib.c
++source/libraries/lua/lib/liolib.c
++source/libraries/lua/lib/lmathlib.c
++source/libraries/lua/lib/loadlib.c
++source/libraries/lua/lib/lstrlib.c
++source/libraries/lua/lib/ltablib.c
++source/libraries/lua/llex.c
++source/libraries/lua/lmem.c
++source/libraries/lua/lobject.c
++source/libraries/lua/lopcodes.c
++source/libraries/lua/lparser.c
++source/libraries/lua/lstate.c
++source/libraries/lua/lstring.c
++source/libraries/lua/ltable.c
++source/libraries/lua/ltests.c
++source/libraries/lua/ltm.c
++source/libraries/lua/lundump.c
++source/libraries/lua/lvm.c
++source/libraries/lua/lzio.c
++source/libraries/raknet/AES128.cpp
++source/libraries/raknet/AsynchronousFileIO.cpp
++source/libraries/raknet/BitStream.cpp
++source/libraries/raknet/CheckSum.cpp
++source/libraries/raknet/DataBlockEncryptor.cpp
++source/libraries/raknet/DistributedNetworkObject.cpp
++source/libraries/raknet/DistributedNetworkObjectManager.cpp
++source/libraries/raknet/DistributedNetworkObjectStub.cpp
++source/libraries/raknet/EncodeClassName.cpp
++source/libraries/raknet/Euclid.cpp
++source/libraries/raknet/ExtendedOverlappedPool.cpp
++source/libraries/raknet/GetTime.cpp
++source/libraries/raknet/HuffmanEncodingTree.cpp
++source/libraries/raknet/HuffmanEncodingTreeFactory.cpp
++source/libraries/raknet/InternalPacketPool.cpp
++source/libraries/raknet/MPUInt.cpp
++source/libraries/raknet/NetworkObject.cpp
++source/libraries/raknet/NetworkTypes.cpp
++source/libraries/raknet/PacketPool.cpp
++source/libraries/raknet/RakClient.cpp
++source/libraries/raknet/RakNetworkFactory.cpp
++source/libraries/raknet/RakPeer.cpp
++source/libraries/raknet/RakServer.cpp
++source/libraries/raknet/rand.cpp
++source/libraries/raknet/ReliabilityLayer.cpp
++source/libraries/raknet/RPCNode.cpp
++source/libraries/raknet/RSA.cpp
++source/libraries/raknet/SHA1.cpp
++source/libraries/raknet/SimpleMutex.cpp
++source/libraries/raknet/SocketLayer.cpp
++source/libraries/raknet/StringCompressor.cpp
++source/melee/manim.cpp
++source/melee/mcbodies.cpp
++source/melee/mcontrol.cpp
++source/melee/mfleet.cpp
++source/melee/mframe.cpp
++source/melee/mgame.cpp
++source/melee/mhelpers.cpp
++source/melee/mitems.cpp
+ source/melee/mlog.cpp
+-source/melee/mitems.cpp
++source/melee/mmath.cpp
+ source/melee/mnet1.cpp
+ source/melee/moptions.cpp
+-source/melee/mgame.cpp
+-source/melee/mhelpers.cpp
+-source/melee/mfleet.cpp
+-source/melee/mview.cpp
+ source/melee/mship.cpp
+-source/melee/mcontrol.cpp
+-source/melee/manim.cpp
+-source/melee/mframe.cpp
+ source/melee/mshot.cpp
+ source/melee/mshpdata.cpp
+ source/melee/mshppan.cpp
+ source/melee/msprite.cpp
+-source/melee/mcbodies.cpp
+-source/melee/mmain.cpp
+ source/melee/mtarget.cpp
+-source/melee/mmath.cpp
+-source/other/orbit.cpp
++source/melee/mview.cpp
+ source/other/configrw.cpp
+-source/other/shippart.cpp
++source/other/dialogs.cpp
+ source/other/fontmorph.cpp
+-source/other/vtarget.cpp
+-source/other/twconfig.cpp
+-source/other/vbodies.cpp
+ source/other/gup.cpp
++source/other/nullphas.cpp
+ source/other/objanim.cpp
+-source/other/nullphas.cpp
++source/other/orbit.cpp
+ source/other/planet3d.cpp
+ source/other/radar.cpp
+-source/other/dialogs.cpp
++source/other/shippart.cpp
++source/other/twconfig.cpp
++source/other/vbodies.cpp
++source/other/vtarget.cpp
++source/sc1ships/shpandgu.cpp
++source/sc1ships/shparisk.cpp
++source/sc1ships/shpchebr.cpp
++source/sc1ships/shpearcr.cpp
++source/sc1ships/shpilwav.cpp
++source/sc1ships/shpkzedr.cpp
++source/sc1ships/shpmmrxf.cpp
++source/sc1ships/shpmycpo.cpp
++source/sc1ships/shpshosc.cpp
++source/sc1ships/shpspael.cpp
++source/sc1ships/shpsyrpe.cpp
++source/sc1ships/shpumgdr.cpp
++source/sc1ships/shpvuxin.cpp
++source/sc1ships/shpyehte.cpp
++source/sc2ships/shpchmav.cpp
++source/sc2ships/shpdruma.cpp
++source/sc2ships/shpkohma.cpp
++source/sc2ships/shpmeltr.cpp
++source/sc2ships/shporzne.cpp
++source/sc2ships/shppkufu.cpp
++source/sc2ships/shpslypr.cpp
++source/sc2ships/shpsupbl.cpp
++source/sc2ships/shpthrto.cpp
++source/sc2ships/shputwju.cpp
++source/sc2ships/shpzfpst.cpp
++source/scp.cpp
++source/ships/shpaktgu.cpp
++source/ships/shpalabc.cpp
++source/ships/shpbahbu.cpp
++source/ships/shpbipka.cpp
++source/ships/shpbogce.cpp
++source/ships/shpchoex.cpp
++source/ships/shpconca.cpp
++source/ships/shpconho.cpp
++source/ships/shpdragr.cpp
++source/ships/shpearc3.cpp
++source/ships/shpforsh.cpp
++source/ships/shpgarty.cpp
++source/ships/shpilwsp.cpp
++source/ships/shpkahbo.cpp
++source/ships/shprogsq.cpp
++source/ships/shpstaba.cpp
+ source/ships/shptauar.cpp
+-source/ships/shpbogce.cpp
+-source/ships/shpaktgu.cpp
+ source/ships/shptauda.cpp
+-source/ships/shpforsh.cpp
+ source/ships/shptaume.cpp
+-source/ships/shpdragr.cpp
+ source/ships/shptausl.cpp
+ source/ships/shptaust.cpp
+ source/ships/shptauto.cpp
+-source/ships/shpgarty.cpp
+-source/ships/shprogsq.cpp
++source/ships/shpwolmi.cpp
++source/ships/shpyusra.cpp
+ source/ships/shpzeksh.cpp
+-source/ships/shpconca.cpp
+-source/ships/shpchoex.cpp
+-source/ships/shpconho.cpp
+-source/ships/shpilwsp.cpp
+-source/ships/shpalabc.cpp
+-source/ships/shpyusra.cpp
+-source/ships/shpbahbu.cpp
+-source/ships/shpbipka.cpp
+-source/ships/shpwolmi.cpp
+-source/ships/shpearc3.cpp
+-source/ships/shpkahbo.cpp
+-source/ships/shpstaba.cpp
++source/tests/testdatapath.cpp
+ source/tests/testmain.cpp
+-source/tests/testdatapath.cpp
++source/twgui/twbutton.cpp
++source/twgui/twbuttontypes.cpp
+ source/twgui/twgui.cpp
+ source/twgui/twhelpers.cpp
+-source/twgui/twbuttontypes.cpp
+-source/twgui/twbutton.cpp
+ source/twgui/twmenuexamples.cpp
+ source/twgui/twpopup.cpp
+ source/twgui/twwindow.cpp
+ source/twgui/utils.cpp
+-source/libraries/lua/lib/ldblib.c
+-source/libraries/lua/lib/lauxlib.c
+-source/libraries/lua/lib/lbaselib.c
+-source/libraries/lua/lib/loadlib.c
+-source/libraries/lua/lib/ltablib.c
+-source/libraries/lua/lib/lmathlib.c
+-source/libraries/lua/lib/lstrlib.c
+-source/libraries/lua/lib/liolib.c
+-source/libraries/lua/lundump.c
+-source/libraries/lua/ldebug.c
+-source/libraries/lua/ldo.c
+-source/libraries/lua/lgc.c
+-source/libraries/lua/ltm.c
+-source/libraries/lua/lvm.c
+-source/libraries/lua/lcode.c
+-source/libraries/lua/ldump.c
+-source/libraries/lua/lfunc.c
+-source/libraries/lua/lparser.c
+-source/libraries/lua/ltable.c
+-source/libraries/lua/ltests.c
+-source/libraries/lua/lstate.c
+-source/libraries/lua/lapi.c
+-source/libraries/lua/llex.c
+-source/libraries/lua/lmem.c
+-source/libraries/lua/lzio.c
+-source/libraries/lua/lopcodes.c
+-source/libraries/lua/lobject.c
+-source/libraries/lua/lstring.c
+-source/libraries/agup/aphoton.c
+-source/libraries/agup/ans.c
+-source/libraries/agup/awin95.c
+-source/libraries/agup/aalg.c
+-source/libraries/agup/aase.c
+-source/libraries/agup/agtk.c
+-source/libraries/agup/agup.c
+-source/libraries/agup/abeos.c
+-source/libraries/agup/abitmap.c
+-source/libraries/raknet/AES128.cpp
+-source/libraries/raknet/PacketPool.cpp
+-source/libraries/raknet/ExtendedOverlappedPool.cpp
+-source/libraries/raknet/RakServer.cpp
+-source/libraries/raknet/RPCNode.cpp
+-source/libraries/raknet/RSA.cpp
+-source/libraries/raknet/RakClient.cpp
+-source/libraries/raknet/HuffmanEncodingTreeFactory.cpp
+-source/libraries/raknet/RakPeer.cpp
+-source/libraries/raknet/SocketLayer.cpp
+-source/libraries/raknet/StringCompressor.cpp
+-source/libraries/raknet/DataBlockEncryptor.cpp
+-source/libraries/raknet/InternalPacketPool.cpp
+-source/libraries/raknet/SHA1.cpp
+-source/libraries/raknet/rand.cpp
+-source/libraries/raknet/GetTime.cpp
+-source/libraries/raknet/EncodeClassName.cpp
+-source/libraries/raknet/NetworkObject.cpp
+-source/libraries/raknet/SimpleMutex.cpp
+-source/libraries/raknet/Euclid.cpp
+-source/libraries/raknet/DistributedNetworkObjectStub.cpp
+-source/libraries/raknet/ReliabilityLayer.cpp
+-source/libraries/raknet/AsynchronousFileIO.cpp
+-source/libraries/raknet/HuffmanEncodingTree.cpp
+-source/libraries/raknet/BitStream.cpp
+-source/libraries/raknet/RakNetworkFactory.cpp
+-source/libraries/raknet/DistributedNetworkObject.cpp
+-source/libraries/raknet/MPUInt.cpp
+-source/libraries/raknet/CheckSum.cpp
+-source/libraries/raknet/DistributedNetworkObjectManager.cpp
+-source/libraries/raknet/NetworkTypes.cpp
+-source/libraries/jpgalleg/io.c
+-source/libraries/jpgalleg/encode.c
+-source/libraries/jpgalleg/decode.c
+-source/libraries/jpgalleg/jpgalleg.c
+-source/scp.cpp
+-source/doxygen.cpp
+-source/input.cpp
+-source/sc1ships/shpearcr.cpp
+-source/sc1ships/shpchebr.cpp
+-source/sc1ships/shpandgu.cpp
+-source/sc1ships/shpilwav.cpp
+-source/sc1ships/shpkzedr.cpp
+-source/sc1ships/shpyehte.cpp
+-source/sc1ships/shpsyrpe.cpp
+-source/sc1ships/shpspael.cpp
+-source/sc1ships/shpvuxin.cpp
+-source/sc1ships/shpumgdr.cpp
+-source/sc1ships/shparisk.cpp
+-source/sc1ships/shpmycpo.cpp
+-source/sc1ships/shpmmrxf.cpp
+-source/sc1ships/shpshosc.cpp
+-source/sc2ships/shpthrto.cpp
+-source/sc2ships/shporzne.cpp
+-source/sc2ships/shpdruma.cpp
+-source/sc2ships/shpmeltr.cpp
+-source/sc2ships/shpchmav.cpp
+-source/sc2ships/shpkohma.cpp
+-source/sc2ships/shputwju.cpp
+-source/sc2ships/shpsupbl.cpp
+-source/sc2ships/shppkufu.cpp
+-source/sc2ships/shpslypr.cpp
+-source/sc2ships/shpzfpst.cpp
+-source/gui.cpp
++source/util/aarot.c
++source/util/aastr.c
++source/util/aautil.c
++source/util/base.cpp
++source/util/endian.cpp
++source/util/errors.cpp
++source/util/errors_c.c
++source/util/get_time.c
++source/util/history.cpp
++source/util/pmask.c
++source/util/random.cpp
++source/util/round.c
++source/util/sound.cpp
++source/util/types.cpp
++source/util/vector2.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000022.html">[Tw-light-svn] r74 - in trunk: Util/deditor source web
+</A></li>
+	<LI>Next message: <A HREF="000024.html">[Tw-light-svn] r76 - branches/multiplayer-branch/source/libraries/raknet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

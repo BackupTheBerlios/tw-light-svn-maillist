@@ -1,0 +1,419 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r132 - in trunk: gamedata gamedata/images gamedata/music source source/melee source/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-March/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r132%20-%20in%20trunk%3A%20gamedata%20gamedata/images%20gamedata/music%20source%20source/melee%20source/util&In-Reply-To=%3C200503071447.j27ElGN2032549%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000077.html">
+   <LINK REL="Next"  HREF="000079.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r132 - in trunk: gamedata gamedata/images gamedata/music source source/melee source/util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r132%20-%20in%20trunk%3A%20gamedata%20gamedata/images%20gamedata/music%20source%20source/melee%20source/util&In-Reply-To=%3C200503071447.j27ElGN2032549%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r132 - in trunk: gamedata gamedata/images gamedata/music source source/melee source/util">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Mon Mar  7 15:47:16 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000077.html">[Tw-light-svn] r131 - in trunk/source: melee other
+</A></li>
+        <LI>Next message: <A HREF="000079.html">[Tw-light-svn] r133 - in trunk/source: . games melee other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#78">[ date ]</a>
+              <a href="thread.html#78">[ thread ]</a>
+              <a href="subject.html#78">[ subject ]</a>
+              <a href="author.html#78">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-03-07 15:47:14 +0100 (Mon, 07 Mar 2005)
+New Revision: 132
+
+Added:
+   trunk/gamedata/gamedata.dat
+   trunk/gamedata/images/3dlogo.jpg
+   trunk/gamedata/images/background.jpg
+   trunk/gamedata/images/joses_pkunk.jpg
+   trunk/gamedata/music/intro.xm
+   trunk/source/melee/mhelpers.h
+Modified:
+   trunk/source/melee/mhelpers.cpp
+   trunk/source/scp.cpp
+   trunk/source/scp.h
+   trunk/source/util/get_time.h
+Log:
+Added intro
+
+
+Added: trunk/gamedata/gamedata.dat
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/gamedata.dat
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/3dlogo.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/3dlogo.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/background.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/background.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/images/joses_pkunk.jpg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/images/joses_pkunk.jpg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/gamedata/music/intro.xm
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/intro.xm
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: trunk/source/melee/mhelpers.cpp
+===================================================================
+--- trunk/source/melee/mhelpers.cpp	2005-03-06 16:45:59 UTC (rev 131)
++++ trunk/source/melee/mhelpers.cpp	2005-03-07 14:47:14 UTC (rev 132)
+@@ -31,6 +31,7 @@
+ #include &quot;melee.h&quot;
+ #include &quot;melee/mcontrol.h&quot;
+ #include &quot;input.h&quot;
++#include &quot;mhelpers.h&quot;
+ 
+ /*
+ 
+@@ -604,6 +605,45 @@
+ }
+ 
+ 
++///////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++
++void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr)
++{
++  BITMAP* d_buf = create_bitmap(SCREEN_W, SCREEN_H);
++  clear(d_buf);
++  copy_buf();
++
++  unsigned int q = 0;
++  BITMAP* tmpB = load_bitmap(data_full_path(backgr).c_str(), NULL);
++  BITMAP* background = create_bitmap(screen-&gt;w, screen-&gt;h);
++  stretch_blit(tmpB, background, 0, 0, tmpB-&gt;w, tmpB-&gt;h, 0, 0, background-&gt;w, background-&gt;h);
++  destroy_bitmap(tmpB);
++  
++
++  while (1)
++    {
++      blit(background, d_buf, 0, 0,  0, 0, background-&gt;w, background-&gt;h);
++      for (unsigned int i = 0;i!=text.size();i++)
++	{
++	  text_mode(-1);
++	  textout_centre(d_buf, font, text[i].c_str(), screen-&gt;w/2, screen-&gt;h+40-q/3+i*30,-1);
++	}
++      copy_buf();
++      
++      HAVE_A_WAIT(30);
++      q+=2;
++      
++      if (q/3 &gt;= text.size()*30+screen-&gt;h+140)
++	break;
++    }
++  clear(d_buf);
++  copy_buf();	
++  destroy_bitmap(d_buf);
++}
++
++
++///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /*------------------------------
+ 		SC2 Unit Conversion
+ ------------------------------*/
+
+Added: trunk/source/melee/mhelpers.h
+===================================================================
+--- trunk/source/melee/mhelpers.h	2005-03-06 16:45:59 UTC (rev 131)
++++ trunk/source/melee/mhelpers.h	2005-03-07 14:47:14 UTC (rev 132)
+@@ -0,0 +1,31 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef __TW_MHELPERS_INCLUDES__
++#define __TW_MHELPERS_INCLUDES__
++
++#include &quot;allegro.h&quot;
++
++#include &lt;vector&gt;
++#include &lt;string&gt;
++
++// Show scrolling text
++
++void ScrollText(std::vector&lt;std::string&gt;&amp; text, FONT* font, int color, const std::string&amp; backgr);
++
++
++#endif 
++
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-03-06 16:45:59 UTC (rev 131)
++++ trunk/source/scp.cpp	2005-03-07 14:47:14 UTC (rev 132)
+@@ -60,8 +60,8 @@
+ #include &quot;melee/mcontrol.h&quot;
+ #include &quot;melee/mcbodies.h&quot;
+ #include &quot;melee/mgame.h&quot;
++#include &quot;melee/mhelpers.h&quot;
+ 
+-
+ #include &quot;melee/mmain.h&quot;
+ #include &quot;melee/mnet1.h&quot;
+ #include &quot;util/aastr.h&quot;
+@@ -69,6 +69,12 @@
+ #include &quot;melee/mfleet.h&quot;
+ 
+ 
++
++
++DATAFILE* g_game_data = NULL;
++
++void intro();
++
+ ///the server port to connect to in client mode.  
+ unsigned serverPort = DEFAULT_SERVER_PORT;
+ ///the server address to connect to in client mode.
+@@ -741,6 +747,8 @@
+     tw_error_exit(&quot;Allegro initialization failed&quot;);
+   create_user_ini();
+   
++  g_game_data = load_datafile(data_full_path(&quot;gamedata.dat&quot;).c_str());
++
+   VideoSystem video;
+   videosystem = &video;
+   videosystem-&gt;preinit();
+@@ -925,8 +933,16 @@
+       tw_sound-&gt;set_sound_volume(tw_sound-&gt;load_sound_volume());
+       tw_sound-&gt;set_music_volume(tw_sound-&gt;load_music_volume());
+     
+-      showLoadingScreen();
+-    
++
++      // Show Intro
++      RGB tmpPal[256];
++      memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
++      set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
++      
++      intro();
++      videosystem-&gt;set_palette(tmpPal);
++      
++
+       View *v = NULL;
+       v = get_view ( get_config_string(&quot;View&quot;, &quot;View&quot;, NULL) , NULL );
+       if (!v) v = get_view ( &quot;Hero&quot;, NULL );
+@@ -1971,3 +1987,75 @@
+   return 0;
+ }
+ 
++
++//################################################################################################
++//  Intro
++
++
++
++
++
++void intro()
++{
++  BITMAP* d_buf;
++  std::vector&lt;std::string&gt; intro_text;
++
++  intro_text.push_back(&quot;The Ur-quan are defeated - the destruction&quot;);
++  intro_text.push_back(&quot;of the Sa-matra threw them into chaos,&quot;);
++  intro_text.push_back(&quot;making them easy prey for&quot;);
++  intro_text.push_back(&quot;the New Alliance of Free Stars.&quot;);
++  intro_text.push_back(&quot;Within weeks the NAFS forces managed&quot;);
++  intro_text.push_back(&quot;to destroy most of the fleets of the two &quot;);
++  intro_text.push_back(&quot;races who terrorized the galaxy&quot;);
++  intro_text.push_back(&quot;for the past 20,000 years!&quot;);
++  intro_text.push_back(&quot;&quot;);
++  intro_text.push_back(&quot;Thanks to captain Zelnick, hope is given&quot;);
++  intro_text.push_back(&quot;to the entire galaxy, and especially to&quot;);
++  intro_text.push_back(&quot;the human race. Now free from their prison&quot;);
++  intro_text.push_back(&quot;under a Slaveshield it's Humanity's time&quot;);
++  intro_text.push_back(&quot;to rebuild.&quot;);
++  intro_text.push_back(&quot;&quot;);
++  intro_text.push_back(&quot;However, it seems there are more troubles&quot;);
++  intro_text.push_back(&quot;ahead. It is time for great space&quot;);
++  intro_text.push_back(&quot;exploration, colonization and piracy.&quot;);
++  intro_text.push_back(&quot;You have to live in this world,&quot;);
++  intro_text.push_back(&quot;young earth captain!!!&quot;);
++
++  d_buf = create_bitmap(SCREEN_W, SCREEN_H);
++  clear(d_buf);
++  copy_buf();
++
++  tw_sound-&gt;play_music(data_full_path(&quot;music/intro.xm&quot;), -1);
++  clear(d_buf);
++  BITMAP* logo = load_bitmap(data_full_path(&quot;images/3dlogo.jpg&quot;).c_str(), NULL);
++  stretch_blit(logo, d_buf, 0, 0, logo-&gt;w, logo-&gt;h, 0, 0, screen-&gt;w, screen-&gt;h);
++  destroy_bitmap(logo);
++
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;TimeWarp development team&quot;, screen-&gt;w/2, screen-&gt;h-50, -1);
++  copy_buf();
++  HAVE_A_WAIT(2500);
++ 
++  clear(d_buf);
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;somewhat proudly&quot;, screen-&gt;w/2, screen-&gt;h/2, -1);
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;present&quot;, screen-&gt;w/2, screen-&gt;h/2+40, -1);
++  copy_buf();
++  HAVE_A_WAIT(2500);
++  clear(d_buf);
++
++  BITMAP* pkunk = load_bitmap(data_full_path(&quot;images/joses_pkunk.jpg&quot;).c_str(), NULL);
++  blit(pkunk, d_buf, 0, 0,  (screen-&gt;w-pkunk-&gt;w)/2, 20, pkunk-&gt;w, pkunk-&gt;h);
++  textout_centre(d_buf, D_FONT_ENGLISH, &quot;TW-Light : Legacies&quot;, screen-&gt;w/2, pkunk-&gt;h+60, -1);
++  destroy_bitmap(pkunk);
++  copy_buf();
++  HAVE_A_WAIT(2500);
++  
++  ScrollText(intro_text,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;);
++
++
++  clear(d_buf);
++  copy_buf();	
++  destroy_bitmap(d_buf);
++}
++
++
++
+
+Modified: trunk/source/scp.h
+===================================================================
+--- trunk/source/scp.h	2005-03-06 16:45:59 UTC (rev 131)
++++ trunk/source/scp.h	2005-03-07 14:47:14 UTC (rev 132)
+@@ -48,6 +48,9 @@
+ int handleSoundSliderChange(void *dp3, int d2);
+ int handleMusicSliderChange(void *dp3, int d2);
+ 
++
++extern DATAFILE* g_game_data;
++
+ extern std::string menuAccept;
+ extern std::string menuFocus;
+ extern std::string menuDisabled;
+@@ -100,4 +103,16 @@
+ std::string data_full_path(std::string path);
+ std::string home_ini_full_path(std::string path);
+ 
++
++
++#define copy_buf() blit(d_buf, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H)
++
++// Data Define
++#define TW_FONT_ENGLISH     1
++#define TW_FONT_PALETTE     2
++
++// Data
++#define D_FONT_ENGLISH	((FONT*)g_game_data[TW_FONT_ENGLISH].dat)
++
++
+ #endif // __SCP_H__
+
+Modified: trunk/source/util/get_time.h
+===================================================================
+--- trunk/source/util/get_time.h	2005-03-06 16:45:59 UTC (rev 131)
++++ trunk/source/util/get_time.h	2005-03-07 14:47:14 UTC (rev 132)
+@@ -16,6 +16,22 @@
+ int idle ( int time ); //to yeild a number of milliseconds to the OS
+ extern int _no_idle;   //to disable the above function
+ 
++  // wait (_d) msec until ESC pressed
++#define HAVE_A_WAIT(_d)	\
++{ \
++        int time = get_time(); \
++	while (time + _d &gt; get_time()) \
++        {  \
++	  while (keypressed()) \
++	  { \
++	    int k = readkey(); \
++	    if(k&gt;&gt;8 == KEY_ESC) \
++	      return; \
++	  } \
++           idle(10); \
++        } \
++}
++
+ #ifdef __cplusplus
+ }
+ #endif
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000077.html">[Tw-light-svn] r131 - in trunk/source: melee other
+</A></li>
+	<LI>Next message: <A HREF="000079.html">[Tw-light-svn] r133 - in trunk/source: . games melee other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#78">[ date ]</a>
+              <a href="thread.html#78">[ thread ]</a>
+              <a href="subject.html#78">[ subject ]</a>
+              <a href="author.html#78">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

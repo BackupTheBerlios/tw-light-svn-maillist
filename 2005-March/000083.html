@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r137 - trunk/source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-March/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r137%20-%20trunk/source/games&In-Reply-To=%3C200503121931.j2CJV9MA029614%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000082.html">
+   <LINK REL="Next"  HREF="000084.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r137 - trunk/source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r137%20-%20trunk/source/games&In-Reply-To=%3C200503121931.j2CJV9MA029614%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r137 - trunk/source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Mar 12 20:31:09 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000082.html">[Tw-light-svn] r136 - in trunk: . gamedata gamedata/python mingw-libs/include mingw-libs/lib source source/games source/generated source/melee source/other source/python source/util
+</A></li>
+        <LI>Next message: <A HREF="000084.html">[Tw-light-svn] r138 - trunk/source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#83">[ date ]</a>
+              <a href="thread.html#83">[ thread ]</a>
+              <a href="subject.html#83">[ subject ]</a>
+              <a href="author.html#83">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-03-12 20:31:08 +0100 (Sat, 12 Mar 2005)
+New Revision: 137
+
+Added:
+   trunk/source/games/ggob.i
+Log:
+Adding missing Gob interface file
+
+
+Added: trunk/source/games/ggob.i
+===================================================================
+--- trunk/source/games/ggob.i	2005-03-12 19:12:58 UTC (rev 136)
++++ trunk/source/games/ggob.i	2005-03-12 19:31:08 UTC (rev 137)
+@@ -0,0 +1,8 @@
++%module ggob
++%{
++#include &quot;games/ggob.h&quot;
++%}
++%include &quot;std_string.i&quot;
++%include &quot;std_pair.i&quot;
++%include ggob.h
++
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000082.html">[Tw-light-svn] r136 - in trunk: . gamedata gamedata/python mingw-libs/include mingw-libs/lib source source/games source/generated source/melee source/other source/python source/util
+</A></li>
+	<LI>Next message: <A HREF="000084.html">[Tw-light-svn] r138 - trunk/source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#83">[ date ]</a>
+              <a href="thread.html#83">[ thread ]</a>
+              <a href="subject.html#83">[ subject ]</a>
+              <a href="author.html#83">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

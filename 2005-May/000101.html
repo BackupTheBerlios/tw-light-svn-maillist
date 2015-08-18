@@ -1,0 +1,1367 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r155 - in trunk: . gamedata gamedata/python gamedata/test_game gamedata/test_game/dialogs source source/generated source/other source/python source/tests source/tml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r155%20-%20in%20trunk%3A%20.%20gamedata%20gamedata/python%20gamedata/test_game%20gamedata/test_game/dialogs%20source%20source/generated%20source/other%20source/python%20source/tests%20source/tml&In-Reply-To=%3C200505071710.j47HAgri005915%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000100.html">
+   <LINK REL="Next"  HREF="000102.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r155 - in trunk: . gamedata gamedata/python gamedata/test_game gamedata/test_game/dialogs source source/generated source/other source/python source/tests source/tml</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r155%20-%20in%20trunk%3A%20.%20gamedata%20gamedata/python%20gamedata/test_game%20gamedata/test_game/dialogs%20source%20source/generated%20source/other%20source/python%20source/tests%20source/tml&In-Reply-To=%3C200505071710.j47HAgri005915%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r155 - in trunk: . gamedata gamedata/python gamedata/test_game gamedata/test_game/dialogs source source/generated source/other source/python source/tests source/tml">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat May  7 19:10:42 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000100.html">[Tw-light-svn] r154 - in trunk: gamedata/python source source/generated source/other source/python
+</A></li>
+        <LI>Next message: <A HREF="000102.html">[Tw-light-svn] r156 - in trunk: . gamedata/images/alien gamedata/music gamedata/music/races gamedata/python gamedata/test_game/dialogs source source/generated source/melee source/python source/tml source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#101">[ date ]</a>
+              <a href="thread.html#101">[ thread ]</a>
+              <a href="subject.html#101">[ subject ]</a>
+              <a href="author.html#101">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-07 19:10:38 +0200 (Sat, 07 May 2005)
+New Revision: 155
+
+Added:
+   trunk/gamedata/python/test_dialog.xml
+   trunk/gamedata/test_game/
+   trunk/gamedata/test_game/dialogs/
+   trunk/gamedata/test_game/dialogs/test_dialog.xml
+   trunk/gamedata/test_game/scripts/
+   trunk/source/tests/gameconfigtest.cpp
+   trunk/source/tests/gameconfigtest.h
+   trunk/source/tml/gameconfig.cpp
+   trunk/source/tml/gameconfig.h
+   trunk/source/tml/gamedialog.cpp
+   trunk/source/tml/gamedialog.h
+Removed:
+   trunk/source/other/gamedialog.cpp
+   trunk/source/other/gamedialog.h
+Modified:
+   trunk/gamedata/python/dialog.py
+   trunk/gamedata/python/tml.py
+   trunk/gamedata/python/tml_fake.py
+   trunk/gamedata/python/twsaveload.py
+   trunk/makefile
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/python/game.cpp
+   trunk/source/python/game.i
+   trunk/source/python/python_class.cpp
+   trunk/source/scp.cpp
+   trunk/sources.lst
+Log:
+TW-Light now can display dialogs in deditor format
+hit F3 will bring ./gamedata/test_game/dialogs/test_dialog.xml
+
+
+Modified: trunk/gamedata/python/dialog.py
+===================================================================
+--- trunk/gamedata/python/dialog.py	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/gamedata/python/dialog.py	2005-05-07 17:10:38 UTC (rev 155)
+@@ -12,8 +12,12 @@
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ 
++#  Module API:
++#  * runDialogString(str_xml) 
++#  * runDialogFile(file_path)
+ 
+ import unittest
++import xml.parsers.expat
+ 
+ &quot;&quot;&quot; For testing purpose we import fake TML implementation that provide the same API as
+     real TML, but doesn't contain real game code.&quot;&quot;&quot;
+@@ -28,6 +32,11 @@
+ 
+ g_cur_dialog = &quot;&quot;
+ 
++def runDialogString(str_xml):
++    DialogLoader().loadDialogString(str_xml).doDialog()
++def runDialogFile(file_path):
++    DialogLoader().loadDialogFile(file_path).doDialog()
++
+ #########################################################
+ # Native dialog API
+ #########################################################
+@@ -96,9 +105,62 @@
+     def endDialog(self):
+         self.cur_node = None
+ 
+-class DialogManager:
+-    pass
++class DialogLoader:
++    &quot;&quot;&quot; This class can be used to transform dialog editor's XML files to Dialog objects
+ 
++        Generaly you should only call one of functions
++          * loadDialogString ()
++          * loadDialogFile ()
++    &quot;&quot;&quot;
++    def __init__(self):
++        self.p = xml.parsers.expat.ParserCreate()
++        self.p.StartElementHandler    = self.start_element
++        self.p.EndElementHandler      = self.end_element
++        self.p.CharacterDataHandler   = self.char_data
++        self.python_code = &quot;&quot;
++    def loadDialogString(self, dlg):
++        self.python_code = &quot;&quot;
++        self.p.Parse(dlg, 1)
++        return eval(self.python_code)
++    def loadDialogFile(self, dlg):
++        self.python_code = &quot;&quot;
++        f = open(dlg,'r')
++        self.p.ParseFile(f)
++        f.close()
++        return eval(self.python_code)
++    #####################################################################
++    def start_element(self, name, attrs):
++        startMethod = getattr(self, 'start' + name)
++        self.python_code += startMethod( name,attrs )
++    def end_element(self, name):
++        endMethod = getattr(self, 'end' + name)
++        self.python_code += endMethod( name )
++    def char_data(self, data):
++        print 'Character data:', repr(data)
++    ######################################################################
++    def startACTION(self, name, attrs):
++        return 'Action(&quot;&quot;&quot;' + attrs['condition'] + '&quot;&quot;&quot;,&quot;&quot;&quot;'  + attrs['action'] + '&quot;&quot;&quot;),'
++    def startPLAYER_ANSWER(self, name, attrs):
++        return 'PlayerAnswer(&quot;&quot;&quot;' + attrs['text'] + '&quot;&quot;&quot;,&quot;&quot;&quot;' + attrs['appear_condition'] + '&quot;&quot;&quot;,('
++    def startNODE(self, name, attrs):
++        return 'Node(' + attrs['id'] + ',&quot;&quot;&quot;' + \
++               attrs['name'] + '&quot;&quot;&quot;,&quot;&quot;&quot;' + \
++               attrs['music'] + '&quot;&quot;&quot;,&quot;&quot;&quot;' + \
++               attrs['background'] + '&quot;&quot;&quot;,&quot;&quot;&quot;' \
++               +  attrs['alien_text'] + '&quot;&quot;&quot;,&quot;&quot;&quot;' + \
++               attrs['font'] + '&quot;&quot;&quot;,' + \
++               attrs['text_location'] + ',('
++    def startNODES(self, name, attrs):
++        return 'Dialog(('
++    def endPLAYER_ANSWER(self,name):
++        return ')),'
++    def endNODE(self,name):
++        return ')),'
++    def endNODES(self,name):
++        return '))'
++    def endACTION(self, name):
++        return &quot;&quot;
++
+ #####################################################################################################
+ #                              TESTS                                                                #
+ #####################################################################################################
+@@ -162,7 +224,53 @@
+         self.dialog.doDialog()
+         self.assertEqual(tml.DialogApi.getJornal(),&quot;startDialog showAlienPicture showText askPlayer showAlienPicture showText askPlayer endDialog &quot;)
+ 
+-        
++class TestDialogLoaderFunctions(unittest.TestCase):
++    def setUp(self):
++        tml.DialogApi.clearJornal()
++    def testAction(self):
++        dlg_ldr = DialogLoader()
++        dlg_ldr.start_element('ACTION', {'action' : 'goto(2)','condition' : '1'})
++        self.assertEqual('Action(&quot;&quot;&quot;1&quot;&quot;&quot;,&quot;&quot;&quot;goto(2)&quot;&quot;&quot;),',dlg_ldr.python_code)
++    def testPlayerAnswer(self):
++        dlg_ldr = DialogLoader()
++        dlg_ldr.start_element('PLAYER_ANSWER', {'appear_condition' : '1','text' : 'we come in peace'})
++        self.assertEqual('PlayerAnswer(&quot;&quot;&quot;we come in peace&quot;&quot;&quot;,&quot;&quot;&quot;1&quot;&quot;&quot;,(',dlg_ldr.python_code)
++    def testPlayerEndElements(self):
++        dlg_ldr = DialogLoader()
++        dlg_ldr.end_element('PLAYER_ANSWER')
++        self.assertEqual(')),',dlg_ldr.python_code)
++        dlg_ldr = DialogLoader()
++        dlg_ldr.end_element('NODE')
++        self.assertEqual(')),',dlg_ldr.python_code)
++        dlg_ldr = DialogLoader()
++        dlg_ldr.end_element('NODES')
++        self.assertEqual('))',dlg_ldr.python_code)
++
++    def testNode(self):
++        dlg_ldr = DialogLoader()
++        dlg_ldr.start_element('NODE', {'text_location' : '(50,10)',
++                                       'alien_text' : 'TW-Dialog',
++                                       'background' : 'a.png',
++                                       'id'         : '0',
++                                       'name'       : 'Start',
++                                       'font'       : 'Times',
++                                       'music'      : 'a.ogg'})
++        self.assertEqual('Node(0,&quot;&quot;&quot;Start&quot;&quot;&quot;,&quot;&quot;&quot;a.ogg&quot;&quot;&quot;,&quot;&quot;&quot;a.png&quot;&quot;&quot;,&quot;&quot;&quot;TW-Dialog&quot;&quot;&quot;,&quot;&quot;&quot;Times&quot;&quot;&quot;,(50,10),(',dlg_ldr.python_code)
++    def testNodes(self):
++        dlg_ldr = DialogLoader()
++        dlg_ldr.start_element('NODES', {})
++        self.assertEqual('Dialog((',dlg_ldr.python_code)
++    def testComplexTest(self):
++        jornalString = &quot;startDialog showAlienPicture showText askPlayer showAlienPicture showText askPlayer endDialog &quot;
++        f = open('test_dialog.xml','r')
++        str = f.read()
++        f.close()
++        DialogLoader().loadDialogString(str).doDialog()
++        self.assertEqual(tml.DialogApi.getJornal(),jornalString)
++        tml.DialogApi.clearJornal()
++        DialogLoader().loadDialogFile('test_dialog.xml').doDialog()
++        self.assertEqual(tml.DialogApi.getJornal(),jornalString)
++    
+ if __name__ == '__main__':
+     unittest.main()
+ 
+
+Added: trunk/gamedata/python/test_dialog.xml
+===================================================================
+--- trunk/gamedata/python/test_dialog.xml	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/gamedata/python/test_dialog.xml	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;a.ogg&quot; background=&quot;a.png&quot; alien_text=&quot;I am greatest warrior in galaxy&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can you chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;a.ogg&quot; background=&quot;a.png&quot; alien_text=&quot;No, I can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/gamedata/python/tml.py	2005-05-07 17:10:38 UTC (rev 155)
+@@ -500,6 +500,40 @@
+ 
+ DialogApi_showAlienPicture = _tml.DialogApi_showAlienPicture
+ 
++class GameConfig(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, GameConfig, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, GameConfig, name)
++    def __repr__(self):
++        return &quot;&lt;C GameConfig instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;SetGameDirectory&quot;] = lambda x: _tml.GameConfig_SetGameDirectory
++    if _newclass:SetGameDirectory = staticmethod(_tml.GameConfig_SetGameDirectory)
++    __swig_getmethods__[&quot;GetGameDirectory&quot;] = lambda x: _tml.GameConfig_GetGameDirectory
++    if _newclass:GetGameDirectory = staticmethod(_tml.GameConfig_GetGameDirectory)
++    __swig_getmethods__[&quot;GetAbsolutePath&quot;] = lambda x: _tml.GameConfig_GetAbsolutePath
++    if _newclass:GetAbsolutePath = staticmethod(_tml.GameConfig_GetAbsolutePath)
++    def __init__(self, *args):
++        _swig_setattr(self, GameConfig, 'this', _tml.new_GameConfig(*args))
++        _swig_setattr(self, GameConfig, 'thisown', 1)
++    def __del__(self, destroy=_tml.delete_GameConfig):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++
++class GameConfigPtr(GameConfig):
++    def __init__(self, this):
++        _swig_setattr(self, GameConfig, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GameConfig, 'thisown', 0)
++        _swig_setattr(self, GameConfig,self.__class__,GameConfig)
++_tml.GameConfig_swigregister(GameConfigPtr)
++
++GameConfig_SetGameDirectory = _tml.GameConfig_SetGameDirectory
++
++GameConfig_GetGameDirectory = _tml.GameConfig_GetGameDirectory
++
++GameConfig_GetAbsolutePath = _tml.GameConfig_GetAbsolutePath
++
+ class vectorEnemySaveData(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, vectorEnemySaveData, name, value)
+
+Modified: trunk/gamedata/python/tml_fake.py
+===================================================================
+--- trunk/gamedata/python/tml_fake.py	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/gamedata/python/tml_fake.py	2005-05-07 17:10:38 UTC (rev 155)
+@@ -12,6 +12,8 @@
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ 
++import unittest
++
+ class Callable:
+     def __init__(self, anycallable):
+         self.__call__ = anycallable
+@@ -41,10 +43,28 @@
+     showAlienPicture = Callable(showAlienPicture)
+     # Test Interface
+     def clearJornal():
++        global jornal
+         jornal = &quot;&quot;
+     def getJornal():
++        global jornal
+         return jornal
+     clearJornal = Callable(clearJornal)
+     getJornal   = Callable(getJornal)
+ 
++#############################################################################
++#            TESTS                                                          #
++#############################################################################
++class TestDialogApiFunctions(unittest.TestCase):
++    def setUp(self):
++        DialogApi.clearJornal()
++    def testClearJornal(self):
++        DialogApi.startDialog()
++        DialogApi.clearJornal()
++        self.assertEqual('',DialogApi.getJornal())
++    def testAddJornalEntry(self):
++        DialogApi.startDialog()
++        self.assertEqual('startDialog ',DialogApi.getJornal())
+ 
++        
++if __name__ == '__main__':
++    unittest.main()
+
+Modified: trunk/gamedata/python/twsaveload.py
+===================================================================
+--- trunk/gamedata/python/twsaveload.py	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/gamedata/python/twsaveload.py	2005-05-07 17:10:38 UTC (rev 155)
+@@ -41,18 +41,8 @@
+             e[i].pos_x = self.enemy[i].pos_x
+             e[i].pos_y = self.enemy[i].pos_y
+         gamedata.setTst(e)
+-        
+-        dlg = dialog.Dialog( (
+-            dialog.Node(0, 'Node1','','images/alien/SpathiMain.jpg','AlienText','',(50,10),
+-                 (dialog.PlayerAnswer('Answer1', '1', (dialog.Action('1', 'goto(1)'), )),
+-                  dialog.PlayerAnswer('Answer2', '1', (dialog.Action('1', 'endDialog()'),)
+-                               )))
+-            ,
+-            dialog.Node(1, 'Node1','','images/alien/SpathiMain.jpg','AlienText','',(50,10),
+-                 (dialog.PlayerAnswer('Answer3', '1', (dialog.Action('1', 'endDialog()'),)
+-                               ),)),
+-            )                         )
+-        dlg.doDialog()
++        print &quot;DIALOG&quot; + tml.GameConfig.GetAbsolutePath(&quot;dialogs/test_dialog.xml&quot;) + &quot;GGG&quot;
++        dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/test_dialog.xml&quot;))
+ 
+ class SaveManager:
+     def __init__(self, file):
+
+Added: trunk/gamedata/test_game/dialogs/test_dialog.xml
+===================================================================
+--- trunk/gamedata/test_game/dialogs/test_dialog.xml	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/gamedata/test_game/dialogs/test_dialog.xml	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1 @@
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Begin&quot; music=&quot;a.ogg&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;I am Black Spathi!&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Can we chat a little?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;bye&quot; music=&quot;a.ogg&quot; background=&quot;images/alien/SpathiMain.jpg&quot; alien_text=&quot;No, we can't&quot; font=&quot;Times&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/makefile	2005-05-07 17:10:38 UTC (rev 155)
+@@ -21,6 +21,8 @@
+ # libraries, so you need to install them before running. cppunit 1.10.*        #
+ # required for TEST=1 configuration                                            #
+ #                                                                              #
++# Also you need install python                                                 #
++#                                                                              #
+ ################################################################################
+ 
+ PRODUCTVERSION = 0.3
+@@ -76,7 +78,7 @@
+ CFLAGS += -DTW_SVNVERSION=\&quot;$(SVNVERSION)\&quot;
+ 
+ VPATH = tests source source/libraries/agup source/ais source/games \
+-        source/melee source/tests source/xslt \
++        source/melee source/tml source/tests \
+         source/other source/ships source/sc1ships source/sc2ships \
+         source/util source/libraries/alogg \
+         source/libraries/jpgalleg source/libraries/jgmod source/libraries/cppunit \
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/generated/tml.py	2005-05-07 17:10:38 UTC (rev 155)
+@@ -500,6 +500,40 @@
+ 
+ DialogApi_showAlienPicture = _tml.DialogApi_showAlienPicture
+ 
++class GameConfig(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, GameConfig, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, GameConfig, name)
++    def __repr__(self):
++        return &quot;&lt;C GameConfig instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;SetGameDirectory&quot;] = lambda x: _tml.GameConfig_SetGameDirectory
++    if _newclass:SetGameDirectory = staticmethod(_tml.GameConfig_SetGameDirectory)
++    __swig_getmethods__[&quot;GetGameDirectory&quot;] = lambda x: _tml.GameConfig_GetGameDirectory
++    if _newclass:GetGameDirectory = staticmethod(_tml.GameConfig_GetGameDirectory)
++    __swig_getmethods__[&quot;GetAbsolutePath&quot;] = lambda x: _tml.GameConfig_GetAbsolutePath
++    if _newclass:GetAbsolutePath = staticmethod(_tml.GameConfig_GetAbsolutePath)
++    def __init__(self, *args):
++        _swig_setattr(self, GameConfig, 'this', _tml.new_GameConfig(*args))
++        _swig_setattr(self, GameConfig, 'thisown', 1)
++    def __del__(self, destroy=_tml.delete_GameConfig):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++
++class GameConfigPtr(GameConfig):
++    def __init__(self, this):
++        _swig_setattr(self, GameConfig, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, GameConfig, 'thisown', 0)
++        _swig_setattr(self, GameConfig,self.__class__,GameConfig)
++_tml.GameConfig_swigregister(GameConfigPtr)
++
++GameConfig_SetGameDirectory = _tml.GameConfig_SetGameDirectory
++
++GameConfig_GetGameDirectory = _tml.GameConfig_GetGameDirectory
++
++GameConfig_GetAbsolutePath = _tml.GameConfig_GetAbsolutePath
++
+ class vectorEnemySaveData(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, vectorEnemySaveData, name, value)
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/generated/tml_wrap.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -708,8 +708,8 @@
+ #define  SWIGTYPE_p_StarMap swig_types[5] 
+ #define  SWIGTYPE_p_Upgrade swig_types[6] 
+ #define  SWIGTYPE_p_p_Upgrade swig_types[7] 
+-#define  SWIGTYPE_p_char swig_types[8] 
+-#define  SWIGTYPE_p_SpaceLocation swig_types[9] 
++#define  SWIGTYPE_p_SpaceLocation swig_types[8] 
++#define  SWIGTYPE_p_char swig_types[9] 
+ #define  SWIGTYPE_p_p_char swig_types[10] 
+ #define  SWIGTYPE_p_GobGame swig_types[11] 
+ #define  SWIGTYPE_p_Control swig_types[12] 
+@@ -730,12 +730,13 @@
+ #define  SWIGTYPE_p_EnemySaveData swig_types[27] 
+ #define  SWIGTYPE_p_p_GobEnemy swig_types[28] 
+ #define  SWIGTYPE_p_GobEnemy swig_types[29] 
+-#define  SWIGTYPE_p_RainbowRift swig_types[30] 
+-#define  SWIGTYPE_p_Log swig_types[31] 
+-#define  SWIGTYPE_p_ShipPanel swig_types[32] 
+-#define  SWIGTYPE_p_float swig_types[33] 
+-#define  SWIGTYPE_p_std__vectorTEnemySaveData_t swig_types[34] 
+-static swig_type_info *swig_types[36];
++#define  SWIGTYPE_p_GameConfig swig_types[30] 
++#define  SWIGTYPE_p_RainbowRift swig_types[31] 
++#define  SWIGTYPE_p_Log swig_types[32] 
++#define  SWIGTYPE_p_ShipPanel swig_types[33] 
++#define  SWIGTYPE_p_float swig_types[34] 
++#define  SWIGTYPE_p_std__vectorTEnemySaveData_t swig_types[35] 
++static swig_type_info *swig_types[37];
+ 
+ /* -------- TYPES TABLE (END) -------- */
+ 
+@@ -748,7 +749,8 @@
+ #define SWIG_name    &quot;_tml&quot;
+ 
+ #include &quot;games/ggob.h&quot;
+-#include &quot;other/gamedialog.h&quot;
++#include &quot;tml/gamedialog.h&quot;
++#include &quot;tml/gameconfig.h&quot;
+ 
+ 
+ #define  SWIG_MemoryError    1
+@@ -4424,6 +4426,112 @@
+     Py_INCREF(obj);
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
++static PyObject *_wrap_GameConfig_SetGameDirectory(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::string *arg1 = 0 ;
++    std::string temp1 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GameConfig_SetGameDirectory&quot;,&amp;obj0)) goto fail;
++    {
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    GameConfig::SetGameDirectory((std::string const &amp;)*arg1);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameConfig_GetGameDirectory(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::string result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:GameConfig_GetGameDirectory&quot;)) goto fail;
++    result = GameConfig::GetGameDirectory();
++    
++    {
++        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameConfig_GetAbsolutePath(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::string *arg1 = 0 ;
++    std::string result;
++    std::string temp1 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GameConfig_GetAbsolutePath&quot;,&amp;obj0)) goto fail;
++    {
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    result = GameConfig::GetAbsolutePath((std::string const &amp;)*arg1);
++    
++    {
++        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_new_GameConfig(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    GameConfig *result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:new_GameConfig&quot;)) goto fail;
++    result = (GameConfig *)new GameConfig();
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_GameConfig, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_delete_GameConfig(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    GameConfig *arg1 = (GameConfig *) 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_GameConfig&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GameConfig,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    delete arg1;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject * GameConfig_swigregister(PyObject *self, PyObject *args) {
++    PyObject *obj;
++    if (!PyArg_ParseTuple(args,(char*)&quot;O&quot;, &amp;obj)) return NULL;
++    SWIG_TypeClientData(SWIGTYPE_p_GameConfig, obj);
++    Py_INCREF(obj);
++    return Py_BuildValue((char *)&quot;&quot;);
++}
+ static PyObject *_wrap_new_vectorEnemySaveData__SWIG_0(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     unsigned int arg1 = (unsigned int) 0 ;
+@@ -5598,6 +5706,12 @@
+ 	 { (char *)&quot;new_DialogApi&quot;, _wrap_new_DialogApi, METH_VARARGS },
+ 	 { (char *)&quot;delete_DialogApi&quot;, _wrap_delete_DialogApi, METH_VARARGS },
+ 	 { (char *)&quot;DialogApi_swigregister&quot;, DialogApi_swigregister, METH_VARARGS },
++	 { (char *)&quot;GameConfig_SetGameDirectory&quot;, _wrap_GameConfig_SetGameDirectory, METH_VARARGS },
++	 { (char *)&quot;GameConfig_GetGameDirectory&quot;, _wrap_GameConfig_GetGameDirectory, METH_VARARGS },
++	 { (char *)&quot;GameConfig_GetAbsolutePath&quot;, _wrap_GameConfig_GetAbsolutePath, METH_VARARGS },
++	 { (char *)&quot;new_GameConfig&quot;, _wrap_new_GameConfig, METH_VARARGS },
++	 { (char *)&quot;delete_GameConfig&quot;, _wrap_delete_GameConfig, METH_VARARGS },
++	 { (char *)&quot;GameConfig_swigregister&quot;, GameConfig_swigregister, METH_VARARGS },
+ 	 { (char *)&quot;new_vectorEnemySaveData&quot;, _wrap_new_vectorEnemySaveData, METH_VARARGS },
+ 	 { (char *)&quot;vectorEnemySaveData___len__&quot;, _wrap_vectorEnemySaveData___len__, METH_VARARGS },
+ 	 { (char *)&quot;vectorEnemySaveData_clear&quot;, _wrap_vectorEnemySaveData_clear, METH_VARARGS },
+@@ -5643,8 +5757,8 @@
+ static swig_type_info _swigt__p_StarMap[] = {{&quot;_p_StarMap&quot;, 0, &quot;StarMap *&quot;, 0},{&quot;_p_StarMap&quot;},{0}};
+ static swig_type_info _swigt__p_Upgrade[] = {{&quot;_p_Upgrade&quot;, 0, &quot;Upgrade *&quot;, 0},{&quot;_p_Upgrade&quot;},{0}};
+ static swig_type_info _swigt__p_p_Upgrade[] = {{&quot;_p_p_Upgrade&quot;, 0, &quot;Upgrade **&quot;, 0},{&quot;_p_p_Upgrade&quot;},{0}};
++static swig_type_info _swigt__p_SpaceLocation[] = {{&quot;_p_SpaceLocation&quot;, 0, &quot;SpaceLocation *&quot;, 0},{&quot;_p_SpaceLocation&quot;},{&quot;_p_RainbowRift&quot;, _p_RainbowRiftTo_p_SpaceLocation},{0}};
+ static swig_type_info _swigt__p_char[] = {{&quot;_p_char&quot;, 0, &quot;char *&quot;, 0},{&quot;_p_char&quot;},{0}};
+-static swig_type_info _swigt__p_SpaceLocation[] = {{&quot;_p_SpaceLocation&quot;, 0, &quot;SpaceLocation *&quot;, 0},{&quot;_p_SpaceLocation&quot;},{&quot;_p_RainbowRift&quot;, _p_RainbowRiftTo_p_SpaceLocation},{0}};
+ static swig_type_info _swigt__p_p_char[] = {{&quot;_p_p_char&quot;, 0, &quot;char **&quot;, 0},{&quot;_p_p_char&quot;},{0}};
+ static swig_type_info _swigt__p_GobGame[] = {{&quot;_p_GobGame&quot;, 0, &quot;GobGame *&quot;, 0},{&quot;_p_GobGame&quot;},{0}};
+ static swig_type_info _swigt__p_Control[] = {{&quot;_p_Control&quot;, 0, &quot;Control *&quot;, 0},{&quot;_p_Control&quot;},{0}};
+@@ -5665,6 +5779,7 @@
+ static swig_type_info _swigt__p_EnemySaveData[] = {{&quot;_p_EnemySaveData&quot;, 0, &quot;EnemySaveData *&quot;, 0},{&quot;_p_EnemySaveData&quot;},{0}};
+ static swig_type_info _swigt__p_p_GobEnemy[] = {{&quot;_p_p_GobEnemy&quot;, 0, &quot;GobEnemy **&quot;, 0},{&quot;_p_p_GobEnemy&quot;},{0}};
+ static swig_type_info _swigt__p_GobEnemy[] = {{&quot;_p_GobEnemy&quot;, 0, &quot;GobEnemy *&quot;, 0},{&quot;_p_GobEnemy&quot;},{0}};
++static swig_type_info _swigt__p_GameConfig[] = {{&quot;_p_GameConfig&quot;, 0, &quot;GameConfig *&quot;, 0},{&quot;_p_GameConfig&quot;},{0}};
+ static swig_type_info _swigt__p_RainbowRift[] = {{&quot;_p_RainbowRift&quot;, 0, &quot;RainbowRift *&quot;, 0},{&quot;_p_RainbowRift&quot;},{0}};
+ static swig_type_info _swigt__p_Log[] = {{&quot;_p_Log&quot;, 0, &quot;Log *&quot;, 0},{&quot;_p_Log&quot;},{0}};
+ static swig_type_info _swigt__p_ShipPanel[] = {{&quot;_p_ShipPanel&quot;, 0, &quot;ShipPanel *&quot;, 0},{&quot;_p_ShipPanel&quot;},{0}};
+@@ -5680,8 +5795,8 @@
+ _swigt__p_StarMap, 
+ _swigt__p_Upgrade, 
+ _swigt__p_p_Upgrade, 
++_swigt__p_SpaceLocation, 
+ _swigt__p_char, 
+-_swigt__p_SpaceLocation, 
+ _swigt__p_p_char, 
+ _swigt__p_GobGame, 
+ _swigt__p_Control, 
+@@ -5702,6 +5817,7 @@
+ _swigt__p_EnemySaveData, 
+ _swigt__p_p_GobEnemy, 
+ _swigt__p_GobEnemy, 
++_swigt__p_GameConfig, 
+ _swigt__p_RainbowRift, 
+ _swigt__p_Log, 
+ _swigt__p_ShipPanel, 
+
+Deleted: trunk/source/other/gamedialog.cpp
+===================================================================
+--- trunk/source/other/gamedialog.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/other/gamedialog.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -1,115 +0,0 @@
+-/* $Id: nullphas.h,v 1.1.1.1 2004/08/01 10:21:24 Yura Exp $ */ 
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#include &lt;iostream&gt;
+-
+-#include &lt;allegro.h&gt;
+-#ifdef WIN32
+-#include &lt;allegro/platform/aintwin.h&gt;
+-#include &lt;winalleg.h&gt;
+-#endif
+-
+-#include &quot;melee.h&quot;
+-#include &quot;frame.h&quot;
+-#include &quot;melee/mview.h&quot;
+-#include &quot;melee/mgame.h&quot;
+-#include &quot;scp.h&quot;
+-
+-#include &quot;gamedialog.h&quot;
+-
+-#define DIALOG_HEIGHT_AREA 0.7
+-
+-void DialogApi::startDialog()
+-{
+-  std::cerr&lt;&lt;__FUNCTION__;
+-  if(!game-&gt;is_paused())
+-    game-&gt;pause();
+-}
+-
+-void DialogApi::endDialog()
+-{
+-  std::cerr&lt;&lt;__FUNCTION__;
+-  game-&gt;unpause();
+-}
+-
+-int DialogApi::askPlayer(std::vector&lt;const char*&gt; answers)
+-{
+-  std::cerr&lt;&lt;__FUNCTION__;
+-  MENU *pMenuAnswers = new MENU[answers.size()+1];
+-  for( unsigned int i=0; i&lt;answers.size(); i++)
+-    {
+-      pMenuAnswers[i].text   = strdup(answers[i]);
+-      pMenuAnswers[i].proc   = NULL;
+-      pMenuAnswers[i].child  = NULL;
+-      pMenuAnswers[i].flags  = 0;
+-      pMenuAnswers[i].dp     = NULL;
+-    }
+-  pMenuAnswers[answers.size()].text   = NULL;
+-  pMenuAnswers[answers.size()].proc   = NULL;
+-  pMenuAnswers[answers.size()].child  = NULL;
+-  pMenuAnswers[answers.size()].flags  = 0;
+-  pMenuAnswers[answers.size()].dp     = NULL;
+-  
+-  show_mouse(game-&gt;window-&gt;surface);
+-  int ret = -1;
+-  while( ret == -1 )
+-    ret = do_menu(pMenuAnswers, 0, (int)(game-&gt;view-&gt;frame-&gt;window-&gt;h*DIALOG_HEIGHT_AREA));
+-  show_mouse(NULL);
+-
+-  ///////////////////////////////////////////////
+-  //Free memory
+-  for(unsigned int i=0;i&lt;answers.size();i++)
+-    free(pMenuAnswers[i].text);
+-  delete[] pMenuAnswers;
+-  return ret;
+-}
+-  
+-void DialogApi::showText(const std::string&amp; text, int delay, int x, int y)
+-{
+-  std::cerr&lt;&lt;__FUNCTION__;
+-  RGB tmpPal[256];
+-  memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
+-  set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
+-  textout_centre(game-&gt;view-&gt;frame-&gt;window-&gt;surface, 
+-		 D_FONT_ENGLISH, 
+-		 text.c_str(), 
+-		 (int)(game-&gt;view-&gt;frame-&gt;window-&gt;w*x/100),  
+-		 (int)(game-&gt;view-&gt;frame-&gt;window-&gt;h*DIALOG_HEIGHT_AREA*y/100), -1);
+-  videosystem-&gt;set_palette(tmpPal);
+-  HAVE_A_WAIT(delay);
+-}
+- 
+-void DialogApi::showAlienPicture(const std::string&amp; path)
+-{
+-  std::cerr&lt;&lt;__FUNCTION__;
+-  BITMAP* alienPic = load_bitmap(data_full_path(path).c_str(), NULL);
+-  
+-  BITMAP* d_buf = create_bitmap(game-&gt;view-&gt;frame-&gt;window-&gt;w,
+-				game-&gt;view-&gt;frame-&gt;window-&gt;h);   
+-  clear_bitmap(d_buf);
+-  stretch_blit(alienPic, d_buf, 0, 0, alienPic-&gt;w, alienPic-&gt;h, 0, 0, d_buf-&gt;w, (int)(d_buf-&gt;h *DIALOG_HEIGHT_AREA));
+-  
+-  blit(d_buf, 
+-       game-&gt;view-&gt;frame-&gt;window-&gt;surface, 
+-       0, 0, 
+-       game-&gt;view-&gt;frame-&gt;window-&gt;x, 
+-       game-&gt;view-&gt;frame-&gt;window-&gt;y, 
+-       d_buf-&gt;w, d_buf-&gt;h);
+-
+-  destroy_bitmap(alienPic);
+-  destroy_bitmap(d_buf);
+-};
+
+Deleted: trunk/source/other/gamedialog.h
+===================================================================
+--- trunk/source/other/gamedialog.h	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/other/gamedialog.h	2005-05-07 17:10:38 UTC (rev 155)
+@@ -1,47 +0,0 @@
+-/* $Id: nullphas.h,v 1.1.1.1 2004/08/01 10:21:24 Yura Exp $ */ 
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#include &lt;vector&gt;
+-#include &lt;string&gt;
+-
+-/// Provide dialog api 
+-class DialogApi
+-{
+- public:
+-  /// Save game state, pause game, init stuff to show dialog
+-  static void startDialog();
+-  /// Return to predialog game state
+-  static void endDialog();
+-  
+-  /// player should select from answer variants
+-  ///
+-  /// \return player answer position
+-  static int askPlayer(std::vector&lt;const char*&gt; answers);
+-  
+-  /// show alien text
+-  ///
+-  /// @param text alien text
+-  /// @param delay how long to display msec
+-  /// @param x center text position (from 0 to 100)
+-  /// @param y center text position (from 0 to 100)
+-  static void showText(const std::string&amp; text, int delay, int x, int y);
+-  
+-  /// show that ugly alien face
+-  ///
+-  /// @param file path from game directory
+-  static void showAlienPicture(const std::string&amp; path);
+-};
+
+Modified: trunk/source/python/game.cpp
+===================================================================
+--- trunk/source/python/game.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/python/game.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -31,6 +31,7 @@
+ #include &lt;dirent.h&gt;
+ 
+ #include &quot;util/errors.h&quot;
++#include &quot;tml/gameconfig.h&quot;
+ 
+ std::string game::User_data_dir; 
+ std::string game::Global_data_dir; 
+
+Modified: trunk/source/python/game.i
+===================================================================
+--- trunk/source/python/game.i	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/python/game.i	2005-05-07 17:10:38 UTC (rev 155)
+@@ -1,12 +1,14 @@
+ %module tml
+ %{
+ #include &quot;games/ggob.h&quot;
+-#include &quot;other/gamedialog.h&quot;
++#include &quot;tml/gamedialog.h&quot;
++#include &quot;tml/gameconfig.h&quot;
+ %}
+ %include &quot;std_string.i&quot;
+ %include &quot;std_pair.i&quot;
+ %include ../games/ggob.h
+-%include ../other/gamedialog.h
++%include ../tml/gamedialog.h
++%include ../tml/gameconfig.h
+ 
+ %include &quot;std_vector.i&quot;
+ 
+
+Modified: trunk/source/python/python_class.cpp
+===================================================================
+--- trunk/source/python/python_class.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/python/python_class.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -29,6 +29,8 @@
+ #include &quot;util/errors.h&quot;
+ #include &quot;scp.h&quot;
+ 
++#include &quot;tml/gameconfig.h&quot;
++
+ #include &lt;iostream&gt; 
+ 
+ 
+@@ -50,6 +52,7 @@
+     // For windows we should include part of standart library we use
+     insert_path( (char*)(datafile_path + &quot;/python/lib&quot;).c_str());
+ #endif
++    insert_path( (char*)(GameConfig::GetGameDirectory() + &quot;/scripts&quot;).c_str());
+     init_tml();
+ }
+ 
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/scp.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -72,8 +72,8 @@
+ #include &quot;util/aastr.h&quot;
+ #include &quot;melee/mship.h&quot; //remove
+ #include &quot;melee/mfleet.h&quot;
++#include &quot;tml/gameconfig.h&quot;
+ 
+-
+ #include &lt;Python.h&gt;
+ #include &quot;python/python_class.h&quot;
+ 
+@@ -801,10 +801,6 @@
+   SetCurrentDirectory(szPath);
+ #endif
+ 
+-  if(argc==2&amp;&amp;!strcmp(argv[1],&quot;-test&quot;))
+-    {
+-      return RunTests();
+-    }
+   
+   int i;
+   int auto_port = -1;
+@@ -817,9 +813,15 @@
+     tw_error_exit(&quot;Allegro initialization failed&quot;);
+   //install_allegro_gl();
+   init_datafile_path();
++  GameConfig::SetGameDirectory(datafile_path + &quot;/test_game&quot;);
+   create_user_ini();
+   python::init();  
+ 
++  if(argc==2&amp;&amp;!strcmp(argv[1],&quot;-test&quot;))
++    {
++      return RunTests();
++    }
++
+   
+   g_game_data = load_datafile(data_full_path(&quot;gamedata.dat&quot;).c_str());
+ 
+
+Added: trunk/source/tests/gameconfigtest.cpp
+===================================================================
+--- trunk/source/tests/gameconfigtest.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/tests/gameconfigtest.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1,44 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifdef TW_CPPUNIT_TESTS
++
++#include &lt;cppunit/ui/text/TestRunner.h&gt;
++#include &lt;cppunit/extensions/HelperMacros.h&gt;
++
++#include &quot;gameconfigtest.h&quot;
++#include &quot;tml/gameconfig.h&quot;
++
++#include &lt;string&gt;
++
++void TestGameConfig::testSetGameDirectory()
++{
++  std::string game_dir = &quot;/home/yura/gm&quot;;
++  GameConfig::SetGameDirectory(&quot;/home/yura/gm&quot;);
++  CPPUNIT_ASSERT_EQUAL(game_dir + &quot;/&quot;, GameConfig::GetGameDirectory());
++}
++
++void TestGameConfig::testGetAbsolutePath()
++{
++  std::string game_dir = &quot;/home/yura/gm&quot;;
++  GameConfig::SetGameDirectory(&quot;gamedata/music&quot;);
++  
++  CPPUNIT_ASSERT_EQUAL(std::string(&quot;gamedata/music/license.txt&quot;), GameConfig::GetAbsolutePath(&quot;license.txt&quot;));
++  CPPUNIT_ASSERT_EQUAL(std::string(&quot;INSTALL&quot;), GameConfig::GetAbsolutePath(&quot;INSTALL&quot;));
++}
++
++CPPUNIT_TEST_SUITE_REGISTRATION( TestGameConfig );
++#endif
+
+Added: trunk/source/tests/gameconfigtest.h
+===================================================================
+--- trunk/source/tests/gameconfigtest.h	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/tests/gameconfigtest.h	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1,39 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifdef TW_CPPUNIT_TESTS
++#ifndef TW_LIGHT_GAMECONFIGTEST_H
++#define TW_LIGHT_GAMECONFIGTEST_H
++
++class TestGameConfig: public CppUnit::TestFixture
++{
++public:
++  
++  void testSetGameDirectory();
++  void testGetAbsolutePath();
++
++  CPPUNIT_TEST_SUITE(TestGameConfig);
++    CPPUNIT_TEST(testSetGameDirectory);
++    CPPUNIT_TEST(testGetAbsolutePath);
++  CPPUNIT_TEST_SUITE_END();
++
++};
++
++
++#endif 
++#endif
++
++
+
+Added: trunk/source/tml/gameconfig.cpp
+===================================================================
+--- trunk/source/tml/gameconfig.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/tml/gameconfig.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1,70 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++
++#include &quot;gameconfig.h&quot;
++#include &quot;scp.h&quot;
++#include &quot;allegro.h&quot;
++
++std::string GameConfig::game_data_dir = &quot;&quot;;
++
++void GameConfig::SetGameDirectory(const std::string&amp; gamedir)
++{
++  if(!gamedir.length())
++    return;
++
++  if(gamedir[gamedir.length()-1] == '/' || gamedir[gamedir.length()-1] == '\\')
++    {
++      game_data_dir = gamedir;
++    }
++  else
++    {
++      game_data_dir = gamedir + &quot;/&quot;;
++    }
++}
++
++std::string GameConfig::GetGameDirectory()
++{
++  return game_data_dir;
++}
++
++std::string GameConfig::GetAbsolutePath(const std::string&amp; file)
++{
++  if(!file.length())
++    return &quot;&quot;;
++  if(file[0] == '/')
++    {
++      return file;
++    }
++  if(file.length()&gt;2&amp;&amp;file[1]==':')
++    {
++      return file;
++    }
++  if(exists( file.c_str()))
++    {
++      return file;
++    }
++  else if(exists( (GetGameDirectory() + file).c_str()))
++    {
++      return GetGameDirectory() + file;
++    }
++  else if (exists( data_full_path(file).c_str()))
++    {
++      return data_full_path(file);
++    }
++  return &quot;&quot;;
++}
++
+
+Added: trunk/source/tml/gameconfig.h
+===================================================================
+--- trunk/source/tml/gameconfig.h	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/tml/gameconfig.h	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1,46 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef __TW_LIGHT_GAMECONFIG_H__
++#define __TW_LIGHT_GAMECONFIG_H__
++
++#include &lt;string&gt;
++/// game configuration class
++///
++/// All game settings should stored here
++class GameConfig
++{
++  static std::string game_data_dir;
++ public:
++  /// Set directory where game should search for it's data and scripts
++  ///
++  /// @param gamedir absolute path
++  static void SetGameDirectory(const std::string&amp; gamedir);
++  
++  /// Get directory where game should search for it's data and scripts
++  static std::string GetGameDirectory();
++
++  /// Get absolute path to data
++  ///
++  /// The function first search in Game data directory, then it common data directory
++  /// @param file file path
++  /// @return absolute path or empty string on errors
++  static std::string GetAbsolutePath(const std::string&amp; file);
++};
++
++#endif
++
++
+
+Copied: trunk/source/tml/gamedialog.cpp (from rev 154, trunk/source/other/gamedialog.cpp)
+===================================================================
+--- trunk/source/other/gamedialog.cpp	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/tml/gamedialog.cpp	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1,121 @@
++/* $Id: nullphas.h,v 1.1.1.1 2004/08/01 10:21:24 Yura Exp $ */ 
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#include &lt;iostream&gt;
++
++#include &lt;allegro.h&gt;
++#ifdef WIN32
++#include &lt;allegro/platform/aintwin.h&gt;
++#include &lt;winalleg.h&gt;
++#endif
++
++#include &quot;melee.h&quot;
++#include &quot;frame.h&quot;
++#include &quot;melee/mview.h&quot;
++#include &quot;melee/mgame.h&quot;
++#include &quot;scp.h&quot;
++
++#include &quot;gamedialog.h&quot;
++#include &quot;gameconfig.h&quot;
++
++#define DIALOG_HEIGHT_AREA 0.7
++
++void DialogApi::startDialog()
++{
++  std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
++  if(!game-&gt;is_paused())
++    game-&gt;pause();
++}
++
++void DialogApi::endDialog()
++{
++  std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
++  game-&gt;unpause();
++}
++
++int DialogApi::askPlayer(std::vector&lt;const char*&gt; answers)
++{
++  std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
++  MENU *pMenuAnswers = new MENU[answers.size()+1];
++  for( unsigned int i=0; i&lt;answers.size(); i++)
++    {
++      pMenuAnswers[i].text   = strdup(answers[i]);
++      pMenuAnswers[i].proc   = NULL;
++      pMenuAnswers[i].child  = NULL;
++      pMenuAnswers[i].flags  = 0;
++      pMenuAnswers[i].dp     = NULL;
++    }
++  pMenuAnswers[answers.size()].text   = NULL;
++  pMenuAnswers[answers.size()].proc   = NULL;
++  pMenuAnswers[answers.size()].child  = NULL;
++  pMenuAnswers[answers.size()].flags  = 0;
++  pMenuAnswers[answers.size()].dp     = NULL;
++  
++  show_mouse(game-&gt;window-&gt;surface);
++  int ret = -1;
++  while( ret == -1 )
++    ret = do_menu(pMenuAnswers, 0, (int)(game-&gt;view-&gt;frame-&gt;window-&gt;h*DIALOG_HEIGHT_AREA));
++  show_mouse(NULL);
++
++  ///////////////////////////////////////////////
++  //Free memory
++  for(unsigned int i=0;i&lt;answers.size();i++)
++    free(pMenuAnswers[i].text);
++  delete[] pMenuAnswers;
++  return ret;
++}
++  
++void DialogApi::showText(const std::string&amp; text, int delay, int x, int y)
++{
++  std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
++  RGB tmpPal[256];
++  memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
++  set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
++  textout_centre(game-&gt;view-&gt;frame-&gt;window-&gt;surface, 
++		 D_FONT_ENGLISH, 
++		 text.c_str(), 
++		 (int)(game-&gt;view-&gt;frame-&gt;window-&gt;w*x/100),  
++		 (int)(game-&gt;view-&gt;frame-&gt;window-&gt;h*DIALOG_HEIGHT_AREA*y/100), -1);
++  videosystem-&gt;set_palette(tmpPal);
++  HAVE_A_WAIT(delay);
++}
++ 
++void DialogApi::showAlienPicture(const std::string&amp; path)
++{
++  std::cerr&lt;&lt;__FUNCTION__&lt;&lt;&quot;\n&quot;;
++  std::string pic = GameConfig::GetAbsolutePath(path);
++  if(!pic.length())
++    {
++      tw_error( (std::string(&quot;Unable to find file: &quot;) + path).c_str());
++    }
++  BITMAP* alienPic = load_bitmap(pic.c_str(), NULL);
++  
++  BITMAP* d_buf = create_bitmap(game-&gt;view-&gt;frame-&gt;window-&gt;w,
++				game-&gt;view-&gt;frame-&gt;window-&gt;h);   
++  clear_bitmap(d_buf);
++  stretch_blit(alienPic, d_buf, 0, 0, alienPic-&gt;w, alienPic-&gt;h, 0, 0, d_buf-&gt;w, (int)(d_buf-&gt;h *DIALOG_HEIGHT_AREA));
++  
++  blit(d_buf, 
++       game-&gt;view-&gt;frame-&gt;window-&gt;surface, 
++       0, 0, 
++       game-&gt;view-&gt;frame-&gt;window-&gt;x, 
++       game-&gt;view-&gt;frame-&gt;window-&gt;y, 
++       d_buf-&gt;w, d_buf-&gt;h);
++
++  destroy_bitmap(alienPic);
++  destroy_bitmap(d_buf);
++};
+
+Copied: trunk/source/tml/gamedialog.h (from rev 154, trunk/source/other/gamedialog.h)
+===================================================================
+--- trunk/source/other/gamedialog.h	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/source/tml/gamedialog.h	2005-05-07 17:10:38 UTC (rev 155)
+@@ -0,0 +1,52 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#ifndef __TW_LIGHT_GAMEDIALOG_H__
++#define __TW_LIGHT_GAMEDIALOG_H__
++
++#include &lt;vector&gt;
++#include &lt;string&gt;
++
++/// Provide dialog api 
++class DialogApi
++{
++ public:
++  /// Save game state, pause game, init stuff to show dialog
++  static void startDialog();
++  /// Return to predialog game state
++  static void endDialog();
++  
++  /// player should select from answer variants
++  ///
++  /// \return player answer position
++  static int askPlayer(std::vector&lt;const char*&gt; answers);
++  
++  /// show alien text
++  ///
++  /// @param text alien text
++  /// @param delay how long to display msec
++  /// @param x center text position (from 0 to 100)
++  /// @param y center text position (from 0 to 100)
++  static void showText(const std::string&amp; text, int delay, int x, int y);
++  
++  /// show that ugly alien face
++  ///
++  /// @param file path from game directory
++  static void showAlienPicture(const std::string&amp; path);
++};
++
++#endif
++
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-05-07 12:38:11 UTC (rev 154)
++++ trunk/sources.lst	2005-05-07 17:10:38 UTC (rev 155)
+@@ -56,7 +56,6 @@
+ source/other/radar.cpp
+ source/other/dialogs.cpp
+ source/other/starmap.cpp
+-source/other/gamedialog.cpp
+ source/ships/shptauar.cpp
+ source/ships/shpbogce.cpp
+ source/ships/shpaktgu.cpp
+@@ -84,6 +83,7 @@
+ source/ships/shpstaba.cpp
+ source/tests/testmain.cpp
+ source/tests/testdatapath.cpp
++source/tests/gameconfigtest.cpp
+ source/libraries/agup/aphoton.c
+ source/libraries/agup/ans.c
+ source/libraries/agup/awin95.c
+@@ -127,6 +127,8 @@
+ source/sc2ships/shpslypr.cpp
+ source/sc2ships/shpzfpst.cpp
+ source/gui.cpp
++source/tml/gamedialog.cpp
++source/tml/gameconfig.cpp
+ source/python/game.cpp
+ source/python/python_class.cpp
+ source/python/fileops.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000100.html">[Tw-light-svn] r154 - in trunk: gamedata/python source source/generated source/other source/python
+</A></li>
+	<LI>Next message: <A HREF="000102.html">[Tw-light-svn] r156 - in trunk: . gamedata/images/alien gamedata/music gamedata/music/races gamedata/python gamedata/test_game/dialogs source source/generated source/melee source/python source/tml source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#101">[ date ]</a>
+              <a href="thread.html#101">[ thread ]</a>
+              <a href="subject.html#101">[ subject ]</a>
+              <a href="author.html#101">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

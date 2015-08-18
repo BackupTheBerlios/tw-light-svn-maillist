@@ -1,0 +1,607 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r91 - in trunk: . source source/melee web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r91%20-%20in%20trunk%3A%20.%20source%20source/melee%20web&In-Reply-To=%3C200410281752.i9SHqnhQ019055%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000038.html">
+   <LINK REL="Next"  HREF="000040.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r91 - in trunk: . source source/melee web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r91%20-%20in%20trunk%3A%20.%20source%20source/melee%20web&In-Reply-To=%3C200410281752.i9SHqnhQ019055%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r91 - in trunk: . source source/melee web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Thu Oct 28 19:52:49 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000038.html">[Tw-light-svn] r90 - branches/multiplayer-branch
+</A></li>
+        <LI>Next message: <A HREF="000040.html">[Tw-light-svn] r92 - trunk/source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-10-28 19:52:48 +0200 (Thu, 28 Oct 2004)
+New Revision: 91
+
+Modified:
+   trunk/makefile
+   trunk/source/gui.cpp
+   trunk/source/gui.h
+   trunk/source/id.h
+   trunk/source/input.cpp
+   trunk/source/input.h
+   trunk/source/melee/manim.cpp
+   trunk/source/melee/manim.h
+   trunk/source/melee/mcbodies.cpp
+   trunk/source/melee/mcbodies.h
+   trunk/source/melee/mcontrol.cpp
+   trunk/source/melee/mcontrol.h
+   trunk/source/melee/mfleet.cpp
+   trunk/source/melee/mfleet.h
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mhelpers.cpp
+   trunk/source/melee/mitems.cpp
+   trunk/source/melee/mitems.h
+   trunk/source/melee/mlog.cpp
+   trunk/source/melee/mlog.h
+   trunk/source/melee/mmain.cpp
+   trunk/source/melee/mmain.h
+   trunk/source/melee/mmath.cpp
+   trunk/source/melee/mnet1.cpp
+   trunk/source/melee/mnet1.h
+   trunk/source/melee/moptions.cpp
+   trunk/source/melee/moptions.h
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mship.h
+   trunk/web/style.css
+   trunk/web/update.sh
+Log:
+Issue #23
+
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/makefile	2004-10-28 17:52:48 UTC (rev 91)
+@@ -23,7 +23,7 @@
+ 
+ PRODUCTVERSION = 0.3
+ 
+-SVNVERSION = ${shell svnversion .}
++SVNVERSION := ${shell svnversion .}
+ 
+ CC = gcc
+ CX = g++
+@@ -72,7 +72,7 @@
+ VPATH = tests source source/libraries/agup source/ais source/games \
+         source/melee source/tests \
+         source/other source/ships source/sc1ships source/sc2ships \
+-        source/twgui source/util source/libraries/alogg \
++        source/util source/libraries/alogg \
+         source/libraries/jpgalleg source/libraries/jgmod source/libraries/cppunit \
+         source/libraries/raknet source/libraries/lua source/libraries/lua/lib
+ 
+
+Modified: trunk/source/gui.cpp
+===================================================================
+--- trunk/source/gui.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/gui.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: gui.cpp,v 1.2 2004/08/03 11:37:22 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/gui.h
+===================================================================
+--- trunk/source/gui.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/gui.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: gui.h,v 1.1.1.1 2004/08/01 10:21:18 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/id.h
+===================================================================
+--- trunk/source/id.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/id.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: id.h,v 1.1.1.1 2004/08/01 10:21:18 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/input.cpp
+===================================================================
+--- trunk/source/input.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/input.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: input.cpp,v 1.1.1.1 2004/08/01 10:21:19 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/input.h
+===================================================================
+--- trunk/source/input.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/input.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: input.h,v 1.1.1.1 2004/08/01 10:21:18 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/manim.cpp
+===================================================================
+--- trunk/source/melee/manim.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/manim.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: manim.cpp,v 1.1.1.1 2004/08/01 10:21:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/manim.h
+===================================================================
+--- trunk/source/melee/manim.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/manim.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: manim.h,v 1.2 2004/08/07 12:33:53 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mcbodies.cpp
+===================================================================
+--- trunk/source/melee/mcbodies.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mcbodies.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mcbodies.cpp,v 1.2 2004/08/07 12:33:53 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mcbodies.h
+===================================================================
+--- trunk/source/melee/mcbodies.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mcbodies.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mcbodies.h,v 1.2 2004/08/07 12:33:53 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mcontrol.cpp
+===================================================================
+--- trunk/source/melee/mcontrol.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mcontrol.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mcontrol.cpp,v 1.2 2004/08/03 11:37:22 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mcontrol.h
+===================================================================
+--- trunk/source/melee/mcontrol.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mcontrol.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mcontrol.h,v 1.2 2004/08/03 11:37:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mfleet.cpp
+===================================================================
+--- trunk/source/melee/mfleet.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mfleet.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mfleet.cpp,v 1.3 2004/08/08 17:36:05 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mfleet.h
+===================================================================
+--- trunk/source/melee/mfleet.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mfleet.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mfleet.h,v 1.1.1.1 2004/08/01 10:21:22 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mframe.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mframe.cpp,v 1.1.1.1 2004/08/01 10:21:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mframe.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mframe.h,v 1.2 2004/08/07 12:33:53 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mgame.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,4 +1,3 @@
+-/* $Id: mgame.cpp,v 1.5 2004/08/08 17:36:06 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+                     <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mgame.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mgame.h,v 1.1.1.1 2004/08/01 10:21:22 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mhelpers.cpp
+===================================================================
+--- trunk/source/melee/mhelpers.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mhelpers.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mhelpers.cpp,v 1.2 2004/08/03 11:37:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mitems.cpp
+===================================================================
+--- trunk/source/melee/mitems.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mitems.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mitems.cpp,v 1.1.1.1 2004/08/01 10:21:22 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mitems.h
+===================================================================
+--- trunk/source/melee/mitems.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mitems.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mitems.h,v 1.1.1.1 2004/08/01 10:21:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mlog.cpp
+===================================================================
+--- trunk/source/melee/mlog.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mlog.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mlog.cpp,v 1.2 2004/08/03 07:08:55 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mlog.h
+===================================================================
+--- trunk/source/melee/mlog.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mlog.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mlog.h,v 1.1.1.1 2004/08/01 10:21:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mmain.cpp
+===================================================================
+--- trunk/source/melee/mmain.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mmain.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mmain.cpp,v 1.3 2004/08/08 17:36:06 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mmain.h
+===================================================================
+--- trunk/source/melee/mmain.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mmain.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mmain.h,v 1.1.1.1 2004/08/01 10:21:22 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mmath.cpp
+===================================================================
+--- trunk/source/melee/mmath.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mmath.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mmath.cpp,v 1.2 2004/08/05 21:06:38 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mnet1.cpp
+===================================================================
+--- trunk/source/melee/mnet1.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mnet1.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mnet1.cpp,v 1.2 2004/08/03 07:08:55 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mnet1.h
+===================================================================
+--- trunk/source/melee/mnet1.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mnet1.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mnet1.h,v 1.2 2004/08/03 07:08:55 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/moptions.cpp
+===================================================================
+--- trunk/source/melee/moptions.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/moptions.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: moptions.cpp,v 1.3 2004/08/03 11:37:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/moptions.h
+===================================================================
+--- trunk/source/melee/moptions.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/moptions.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: moptions.h,v 1.1 2004/08/03 22:17:54 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mship.cpp	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,4 +1,3 @@
+-/* $Id: mship.cpp,v 1.2 2004/08/08 17:36:06 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+                     <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/source/melee/mship.h	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,7 +1,6 @@
+-/* $Id: mship.h,v 1.2 2004/08/07 12:33:54 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/web/style.css
+===================================================================
+--- trunk/web/style.css	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/web/style.css	2004-10-28 17:52:48 UTC (rev 91)
+@@ -45,26 +45,26 @@
+ h2 {
+   color: white;
+   background-color: gray;
+-  border-top: 2px solid gray;
+-  border-left: 2px solid gray;
+-  border-right: 2px solid gray;
+-  border-bottom: 2px solid gray;    
+-  padding: 0px 0px 0px 2px;
++  border-top: 1px solid gray;
++  border-left: 1px solid gray;
++  border-right: 1px solid gray;
++  border-bottom: 1px solid gray;    
++  padding: 0px 0px 0px 1px;
+ }
+ 
+ h3 {
+   color: white;
+   background-color: #001C36; 
+-  border-top: 2px solid gray;
+-  border-left: 2px solid gray;
+-  border-right: 2px solid gray;
+-  border-bottom: 2px solid gray;    
+-  padding: 0px 0px 0px 2px;
++  border-top: 1px solid gray;
++  border-left: 1px solid gray;
++  border-right: 1px solid gray;
++  border-bottom: 1px solid gray;    
++  padding: 0px 0px 0px 1px;
+ 
+ }
+ 
+ h4 {
+   color: white;
+   background-color: transparent;  
+-  padding: 0px 0px 0px 2px;
++  padding: 0px 0px 0px 1px;
+ }
+
+Modified: trunk/web/update.sh
+===================================================================
+--- trunk/web/update.sh	2004-10-26 05:35:40 UTC (rev 90)
++++ trunk/web/update.sh	2004-10-28 17:52:48 UTC (rev 91)
+@@ -1,2 +1,2 @@
+ #!/bin/bash
+-pscp header.inc footer.inc *.php <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
++pscp style.css <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000038.html">[Tw-light-svn] r90 - branches/multiplayer-branch
+</A></li>
+	<LI>Next message: <A HREF="000040.html">[Tw-light-svn] r92 - trunk/source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,429 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r123 - in trunk: gamedata/xml/GOB gamedata/xslt source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r123%20-%20in%20trunk%3A%20gamedata/xml/GOB%20gamedata/xslt%20source/games&In-Reply-To=%3C200502261852.j1QIqfJ9020098%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000068.html">
+   <LINK REL="Next"  HREF="000070.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r123 - in trunk: gamedata/xml/GOB gamedata/xslt source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r123%20-%20in%20trunk%3A%20gamedata/xml/GOB%20gamedata/xslt%20source/games&In-Reply-To=%3C200502261852.j1QIqfJ9020098%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r123 - in trunk: gamedata/xml/GOB gamedata/xslt source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Feb 26 19:52:41 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000068.html">[Tw-light-svn] r122 - in trunk: . gamedata gamedata/xml gamedata/xml/GOB gamedata/xslt source source/games source/melee source/other
+</A></li>
+        <LI>Next message: <A HREF="000070.html">[Tw-light-svn] r124 - in trunk: gamedata/xml/GOB gamedata/xslt source source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#69">[ date ]</a>
+              <a href="thread.html#69">[ thread ]</a>
+              <a href="subject.html#69">[ subject ]</a>
+              <a href="author.html#69">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-26 19:52:40 +0100 (Sat, 26 Feb 2005)
+New Revision: 123
+
+Modified:
+   trunk/gamedata/xml/GOB/start.xml
+   trunk/gamedata/xslt/load.xsl
+   trunk/source/games/gamehierarchy.cpp
+   trunk/source/games/gamehierarchy.h
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+Log:
+You can specify any number of star system in start.xml for GOB game
+
+
+Modified: trunk/gamedata/xml/GOB/start.xml
+===================================================================
+--- trunk/gamedata/xml/GOB/start.xml	2005-02-26 11:50:40 UTC (rev 122)
++++ trunk/gamedata/xml/GOB/start.xml	2005-02-26 18:52:40 UTC (rev 123)
+@@ -1,55 +1,108 @@
+ &lt;GOB&gt;
+-  &lt;Area x=&quot;24000&quot; y=&quot;24000&quot;&gt;
+-  &lt;SpaceObjects&gt;
+-    &lt;Planet_with_station
+-      planet_index=&quot;0&quot;
+-      datafile=&quot;gob.dat&quot;
+-      stationSprite=&quot;station0sprite&quot;
+-      station_pic_name=&quot;gob.dat#station0picture.bmp&quot;
+-      station_build_name=&quot;supbl&quot;
+-    /&gt;
+-    &lt;Planet_with_station
+-      planet_index=&quot;1&quot;
+-      datafile=&quot;gob.dat&quot;
+-      stationSprite=&quot;station1sprite&quot;
+-      station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
+-      station_build_name=&quot;orzne&quot;
+-    /&gt;
+-    &lt;Planet_with_station
+-      planet_index=&quot;2&quot;
+-      datafile=&quot;gob.dat&quot;
+-      stationSprite=&quot;station2sprite&quot;
+-      station_pic_name=&quot;gob.dat#station2picture.bmp&quot;
+-      station_build_name=&quot;kohma&quot;
+-    /&gt;
+-    &lt;Planet_with_station
+-      planet_index=&quot;1&quot;
+-      datafile=&quot;gob.dat&quot;
+-      stationSprite=&quot;station1sprite&quot;
+-      station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
+-      station_build_name=&quot;utwju&quot;
+-    /&gt;
+-    &lt;NEW_ENEMY/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-    &lt;GobAsteroid/&gt;
+-  &lt;/SpaceObjects&gt;
+-  &lt;/Area&gt;
++  &lt;System name=&quot;Arix&quot; x=&quot;24000&quot; y=&quot;24000&quot;&gt;
++      &lt;SpaceObjects&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;0&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station0sprite&quot;
++	    station_pic_name=&quot;gob.dat#station0picture.bmp&quot;
++	    station_build_name=&quot;supbl&quot;
++	    /&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;1&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station1sprite&quot;
++	    station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
++	    station_build_name=&quot;orzne&quot;
++	    /&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;2&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station2sprite&quot;
++	    station_pic_name=&quot;gob.dat#station2picture.bmp&quot;
++	    station_build_name=&quot;kohma&quot;
++	    /&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;1&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station1sprite&quot;
++	    station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
++	    station_build_name=&quot;utwju&quot;
++	    /&gt;
++	&lt;NEW_ENEMY/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++      &lt;/SpaceObjects&gt;
++  &lt;/System&gt;
++  &lt;System name=&quot;Beta&quot; x=&quot;24000&quot; y=&quot;24000&quot;&gt;
++      &lt;SpaceObjects&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;0&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station0sprite&quot;
++	    station_pic_name=&quot;gob.dat#station0picture.bmp&quot;
++	    station_build_name=&quot;supbl&quot;
++	    /&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;1&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station1sprite&quot;
++	    station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
++	    station_build_name=&quot;orzne&quot;
++	    /&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;2&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station2sprite&quot;
++	    station_pic_name=&quot;gob.dat#station2picture.bmp&quot;
++	    station_build_name=&quot;kohma&quot;
++	    /&gt;
++	&lt;Planet_with_station
++	    planet_index=&quot;1&quot;
++	    datafile=&quot;gob.dat&quot;
++	    stationSprite=&quot;station1sprite&quot;
++	    station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
++	    station_build_name=&quot;utwju&quot;
++	    /&gt;
++	&lt;NEW_ENEMY/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++	&lt;GobAsteroid/&gt;
++      &lt;/SpaceObjects&gt;
++  &lt;/System&gt;
+ &lt;/GOB&gt;
+\ No newline at end of file
+
+Modified: trunk/gamedata/xslt/load.xsl
+===================================================================
+--- trunk/gamedata/xslt/load.xsl	2005-02-26 11:50:40 UTC (rev 122)
++++ trunk/gamedata/xslt/load.xsl	2005-02-26 18:52:40 UTC (rev 123)
+@@ -7,8 +7,8 @@
+   &lt;xsl:apply-templates/&gt;
+ &lt;/xsl:template&gt;
+ 
+-&lt;xsl:template match=&quot;Area&quot;&gt;
+-  &lt;xsl:value-of select=&quot;tw:SetMapSize(@<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">x, at y</A>)&quot;/&gt;
++&lt;xsl:template match=&quot;System&quot;&gt;
++  &lt;xsl:value-of select=&quot;tw:AddSystem(@<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">name, at x</A><A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">, at y</A>)&quot;/&gt;
+   &lt;xsl:apply-templates/&gt;    
+ &lt;/xsl:template&gt;
+ 
+
+Modified: trunk/source/games/gamehierarchy.cpp
+===================================================================
+--- trunk/source/games/gamehierarchy.cpp	2005-02-26 11:50:40 UTC (rev 122)
++++ trunk/source/games/gamehierarchy.cpp	2005-02-26 18:52:40 UTC (rev 123)
+@@ -36,7 +36,6 @@
+ 
+ SubGame::SubGame()
+ {
+- 
+ }
+ 
+ SubGame::~SubGame()
+@@ -44,7 +43,7 @@
+ 
+ }
+ 
+-void SubGame::init(Log *_log, const std::string&amp; save)
++void SubGame::init(Log *_log,  const std::string&amp; save)
+ {
+   STACKTRACE;
+ 
+@@ -53,7 +52,7 @@
+     log = new Log();
+     log-&gt;init();
+   }
+-
++  
+   lag_frames = 0;
+   show_fps = 0;
+   game_time = 0;
+@@ -106,10 +105,19 @@
+   return;
+ }
+ 
+-void MainGame::addsubgame(SubGame *asubgame)
++MainGame* g_maingame = NULL;
++
++
++MainGame::MainGame()
+ {
++  g_maingame = this;
++}
++
++void MainGame::addsubgame(SubGame *asubgame, const std::string&amp; name)
++{
+   STACKTRACE;
+ 
++  asubgame-&gt;_name = name;
+   asubgame-&gt;maingame = this;
+ 
+   asubgame-&gt;preinit();
+@@ -119,7 +127,6 @@
+   asubgame-&gt;window-&gt;locate(0,0,0,0,0,1,0,1);
+ 
+   asubgame-&gt;init(log, &quot;&quot;);	// all subgames share the same log (is this ok?)
+-  // this init should reference the already-initialized melee-data of the maingame
+ 
+   subgame.insert(asubgame);
+ }
+
+Modified: trunk/source/games/gamehierarchy.h
+===================================================================
+--- trunk/source/games/gamehierarchy.h	2005-02-26 11:50:40 UTC (rev 122)
++++ trunk/source/games/gamehierarchy.h	2005-02-26 18:52:40 UTC (rev 123)
+@@ -31,11 +31,13 @@
+  public:
+ 
+   MainGame	*maingame;		///&lt; the first game (contains the melee data ?)
+-
++  std::string _name;                    ///&lt; Every SubGame has name which can be used in MainGame to manipulate it
+   SubGame();
+   ~SubGame();
+ 
+   virtual void init(Log *_log, const std::string&amp; save);
++ protected:
++
+ };
+ 
+ 
+@@ -46,11 +48,12 @@
+ class MainGame : public Game
+ {
+  public:
+-  
++ 
++  MainGame();
+   std::set&lt;SubGame*&gt; subgame;
+   
+ 
+-  virtual void addsubgame(SubGame *asubgame);
++  virtual void addsubgame(SubGame *asubgame,  const std::string&amp; save);
+   virtual void removesubgame(SubGame* g);
+   virtual int isGameDone();
+   virtual int play();
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-02-26 11:50:40 UTC (rev 122)
++++ trunk/source/games/ggob.cpp	2005-02-26 18:52:40 UTC (rev 123)
+@@ -175,17 +175,13 @@
+   int i;
+   GobGameBase::init(_log, save);
+   
++  size = Vector2(24000, 24000);
+   log_file(&quot;server.ini&quot;);
+   max_enemies = get_config_int(&quot;Gob&quot;, &quot;MaxEnemies&quot;, 32);
+   gobenemy = (GobEnemy**) malloc(sizeof(GobEnemy*) * max_enemies);
+ 
+   enemy_team = new_team();
+-	
+-   if(Load(data_full_path(&quot;xml/GOB/start.xml&quot;)) == 1)
+-    {
+-      tw_error(&quot;unable to locate start.xml&quot;);
+-    };
+-       
++	       
+    //  for (i = 0; i &lt; 19; i += 1) add(new GobAsteroid());
+ 
+   int server_players, client_players;
+@@ -298,6 +294,7 @@
+   STACKTRACE;
+   GobGameBase::fps();
+   
++  message.print((int)msecs_per_fps, 15, &quot;System: %s&quot;, _name.c_str());
+   message.print((int)msecs_per_fps, 15, &quot;enemies: %d&quot;, (int)gobenemies);
+   message.print((int)msecs_per_fps, 15, &quot;time: %d&quot;, (int)(game_time / 1000));
+ 
+@@ -1068,7 +1065,19 @@
+ }
+ 
+ 
+-//REGISTER_GAME(GobGame, &quot;GOB&quot;)
++void MainGobGame::init (Log *log, const std::string&amp; save)
++{
++  MainGame::init(log,save);
++  
++  if(Load(data_full_path(&quot;xml/GOB/start.xml&quot;)) == 1)
++    {
++      tw_error(&quot;unable to locate start.xml&quot;);
++    };
++  
++  //  addsubgame(new GobGame, );
++}	
++
++
+ REGISTER_GAME(MainGobGame, &quot;GOB&quot;)
+ 
+ 
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-02-26 11:50:40 UTC (rev 122)
++++ trunk/source/games/ggob.h	2005-02-26 18:52:40 UTC (rev 123)
+@@ -185,13 +185,7 @@
+ class MainGobGame : public MainGame
+ {
+  public:
+-  virtual void 	init (Log *log, const std::string&amp; save)
+-    {
+-      MainGame::init(log,save);
+-      addsubgame(new GobGame);
+-      addsubgame(new GobGame);
+-      //      addsubgame(new GobGame);
+-    }	
++  virtual void 	init (Log *log, const std::string&amp; save);
+ };
+ 
+ #endif // TW_GOB_H_INCLUDES
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000068.html">[Tw-light-svn] r122 - in trunk: . gamedata gamedata/xml gamedata/xml/GOB gamedata/xslt source source/games source/melee source/other
+</A></li>
+	<LI>Next message: <A HREF="000070.html">[Tw-light-svn] r124 - in trunk: gamedata/xml/GOB gamedata/xslt source source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#69">[ date ]</a>
+              <a href="thread.html#69">[ thread ]</a>
+              <a href="subject.html#69">[ subject ]</a>
+              <a href="author.html#69">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

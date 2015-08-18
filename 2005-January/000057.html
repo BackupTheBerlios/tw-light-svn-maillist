@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r111 - in trunk: . source source/other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-January/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r111%20-%20in%20trunk%3A%20.%20source%20source/other&In-Reply-To=%3C200501091304.j09D4Qq6019147%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000056.html">
+   <LINK REL="Next"  HREF="000058.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r111 - in trunk: . source source/other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r111%20-%20in%20trunk%3A%20.%20source%20source/other&In-Reply-To=%3C200501091304.j09D4Qq6019147%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r111 - in trunk: . source source/other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Jan  9 14:04:26 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000056.html">[Tw-light-svn] r110 - in trunk: . source source/melee source/util web
+</A></li>
+        <LI>Next message: <A HREF="000058.html">[Tw-light-svn] r112 - trunk/source/sc1ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-01-09 14:04:25 +0100 (Sun, 09 Jan 2005)
+New Revision: 111
+
+Modified:
+   trunk/source/other/dialogs.cpp
+   trunk/source/other/dialogs.h
+   trunk/source/scp.cpp
+   trunk/sources.lst
+Log:
+Readding network user interface
+
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-01-09 12:49:37 UTC (rev 110)
++++ trunk/source/other/dialogs.cpp	2005-01-09 13:04:25 UTC (rev 111)
+@@ -274,11 +274,13 @@
+   // (dialog proc)     (x)  (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
+   { d_shadow_box_proc, 40,  40,   240,  185,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+   { my_d_button_proc,  50,   50,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game&quot; , NULL, NULL },
+-  { my_d_button_proc,  50,   75,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Key Tester&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,  100,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Ship Info&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,  125,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Show License&quot;, NULL, NULL },
+-  { my_d_button_proc,  50,  150,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Diagnostics&quot;, NULL, NULL },
+-  { my_d_button_proc,  80,  175,  190,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Main Menu&quot;, NULL, NULL },
++  { my_d_button_proc,  50,   75,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game/Net Server&quot; , NULL, NULL },
++  { my_d_button_proc,  50,  100,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Play Game/Net Client&quot; , NULL, NULL },
++  { my_d_button_proc,  50,  125,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Key Tester&quot;, NULL, NULL },
++  { my_d_button_proc,  50,  150,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Ship Info&quot;, NULL, NULL },
++  { my_d_button_proc,  50,  175,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Show License&quot;, NULL, NULL },
++  { my_d_button_proc,  50,  200,  190,  20,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Diagnostics&quot;, NULL, NULL },
++  { my_d_button_proc,  80,  225,  190,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Main Menu&quot;, NULL, NULL },
+   { d_tw_yield_proc,   0,   0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+   { NULL,              0,   0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL }
+ };
+
+Modified: trunk/source/other/dialogs.h
+===================================================================
+--- trunk/source/other/dialogs.h	2005-01-09 12:49:37 UTC (rev 110)
++++ trunk/source/other/dialogs.h	2005-01-09 13:04:25 UTC (rev 111)
+@@ -187,6 +187,8 @@
+ enum {
+ 	MELEE_EX_DIALOG_BOX = 0,
+ 	MELEE_EX_DIALOG_PLAY_GAME,
++	MELEE_EX_DIALOG_PLAY_NET1SERVER,
++	MELEE_EX_DIALOG_PLAY_NET1CLIENT,
+ 	MELEE_EX_DIALOG_KEYTESTER,
+ 	MELEE_EX_DIALOG_SHIPINFO,
+ 	MELEE_EX_DIALOG_LICENSE,
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-01-09 12:49:37 UTC (rev 110)
++++ trunk/source/scp.cpp	2005-01-09 13:04:25 UTC (rev 111)
+@@ -1041,6 +1041,15 @@
+     //			play_game(game_names[melee_ex_dialog[MELEE_EX_DIALOG_GAMELIST].d1], log_types[melee_ex_dialog[MELEE_EX_DIALOG_LOGLIST].d1]);
+   }
+     break;
++  case MELEE_EX_DIALOG_PLAY_NET1SERVER: {
++			const char *gname = select_game_menu();
++			if (gname) play_net1server(gname);
++		}
++		break;
++		case MELEE_EX_DIALOG_PLAY_NET1CLIENT: {
++			play_net1client();
++		}
++		break;
+   case MELEE_EX_DIALOG_DIAGNOSTICS: {
+     show_diagnostics();
+   }
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-01-09 12:49:37 UTC (rev 110)
++++ trunk/sources.lst	2005-01-09 13:04:25 UTC (rev 111)
+@@ -18,7 +18,6 @@
+ source/util/endian.cpp
+ source/util/pmask.c
+ source/util/base.cpp
+-source/games/gtwmultiplayer.cpp
+ source/games/ggob.cpp
+ source/games/gflmelee.cpp
+ source/games/gdefender.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000056.html">[Tw-light-svn] r110 - in trunk: . source source/melee source/util web
+</A></li>
+	<LI>Next message: <A HREF="000058.html">[Tw-light-svn] r112 - trunk/source/sc1ships
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

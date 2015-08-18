@@ -1,0 +1,1193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r154 - in trunk: gamedata/python source source/generated source/other source/python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r154%20-%20in%20trunk%3A%20gamedata/python%20source%20source/generated%20source/other%20source/python&In-Reply-To=%3C200505071238.j47CcCxm013084%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000099.html">
+   <LINK REL="Next"  HREF="000101.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r154 - in trunk: gamedata/python source source/generated source/other source/python</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r154%20-%20in%20trunk%3A%20gamedata/python%20source%20source/generated%20source/other%20source/python&In-Reply-To=%3C200505071238.j47CcCxm013084%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r154 - in trunk: gamedata/python source source/generated source/other source/python">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat May  7 14:38:12 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000099.html">[Tw-light-svn] r153 - trunk/gamedata/python
+</A></li>
+        <LI>Next message: <A HREF="000101.html">[Tw-light-svn] r155 - in trunk: . gamedata gamedata/python gamedata/test_game gamedata/test_game/dialogs source source/generated source/other source/python source/tests source/tml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#100">[ date ]</a>
+              <a href="thread.html#100">[ thread ]</a>
+              <a href="subject.html#100">[ subject ]</a>
+              <a href="author.html#100">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-07 14:38:11 +0200 (Sat, 07 May 2005)
+New Revision: 154
+
+Added:
+   trunk/source/tml/
+Modified:
+   trunk/gamedata/python/dialog.py
+   trunk/gamedata/python/tml_fake.py
+   trunk/gamedata/python/twsaveload.py
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/other/gamedialog.cpp
+   trunk/source/other/gamedialog.h
+   trunk/source/python/game.i
+Log:
+Fixed bugs in dialog fake api
+
+
+Modified: trunk/gamedata/python/dialog.py
+===================================================================
+--- trunk/gamedata/python/dialog.py	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/gamedata/python/dialog.py	2005-05-07 12:38:11 UTC (rev 154)
+@@ -21,6 +21,10 @@
+     import tml_fake as tml
+ else:
+     import tml
++if __name__ == '__main__':
++    import misc_fake as misc
++else:
++    import misc
+ 
+ g_cur_dialog = &quot;&quot;
+ 
+@@ -69,12 +73,12 @@
+         self.player_answers = player_answers         # player Answers tuple
+     def evaluate(self):
+         tml.DialogApi.showAlienPicture(self.background)
+-        tml.DialogApi.showText(self.alien_text)
++        tml.DialogApi.showText(self.alien_text, 0, self.text_location[0], self.text_location[1])
+         answers = filter(lambda x: x.checkCond(), self.player_answers)
+         answ_texts = []
+         for answer in answers:
+             answ_texts.append(answer.text)
+-        answers[tml.DialogApi.askPlayer(answ_texts)].evaluate()
++        answers[tml.DialogApi.askPlayer(misc.PyListStringToVector(answ_texts))].evaluate()
+         
+ class Dialog:
+     def __init__(self, nodeset):
+@@ -92,6 +96,9 @@
+     def endDialog(self):
+         self.cur_node = None
+ 
++class DialogManager:
++    pass
++
+ #####################################################################################################
+ #                              TESTS                                                                #
+ #####################################################################################################
+
+Modified: trunk/gamedata/python/tml_fake.py
+===================================================================
+--- trunk/gamedata/python/tml_fake.py	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/gamedata/python/tml_fake.py	2005-05-07 12:38:11 UTC (rev 154)
+@@ -28,7 +28,7 @@
+         global jornal
+         jornal += &quot;askPlayer &quot;
+         return 0
+-    def showText(text):
++    def showText(text,delay,x,y):
+         global jornal
+         jornal += &quot;showText &quot;
+     def showAlienPicture(background):
+
+Modified: trunk/gamedata/python/twsaveload.py
+===================================================================
+--- trunk/gamedata/python/twsaveload.py	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/gamedata/python/twsaveload.py	2005-05-07 12:38:11 UTC (rev 154)
+@@ -1,5 +1,5 @@
+ #!/usr/bin/python
+-import pickle,os,sys,tml,copy,misc
++import pickle,os,sys,tml,copy,misc,dialog
+ 
+ 
+ gamedata = tml.SaveGobGameInfo.getInstance()
+@@ -41,11 +41,18 @@
+             e[i].pos_x = self.enemy[i].pos_x
+             e[i].pos_y = self.enemy[i].pos_y
+         gamedata.setTst(e)
+-        tml.DialogApi.startDialog()
+-        tml.DialogApi.showAlienPicture(&quot;images/alien/SpathiMain.jpg&quot;)
+-        tml.DialogApi.showText(&quot;Stupid text!!!&quot;, 2500, 50, 10)
+-        tml.DialogApi.askPlayer(misc.PyListStringToVector([&quot;Hi&quot;,&quot;This is simple test&quot;,&quot;get away from me&quot;]))
+-        tml.DialogApi.endDialog()
++        
++        dlg = dialog.Dialog( (
++            dialog.Node(0, 'Node1','','images/alien/SpathiMain.jpg','AlienText','',(50,10),
++                 (dialog.PlayerAnswer('Answer1', '1', (dialog.Action('1', 'goto(1)'), )),
++                  dialog.PlayerAnswer('Answer2', '1', (dialog.Action('1', 'endDialog()'),)
++                               )))
++            ,
++            dialog.Node(1, 'Node1','','images/alien/SpathiMain.jpg','AlienText','',(50,10),
++                 (dialog.PlayerAnswer('Answer3', '1', (dialog.Action('1', 'endDialog()'),)
++                               ),)),
++            )                         )
++        dlg.doDialog()
+ 
+ class SaveManager:
+     def __init__(self, file):
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/source/generated/tml.py	2005-05-07 12:38:11 UTC (rev 154)
+@@ -539,14 +539,14 @@
+     __swig_getmethods__ = {}
+     __getattr__ = lambda self, name: _swig_getattr(self, vectorString, name)
+     def __repr__(self):
+-        return &quot;&lt;C std::vector&lt;(std::string)&gt; instance at %s&gt;&quot; % (self.this,)
++        return &quot;&lt;C std::vector&lt;(p.q(const).char)&gt; instance at %s&gt;&quot; % (self.this,)
+     def __init__(self, *args):
+         _swig_setattr(self, vectorString, 'this', _tml.new_vectorString(*args))
+         _swig_setattr(self, vectorString, 'thisown', 1)
+     def __len__(*args): return _tml.vectorString___len__(*args)
+-    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def clear(*args): return _tml.vectorString_clear(*args)
+     def append(*args): return _tml.vectorString_append(*args)
++    def __nonzero__(*args): return _tml.vectorString___nonzero__(*args)
+     def pop(*args): return _tml.vectorString_pop(*args)
+     def __getitem__(*args): return _tml.vectorString___getitem__(*args)
+     def __getslice__(*args): return _tml.vectorString___getslice__(*args)
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/source/generated/tml_wrap.cpp	2005-05-07 12:38:11 UTC (rev 154)
+@@ -700,40 +700,42 @@
+ 
+ /* -------- TYPES TABLE (BEGIN) -------- */
+ 
+-#define  SWIGTYPE_p_GobPlayer swig_types[0] 
+-#define  SWIGTYPE_p_p_Upgrade swig_types[1] 
+-#define  SWIGTYPE_p_SpaceLocation swig_types[2] 
+-#define  SWIGTYPE_p_p_GobStation swig_types[3] 
+-#define  SWIGTYPE_p_GobStation swig_types[4] 
+-#define  SWIGTYPE_p_Upgrade swig_types[5] 
+-#define  SWIGTYPE_p_RGB swig_types[6] 
+-#define  SWIGTYPE_p_Log swig_types[7] 
+-#define  SWIGTYPE_p_StarMap swig_types[8] 
+-#define  SWIGTYPE_p_float swig_types[9] 
+-#define  SWIGTYPE_p_std__vectorTEnemySaveData_t swig_types[10] 
+-#define  SWIGTYPE_p_GobAsteroid swig_types[11] 
+-#define  SWIGTYPE_p_TeamCode swig_types[12] 
+-#define  SWIGTYPE_p_GobEnemy swig_types[13] 
+-#define  SWIGTYPE_p_p_GobEnemy swig_types[14] 
+-#define  SWIGTYPE_p_p_Planet swig_types[15] 
+-#define  SWIGTYPE_p_RainbowRift swig_types[16] 
+-#define  SWIGTYPE_p_GobGame swig_types[17] 
+-#define  SWIGTYPE_p_EnemySaveData swig_types[18] 
+-#define  SWIGTYPE_p_std__string swig_types[19] 
+-#define  SWIGTYPE_p_Vector2 swig_types[20] 
+-#define  SWIGTYPE_p_SaveGobGameInfo swig_types[21] 
+-#define  SWIGTYPE_p_DialogApi swig_types[22] 
+-#define  SWIGTYPE_p_pair swig_types[23] 
+-#define  SWIGTYPE_p_SpaceSprite swig_types[24] 
+-#define  SWIGTYPE_p_Control swig_types[25] 
++#define  SWIGTYPE_p_SaveGobGameInfo swig_types[0] 
++#define  SWIGTYPE_p_SAMPLE swig_types[1] 
++#define  SWIGTYPE_p_std__vectorTchar_const_p_t swig_types[2] 
++#define  SWIGTYPE_p_Ship swig_types[3] 
++#define  SWIGTYPE_p_DialogApi swig_types[4] 
++#define  SWIGTYPE_p_StarMap swig_types[5] 
++#define  SWIGTYPE_p_Upgrade swig_types[6] 
++#define  SWIGTYPE_p_p_Upgrade swig_types[7] 
++#define  SWIGTYPE_p_char swig_types[8] 
++#define  SWIGTYPE_p_SpaceLocation swig_types[9] 
++#define  SWIGTYPE_p_p_char swig_types[10] 
++#define  SWIGTYPE_p_GobGame swig_types[11] 
++#define  SWIGTYPE_p_Control swig_types[12] 
++#define  SWIGTYPE_p_GobAsteroid swig_types[13] 
++#define  SWIGTYPE_p_RGB swig_types[14] 
++#define  SWIGTYPE_p_SpaceSprite swig_types[15] 
++#define  SWIGTYPE_p_Vector2 swig_types[16] 
++#define  SWIGTYPE_p_GobStation swig_types[17] 
++#define  SWIGTYPE_p_p_GobStation swig_types[18] 
++#define  SWIGTYPE_p_p_Planet swig_types[19] 
++#define  SWIGTYPE_p_pair swig_types[20] 
++#define  SWIGTYPE_p_std__string swig_types[21] 
++#define  SWIGTYPE_p_GobPlayer swig_types[22] 
++#define  SWIGTYPE_p_Frame swig_types[23] 
++#define  SWIGTYPE_p_ShipType swig_types[24] 
++#define  SWIGTYPE_p_TeamCode swig_types[25] 
+ #define  SWIGTYPE_p_SpaceObject swig_types[26] 
+-#define  SWIGTYPE_p_Frame swig_types[27] 
+-#define  SWIGTYPE_p_std__vectorTstd__string_t swig_types[28] 
+-#define  SWIGTYPE_p_ShipPanel swig_types[29] 
+-#define  SWIGTYPE_p_SAMPLE swig_types[30] 
+-#define  SWIGTYPE_p_ShipType swig_types[31] 
+-#define  SWIGTYPE_p_Ship swig_types[32] 
+-static swig_type_info *swig_types[34];
++#define  SWIGTYPE_p_EnemySaveData swig_types[27] 
++#define  SWIGTYPE_p_p_GobEnemy swig_types[28] 
++#define  SWIGTYPE_p_GobEnemy swig_types[29] 
++#define  SWIGTYPE_p_RainbowRift swig_types[30] 
++#define  SWIGTYPE_p_Log swig_types[31] 
++#define  SWIGTYPE_p_ShipPanel swig_types[32] 
++#define  SWIGTYPE_p_float swig_types[33] 
++#define  SWIGTYPE_p_std__vectorTEnemySaveData_t swig_types[34] 
++static swig_type_info *swig_types[36];
+ 
+ /* -------- TYPES TABLE (END) -------- */
+ 
+@@ -904,14 +906,17 @@
+                 if (j&gt;size) j = size;
+                 self-&gt;erase(self-&gt;begin()+i,self-&gt;begin()+j);
+             }
+-std::string std_vectorlstd_string_g_pop___(std::vector&lt;std::string &gt; *self){
++bool std_vectorlchar_const_m_g___nonzero_____(std::vector&lt;char const * &gt; *self){
++                return !(self-&gt;empty());
++            }
++char const *std_vectorlchar_const_m_g_pop___(std::vector&lt;char const * &gt; *self){
+                 if (self-&gt;size() == 0)
+                     throw std::out_of_range(&quot;pop from empty vector&quot;);
+-                std::string x = self-&gt;back();
++                char const *x = self-&gt;back();
+                 self-&gt;pop_back();
+                 return x;
+             }
+-std::string std_vectorlstd_string_g___getitem_____(std::vector&lt;std::string &gt; *self,int i){
++char const *std_vectorlchar_const_m_g___getitem_____(std::vector&lt;char const * &gt; *self,int i){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i += size;
+                 if (i&gt;=0 &amp;&amp; i&lt;size)
+@@ -919,17 +924,17 @@
+                 else
+                     throw std::out_of_range(&quot;vector index out of range&quot;);
+             }
+-std::vector&lt;std::string &gt; std_vectorlstd_string_g___getslice_____(std::vector&lt;std::string &gt; *self,int i,int j){
++std::vector&lt;char const * &gt; std_vectorlchar_const_m_g___getslice_____(std::vector&lt;char const * &gt; *self,int i,int j){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i = size+i;
+                 if (j&lt;0) j = size+j;
+                 if (i&lt;0) i = 0;
+                 if (j&gt;size) j = size;
+-                std::vector&lt;std::string &gt; tmp(j-i);
++                std::vector&lt;char const *&gt; tmp(j-i);
+                 std::copy(self-&gt;begin()+i,self-&gt;begin()+j,tmp.begin());
+                 return tmp;
+             }
+-void std_vectorlstd_string_g___setitem_____(std::vector&lt;std::string &gt; *self,int i,std::string x){
++void std_vectorlchar_const_m_g___setitem_____(std::vector&lt;char const * &gt; *self,int i,char const *x){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i+= size;
+                 if (i&gt;=0 &amp;&amp; i&lt;size)
+@@ -937,7 +942,7 @@
+                 else
+                     throw std::out_of_range(&quot;vector index out of range&quot;);
+             }
+-void std_vectorlstd_string_g___setslice_____(std::vector&lt;std::string &gt; *self,int i,int j,std::vector&lt;std::string &gt; const &amp;v){
++void std_vectorlchar_const_m_g___setslice_____(std::vector&lt;char const * &gt; *self,int i,int j,std::vector&lt;char const * &gt; const &amp;v){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i = size+i;
+                 if (j&lt;0) j = size+j;
+@@ -953,7 +958,7 @@
+                         self-&gt;insert(self-&gt;end(),v.begin(),v.end());
+                 }
+             }
+-void std_vectorlstd_string_g___delitem_____(std::vector&lt;std::string &gt; *self,int i){
++void std_vectorlchar_const_m_g___delitem_____(std::vector&lt;char const * &gt; *self,int i){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i+= size;
+                 if (i&gt;=0 &amp;&amp; i&lt;size)
+@@ -961,7 +966,7 @@
+                 else
+                     throw std::out_of_range(&quot;vector index out of range&quot;);
+             }
+-void std_vectorlstd_string_g___delslice_____(std::vector&lt;std::string &gt; *self,int i,int j){
++void std_vectorlchar_const_m_g___delslice_____(std::vector&lt;char const * &gt; *self,int i,int j){
+                 int size = int(self-&gt;size());
+                 if (i&lt;0) i = size+i;
+                 if (j&lt;0) j = size+j;
+@@ -4312,13 +4317,13 @@
+ 
+ static PyObject *_wrap_DialogApi_askPlayer(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; arg1 ;
++    std::vector&lt;char const * &gt; arg1 ;
+     int result;
+-    std::vector&lt;std::string &gt; *argp1 ;
++    std::vector&lt;char const * &gt; *argp1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:DialogApi_askPlayer&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;argp1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;argp1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
+     arg1 = *argp1; 
+     result = (int)DialogApi::askPlayer(arg1);
+     
+@@ -4331,21 +4336,24 @@
+ 
+ static PyObject *_wrap_DialogApi_showText(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::string arg1 ;
++    std::string *arg1 = 0 ;
+     int arg2 ;
+     int arg3 ;
+     int arg4 ;
++    std::string temp1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oiii:DialogApi_showText&quot;,&amp;obj0,&amp;arg2,&amp;arg3,&amp;arg4)) goto fail;
+     {
+-        if (PyString_Check(obj0))
+-        arg1 = std::string(PyString_AsString(obj0),
+-        PyString_Size(obj0));
+-        else
+-        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
+     }
+-    DialogApi::showText(arg1,arg2,arg3,arg4);
++    DialogApi::showText((std::string const &amp;)*arg1,arg2,arg3,arg4);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -4356,18 +4364,21 @@
+ 
+ static PyObject *_wrap_DialogApi_showAlienPicture(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::string arg1 ;
++    std::string *arg1 = 0 ;
++    std::string temp1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:DialogApi_showAlienPicture&quot;,&amp;obj0)) goto fail;
+     {
+-        if (PyString_Check(obj0))
+-        arg1 = std::string(PyString_AsString(obj0),
+-        PyString_Size(obj0));
+-        else
+-        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
+     }
+-    DialogApi::showAlienPicture(arg1);
++    DialogApi::showAlienPicture((std::string const &amp;)*arg1);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -4917,7 +4928,7 @@
+ static PyObject *_wrap_new_vectorString__SWIG_0(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     unsigned int arg1 = (unsigned int) 0 ;
+-    std::vector&lt;std::string &gt; *result;
++    std::vector&lt;char const * &gt; *result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;|O:new_vectorString&quot;,&amp;obj0)) goto fail;
+@@ -4925,9 +4936,9 @@
+         arg1 = (unsigned int) PyInt_AsLong(obj0);
+         if (PyErr_Occurred()) SWIG_fail;
+     }
+-    result = (std::vector&lt;std::string &gt; *)new std::vector&lt;std::string &gt;(arg1);
++    result = (std::vector&lt;char const * &gt; *)new std::vector&lt;char const * &gt;(arg1);
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTstd__string_t, 1);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTchar_const_p_t, 1);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -4937,27 +4948,21 @@
+ static PyObject *_wrap_new_vectorString__SWIG_1(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     unsigned int arg1 ;
+-    std::string *arg2 = 0 ;
+-    std::vector&lt;std::string &gt; *result;
+-    std::string temp2 ;
++    char **arg2 = 0 ;
++    std::vector&lt;char const * &gt; *result;
+     PyObject * obj0 = 0 ;
+     PyObject * obj1 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;OO:new_vectorString&quot;,&amp;obj0,&amp;obj1)) goto fail;
+     arg1 = (unsigned int) PyInt_AsLong(obj0);
+     if (PyErr_Occurred()) SWIG_fail;
+-    {
+-        if (PyString_Check(obj1)) {
+-            temp2 = std::string(PyString_AsString(obj1),
+-            PyString_Size(obj1));
+-            arg2 = &amp;temp2;
+-        } else {
+-            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
+-        }
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_p_char,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg2 == NULL) {
++        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
+     }
+-    result = (std::vector&lt;std::string &gt; *)new std::vector&lt;std::string &gt;(arg1,(std::string const &amp;)*arg2);
++    result = (std::vector&lt;char const * &gt; *)new std::vector&lt;char const * &gt;(arg1,(char const *&amp;)*arg2);
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTstd__string_t, 1);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTchar_const_p_t, 1);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -4966,10 +4971,10 @@
+ 
+ static PyObject *_wrap_new_vectorString__SWIG_2(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = 0 ;
+-    std::vector&lt;std::string &gt; *result;
+-    std::vector&lt;std::string &gt; temp1 ;
+-    std::vector&lt;std::string &gt; *v1 ;
++    std::vector&lt;char const * &gt; *arg1 = 0 ;
++    std::vector&lt;char const * &gt; *result;
++    std::vector&lt;char const * &gt; temp1 ;
++    std::vector&lt;char const * &gt; *v1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:new_vectorString&quot;,&amp;obj0)) goto fail;
+@@ -4978,32 +4983,33 @@
+             unsigned int size = (PyTuple_Check(obj0) ?
+             PyTuple_Size(obj0) :
+             PyList_Size(obj0));
+-            temp1 = std::vector&lt;std::string &gt;(size);
++            temp1 = std::vector&lt;char const *&gt;(size);
+             arg1 = &amp;temp1;
+             for (unsigned int i=0; i&lt;size; i++) {
++                char const *x;
+                 PyObject* o = PySequence_GetItem(obj0,i);
+-                if (PyString_Check(o)) {
+-                    temp1[i] = (std::string)(\
+-                    SwigString_AsString(o));
++                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                SWIGTYPE_p_char,0)) != -1) {
++                    temp1[i] = x;
+                     Py_DECREF(o);
+                 } else {
+                     Py_DECREF(o);
+                     PyErr_SetString(PyExc_TypeError,
+-                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++                    &quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
+                     SWIG_fail;
+                 }
+             }
+         } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
+-        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
++        SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1) {
+             arg1 = v1;
+         } else {
+-            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
+             SWIG_fail;
+         }
+     }
+-    result = (std::vector&lt;std::string &gt; *)new std::vector&lt;std::string &gt;((std::vector&lt;std::string &gt; const &amp;)*arg1);
++    result = (std::vector&lt;char const * &gt; *)new std::vector&lt;char const * &gt;((std::vector&lt;char const * &gt; const &amp;)*arg1);
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTstd__string_t, 1);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTchar_const_p_t, 1);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -5044,8 +5050,10 @@
+                     _v = 1;
+                 } else {
+                     /* check the first element only */
++                    char const *x;
+                     PyObject* o = PySequence_GetItem(argv[0],0);
+-                    if (PyString_Check(o))
++                    if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                    SWIGTYPE_p_char,0)) != -1)
+                     _v = 1;
+                     else
+                     _v = 0;
+@@ -5053,9 +5061,9 @@
+                 }
+             } else {
+                 /* wrapped vector? */
+-                std::vector&lt;std::string &gt;* v;
++                std::vector&lt;char const *&gt;* v;
+                 if (SWIG_ConvertPtr(argv[0],(void **) &amp;v, 
+-                SWIGTYPE_p_std__vectorTstd__string_t,0) != -1)
++                SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1)
+                 _v = 1;
+                 else
+                 _v = 0;
+@@ -5072,7 +5080,13 @@
+         }
+         if (_v) {
+             {
+-                _v = PyString_Check(argv[1]) ? 1 : 0;
++                void *ptr;
++                if (SWIG_ConvertPtr(argv[1], (void **) &amp;ptr, SWIGTYPE_p_p_char, 0) == -1) {
++                    _v = 0;
++                    PyErr_Clear();
++                } else {
++                    _v = 1;
++                }
+             }
+             if (_v) {
+                 return _wrap_new_vectorString__SWIG_1(self,args);
+@@ -5087,10 +5101,10 @@
+ 
+ static PyObject *_wrap_vectorString___len__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     unsigned int result;
+-    std::vector&lt;std::string &gt; temp1 ;
+-    std::vector&lt;std::string &gt; *v1 ;
++    std::vector&lt;char const * &gt; temp1 ;
++    std::vector&lt;char const * &gt; *v1 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString___len__&quot;,&amp;obj0)) goto fail;
+@@ -5099,30 +5113,31 @@
+             unsigned int size = (PyTuple_Check(obj0) ?
+             PyTuple_Size(obj0) :
+             PyList_Size(obj0));
+-            temp1 = std::vector&lt;std::string &gt;(size);
++            temp1 = std::vector&lt;char const *&gt;(size);
+             arg1 = &amp;temp1;
+             for (unsigned int i=0; i&lt;size; i++) {
++                char const *x;
+                 PyObject* o = PySequence_GetItem(obj0,i);
+-                if (PyString_Check(o)) {
+-                    temp1[i] = (std::string)(\
+-                    SwigString_AsString(o));
++                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                SWIGTYPE_p_char,0)) != -1) {
++                    temp1[i] = x;
+                     Py_DECREF(o);
+                 } else {
+                     Py_DECREF(o);
+                     PyErr_SetString(PyExc_TypeError,
+-                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++                    &quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
+                     SWIG_fail;
+                 }
+             }
+         } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
+-        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
++        SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1) {
+             arg1 = v1;
+         } else {
+-            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
+             SWIG_fail;
+         }
+     }
+-    result = (unsigned int)((std::vector&lt;std::string &gt; const *)arg1)-&gt;size();
++    result = (unsigned int)((std::vector&lt;char const * &gt; const *)arg1)-&gt;size();
+     
+     resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+@@ -5131,60 +5146,31 @@
+ }
+ 
+ 
+-static PyObject *_wrap_vectorString___nonzero__(PyObject *self, PyObject *args) {
++static PyObject *_wrap_vectorString_clear(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+-    bool result;
+-    std::vector&lt;std::string &gt; temp1 ;
+-    std::vector&lt;std::string &gt; *v1 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString___nonzero__&quot;,&amp;obj0)) goto fail;
+-    {
+-        if (PyTuple_Check(obj0) || PyList_Check(obj0)) {
+-            unsigned int size = (PyTuple_Check(obj0) ?
+-            PyTuple_Size(obj0) :
+-            PyList_Size(obj0));
+-            temp1 = std::vector&lt;std::string &gt;(size);
+-            arg1 = &amp;temp1;
+-            for (unsigned int i=0; i&lt;size; i++) {
+-                PyObject* o = PySequence_GetItem(obj0,i);
+-                if (PyString_Check(o)) {
+-                    temp1[i] = (std::string)(\
+-                    SwigString_AsString(o));
+-                    Py_DECREF(o);
+-                } else {
+-                    Py_DECREF(o);
+-                    PyErr_SetString(PyExc_TypeError,
+-                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+-                    SWIG_fail;
+-                }
+-            }
+-        } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
+-        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
+-            arg1 = v1;
+-        } else {
+-            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
+-            SWIG_fail;
+-        }
+-    }
+-    result = (bool)((std::vector&lt;std::string &gt; const *)arg1)-&gt;empty();
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString_clear&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;clear();
+     
+-    resultobj = PyInt_FromLong((long)result);
++    Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+     fail:
+     return NULL;
+ }
+ 
+ 
+-static PyObject *_wrap_vectorString_clear(PyObject *self, PyObject *args) {
++static PyObject *_wrap_vectorString_append(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    char *arg2 ;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString_clear&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    (arg1)-&gt;clear();
++    if(!PyArg_ParseTuple(args,(char *)&quot;Os:vectorString_append&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;push_back((char const *)arg2);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -5193,25 +5179,17 @@
+ }
+ 
+ 
+-static PyObject *_wrap_vectorString_append(PyObject *self, PyObject *args) {
++static PyObject *_wrap_vectorString___nonzero__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+-    std::string arg2 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    bool result;
+     PyObject * obj0 = 0 ;
+-    PyObject * obj1 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;OO:vectorString_append&quot;,&amp;obj0,&amp;obj1)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    {
+-        if (PyString_Check(obj1))
+-        arg2 = std::string(PyString_AsString(obj1),
+-        PyString_Size(obj1));
+-        else
+-        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
+-    }
+-    (arg1)-&gt;push_back(arg2);
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString___nonzero__&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (bool)std_vectorlchar_const_m_g___nonzero_____(arg1);
+     
+-    Py_INCREF(Py_None); resultobj = Py_None;
++    resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -5220,23 +5198,21 @@
+ 
+ static PyObject *_wrap_vectorString_pop(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
+-    std::string result;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
++    char *result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorString_pop&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         try {
+-            result = std_vectorlstd_string_g_pop___(arg1);
++            result = (char *)std_vectorlchar_const_m_g_pop___(arg1);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+         }
+     }
+-    {
+-        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
+-    }
++    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)&quot;&quot;);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -5245,24 +5221,22 @@
+ 
+ static PyObject *_wrap_vectorString___getitem__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     int arg2 ;
+-    std::string result;
++    char *result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oi:vectorString___getitem__&quot;,&amp;obj0,&amp;arg2)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         try {
+-            result = std_vectorlstd_string_g___getitem_____(arg1,arg2);
++            result = (char *)std_vectorlchar_const_m_g___getitem_____(arg1,arg2);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+         }
+     }
+-    {
+-        resultobj = PyString_FromStringAndSize((&amp;result)-&gt;data(),(&amp;result)-&gt;size());
+-    }
++    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)&quot;&quot;);
+     return resultobj;
+     fail:
+     return NULL;
+@@ -5271,21 +5245,24 @@
+ 
+ static PyObject *_wrap_vectorString___getslice__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     int arg2 ;
+     int arg3 ;
+-    std::vector&lt;std::string &gt; result;
++    std::vector&lt;char const * &gt; result;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oii:vectorString___getslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = std_vectorlstd_string_g___getslice_____(arg1,arg2,arg3);
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = std_vectorlchar_const_m_g___getslice_____(arg1,arg2,arg3);
+     
+     {
+         resultobj = PyTuple_New((&amp;result)-&gt;size());
+-        for (unsigned int i=0; i&lt;(&amp;result)-&gt;size(); i++)
+-        PyTuple_SetItem(resultobj,i,
+-        SwigString_FromString(((std::vector&lt;std::string &gt; &amp;)result)[i]));
++        for (unsigned int i=0; i&lt;(&amp;result)-&gt;size(); i++) {
++            char const *ptr = ((std::vector&lt;char const * &gt; &amp;)result)[i];
++            PyTuple_SetItem(resultobj,i,
++            SWIG_NewPointerObj((void *) ptr, 
++            SWIGTYPE_p_char, 0));
++        }
+     }
+     return resultobj;
+     fail:
+@@ -5295,24 +5272,16 @@
+ 
+ static PyObject *_wrap_vectorString___setitem__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     int arg2 ;
+-    std::string arg3 ;
++    char *arg3 ;
+     PyObject * obj0 = 0 ;
+-    PyObject * obj2 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;OiO:vectorString___setitem__&quot;,&amp;obj0,&amp;arg2,&amp;obj2)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;Ois:vectorString___setitem__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+-        if (PyString_Check(obj2))
+-        arg3 = std::string(PyString_AsString(obj2),
+-        PyString_Size(obj2));
+-        else
+-        SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
+-    }
+-    {
+         try {
+-            std_vectorlstd_string_g___setitem_____(arg1,arg2,arg3);
++            std_vectorlchar_const_m_g___setitem_____(arg1,arg2,(char const *)arg3);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+@@ -5327,46 +5296,47 @@
+ 
+ static PyObject *_wrap_vectorString___setslice__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     int arg2 ;
+     int arg3 ;
+-    std::vector&lt;std::string &gt; *arg4 = 0 ;
+-    std::vector&lt;std::string &gt; temp4 ;
+-    std::vector&lt;std::string &gt; *v4 ;
++    std::vector&lt;char const * &gt; *arg4 = 0 ;
++    std::vector&lt;char const * &gt; temp4 ;
++    std::vector&lt;char const * &gt; *v4 ;
+     PyObject * obj0 = 0 ;
+     PyObject * obj3 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;OiiO:vectorString___setslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3,&amp;obj3)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         if (PyTuple_Check(obj3) || PyList_Check(obj3)) {
+             unsigned int size = (PyTuple_Check(obj3) ?
+             PyTuple_Size(obj3) :
+             PyList_Size(obj3));
+-            temp4 = std::vector&lt;std::string &gt;(size);
++            temp4 = std::vector&lt;char const *&gt;(size);
+             arg4 = &amp;temp4;
+             for (unsigned int i=0; i&lt;size; i++) {
++                char const *x;
+                 PyObject* o = PySequence_GetItem(obj3,i);
+-                if (PyString_Check(o)) {
+-                    temp4[i] = (std::string)(\
+-                    SwigString_AsString(o));
++                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                SWIGTYPE_p_char,0)) != -1) {
++                    temp4[i] = x;
+                     Py_DECREF(o);
+                 } else {
+                     Py_DECREF(o);
+                     PyErr_SetString(PyExc_TypeError,
+-                    &quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++                    &quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
+                     SWIG_fail;
+                 }
+             }
+         } else if (SWIG_ConvertPtr(obj3,(void **) &amp;v4, 
+-        SWIGTYPE_p_std__vectorTstd__string_t,1) != -1){
++        SWIGTYPE_p_std__vectorTchar_const_p_t,0) != -1) {
+             arg4 = v4;
+         } else {
+-            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot;&quot;std::string&quot; &quot;&gt; expected&quot;);
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;q(const).char&quot; &quot;*&gt; expected&quot;);
+             SWIG_fail;
+         }
+     }
+-    std_vectorlstd_string_g___setslice_____(arg1,arg2,arg3,(std::vector&lt;std::string &gt; const &amp;)*arg4);
++    std_vectorlchar_const_m_g___setslice_____(arg1,arg2,arg3,(std::vector&lt;char const * &gt; const &amp;)*arg4);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -5377,15 +5347,15 @@
+ 
+ static PyObject *_wrap_vectorString___delitem__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     int arg2 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oi:vectorString___delitem__&quot;,&amp;obj0,&amp;arg2)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     {
+         try {
+-            std_vectorlstd_string_g___delitem_____(arg1,arg2);
++            std_vectorlchar_const_m_g___delitem_____(arg1,arg2);
+             
+         } catch (std::out_of_range&amp; e) {
+             SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
+@@ -5400,14 +5370,14 @@
+ 
+ static PyObject *_wrap_vectorString___delslice__(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     int arg2 ;
+     int arg3 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;Oii:vectorString___delslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    std_vectorlstd_string_g___delslice_____(arg1,arg2,arg3);
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    std_vectorlchar_const_m_g___delslice_____(arg1,arg2,arg3);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -5418,11 +5388,11 @@
+ 
+ static PyObject *_wrap_delete_vectorString(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    std::vector&lt;std::string &gt; *arg1 = (std::vector&lt;std::string &gt; *) 0 ;
++    std::vector&lt;char const * &gt; *arg1 = (std::vector&lt;char const * &gt; *) 0 ;
+     PyObject * obj0 = 0 ;
+     
+     if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_vectorString&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTstd__string_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTchar_const_p_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     delete arg1;
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+@@ -5435,7 +5405,7 @@
+ static PyObject * vectorString_swigregister(PyObject *self, PyObject *args) {
+     PyObject *obj;
+     if (!PyArg_ParseTuple(args,(char*)&quot;O&quot;, &amp;obj)) return NULL;
+-    SWIG_TypeClientData(SWIGTYPE_p_std__vectorTstd__string_t, obj);
++    SWIG_TypeClientData(SWIGTYPE_p_std__vectorTchar_const_p_t, obj);
+     Py_INCREF(obj);
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
+@@ -5644,9 +5614,9 @@
+ 	 { (char *)&quot;vectorEnemySaveData_swigregister&quot;, vectorEnemySaveData_swigregister, METH_VARARGS },
+ 	 { (char *)&quot;new_vectorString&quot;, _wrap_new_vectorString, METH_VARARGS },
+ 	 { (char *)&quot;vectorString___len__&quot;, _wrap_vectorString___len__, METH_VARARGS },
+-	 { (char *)&quot;vectorString___nonzero__&quot;, _wrap_vectorString___nonzero__, METH_VARARGS },
+ 	 { (char *)&quot;vectorString_clear&quot;, _wrap_vectorString_clear, METH_VARARGS },
+ 	 { (char *)&quot;vectorString_append&quot;, _wrap_vectorString_append, METH_VARARGS },
++	 { (char *)&quot;vectorString___nonzero__&quot;, _wrap_vectorString___nonzero__, METH_VARARGS },
+ 	 { (char *)&quot;vectorString_pop&quot;, _wrap_vectorString_pop, METH_VARARGS },
+ 	 { (char *)&quot;vectorString___getitem__&quot;, _wrap_vectorString___getitem__, METH_VARARGS },
+ 	 { (char *)&quot;vectorString___getslice__&quot;, _wrap_vectorString___getslice__, METH_VARARGS },
+@@ -5665,74 +5635,78 @@
+ static void *_p_RainbowRiftTo_p_SpaceLocation(void *x) {
+     return (void *)((SpaceLocation *)  ((RainbowRift *) x));
+ }
+-static swig_type_info _swigt__p_GobPlayer[] = {{&quot;_p_GobPlayer&quot;, 0, &quot;GobPlayer *&quot;, 0},{&quot;_p_GobPlayer&quot;},{0}};
++static swig_type_info _swigt__p_SaveGobGameInfo[] = {{&quot;_p_SaveGobGameInfo&quot;, 0, &quot;SaveGobGameInfo *&quot;, 0},{&quot;_p_SaveGobGameInfo&quot;},{0}};
++static swig_type_info _swigt__p_SAMPLE[] = {{&quot;_p_SAMPLE&quot;, 0, &quot;SAMPLE *&quot;, 0},{&quot;_p_SAMPLE&quot;},{0}};
++static swig_type_info _swigt__p_std__vectorTchar_const_p_t[] = {{&quot;_p_std__vectorTchar_const_p_t&quot;, 0, &quot;std::vector&lt;char const * &gt; *&quot;, 0},{&quot;_p_std__vectorTchar_const_p_t&quot;},{0}};
++static swig_type_info _swigt__p_Ship[] = {{&quot;_p_Ship&quot;, 0, &quot;Ship *&quot;, 0},{&quot;_p_Ship&quot;},{0}};
++static swig_type_info _swigt__p_DialogApi[] = {{&quot;_p_DialogApi&quot;, 0, &quot;DialogApi *&quot;, 0},{&quot;_p_DialogApi&quot;},{0}};
++static swig_type_info _swigt__p_StarMap[] = {{&quot;_p_StarMap&quot;, 0, &quot;StarMap *&quot;, 0},{&quot;_p_StarMap&quot;},{0}};
++static swig_type_info _swigt__p_Upgrade[] = {{&quot;_p_Upgrade&quot;, 0, &quot;Upgrade *&quot;, 0},{&quot;_p_Upgrade&quot;},{0}};
+ static swig_type_info _swigt__p_p_Upgrade[] = {{&quot;_p_p_Upgrade&quot;, 0, &quot;Upgrade **&quot;, 0},{&quot;_p_p_Upgrade&quot;},{0}};
++static swig_type_info _swigt__p_char[] = {{&quot;_p_char&quot;, 0, &quot;char *&quot;, 0},{&quot;_p_char&quot;},{0}};
+ static swig_type_info _swigt__p_SpaceLocation[] = {{&quot;_p_SpaceLocation&quot;, 0, &quot;SpaceLocation *&quot;, 0},{&quot;_p_SpaceLocation&quot;},{&quot;_p_RainbowRift&quot;, _p_RainbowRiftTo_p_SpaceLocation},{0}};
+-static swig_type_info _swigt__p_p_GobStation[] = {{&quot;_p_p_GobStation&quot;, 0, &quot;GobStation **&quot;, 0},{&quot;_p_p_GobStation&quot;},{0}};
+-static swig_type_info _swigt__p_GobStation[] = {{&quot;_p_GobStation&quot;, 0, &quot;GobStation *&quot;, 0},{&quot;_p_GobStation&quot;},{0}};
+-static swig_type_info _swigt__p_Upgrade[] = {{&quot;_p_Upgrade&quot;, 0, &quot;Upgrade *&quot;, 0},{&quot;_p_Upgrade&quot;},{0}};
+-static swig_type_info _swigt__p_RGB[] = {{&quot;_p_RGB&quot;, 0, &quot;RGB *&quot;, 0},{&quot;_p_RGB&quot;},{0}};
+-static swig_type_info _swigt__p_Log[] = {{&quot;_p_Log&quot;, 0, &quot;Log *&quot;, 0},{&quot;_p_Log&quot;},{0}};
+-static swig_type_info _swigt__p_StarMap[] = {{&quot;_p_StarMap&quot;, 0, &quot;StarMap *&quot;, 0},{&quot;_p_StarMap&quot;},{0}};
+-static swig_type_info _swigt__p_float[] = {{&quot;_p_float&quot;, 0, &quot;float *&quot;, 0},{&quot;_p_float&quot;},{0}};
+-static swig_type_info _swigt__p_std__vectorTEnemySaveData_t[] = {{&quot;_p_std__vectorTEnemySaveData_t&quot;, 0, &quot;std::vector&lt;EnemySaveData &gt; *&quot;, 0},{&quot;_p_std__vectorTEnemySaveData_t&quot;},{0}};
+-static swig_type_info _swigt__p_GobAsteroid[] = {{&quot;_p_GobAsteroid&quot;, 0, &quot;GobAsteroid *&quot;, 0},{&quot;_p_GobAsteroid&quot;},{0}};
+-static swig_type_info _swigt__p_TeamCode[] = {{&quot;_p_TeamCode&quot;, 0, &quot;TeamCode *&quot;, 0},{&quot;_p_TeamCode&quot;},{0}};
+-static swig_type_info _swigt__p_GobEnemy[] = {{&quot;_p_GobEnemy&quot;, 0, &quot;GobEnemy *&quot;, 0},{&quot;_p_GobEnemy&quot;},{0}};
+-static swig_type_info _swigt__p_p_GobEnemy[] = {{&quot;_p_p_GobEnemy&quot;, 0, &quot;GobEnemy **&quot;, 0},{&quot;_p_p_GobEnemy&quot;},{0}};
+-static swig_type_info _swigt__p_p_Planet[] = {{&quot;_p_p_Planet&quot;, 0, &quot;Planet **&quot;, 0},{&quot;_p_p_Planet&quot;},{0}};
+-static swig_type_info _swigt__p_RainbowRift[] = {{&quot;_p_RainbowRift&quot;, 0, &quot;RainbowRift *&quot;, 0},{&quot;_p_RainbowRift&quot;},{0}};
++static swig_type_info _swigt__p_p_char[] = {{&quot;_p_p_char&quot;, 0, &quot;char **&quot;, 0},{&quot;_p_p_char&quot;},{0}};
+ static swig_type_info _swigt__p_GobGame[] = {{&quot;_p_GobGame&quot;, 0, &quot;GobGame *&quot;, 0},{&quot;_p_GobGame&quot;},{0}};
+-static swig_type_info _swigt__p_EnemySaveData[] = {{&quot;_p_EnemySaveData&quot;, 0, &quot;EnemySaveData *&quot;, 0},{&quot;_p_EnemySaveData&quot;},{0}};
+-static swig_type_info _swigt__p_std__string[] = {{&quot;_p_std__string&quot;, 0, &quot;std::string *&quot;, 0},{&quot;_p_std__string&quot;},{0}};
++static swig_type_info _swigt__p_Control[] = {{&quot;_p_Control&quot;, 0, &quot;Control *&quot;, 0},{&quot;_p_Control&quot;},{0}};
++static swig_type_info _swigt__p_GobAsteroid[] = {{&quot;_p_GobAsteroid&quot;, 0, &quot;GobAsteroid *&quot;, 0},{&quot;_p_GobAsteroid&quot;},{0}};
++static swig_type_info _swigt__p_RGB[] = {{&quot;_p_RGB&quot;, 0, &quot;RGB *&quot;, 0},{&quot;_p_RGB&quot;},{0}};
++static swig_type_info _swigt__p_SpaceSprite[] = {{&quot;_p_SpaceSprite&quot;, 0, &quot;SpaceSprite *&quot;, 0},{&quot;_p_SpaceSprite&quot;},{0}};
+ static swig_type_info _swigt__p_Vector2[] = {{&quot;_p_Vector2&quot;, 0, &quot;Vector2 *&quot;, 0},{&quot;_p_Vector2&quot;},{0}};
+-static swig_type_info _swigt__p_SaveGobGameInfo[] = {{&quot;_p_SaveGobGameInfo&quot;, 0, &quot;SaveGobGameInfo *&quot;, 0},{&quot;_p_SaveGobGameInfo&quot;},{0}};
+-static swig_type_info _swigt__p_DialogApi[] = {{&quot;_p_DialogApi&quot;, 0, &quot;DialogApi *&quot;, 0},{&quot;_p_DialogApi&quot;},{0}};
++static swig_type_info _swigt__p_GobStation[] = {{&quot;_p_GobStation&quot;, 0, &quot;GobStation *&quot;, 0},{&quot;_p_GobStation&quot;},{0}};
++static swig_type_info _swigt__p_p_GobStation[] = {{&quot;_p_p_GobStation&quot;, 0, &quot;GobStation **&quot;, 0},{&quot;_p_p_GobStation&quot;},{0}};
++static swig_type_info _swigt__p_p_Planet[] = {{&quot;_p_p_Planet&quot;, 0, &quot;Planet **&quot;, 0},{&quot;_p_p_Planet&quot;},{0}};
+ static swig_type_info _swigt__p_pair[] = {{&quot;_p_pair&quot;, 0, &quot;pair *&quot;, 0},{&quot;_p_pair&quot;},{0}};
+-static swig_type_info _swigt__p_SpaceSprite[] = {{&quot;_p_SpaceSprite&quot;, 0, &quot;SpaceSprite *&quot;, 0},{&quot;_p_SpaceSprite&quot;},{0}};
+-static swig_type_info _swigt__p_Control[] = {{&quot;_p_Control&quot;, 0, &quot;Control *&quot;, 0},{&quot;_p_Control&quot;},{0}};
+-static swig_type_info _swigt__p_SpaceObject[] = {{&quot;_p_SpaceObject&quot;, 0, &quot;SpaceObject *&quot;, 0},{&quot;_p_SpaceObject&quot;},{0}};
++static swig_type_info _swigt__p_std__string[] = {{&quot;_p_std__string&quot;, 0, &quot;std::string *&quot;, 0},{&quot;_p_std__string&quot;},{0}};
++static swig_type_info _swigt__p_GobPlayer[] = {{&quot;_p_GobPlayer&quot;, 0, &quot;GobPlayer *&quot;, 0},{&quot;_p_GobPlayer&quot;},{0}};
+ static swig_type_info _swigt__p_Frame[] = {{&quot;_p_Frame&quot;, 0, &quot;Frame *&quot;, 0},{&quot;_p_Frame&quot;},{0}};
+-static swig_type_info _swigt__p_std__vectorTstd__string_t[] = {{&quot;_p_std__vectorTstd__string_t&quot;, 0, &quot;std::vector&lt;std::string &gt; *&quot;, 0},{&quot;_p_std__vectorTstd__string_t&quot;},{0}};
+-static swig_type_info _swigt__p_ShipPanel[] = {{&quot;_p_ShipPanel&quot;, 0, &quot;ShipPanel *&quot;, 0},{&quot;_p_ShipPanel&quot;},{0}};
+-static swig_type_info _swigt__p_SAMPLE[] = {{&quot;_p_SAMPLE&quot;, 0, &quot;SAMPLE *&quot;, 0},{&quot;_p_SAMPLE&quot;},{0}};
+ static swig_type_info _swigt__p_ShipType[] = {{&quot;_p_ShipType&quot;, 0, &quot;ShipType *&quot;, 0},{&quot;_p_ShipType&quot;},{0}};
+-static swig_type_info _swigt__p_Ship[] = {{&quot;_p_Ship&quot;, 0, &quot;Ship *&quot;, 0},{&quot;_p_Ship&quot;},{0}};
++static swig_type_info _swigt__p_TeamCode[] = {{&quot;_p_TeamCode&quot;, 0, &quot;TeamCode *&quot;, 0},{&quot;_p_TeamCode&quot;},{0}};
++static swig_type_info _swigt__p_SpaceObject[] = {{&quot;_p_SpaceObject&quot;, 0, &quot;SpaceObject *&quot;, 0},{&quot;_p_SpaceObject&quot;},{0}};
++static swig_type_info _swigt__p_EnemySaveData[] = {{&quot;_p_EnemySaveData&quot;, 0, &quot;EnemySaveData *&quot;, 0},{&quot;_p_EnemySaveData&quot;},{0}};
++static swig_type_info _swigt__p_p_GobEnemy[] = {{&quot;_p_p_GobEnemy&quot;, 0, &quot;GobEnemy **&quot;, 0},{&quot;_p_p_GobEnemy&quot;},{0}};
++static swig_type_info _swigt__p_GobEnemy[] = {{&quot;_p_GobEnemy&quot;, 0, &quot;GobEnemy *&quot;, 0},{&quot;_p_GobEnemy&quot;},{0}};
++static swig_type_info _swigt__p_RainbowRift[] = {{&quot;_p_RainbowRift&quot;, 0, &quot;RainbowRift *&quot;, 0},{&quot;_p_RainbowRift&quot;},{0}};
++static swig_type_info _swigt__p_Log[] = {{&quot;_p_Log&quot;, 0, &quot;Log *&quot;, 0},{&quot;_p_Log&quot;},{0}};
++static swig_type_info _swigt__p_ShipPanel[] = {{&quot;_p_ShipPanel&quot;, 0, &quot;ShipPanel *&quot;, 0},{&quot;_p_ShipPanel&quot;},{0}};
++static swig_type_info _swigt__p_float[] = {{&quot;_p_float&quot;, 0, &quot;float *&quot;, 0},{&quot;_p_float&quot;},{0}};
++static swig_type_info _swigt__p_std__vectorTEnemySaveData_t[] = {{&quot;_p_std__vectorTEnemySaveData_t&quot;, 0, &quot;std::vector&lt;EnemySaveData &gt; *&quot;, 0},{&quot;_p_std__vectorTEnemySaveData_t&quot;},{0}};
+ 
+ static swig_type_info *swig_types_initial[] = {
+-_swigt__p_GobPlayer, 
++_swigt__p_SaveGobGameInfo, 
++_swigt__p_SAMPLE, 
++_swigt__p_std__vectorTchar_const_p_t, 
++_swigt__p_Ship, 
++_swigt__p_DialogApi, 
++_swigt__p_StarMap, 
++_swigt__p_Upgrade, 
+ _swigt__p_p_Upgrade, 
++_swigt__p_char, 
+ _swigt__p_SpaceLocation, 
+-_swigt__p_p_GobStation, 
+-_swigt__p_GobStation, 
+-_swigt__p_Upgrade, 
+-_swigt__p_RGB, 
+-_swigt__p_Log, 
+-_swigt__p_StarMap, 
+-_swigt__p_float, 
+-_swigt__p_std__vectorTEnemySaveData_t, 
+-_swigt__p_GobAsteroid, 
+-_swigt__p_TeamCode, 
+-_swigt__p_GobEnemy, 
+-_swigt__p_p_GobEnemy, 
+-_swigt__p_p_Planet, 
+-_swigt__p_RainbowRift, 
++_swigt__p_p_char, 
+ _swigt__p_GobGame, 
+-_swigt__p_EnemySaveData, 
+-_swigt__p_std__string, 
++_swigt__p_Control, 
++_swigt__p_GobAsteroid, 
++_swigt__p_RGB, 
++_swigt__p_SpaceSprite, 
+ _swigt__p_Vector2, 
+-_swigt__p_SaveGobGameInfo, 
+-_swigt__p_DialogApi, 
++_swigt__p_GobStation, 
++_swigt__p_p_GobStation, 
++_swigt__p_p_Planet, 
+ _swigt__p_pair, 
+-_swigt__p_SpaceSprite, 
+-_swigt__p_Control, 
+-_swigt__p_SpaceObject, 
++_swigt__p_std__string, 
++_swigt__p_GobPlayer, 
+ _swigt__p_Frame, 
+-_swigt__p_std__vectorTstd__string_t, 
+-_swigt__p_ShipPanel, 
+-_swigt__p_SAMPLE, 
+ _swigt__p_ShipType, 
+-_swigt__p_Ship, 
++_swigt__p_TeamCode, 
++_swigt__p_SpaceObject, 
++_swigt__p_EnemySaveData, 
++_swigt__p_p_GobEnemy, 
++_swigt__p_GobEnemy, 
++_swigt__p_RainbowRift, 
++_swigt__p_Log, 
++_swigt__p_ShipPanel, 
++_swigt__p_float, 
++_swigt__p_std__vectorTEnemySaveData_t, 
+ 0
+ };
+ 
+
+Modified: trunk/source/other/gamedialog.cpp
+===================================================================
+--- trunk/source/other/gamedialog.cpp	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/source/other/gamedialog.cpp	2005-05-07 12:38:11 UTC (rev 154)
+@@ -35,21 +35,24 @@
+ 
+ void DialogApi::startDialog()
+ {
++  std::cerr&lt;&lt;__FUNCTION__;
+   if(!game-&gt;is_paused())
+     game-&gt;pause();
+ }
+ 
+ void DialogApi::endDialog()
+ {
++  std::cerr&lt;&lt;__FUNCTION__;
+   game-&gt;unpause();
+ }
+ 
+-int DialogApi::askPlayer(std::vector&lt;std::string&gt; answers)
++int DialogApi::askPlayer(std::vector&lt;const char*&gt; answers)
+ {
++  std::cerr&lt;&lt;__FUNCTION__;
+   MENU *pMenuAnswers = new MENU[answers.size()+1];
+   for( unsigned int i=0; i&lt;answers.size(); i++)
+     {
+-      pMenuAnswers[i].text   = strdup(answers[i].c_str());
++      pMenuAnswers[i].text   = strdup(answers[i]);
+       pMenuAnswers[i].proc   = NULL;
+       pMenuAnswers[i].child  = NULL;
+       pMenuAnswers[i].flags  = 0;
+@@ -77,6 +80,7 @@
+   
+ void DialogApi::showText(const std::string&amp; text, int delay, int x, int y)
+ {
++  std::cerr&lt;&lt;__FUNCTION__;
+   RGB tmpPal[256];
+   memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
+   set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
+@@ -91,6 +95,7 @@
+  
+ void DialogApi::showAlienPicture(const std::string&amp; path)
+ {
++  std::cerr&lt;&lt;__FUNCTION__;
+   BITMAP* alienPic = load_bitmap(data_full_path(path).c_str(), NULL);
+   
+   BITMAP* d_buf = create_bitmap(game-&gt;view-&gt;frame-&gt;window-&gt;w,
+
+Modified: trunk/source/other/gamedialog.h
+===================================================================
+--- trunk/source/other/gamedialog.h	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/source/other/gamedialog.h	2005-05-07 12:38:11 UTC (rev 154)
+@@ -30,7 +30,7 @@
+   /// player should select from answer variants
+   ///
+   /// \return player answer position
+-  static int askPlayer(std::vector&lt;std::string&gt; answers);
++  static int askPlayer(std::vector&lt;const char*&gt; answers);
+   
+   /// show alien text
+   ///
+
+Modified: trunk/source/python/game.i
+===================================================================
+--- trunk/source/python/game.i	2005-05-07 11:53:49 UTC (rev 153)
++++ trunk/source/python/game.i	2005-05-07 12:38:11 UTC (rev 154)
+@@ -12,6 +12,6 @@
+ 
+ namespace std { 
+    %template(vectorEnemySaveData) vector&lt;EnemySaveData&gt;;
+-   %template(vectorString) vector&lt;string&gt;;	
++   %template(vectorString) vector&lt;const char*&gt;;	
+ };
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000099.html">[Tw-light-svn] r153 - trunk/gamedata/python
+</A></li>
+	<LI>Next message: <A HREF="000101.html">[Tw-light-svn] r155 - in trunk: . gamedata gamedata/python gamedata/test_game gamedata/test_game/dialogs source source/generated source/other source/python source/tests source/tml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#100">[ date ]</a>
+              <a href="thread.html#100">[ thread ]</a>
+              <a href="subject.html#100">[ subject ]</a>
+              <a href="author.html#100">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

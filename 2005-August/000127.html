@@ -1,0 +1,1017 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r181 - in trunk: . doc gamedata/default_ini gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source/generated source/tml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r181%20-%20in%20trunk%3A%20.%20doc%20gamedata/default_ini%20gamedata/games/test_game/scripts%20gamedata/games/test_game/scripts/systems%20gamedata/python%20source/generated%20source/tml&In-Reply-To=%3C200508171720.j7HHKauQ012101%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000126.html">
+   <LINK REL="Next"  HREF="000128.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r181 - in trunk: . doc gamedata/default_ini gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source/generated source/tml</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r181%20-%20in%20trunk%3A%20.%20doc%20gamedata/default_ini%20gamedata/games/test_game/scripts%20gamedata/games/test_game/scripts/systems%20gamedata/python%20source/generated%20source/tml&In-Reply-To=%3C200508171720.j7HHKauQ012101%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r181 - in trunk: . doc gamedata/default_ini gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source/generated source/tml">yurand at berlios.de
+       </A><BR>
+    <I>Wed Aug 17 19:20:36 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000126.html">[Tw-light-svn] r180 - in trunk: . gamedata/games/test_game/scripts gamedata/python source/generated source/tml
+</A></li>
+        <LI>Next message: <A HREF="000128.html">[Tw-light-svn] r182 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts rawgraphic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#127">[ date ]</a>
+              <a href="thread.html#127">[ thread ]</a>
+              <a href="subject.html#127">[ subject ]</a>
+              <a href="author.html#127">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-08-17 19:20:16 +0200 (Wed, 17 Aug 2005)
+New Revision: 181
+
+Modified:
+   trunk/doc/Doxyfile
+   trunk/gamedata/default_ini/fleets.ini
+   trunk/gamedata/default_ini/scp.ini
+   trunk/gamedata/games/test_game/scripts/flags.py
+   trunk/gamedata/games/test_game/scripts/quests.py
+   trunk/gamedata/games/test_game/scripts/start.py
+   trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py
+   trunk/gamedata/python/tml.py
+   trunk/makefile
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/tml/gameaction.cpp
+   trunk/source/tml/gameaction.h
+Log:
+Zoq-Fot-Pik quest
+
+Modified: trunk/doc/Doxyfile
+===================================================================
+--- trunk/doc/Doxyfile	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/doc/Doxyfile	2005-08-17 17:20:16 UTC (rev 181)
+@@ -4,7 +4,7 @@
+ # General configuration options
+ #---------------------------------------------------------------------------
+ PROJECT_NAME           = TW-Light
+-PROJECT_NUMBER=0.3r148M
++PROJECT_NUMBER=0.3r179M
+ OUTPUT_DIRECTORY       = ./doc
+ OUTPUT_LANGUAGE        = English
+ USE_WINDOWS_ENCODING   = YES
+
+Modified: trunk/gamedata/default_ini/fleets.ini
+===================================================================
+--- trunk/gamedata/default_ini/fleets.ini	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/gamedata/default_ini/fleets.ini	2005-08-17 17:20:16 UTC (rev 181)
+@@ -1,75 +1,76 @@
+-[Player1]
+-Slot0 = earcr
+-Slot1 = thrto
+-Slot2 = chebr
+-Slot3 = orzne
+-Slot4 = druma
+-Slot5 = meltr
+-Slot6 = chmav
+-Slot7 = kohma
+-Slot8 = utwju
+-Slot9 = andgu
+-Slot10 = ilwav
+-Slot11 = kzedr
+-Slot12 = yehte
+-Slot13 = syrpe
+-Slot14 = spael
+-Slot15 = vuxin
+-Slot16 = umgdr
+-Slot17 = supbl
+-Slot18 = pkufu
+-Slot19 = slypr
+-Slot20 = arisk
+-Slot21 = zfpst
+-Slot22 = mycpo
+-Slot23 = mmrxf
+-Slot24 = shosc
+-Size = 25
+-MaxFleetCost = 500
+-Name = Player1
+-Type = Keyboard/Joystick
+-Team = 1
+-Channel = 12
+-StartingFleetCost = 633
+-StartingFleetSize = 24
+-
+-[Player2]
+-Slot0 = tauar
+-Slot1 = tauda
+-Slot2 = hydcr
+-Slot3 = forsh
+-Slot4 = dragr
+-Slot5 = tausl
+-Slot6 = tauto
+-Slot7 = garty
+-Slot8 = djila
+-Slot9 = zeksh
+-Slot10 = conca
+-Slot11 = choex
+-Slot12 = conho
+-Slot13 = ilwsp
+-Slot14 = rekas
+-Slot15 = bahbu
+-Slot16 = bipka
+-Slot17 = earc2
+-Slot18 = earc3
+-Slot19 = kahbo
+-Size = 20
+-MaxFleetCost = 500
+-Name = Player2
+-Type = WussieBot
+-Team = 2
+-Channel = 12
+-StartingFleetCost = 513
+-StartingFleetSize = 22
+-
+-[Player3]
+-Slot0 = alabc
+-Slot1 = staba
+-Size = 2
+-MaxFleetCost = 500
+-Type = WussieBot
+-Team = 2
+-Channel = 12
+-StartingFleetCost = 513
+-StartingFleetSize = 22
++[Player1]
++Slot0 = earcr
++Slot1 = thrto
++Slot2 = chebr
++Slot3 = orzne
++Slot4 = druma
++Slot5 = meltr
++Slot6 = chmav
++Slot7 = kohma
++Slot8 = utwju
++Slot9 = andgu
++Slot10 = ilwav
++Slot11 = kzedr
++Slot12 = yehte
++Slot13 = syrpe
++Slot14 = spael
++Slot15 = vuxin
++Slot16 = umgdr
++Slot17 = supbl
++Slot18 = pkufu
++Slot19 = slypr
++Slot20 = arisk
++Slot21 = zfpst
++Slot22 = mycpo
++Slot23 = mmrxf
++Slot24 = shosc
++Size = 25
++MaxFleetCost = 500
++Name = Player1
++Type = Keyboard/Joystick
++Team = 1
++Channel = 12
++StartingFleetCost = 633
++StartingFleetSize = 24
++
++[Player2]
++Slot0 = tauar
++Slot1 = tauda
++Slot2 = hydcr
++Slot3 = forsh
++Slot4 = dragr
++Slot5 = tausl
++Slot6 = tauto
++Slot7 = garty
++Slot8 = djila
++Slot9 = zeksh
++Slot10 = conca
++Slot11 = choex
++Slot12 = conho
++Slot13 = ilwsp
++Slot14 = rekas
++Slot15 = bahbu
++Slot16 = bipka
++Slot17 = earc2
++Slot18 = earc3
++Slot19 = kahbo
++Size = 20
++MaxFleetCost = 500
++Name = Player2
++Type = WussieBot
++Team = 2
++Channel = 12
++StartingFleetCost = 513
++StartingFleetSize = 22
++
++[Player3]
++Slot0 = staba
++Slot1 = staba
++Size = 3
++MaxFleetCost = 500
++Type = WussieBot
++Team = 2
++Channel = 12
++StartingFleetCost = 513
++StartingFleetSize = 22
++Slot2 = staba
+
+Modified: trunk/gamedata/default_ini/scp.ini
+===================================================================
+--- trunk/gamedata/default_ini/scp.ini	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/gamedata/default_ini/scp.ini	2005-08-17 17:20:16 UTC (rev 181)
+@@ -1,188 +1,188 @@
+-[Limits]
+-MaxPlayers = 20
+-MaxConfigurations = 4
+-MaxTeams = 6
+-
+-
+-[Config0]
+-Thrust = 84
+-Left = 82
+-Right = 83
+-Fire = 67
+-AltFire = 63
+-Special = 106
+-Next_Target = 65
+-Prev_Target = 66
+-Closest_Target = 16
+-Backwards = 85
+-Extra1 = 0
+-Extra2 = 0
+-Extra3 = 0
+-Extra4 = 0
+-Extra5 = 0
+-Extra6 = 0
+-
+-[Config1]
+-Backwards = 19
+-Thrust = 23
+-Left = 1
+-Right = 4
+-Fire = 10
+-AltFire = 14
+-Special = 11
+-Next_Target = 6
+-Prev_Target = 7
+-Closest_Target = 7
+-Extra1 = 0
+-Extra2 = 0
+-Extra3 = 0
+-Extra4 = 0
+-Extra5 = 0
+-Extra6 = 0
+-
+-
+-[Config2]
+-Thrust = 0
+-Left = 0
+-Right = 0
+-Fire = 0
+-AltFire = 0
+-Special = 0
+-Next_Target = 0
+-Prev_Target = 0
+-Closest_Target = 0
+-
+-
+-[Config3]
+-Thrust = 0
+-Left = 0
+-Right = 0
+-Fire = 0
+-AltFire = 0
+-Special = 0
+-Next_Target = 0
+-Prev_Target = 0
+-Closest_Target = 0
+-
+-
+-[Player1]
+-Type = Human
+-Config = 0
+-Team = 1
+-
+-
+-[Player2]
+-Type = WussieBot
+-Config = 1
+-Team = 2
+-
+-
+-[Player3]
+-Type = WussieBot
+-Config = 2
+-Team = 2
+-
+-
+-[Player4]
+-Type = none
+-Config = 3
+-Team = 2
+-
+-
+-[Player5]
+-Type = none
+-Config = 0
+-Team = 2
+-
+-
+-[Player6]
+-Type = none
+-Config = 1
+-Team = 2
+-
+-
+-[Player7]
+-Type = none
+-Config = 2
+-Team = 1
+-
+-
+-[Player8]
+-Type = none
+-Config = 3
+-Team = 1
+-
+-
+-[Player9]
+-Type = none
+-Config = 0
+-Team = 0
+-
+-
+-[Player10]
+-Type = none
+-Config = 0
+-Team = 0
+-
+-
+-[Player11]
+-Type = none
+-Config = 0
+-Team = 0
+-
+-
+-[Player12]
+-Type = none
+-Config = 0
+-Team = 0
+-
+-
+-[Player13]
+-Type = none
+-Config = 0
+-Team = 0
+-
+-
+-[Player14]
+-Type = none
+-Config = 1
+-Team = 0
+-
+-
+-[Player15]
+-Type = none
+-Config = 2
+-Team = 0
+-
+-
+-[Player16]
+-Type = none
+-Config = 3
+-Team = 0
+-
+-
+-[Player17]
+-Type = none
+-Config = 0
+-Team = 0
+-
+-
+-[Player18]
+-Type = none
+-Config = 1
+-Team = 0
+-
+-
+-[Player19]
+-Type = none
+-Config = 2
+-Team = 0
+-
+-
+-[Player20]
+-Type = none
+-Config = 3
+-Team = 0
+-
+-
+-
++[Limits]
++MaxPlayers = 20
++MaxConfigurations = 4
++MaxTeams = 6
++
++
++[Config0]
++Thrust = 84
++Left = 82
++Right = 83
++Fire = 67
++AltFire = 63
++Special = 106
++Next_Target = 65
++Prev_Target = 66
++Closest_Target = 16
++Backwards = 85
++Extra1 = 0
++Extra2 = 0
++Extra3 = 0
++Extra4 = 0
++Extra5 = 0
++Extra6 = 0
++
++[Config1]
++Backwards = 19
++Thrust = 23
++Left = 1
++Right = 4
++Fire = 10
++AltFire = 14
++Special = 11
++Next_Target = 6
++Prev_Target = 7
++Closest_Target = 7
++Extra1 = 0
++Extra2 = 0
++Extra3 = 0
++Extra4 = 0
++Extra5 = 0
++Extra6 = 0
++
++
++[Config2]
++Thrust = 0
++Left = 0
++Right = 0
++Fire = 0
++AltFire = 0
++Special = 0
++Next_Target = 0
++Prev_Target = 0
++Closest_Target = 0
++
++
++[Config3]
++Thrust = 0
++Left = 0
++Right = 0
++Fire = 0
++AltFire = 0
++Special = 0
++Next_Target = 0
++Prev_Target = 0
++Closest_Target = 0
++
++
++[Player1]
++Type = Human
++Config = 0
++Team = 1
++
++
++[Player2]
++Type = WussieBot
++Config = 1
++Team = 1
++
++
++[Player3]
++Type = WussieBot
++Config = 2
++Team = 2
++
++
++[Player4]
++Type = none
++Config = 3
++Team = 2
++
++
++[Player5]
++Type = none
++Config = 0
++Team = 2
++
++
++[Player6]
++Type = none
++Config = 1
++Team = 2
++
++
++[Player7]
++Type = none
++Config = 2
++Team = 1
++
++
++[Player8]
++Type = none
++Config = 3
++Team = 1
++
++
++[Player9]
++Type = none
++Config = 0
++Team = 0
++
++
++[Player10]
++Type = none
++Config = 0
++Team = 0
++
++
++[Player11]
++Type = none
++Config = 0
++Team = 0
++
++
++[Player12]
++Type = none
++Config = 0
++Team = 0
++
++
++[Player13]
++Type = none
++Config = 0
++Team = 0
++
++
++[Player14]
++Type = none
++Config = 1
++Team = 0
++
++
++[Player15]
++Type = none
++Config = 2
++Team = 0
++
++
++[Player16]
++Type = none
++Config = 3
++Team = 0
++
++
++[Player17]
++Type = none
++Config = 0
++Team = 0
++
++
++[Player18]
++Type = none
++Config = 1
++Team = 0
++
++
++[Player19]
++Type = none
++Config = 2
++Team = 0
++
++
++[Player20]
++Type = none
++Config = 3
++Team = 0
++
++
++
+
+Modified: trunk/gamedata/games/test_game/scripts/flags.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/flags.py	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/gamedata/games/test_game/scripts/flags.py	2005-08-17 17:20:16 UTC (rev 181)
+@@ -26,11 +26,14 @@
+     
+     # Mission 4 Zoq-Fot-Pik ambassador
+     m4_status     = 0
++    m4_terrorist1 = -1
++    m4_terrorist2 = -1
+     
+     # Locations
+-    ixis_mining_station  = -1
+-    ixis_chorali_station = -1
+-    precursor_wreck_id   = -1
++    ixis_mining_station         = -1
++    ixis_chorali_station        = -1
++    precursor_wreck_id          = -1
++    gamaonyx_drax_station       = -1
+     
+     # Know How
+     use_tin_device = 0
+
+Modified: trunk/gamedata/games/test_game/scripts/quests.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/quests.py	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/gamedata/games/test_game/scripts/quests.py	2005-08-17 17:20:16 UTC (rev 181)
+@@ -63,8 +63,54 @@
+ def zoq_fot_pik_ambassador_func():
+     gflag.current_mission = &quot;&quot;&quot; You must escort Zoq-Fot-Pik ambassador.&quot;&quot;&quot;
+     gflag.m4_status = MISSION_IN_PROGRESS
++    tml.EventManager.jumpToSystem('Gama Onyx', 'zoq_fot_pik_ambassador_jump_to_gama_onyx')
++
++def zoq_fot_pik_ambassador_jump_to_gama_onyx():
++    gflag.m4_ambasador = tml.GameAction.add_ship('Gama Onyx',&quot;zfpst&quot;,
++                                                 tml.GameAction.get_location_pos_x(tml.GameAction.get_player_ship_id())+50,
++                                                 tml.GameAction.get_location_pos_y(tml.GameAction.get_player_ship_id())+50,
++                                                 tml.GameAction.get_player_team())
++    dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/zoq-fot-pik.xml&quot;))
++    tml.GameAction.guard_location(gflag.m4_ambasador, tml.GameAction.get_player_ship_id(), 300)
++    tml.GameAction.set_crew(gflag.m4_ambasador, 1)
++    tml.EventManager.shipDeathById(gflag.m4_ambasador,'zoq_fot_pik_ambassador_death')
++    tml.EventManager.distanceLessThen(gflag.m4_ambasador,
++                                      gflag.gamaonyx_drax_station,
++                                      500,  'drax_terrorist_attack')
+     gflag.m4_status = MISSION_COMPLETED
++
++def zoq_fot_pik_ambassador_death():
++    if gflag.m4_status == MISSION_COMPLETED:
++        return
++    if tml.GameAction.exist(gflag.m4_terrorist1) or tml.GameAction.exist(gflag.m4_terrorist2):
++        return
++    gflag.m4_status == MISSION_FAILED
+     
++def drax_terrorist_attack():
++    gflag.m4_terrorist1 = tml.GameAction.add_ship('Gama Onyx', &quot;dragr&quot;,
++                                                  tml.GameAction.get_location_pos_x(gflag.gamaonyx_drax_station),
++                                                  tml.GameAction.get_location_pos_y(gflag.gamaonyx_drax_station)+25,
++                                                  tml.GameAction.get_enemy_team())
++
++    gflag.m4_terrorist2 = tml.GameAction.add_ship('Gama Onyx', &quot;dragr&quot;,
++                                                  tml.GameAction.get_location_pos_x(gflag.gamaonyx_drax_station),
++                                                  tml.GameAction.get_location_pos_y(gflag.gamaonyx_drax_station)-25,
++                                                  tml.GameAction.get_enemy_team())
++    tml.EventManager.shipDeathById(gflag.m4_terrorist1,'zoq_fot_pik_ambassador_terrorist_death')
++    tml.EventManager.shipDeathById(gflag.m4_terrorist2,'zoq_fot_pik_ambassador_terrorist_death')
++    tml.GameAction.set_target(gflag.m4_terrorist1, gflag.m4_ambasador)
++    tml.GameAction.set_target(gflag.m4_terrorist2, gflag.m4_ambasador)
++    tml.GameAction.set_crew(gflag.m4_terrorist1, 1)
++    tml.GameAction.set_crew(gflag.m4_terrorist2, 1)
++    
++def zoq_fot_pik_ambassador_terrorist_death():
++    if tml.GameAction.exist(gflag.m4_terrorist1) or tml.GameAction.exist(gflag.m4_terrorist2):
++        return
++    gflag.m4_status = MISSION_COMPLETED
++    if tml.GameAction.exist(gflag.m4_ambasador):
++        dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/zoq-fot-pik.xml&quot;))
++        tml.GameAction.remove_location(gflag.m4_ambasador)
++    
+ ############################################################################################################
+ # Mission 5
+ def capture_precursor_battleship_func():
+
+Modified: trunk/gamedata/games/test_game/scripts/start.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/start.py	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/gamedata/games/test_game/scripts/start.py	2005-08-17 17:20:16 UTC (rev 181)
+@@ -26,6 +26,15 @@
+ def print_hello_world():
+     print &quot;Hello world Jump to system works&quot;
+ 
++zoq_fot_pik_ambassador_func()
++
++# tml.EventManager.setRepeatableTimeEvent(1, &quot;print_pos&quot;)
++
++
++# def print_pos():
++#     print tml.GameAction.get_location_pos_x(tml.GameAction.get_player_ship_id())
++#     print tml.GameAction.get_location_pos_y(tml.GameAction.get_player_ship_id())
++    
+ # Start quests
+ 
+ #capture_precursor_battleship_func()
+
+Modified: trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py	2005-08-17 17:20:16 UTC (rev 181)
+@@ -6,7 +6,8 @@
+ tml.GameAction.add_system('Gama Onyx',200, 200)
+ 
+ tml.GameAction.add_planet('Gama Onyx','I', 1500, 1800)
+-tml.GameAction.add_orbiter_station('Gama Onyx',
++
++gflag.gamaonyx_drax_station = tml.GameAction.add_orbiter_station('Gama Onyx',
+                            'I',
+                            'gob.dat',
+                            'station0sprite',
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/gamedata/python/tml.py	2005-08-17 17:20:16 UTC (rev 181)
+@@ -91,6 +91,12 @@
+     if _newclass:remove_location = staticmethod(_tml.GameAction_remove_location)
+     __swig_getmethods__[&quot;set_crew&quot;] = lambda x: _tml.GameAction_set_crew
+     if _newclass:set_crew = staticmethod(_tml.GameAction_set_crew)
++    __swig_getmethods__[&quot;get_location_pos_x&quot;] = lambda x: _tml.GameAction_get_location_pos_x
++    if _newclass:get_location_pos_x = staticmethod(_tml.GameAction_get_location_pos_x)
++    __swig_getmethods__[&quot;get_location_pos_y&quot;] = lambda x: _tml.GameAction_get_location_pos_y
++    if _newclass:get_location_pos_y = staticmethod(_tml.GameAction_get_location_pos_y)
++    __swig_getmethods__[&quot;exist&quot;] = lambda x: _tml.GameAction_exist
++    if _newclass:exist = staticmethod(_tml.GameAction_exist)
+     __swig_getmethods__[&quot;end_game&quot;] = lambda x: _tml.GameAction_end_game
+     if _newclass:end_game = staticmethod(_tml.GameAction_end_game)
+     __swig_getmethods__[&quot;scroll_text&quot;] = lambda x: _tml.GameAction_scroll_text
+@@ -163,6 +169,12 @@
+ 
+ GameAction_set_crew = _tml.GameAction_set_crew
+ 
++GameAction_get_location_pos_x = _tml.GameAction_get_location_pos_x
++
++GameAction_get_location_pos_y = _tml.GameAction_get_location_pos_y
++
++GameAction_exist = _tml.GameAction_exist
++
+ GameAction_end_game = _tml.GameAction_end_game
+ 
+ GameAction_scroll_text = _tml.GameAction_scroll_text
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/makefile	2005-08-17 17:20:16 UTC (rev 181)
+@@ -174,7 +174,7 @@
+ 
+ 
+ source/generated/tml_wrap.cpp: source/python/game.i source/tml/gameaction.h source/util/sound.h source/tml/gameconfig.h source/tml/gamedialog.h source/tml/eventmanager.h
+-	$(SWIG) -c++ -python -o source/generated/tml_wrap.cpp source/python/game.i
++	$(SWIG) -c++ -python -o source/generated/tml_wrap.cpp -outdir source/generated/ source/python/game.i
+ 	cp source/generated/tml.py $(DATAPATH)/python/
+ 
+ 
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/source/generated/tml.py	2005-08-17 17:20:16 UTC (rev 181)
+@@ -91,6 +91,12 @@
+     if _newclass:remove_location = staticmethod(_tml.GameAction_remove_location)
+     __swig_getmethods__[&quot;set_crew&quot;] = lambda x: _tml.GameAction_set_crew
+     if _newclass:set_crew = staticmethod(_tml.GameAction_set_crew)
++    __swig_getmethods__[&quot;get_location_pos_x&quot;] = lambda x: _tml.GameAction_get_location_pos_x
++    if _newclass:get_location_pos_x = staticmethod(_tml.GameAction_get_location_pos_x)
++    __swig_getmethods__[&quot;get_location_pos_y&quot;] = lambda x: _tml.GameAction_get_location_pos_y
++    if _newclass:get_location_pos_y = staticmethod(_tml.GameAction_get_location_pos_y)
++    __swig_getmethods__[&quot;exist&quot;] = lambda x: _tml.GameAction_exist
++    if _newclass:exist = staticmethod(_tml.GameAction_exist)
+     __swig_getmethods__[&quot;end_game&quot;] = lambda x: _tml.GameAction_end_game
+     if _newclass:end_game = staticmethod(_tml.GameAction_end_game)
+     __swig_getmethods__[&quot;scroll_text&quot;] = lambda x: _tml.GameAction_scroll_text
+@@ -163,6 +169,12 @@
+ 
+ GameAction_set_crew = _tml.GameAction_set_crew
+ 
++GameAction_get_location_pos_x = _tml.GameAction_get_location_pos_x
++
++GameAction_get_location_pos_y = _tml.GameAction_get_location_pos_y
++
++GameAction_exist = _tml.GameAction_exist
++
+ GameAction_end_game = _tml.GameAction_end_game
+ 
+ GameAction_scroll_text = _tml.GameAction_scroll_text
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/source/generated/tml_wrap.cpp	2005-08-17 17:20:16 UTC (rev 181)
+@@ -1568,6 +1568,15 @@
+ /*@@*/
+ 
+ 
++SWIGINTERNINLINE PyObject*
++  SWIG_From_bool(bool value)
++{
++  PyObject *obj = value ? Py_True : Py_False;
++  Py_INCREF(obj);
++  return obj;
++}
++
++
+ #include &lt;limits.h&gt;
+ 
+ 
+@@ -1714,15 +1723,6 @@
+   return SWIG_AsVal_bool(obj, (bool*)0);
+ }
+ 
+-
+-SWIGINTERNINLINE PyObject*
+-  SWIG_From_bool(bool value)
+-{
+-  PyObject *obj = value ? Py_True : Py_False;
+-  Py_INCREF(obj);
+-  return obj;
+-}
+-
+ extern SoundSystem *tw_sound;
+ SoundSystem *GetSoundSystem();
+ 
+@@ -3859,6 +3859,72 @@
+ }
+ 
+ 
++static PyObject *_wrap_GameAction_get_location_pos_x(PyObject *, PyObject *args) {
++    PyObject *resultobj = NULL;
++    double arg1 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GameAction_get_location_pos_x&quot;,&amp;obj0)) goto fail;
++    {
++        arg1 = (double)(SWIG_As_double(obj0)); 
++        if (SWIG_arg_fail(1)) SWIG_fail;
++    }
++    result = (int)GameAction::get_location_pos_x(arg1);
++    
++    {
++        resultobj = SWIG_From_int((int)(result)); 
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_get_location_pos_y(PyObject *, PyObject *args) {
++    PyObject *resultobj = NULL;
++    double arg1 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GameAction_get_location_pos_y&quot;,&amp;obj0)) goto fail;
++    {
++        arg1 = (double)(SWIG_As_double(obj0)); 
++        if (SWIG_arg_fail(1)) SWIG_fail;
++    }
++    result = (int)GameAction::get_location_pos_y(arg1);
++    
++    {
++        resultobj = SWIG_From_int((int)(result)); 
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GameAction_exist(PyObject *, PyObject *args) {
++    PyObject *resultobj = NULL;
++    double arg1 ;
++    bool result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GameAction_exist&quot;,&amp;obj0)) goto fail;
++    {
++        arg1 = (double)(SWIG_As_double(obj0)); 
++        if (SWIG_arg_fail(1)) SWIG_fail;
++    }
++    result = (bool)GameAction::exist(arg1);
++    
++    {
++        resultobj = SWIG_From_bool((bool)(result)); 
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_GameAction_end_game(PyObject *, PyObject *args) {
+     PyObject *resultobj = NULL;
+     
+@@ -6477,6 +6543,9 @@
+ 	 { (char *)&quot;GameAction_get_player_team&quot;, _wrap_GameAction_get_player_team, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_remove_location&quot;, _wrap_GameAction_remove_location, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_set_crew&quot;, _wrap_GameAction_set_crew, METH_VARARGS, NULL},
++	 { (char *)&quot;GameAction_get_location_pos_x&quot;, _wrap_GameAction_get_location_pos_x, METH_VARARGS, NULL},
++	 { (char *)&quot;GameAction_get_location_pos_y&quot;, _wrap_GameAction_get_location_pos_y, METH_VARARGS, NULL},
++	 { (char *)&quot;GameAction_exist&quot;, _wrap_GameAction_exist, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_end_game&quot;, _wrap_GameAction_end_game, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_scroll_text&quot;, _wrap_GameAction_scroll_text, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_print_message&quot;, _wrap_GameAction_print_message, METH_VARARGS, NULL},
+
+Modified: trunk/source/tml/gameaction.cpp
+===================================================================
+--- trunk/source/tml/gameaction.cpp	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/source/tml/gameaction.cpp	2005-08-17 17:20:16 UTC (rev 181)
+@@ -295,3 +295,34 @@
+       tw_error( (std::string(&quot;Requesting unknown camera mode : &quot;) + mode).c_str());
+     }
+ }
++
++int GameAction::get_location_pos_x(double id)
++{
++	SpaceLocation* l  =  twl::get_location((int)id);
++	if(l &amp;&amp; l-&gt;exists())
++	{
++		return l-&gt;normal_pos().x;
++	}
++	return -1;
++}
++
++ 
++int GameAction::get_location_pos_y(double id)
++{
++	SpaceLocation* l  =  twl::get_location((int)id);
++	if(l &amp;&amp; l-&gt;exists())
++	{
++		return l-&gt;normal_pos().y;
++	}
++	return -1;
++}
++
++bool GameAction::exist(double id)
++{
++	SpaceLocation* l  =  twl::get_location((int)id);
++	if(l &amp;&amp; l-&gt;exists())
++	{
++		return true;
++	}
++	return false;
++}
+
+Modified: trunk/source/tml/gameaction.h
+===================================================================
+--- trunk/source/tml/gameaction.h	2005-08-15 19:18:30 UTC (rev 180)
++++ trunk/source/tml/gameaction.h	2005-08-17 17:20:16 UTC (rev 181)
+@@ -182,6 +182,21 @@
+   /// @param crew new crew
+   static void set_crew(double id, double crew);
+ 
++  /// Get x position of location
++  ///
++  /// @param id of location
++  static int get_location_pos_x(double id);
++
++  /// Get y position of location
++  ///
++  /// @param id of location
++  static int get_location_pos_y(double id);
++
++  /// Return true if location exist, false otherwise
++  ///
++  /// @param id of location
++  static bool exist(double id);
++
+   /// The game is finished, return to main menu
+   static void end_game();
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000126.html">[Tw-light-svn] r180 - in trunk: . gamedata/games/test_game/scripts gamedata/python source/generated source/tml
+</A></li>
+	<LI>Next message: <A HREF="000128.html">[Tw-light-svn] r182 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts rawgraphic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#127">[ date ]</a>
+              <a href="thread.html#127">[ thread ]</a>
+              <a href="subject.html#127">[ subject ]</a>
+              <a href="author.html#127">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

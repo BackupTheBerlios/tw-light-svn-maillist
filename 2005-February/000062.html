@@ -1,0 +1,893 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r116 - trunk/source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r116%20-%20trunk/source/melee&In-Reply-To=%3C200502142307.j1EN76tY003472%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000061.html">
+   <LINK REL="Next"  HREF="000063.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r116 - trunk/source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r116%20-%20trunk/source/melee&In-Reply-To=%3C200502142307.j1EN76tY003472%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r116 - trunk/source/melee">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Tue Feb 15 00:07:06 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000061.html">[Tw-light-svn] r115 - trunk
+</A></li>
+        <LI>Next message: <A HREF="000063.html">[Tw-light-svn] r117 - trunk/source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#62">[ date ]</a>
+              <a href="thread.html#62">[ thread ]</a>
+              <a href="subject.html#62">[ subject ]</a>
+              <a href="author.html#62">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-15 00:07:04 +0100 (Tue, 15 Feb 2005)
+New Revision: 116
+
+Modified:
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+Log:
+Added help message for changing camera mode
+
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-02-13 22:25:09 UTC (rev 115)
++++ trunk/source/melee/mgame.cpp	2005-02-14 23:07:04 UTC (rev 116)
+@@ -1,17 +1,17 @@
+ /*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
+ 
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
+ 
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
+ */
+ 
+ #include &lt;exception&gt;
+@@ -137,17 +137,18 @@
+ char **game_names = NULL;
+ GameType **games = NULL;
+ 
+-GameType::GameType(const char *name, Game *(*new_game)(), double order) {
+-	this-&gt;name = strdup(name);
+-	this-&gt;_new_game = new_game;
+-	this-&gt;order = order;
+-	::num_games += 1;
+-	::game_names = (char **) realloc(::game_names, sizeof(char*) * (num_games+1));
+-	::games = (GameType**) realloc(::games, sizeof(GameType*) * (num_games+1));
+-	games[num_games-1] = this;
+-	games[num_games] = NULL;
+-	game_names[num_games-1] = this-&gt;name;
+-	game_names[num_games] = NULL;
++GameType::GameType(const char *name, Game *(*new_game)(), double order) 
++{
++  this-&gt;name = strdup(name);
++  this-&gt;_new_game = new_game;
++  this-&gt;order = order;
++  ::num_games += 1;
++  ::game_names = (char **) realloc(::game_names, sizeof(char*) * (num_games+1));
++  ::games = (GameType**) realloc(::games, sizeof(GameType*) * (num_games+1));
++  games[num_games-1] = this;
++  games[num_games] = NULL;
++  game_names[num_games-1] = this-&gt;name;
++  game_names[num_games] = NULL;
+ }
+ 
+ Game *GameType::new_game() 
+@@ -165,7 +166,7 @@
+   for (g = games; *g; g ++)
+     if (!strcmp((*g)-&gt;name, name))
+       return *g;
+-	return NULL;
++  return NULL;
+ }
+ 
+ void __checksync( const char *fname, int line) 
+@@ -355,59 +356,59 @@
+ }
+ 
+ Control *Game::create_control (int channel, const char *type, char *config, char *file) {STACKTRACE
+-	if ((channel != channel_none) &amp;&amp; !is_local(channel)) {
+-		type = &quot;VegetableBot&quot;;
+-		config = &quot;Config0&quot;;
+-		file = &quot;scp.ini&quot;;
+-	}
++											   if ((channel != channel_none) &amp;&amp; !is_local(channel)) {
++											     type = &quot;VegetableBot&quot;;
++											     config = &quot;Config0&quot;;
++											     file = &quot;scp.ini&quot;;
++											   }
+ 
+-	Control *c = getController(type, &quot;whatever&quot;, channel);
+-	if (!c) {
+-		tw_error(&quot;Game::create_control - bad control type (%s)&quot;, type);
+-		return c;
+-	}
+-	c-&gt;load(file, config);
+-	add(c);
+-	return c;
++ Control *c = getController(type, &quot;whatever&quot;, channel);
++ if (!c) {
++   tw_error(&quot;Game::create_control - bad control type (%s)&quot;, type);
++   return c;
++ }
++ c-&gt;load(file, config);
++ add(c);
++ return c;
+ }
+ 
+ void Game::log_char(int channel, char &amp;data) {
+   STACKTRACE;
+-	if (!log) return;
+-	log-&gt;log  (channel, &amp;data, 1);
+-	return;
++  if (!log) return;
++  log-&gt;log  (channel, &amp;data, 1);
++  return;
+ }
+ 
+ void Game::log_short(int channel, short &amp;data) {
+   STACKTRACE;
+-	if (!log) return;
+-	data = intel_ordering_short(data);	
+-	log-&gt;log  (channel, &amp;data, sizeof(short));
+-	data = intel_ordering_short(data);
+-	return;
++  if (!log) return;
++  data = intel_ordering_short(data);	
++  log-&gt;log  (channel, &amp;data, sizeof(short));
++  data = intel_ordering_short(data);
++  return;
+ }
+ 
+ void Game::log_int(int channel, int &amp;data) {
+   STACKTRACE;
+-	if (!log) return;
+-	data = intel_ordering(data);
+-	log-&gt;log  (channel, &amp;data, sizeof(int));
+-	data = intel_ordering(data);
+-	return;
++  if (!log) return;
++  data = intel_ordering(data);
++  log-&gt;log  (channel, &amp;data, sizeof(int));
++  data = intel_ordering(data);
++  return;
+ }
+ 
+ void Game::log_data(int channel, void *data, int size) {
+   STACKTRACE;
+-	if (!log) return;
+-	log-&gt;log  (channel, data, size);
+-	return;
++  if (!log) return;
++  log-&gt;log  (channel, data, size);
++  return;
+ }
+ 
+ void Game::idle(int time) {
+   STACKTRACE;
+-	if (log-&gt;listen()) return;
+-	::idle(time);
+-	return;
++  if (log-&gt;listen()) return;
++  ::idle(time);
++  return;
+ }
+ 
+ void Game::animate(Frame *frame) 
+@@ -553,9 +554,9 @@
+       tmp = (char *)malloc(s);
+       memcpy(tmp, buffy, sizeof(GameEvent));
+     }
+-		log-&gt;unbuffer(channel_server + _channel_buffered, tmp + sizeof(GameEvent), s - sizeof(GameEvent));
+-		handle_game_event ( channel_server, ((GameEvent*)tmp));
+-		if (tmp != buffy) free(tmp);
++    log-&gt;unbuffer(channel_server + _channel_buffered, tmp + sizeof(GameEvent), s - sizeof(GameEvent));
++    handle_game_event ( channel_server, ((GameEvent*)tmp));
++    if (tmp != buffy) free(tmp);
+   }
+   
+   
+@@ -568,7 +569,7 @@
+     if (s &gt; 1024) {
+       tmp = (char *)malloc(s);
+       memcpy(tmp, buffy, sizeof(GameEvent));
+-		}
++    }
+     log-&gt;unbuffer(channel_client + _channel_buffered, tmp + sizeof(GameEvent), s - sizeof(GameEvent));
+     handle_game_event ( channel_client, ((GameEvent*)tmp));
+     if (tmp != buffy) free(tmp);
+@@ -622,32 +623,32 @@
+       num_focuses -= 1;
+       if (focus_index == i) {
+ 	focus[i]-&gt;attributes &amp;= ~ATTRIB_ACTIVE_FOCUS;
+-				active_focus_destroyed = 1;
+-				focus_index -= 1;
+-				if (num_focuses &amp;&amp; (focus_index &lt; 0))
+-					focus_index += 1;
+-			}
+-			focus[i] = focus[num_focuses];
+-			i -= 1;
+-		}
+-	}
++	active_focus_destroyed = 1;
++	focus_index -= 1;
++	if (num_focuses &amp;&amp; (focus_index &lt; 0))
++	  focus_index += 1;
++      }
++      focus[i] = focus[num_focuses];
++      i -= 1;
++    }
++  }
+ 
+ 
+-	if (active_focus_destroyed &amp;&amp; (focus_index &gt;= 0))
+-		focus[focus_index]-&gt;attributes |= ATTRIB_ACTIVE_FOCUS;
++  if (active_focus_destroyed &amp;&amp; (focus_index &gt;= 0))
++    focus[focus_index]-&gt;attributes |= ATTRIB_ACTIVE_FOCUS;
+ 
+ 
+ 
+-	Physics::calculate();
++  Physics::calculate();
+ 
+-	gametargets.calculate();
++  gametargets.calculate();
+ 
+-	view-&gt;calculate(this);
++  view-&gt;calculate(this);
+ 
+ 
+-	t = get_time() - t - paused_time;
+-	tic_history-&gt;add_element(pow(t, HIST_POWER));
+-	return;
++  t = get_time() - t - paused_time;
++  tic_history-&gt;add_element(pow(t, HIST_POWER));
++  return;
+ }
+ 
+ void Game::play() 
+@@ -702,7 +703,7 @@
+     handle_game_error(this);
+     if (i != 0) {
+       caught_error (&quot;%s %s caught int %d&quot;, __FILE__, __LINE__, i);
+-		}
++    }
+     if (__error_flag &amp; 1) throw;
+   }
+   catch (const char *str) {
+@@ -753,70 +754,68 @@
+ void Game::object_died(SpaceObject *who, SpaceLocation *source)
+ {
+   STACKTRACE;
+-	if (who &amp;&amp; who-&gt;isShip())
+-	{
+-		ship_died((Ship*)who, source);
+-	}
++  if (who &amp;&amp; who-&gt;isShip())
++    {
++      ship_died((Ship*)who, source);
++    }
+ }
+ 
+ void Game::fps() {
+   STACKTRACE;
+-	if ((!log-&gt;playback) &amp;&amp; ((log-&gt;type == Log::log_net1server) || (log-&gt;type == Log::log_net1client))) {
+-		int ping = ((NetLog*)log)-&gt;ping;
+-		char *tt = &quot;good&quot;;
+-		if (ping &gt; 100) tt = &quot;okay&quot;;
+-		if (ping &gt; 200) tt = &quot;bad&quot;;
+-		if (ping &gt; 400) tt = &quot;BAD!&quot;;
+-		if (ping &gt; 800) tt = &quot;VERY BAD!&quot;;
+-		message.print((int)msecs_per_fps, 12, &quot;ping: %dms (that's %s)&quot;, ping, tt);
+-	}
++  if ((!log-&gt;playback) &amp;&amp; ((log-&gt;type == Log::log_net1server) || (log-&gt;type == Log::log_net1client))) {
++    int ping = ((NetLog*)log)-&gt;ping;
++    char *tt = &quot;good&quot;;
++    if (ping &gt; 100) tt = &quot;okay&quot;;
++    if (ping &gt; 200) tt = &quot;bad&quot;;
++    if (ping &gt; 400) tt = &quot;BAD!&quot;;
++    if (ping &gt; 800) tt = &quot;VERY BAD!&quot;;
++    message.print((int)msecs_per_fps, 12, &quot;ping: %dms (that's %s)&quot;, ping, tt);
++  }
+ 
+-	if (this-&gt;show_fps) {
+-/*			double a = 1.0;
++  if (this-&gt;show_fps) {
++    /*			double a = 1.0;
+ 			double b = 1.0;
+-//			double *c = (double *)(((int)&amp;a - (int)&amp;b) &amp; 0x80000000);
+-//			message.print(1000, 15, &quot;inf = %f&quot;, a + *c);
+-				{
+-				SpaceLocation *frog = getFirstItem(LAYER_CBODIES);
+-//				const type_info *d = &amp;typeid(*frog);
+-				message.print(msecs_per_fps, 15, &quot;%s %d %d %d&quot;, 
+-						d-&gt;name(), sizeof(*frog), sizeof(Asteroid),
+-						0);
+-				}*/
+-		double tt = pow(tic_history-&gt;get_average(0, 1000/frame_time), 1/HIST_POWER);
+-		double rt = pow(render_history-&gt;get_average(0, 1000/frame_time), 1/HIST_POWER);
+-		char *tmp;
++			//			double *c = (double *)(((int)&amp;a - (int)&amp;b) &amp; 0x80000000);
++			//			message.print(1000, 15, &quot;inf = %f&quot;, a + *c);
++			{
++			SpaceLocation *frog = getFirstItem(LAYER_CBODIES);
++			//				const type_info *d = &amp;typeid(*frog);
++			message.print(msecs_per_fps, 15, &quot;%s %d %d %d&quot;, 
++			d-&gt;name(), sizeof(*frog), sizeof(Asteroid),
++			0);
++			}*/
++    double tt = pow(tic_history-&gt;get_average(0, 1000/frame_time), 1/HIST_POWER);
++    double rt = pow(render_history-&gt;get_average(0, 1000/frame_time), 1/HIST_POWER);
++    char *tmp;
+ 
+-		if (tt*8 &lt; frame_time)
+-			tmp = &quot;good&quot;;
+-		else if (tt*2 &lt; frame_time)
+-			tmp = &quot;ok&quot;;
+-		else if (tt &lt; frame_time)
+-			tmp = &quot;bad&quot;;
+-		else
+-			tmp = &quot;BAD!&quot;;
+-		message.print((int)msecs_per_fps, 12, &quot;tic time: %.3fms (that's %s)&quot;, tt, tmp);
++    if (tt*8 &lt; frame_time)
++      tmp = &quot;good&quot;;
++    else if (tt*2 &lt; frame_time)
++      tmp = &quot;ok&quot;;
++    else if (tt &lt; frame_time)
++      tmp = &quot;bad&quot;;
++    else
++      tmp = &quot;BAD!&quot;;
++    message.print((int)msecs_per_fps, 12, &quot;tic time: %.3fms (that's %s)&quot;, tt, tmp);
+ 
+-		if (rt &lt; 2)
+-			tmp = &quot;good&quot;;
+-		else if (rt &lt; 20)
+-			tmp = &quot;ok&quot;;
+-		else if (rt &lt; 50)
+-			tmp = &quot;bad&quot;;
+-		else
+-			tmp = &quot;BAD!&quot;;
+-		message.print((int)msecs_per_fps, 12, &quot;render time: %.3fms (that's %s)&quot;, rt, tmp);
+-		message.print((int)msecs_per_fps, 12, &quot;debug: %d&quot;, debug_value);
+-	}
++    if (rt &lt; 2)
++      tmp = &quot;good&quot;;
++    else if (rt &lt; 20)
++      tmp = &quot;ok&quot;;
++    else if (rt &lt; 50)
++      tmp = &quot;bad&quot;;
++    else
++      tmp = &quot;BAD!&quot;;
++    message.print((int)msecs_per_fps, 12, &quot;render time: %.3fms (that's %s)&quot;, rt, tmp);
++    message.print((int)msecs_per_fps, 12, &quot;debug: %d&quot;, debug_value);
++  }
+ }
+ 
+ void Game::preinit() 
+ {
+   STACKTRACE;
+   Physics::preinit();
+-  //	meleedata.planetSprite = meleedata.asteroidSprite = meleedata.asteroidExplosionSprite = meleedata.hotspotSprite = meleedata.kaboomSprite = meleedata.panelSprite = meleedata.sparkSprite = meleedata.xpl1Sprite = NULL;
+-  // you should reset it here (again), cause there can be subgames of this type.
+-  //	planet_victory = NULL;
++
+   log = NULL;
+   tic_history = render_history = NULL;
+   
+@@ -827,8 +826,6 @@
+   num_focuses = 0;
+   focus_index = 0;
+   focus = NULL;
+-  //	num_targets = 0;
+-  //	target = NULL;
+   gametargets.reset();
+   view = NULL;
+   window = NULL;
+@@ -884,7 +881,7 @@
+       break;
+     case Log::log_net1client: {
+     }
+-			break;
++      break;
+     default: {
+       tw_error(&quot;Knee!&quot;);
+     }
+@@ -896,9 +893,9 @@
+      
+   offset	size	format		data
+   0		4		int			log type number
+-4		4		int			size of game type name
+-8		?		char[]		game type name
+-?		4		int			lag frames
++  4		4		int			size of game type name
++  8		?		char[]		game type name
++  ?		4		int			lag frames
+ 
+   */
+   int tmp = log-&gt;type;
+@@ -906,155 +903,159 @@
+   if (log-&gt;playback) log-&gt;type = tmp;
+ 
+   char buffy[128];
+-	i = strlen(type-&gt;name);
+-	memcpy(buffy, type-&gt;name, i);
+-	if (i &gt; 127) {tw_error(&quot;long gamename1&quot;);}
+-	log_int (channel_init, i);
+-	if (i &gt; 127) {tw_error(&quot;long gamename2&quot;);}
+-	log_data(channel_init, buffy, i);
+-	buffy[i] = 0;
+-	if (strcmp(buffy, type-&gt;name)) {tw_error(&quot;wrong game type&quot;);}
++  i = strlen(type-&gt;name);
++  memcpy(buffy, type-&gt;name, i);
++  if (i &gt; 127) {tw_error(&quot;long gamename1&quot;);}
++  log_int (channel_init, i);
++  if (i &gt; 127) {tw_error(&quot;long gamename2&quot;);}
++  log_data(channel_init, buffy, i);
++  buffy[i] = 0;
++  if (strcmp(buffy, type-&gt;name)) {tw_error(&quot;wrong game type&quot;);}
+ 
+-	i = rand();
+-//	i = 9223;
+-	log_int(channel_server, i);
+-	random_seed[0] = i;
+-	rng.seed(i);
+-	i = rand();
+-//	i = 7386;
+-	log_int(channel_server, i);
+-	random_seed[1] = i;
+-	rng.seed_more(i);
++  i = rand();
++  //	i = 9223;
++  log_int(channel_server, i);
++  random_seed[0] = i;
++  rng.seed(i);
++  i = rand();
++  //	i = 7386;
++  log_int(channel_server, i);
++  random_seed[1] = i;
++  rng.seed_more(i);
+ 
+-	if (!is_paused()) pause();
++  if (!is_paused()) pause();
+ 
+-	text_mode(-1);
++  text_mode(-1);
+ 
+-	tw_set_config_file(&quot;client.ini&quot;);
+-	msecs_per_fps = get_config_int(&quot;View&quot;, &quot;FPS_Time&quot;, 200);
+-	msecs_per_render = (int)(1000. / get_config_float(&quot;View&quot;, &quot;MinimumFrameRate&quot;, 10) + 0.5);
++  tw_set_config_file(&quot;client.ini&quot;);
++  msecs_per_fps = get_config_int(&quot;View&quot;, &quot;FPS_Time&quot;, 200);
++  msecs_per_render = (int)(1000. / get_config_float(&quot;View&quot;, &quot;MinimumFrameRate&quot;, 10) + 0.5);
+ 	
+-	log_file(&quot;server.ini&quot;);
+-	camera_hides_cloakers = get_config_int(&quot;View&quot;, &quot;CameraHidesCloakers&quot;, 1);
+-	time_ratio = (int)(1000. / get_config_float (&quot;Game&quot;, &quot;SC2FrameRate&quot;, 20));
+-	distance_ratio = (3840. / get_config_float (&quot;Game&quot;, &quot;SC2TotalDistance&quot;, 8000));
+-	frame_time = (int)(1000. / get_config_float (&quot;Game&quot;, &quot;TicRate&quot;, 40) + 0.5);
+-	normal_turbo = get_config_float(&quot;Game&quot;, &quot;Turbo&quot;, 1.0);
+-	f4_turbo = get_config_float(&quot;Game&quot;, &quot;F4Turbo&quot;, 10.0);	
+-	turbo = normal_turbo;
+-	friendly_fire = get_config_int(&quot;Game&quot;, &quot;FriendlyFire&quot;, 0) == 0 ? 0 : 1; //MSVC sucks also
+-	shot_relativity = get_config_float(&quot;Game&quot;, &quot;ShotRelativity&quot;, 0);
+-	size = Vector2 (
+-		get_config_float(&quot;Game&quot;, &quot;MapWidth&quot;, 0),
+-		get_config_float(&quot;Game&quot;, &quot;MapHeight&quot;, 0)
+-	);
++  log_file(&quot;server.ini&quot;);
++  camera_hides_cloakers = get_config_int(&quot;View&quot;, &quot;CameraHidesCloakers&quot;, 1);
++  time_ratio = (int)(1000. / get_config_float (&quot;Game&quot;, &quot;SC2FrameRate&quot;, 20));
++  distance_ratio = (3840. / get_config_float (&quot;Game&quot;, &quot;SC2TotalDistance&quot;, 8000));
++  frame_time = (int)(1000. / get_config_float (&quot;Game&quot;, &quot;TicRate&quot;, 40) + 0.5);
++  normal_turbo = get_config_float(&quot;Game&quot;, &quot;Turbo&quot;, 1.0);
++  f4_turbo = get_config_float(&quot;Game&quot;, &quot;F4Turbo&quot;, 10.0);	
++  turbo = normal_turbo;
++  friendly_fire = get_config_int(&quot;Game&quot;, &quot;FriendlyFire&quot;, 0) == 0 ? 0 : 1; //MSVC sucks also
++  shot_relativity = get_config_float(&quot;Game&quot;, &quot;ShotRelativity&quot;, 0);
++  size = Vector2 (
++		  get_config_float(&quot;Game&quot;, &quot;MapWidth&quot;, 0),
++		  get_config_float(&quot;Game&quot;, &quot;MapHeight&quot;, 0)
++		  );
+ 
+-	init_lag();
+-	log_int(channel_server, lag_frames);
+-	log_int(channel_init, lag_frames);
++  init_lag();
++  log_int(channel_server, lag_frames);
++  log_int(channel_init, lag_frames);
+ 
+-	tic_history = new Histograph(128);
+-	render_history = new Histograph(128);
++  tic_history = new Histograph(128);
++  render_history = new Histograph(128);
+ 
+-	prepare();
++  prepare();
+ 
+-	return;
++  return;
+ }
+ 
+-void Game::init_lag() {
++void Game::init_lag() 
++{
+   STACKTRACE;
+-	if ((log-&gt;type == Log::log_net1server) || (log-&gt;type == Log::log_net1client)) {
+-		int lag_time = 0;//get_config_int(&quot;Network&quot;, &quot;Lag&quot;, 200);
+-		char blah = 0;
+-		log_char(channel_server, blah);
+-		log-&gt;flush();
+-		log_char(channel_client, blah);
+-		log-&gt;flush();
+-		log_char(channel_server, blah);
+-		log-&gt;flush();
+-		log_char(channel_client, blah);
+-		log-&gt;flush();
+-		log_char(channel_server, blah);
+-		log-&gt;flush();
+-		lag_time = ((NetLog*)log)-&gt;ping;
+-		log_int(channel_server, lag_time);
+-		int lag_frames = (int) (1.5 + lag_time * normal_turbo / (double) frame_time );
++  if ((log-&gt;type == Log::log_net1server) || (log-&gt;type == Log::log_net1client)) 
++    {
++      int lag_time = 0;//get_config_int(&quot;Network&quot;, &quot;Lag&quot;, 200);
++      char blah = 0;
++      log_char(channel_server, blah);
++      log-&gt;flush();
++      log_char(channel_client, blah);
++      log-&gt;flush();
++      log_char(channel_server, blah);
++      log-&gt;flush();
++      log_char(channel_client, blah);
++      log-&gt;flush();
++      log_char(channel_server, blah);
++      log-&gt;flush();
++      lag_time = ((NetLog*)log)-&gt;ping;
++      log_int(channel_server, lag_time);
++      int lag_frames = (int) (1.5 + lag_time * normal_turbo / (double) frame_time );
+ #		ifdef _DEBUG
+-//			lag_frames += 5;
++    //			lag_frames += 5;
+ #		endif
+-//			lag_frames += 5;
+-		message.print(15000, 15, &quot;target ping set to: %d ms (pessimistically: %d ms)&quot;, lag_time, iround(lag_frames * frame_time / normal_turbo));
+-		for (int i = 0; i &lt; lag_frames; i += 1)
+-			increase_latency();
+-	}
+-	else {
+-		int lag_frames = 0;//10;//0;
+-		for (int i = 0; i &lt; lag_frames; i += 1)
+-			increase_latency();//*/
+-	}
++    //			lag_frames += 5;
++      message.print(15000, 15, &quot;target ping set to: %d ms (pessimistically: %d ms)&quot;, lag_time, iround(lag_frames * frame_time / normal_turbo));
++      for (int i = 0; i &lt; lag_frames; i += 1)
++	increase_latency();
++    }
++  else 
++    {
++      int lag_frames = 0;//10;//0;
++      for (int i = 0; i &lt; lag_frames; i += 1)
++	increase_latency();//*/
++    }
+ }
+ 
+ void Game::change_view(View *new_view) {
+   STACKTRACE;//this function looks wrong to me
+-	View *v = new_view;
+-	v-&gt;preinit();
+-	v-&gt;init(view);
+-	if (view)
+-		v-&gt;replace(view);
+-	else {
+-		v-&gt;window-&gt;init(window);
+-		v-&gt;window-&gt;locate(
+-			0, 0,
+-			0, 0,
+-			0, 1,
+-			0, 1
+-			);
+-	}
+-	view = v;
+-	return;
++  View *v = new_view;
++  v-&gt;preinit();
++  v-&gt;init(view);
++  if (view)
++    v-&gt;replace(view);
++  else {
++    v-&gt;window-&gt;init(window);
++    v-&gt;window-&gt;locate(
++		      0, 0,
++		      0, 0,
++		      0, 1,
++		      0, 1
++		      );
++  }
++  view = v;
++  return;
+ }
+ 
+-void Game::change_view(const char * name) {
++void Game::change_view(const char * name) 
++{
+   STACKTRACE;
+-	View *v = get_view(name, view);
+-	if (!v)	{tw_error(&quot;Game::change_view - invalid view name&quot;);}
+-	if (view)
+-		v-&gt;replace(view);
+-	else 
+-	{
+-		v-&gt;window-&gt;init(window);
+-		v-&gt;window-&gt;locate(
++  View *v = get_view(name, view);
++  if (!v)	{tw_error(&quot;Game::change_view - invalid view name&quot;);}
++  if (view)
++    v-&gt;replace(view);
++  else 
++    {
++      v-&gt;window-&gt;init(window);
++      v-&gt;window-&gt;locate(
+ 			0, 0,
+ 			0, 0,
+ 			0, 1,
+ 			0, 1
+ 			);
+-	}
+-	view = v;
+-	return;
++    }
++  view = v;
++  return;
+ }
+ 
+ Game::~Game() {STACKTRACE
+-	message.out(&quot;deleteing GameEvents&quot;);
+-	int i;
+-	for (i = 0; i &lt; events_waiting; i += 1) free(waiting_events[i]);
+-	delete[] waiting_events;
++		 message.out(&quot;deleteing GameEvents&quot;);
++ int i;
++ for (i = 0; i &lt; events_waiting; i += 1) free(waiting_events[i]);
++ delete[] waiting_events;
+ 
+-	message.out(&quot;deleteing histographs&quot;);
+-	delete tic_history; tic_history = NULL;
+-	delete render_history; render_history = NULL;
++ message.out(&quot;deleteing histographs&quot;);
++ delete tic_history; tic_history = NULL;
++ delete render_history; render_history = NULL;
+ 
+-	tw_sound-&gt;play_music(std::string(&quot;&quot;));
++ tw_sound-&gt;play_music(std::string(&quot;&quot;));
+ 
+-	message.out(&quot;deleteing game objects&quot;);
+-	destroy_all();
++ message.out(&quot;deleteing game objects&quot;);
++ destroy_all();
+ 
+-	message.out(&quot;other shit&quot;);
+-	message.flush();
++ message.out(&quot;other shit&quot;);
++ message.flush();
+ 
+-	delete view;
+-	window-&gt;remove_callback(this);
+-	delete window;
++ delete view;
++ window-&gt;remove_callback(this);
++ delete window;
+ }
+ 
+ bool Game::is_paused() 
+@@ -1195,6 +1196,7 @@
+ 	  {
+ 	    game-&gt;change_view(&quot;Hero&quot;);
+ 	    message.print(2500, 15, &quot;View mode changed to 'Hero'&quot;);
++	    message.print(3000, 15, &quot;Use '+'/'-' for zoom in/out&quot;);
+ 	    return true;
+ 	  }
+ 	return true;
+@@ -1227,9 +1229,9 @@
+ 
+ int Game::set_frame_time(int t) {
+   STACKTRACE;
+-	this-&gt;frame_time = t;
+-	prepare();
+-	return 1;
++  this-&gt;frame_time = t;
++  prepare();
++  return 1;
+ }
+ 
+ int Game::set_turbo(double t) 
+@@ -1260,12 +1262,12 @@
+ }
+ 
+ bool Game::isGameDone() { 
+-    return game_done;
++  return game_done;
+ }
+ 
+ void Game::setGameDone(const bool done)
+ { 
+-    game_done = done; 
++  game_done = done; 
+ }
+ 
+ 
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-02-13 22:25:09 UTC (rev 115)
++++ trunk/source/melee/mgame.h	2005-02-14 23:07:04 UTC (rev 116)
+@@ -1,17 +1,17 @@
+ /*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
+ 
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
+ 
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
+ */
+ 
+ 
+@@ -73,28 +73,28 @@
+   
+   enum 
+     {
+-      channel_none = -1,    /**&lt; not a valid channel */
+-      channel_init = 4,     /**&lt; game type, version, length, etc.. things that need to read by a reader independant of a particular game type */
+-      channel_playback = 8, /**&lt;  used for demo playbacks only */
+-      channel_server  = 12, /**&lt; data originating on the server */
+-      channel_client  = 16, /**&lt; data originating on the client */
++      channel_none = -1,    ///&lt; not a valid channel 
++      channel_init = 4,     ///&lt; game type, version, length, etc.. things that need to read by a reader independant of a particular game type
++      channel_playback = 8, ///&lt;  used for demo playbacks only 
++      channel_server  = 12, ///&lt; data originating on the server 
++      channel_client  = 16, ///&lt; data originating on the client 
+       _channel_buffered = 1
+     };
+   
+-  Log *log; /**&lt; logging system for networking, demo recording/playback, etc. */
+-  void log_char (int channel, char &amp;data); /**&lt; helper for using the logging system */
+-  void log_char (int channel, unsigned char &amp;data) 
++  Log *log; ///&lt; logging system for networking, demo recording/playback, etc.
++  void log_char (int channel, char &amp;data); ///&lt; helper for using the logging system 
++  void log_char (int channel, unsigned char &amp;data) ///&lt; helper for using the logging system 
+     {
+       log_char (channel,*(char*)&amp;data);
+     }
+-  void log_short(int channel, short &amp;data);    /**&lt; helper for using the logging system */
++  void log_short(int channel, short &amp;data);    ///&lt; helper for using the logging system 
+   void log_short(int channel, unsigned short &amp;data) 
+     {
+       log_short (channel,*(short*)&amp;data);
+     }
+-  void log_int  (int channel, int &amp;data);      /**&lt; helper for using the logging system */
++  void log_int  (int channel, int &amp;data);      ///&lt; helper for using the logging system 
+   void log_int  (int channel, unsigned int &amp;data) {log_int (channel,*(int*)&amp;data);}
+-  void log_data (int channel, void *data, int length); /**&lt; helper for using the logging system */
++  void log_data (int channel, void *data, int length); ///&lt; helper for using the logging system 
+   virtual void log_file (const char *fname);
+   void log_fleet(int channel, class Fleet *fleet);
+   int is_local ( int channel ) ;
+@@ -132,9 +132,10 @@
+   View *view;
+   VideoWindow *window;
+   
+-  virtual void prepare();   //called before doing anything with game objects contained within you.  
+-  //This is particularly necessary if you are working with multiple Games simultaneously
+-  
++  /// called before doing anything with game objects contained within you.  
++  /// This is particularly necessary if you are working with multiple Games simultaneously
++  virtual void prepare();   
++
+   virtual void calculate();
+   virtual void play();
+   virtual void animate(Frame *frame); // stupid C++
+@@ -152,7 +153,7 @@
+   virtual void set_resolution (int screen_x, int screen_y);
+   virtual void redraw();
+ 
+-protected:  
++ protected:  
+   bool game_done;
+   /// Show ingame menu (save/load/option/quit/exit)
+   virtual void GameMenu();
+@@ -160,7 +161,7 @@
+   virtual std::string Save();
+   virtual int Load(std::string xml);
+ 
+-public:
++ public:
+   /// sets whether the game is done, according to the rules for the
+   /// gametype.
+   virtual void setGameDone(const bool done);
+@@ -187,7 +188,6 @@
+   Targets gametargets;
+   
+   
+-  
+   virtual Control *create_control (int channel, const char *type, char *config = &quot;Config0&quot;, char *file = &quot;scp.ini&quot;) ;
+   virtual Ship    *create_ship (const char *id, Control *c, Vector2 pos, double angle, int team=0);
+   virtual Ship    *create_ship (int channel, const char *id, const char *control, Vector2 pos, double angle, int team=0);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000061.html">[Tw-light-svn] r115 - trunk
+</A></li>
+	<LI>Next message: <A HREF="000063.html">[Tw-light-svn] r117 - trunk/source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#62">[ date ]</a>
+              <a href="thread.html#62">[ thread ]</a>
+              <a href="subject.html#62">[ subject ]</a>
+              <a href="author.html#62">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

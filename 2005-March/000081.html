@@ -1,0 +1,775 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r135 - in trunk: . gamedata/xml/GOB source source/games source/melee source/other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-March/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r135%20-%20in%20trunk%3A%20.%20gamedata/xml/GOB%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200503081445.j28EjVOo012582%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000080.html">
+   <LINK REL="Next"  HREF="000082.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r135 - in trunk: . gamedata/xml/GOB source source/games source/melee source/other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r135%20-%20in%20trunk%3A%20.%20gamedata/xml/GOB%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200503081445.j28EjVOo012582%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r135 - in trunk: . gamedata/xml/GOB source source/games source/melee source/other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Tue Mar  8 15:45:31 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000080.html">[Tw-light-svn] r134 - trunk/source/games
+</A></li>
+        <LI>Next message: <A HREF="000082.html">[Tw-light-svn] r136 - in trunk: . gamedata gamedata/python mingw-libs/include mingw-libs/lib source source/games source/generated source/melee source/other source/python source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#81">[ date ]</a>
+              <a href="thread.html#81">[ thread ]</a>
+              <a href="subject.html#81">[ subject ]</a>
+              <a href="author.html#81">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-03-08 15:45:30 +0100 (Tue, 08 Mar 2005)
+New Revision: 135
+
+Added:
+   trunk/source/other/starmap.cpp
+   trunk/source/other/starmap.h
+Modified:
+   trunk/gamedata/xml/GOB/start.xml
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee.h
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/msprite.cpp
+   trunk/source/melee/mview.h
+   trunk/source/other/configrw.cpp
+   trunk/source/other/orbit.cpp
+   trunk/sources.lst
+Log:
+Added simple starmap to GOB,
+implementation is awfull but work.
+
+
+Modified: trunk/gamedata/xml/GOB/start.xml
+===================================================================
+--- trunk/gamedata/xml/GOB/start.xml	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/gamedata/xml/GOB/start.xml	2005-03-08 14:45:30 UTC (rev 135)
+@@ -1,5 +1,5 @@
+ &lt;GOB&gt;
+-  &lt;System name=&quot;Arix&quot; x=&quot;24000&quot; y=&quot;24000&quot;&gt;
++  &lt;System name=&quot;Arix&quot; x=&quot;50&quot; y=&quot;50&quot;&gt;
+       &lt;SpaceObjects&gt;
+ 	&lt;Planet_with_station
+ 	    planet_index=&quot;0&quot;
+@@ -52,7 +52,7 @@
+ 	&lt;GobAsteroid/&gt;
+       &lt;/SpaceObjects&gt;
+   &lt;/System&gt;
+-  &lt;System name=&quot;Beta&quot; x=&quot;24000&quot; y=&quot;24000&quot;&gt;
++  &lt;System name=&quot;Beta&quot; x=&quot;100&quot; y=&quot;100&quot;&gt;
+       &lt;SpaceObjects&gt;
+ 	&lt;Planet_with_station
+ 	    planet_index=&quot;0&quot;
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/games/ggob.cpp	2005-03-08 14:45:30 UTC (rev 135)
+@@ -106,25 +106,50 @@
+ }
+ 
+ 
++struct findStar : public std::binary_function&lt;StarSystem*, std::string, bool&gt;
++{
++  bool operator ()(StarSystem* s, std::string name) const
++  {
++    if (s-&gt;getName() == name)
++      return true;
++    return false;
++  }
++};
++
+ void GobGame::switch_system(const std::string&amp; name)
+ {
++  if(name == _name)
++    return;
++
+   // remove ship from current system
+   item.remove(gobplayer.ship);
+-
+-  // Save current game
+-  _galaxy[_name] = item;
+   
+-  // Load 
+-  if(_galaxy.find(name)!=_galaxy.end())
++  std::list&lt;StarSystem*&gt;::iterator sNew = std::find_if(_galaxy._stars.begin(), 
++						 _galaxy._stars.end(), 
++						 std::bind2nd(findStar(), name));
++  if(sNew==_galaxy._stars.end())
+     {
+-      item = _galaxy[name];
++      tw_error(&quot;Star not found&quot;);
+     }
+-  else
++
++  std::list&lt;StarSystem*&gt;::iterator sOld = std::find_if(_galaxy._stars.begin(), 
++						 _galaxy._stars.end(), 
++						 std::bind2nd(findStar(), _name));
++  if(sOld==_galaxy._stars.end())
+     {
+-      item.clear();
++      tw_error(&quot;Star not found&quot;);
+     }
++
++  // Save current star items  
++  (*sOld)-&gt;_item = item;
++
++  // Load new items
++  item = (*sNew)-&gt;_item;
+   
++  // set new name
+   _name = name;
++  _galaxy._playerStar = *sNew;
++
+   // add player ship
+   item.remove(gobplayer.ship);
+   if(gobplayer.ship)
+@@ -219,18 +244,23 @@
+   enemy_team = new_team();
+ 	       
+ 
+-
+   int server_players;
+   tw_set_config_file(&quot;client.ini&quot;);
+   server_players = 1;
+   log_int(channel_server, server_players);
+   _player_control = create_control(channel_server, &quot;Human&quot;, &quot;Config0&quot;);
+ 
++  StarSystem* s = new StarSystem(&quot;FakeSystem_123&quot;, Vector2(0,0));
++  _name = &quot;FakeSystem_123&quot;;
++  _galaxy.add(s);
+   if(Load(data_full_path(&quot;xml/GOB/start.xml&quot;)) == 1)
+     {
+       tw_error(&quot;unable to locate start.xml&quot;);
+     };  
+-
++  
++  _galaxy._stars.remove(s);
++  delete s;
++  
+   add ( new RainbowRift() );
+   
+   next_add_new_enemy_time = 1000;
+@@ -412,24 +442,16 @@
+ 	  {
+ 	    switch_system(&quot;Arix&quot;);
+ 	  }
+-	/*
+-	setGameDone(GAME_STATE_SUSPENDED);
+-	maingame-&gt;gobplayer._teleport = 1;
+-	maingame-&gt;gobplayer.ship-&gt;die();
+-	if(_name==&quot;Arix&quot;)
+-	  {
+-	    maingame-&gt;setActiveGame(&quot;Beta&quot;);
+-	  }
+-	else
+-	  {
+-	    maingame-&gt;setActiveGame(&quot;Arix&quot;);
+-	  }
+-	*/
+ 	return true;
+       }
+       break;
+-    //don't use hardwired normal keys
+-            
++    case KEY_M:
++      {
++	switch_system(_galaxy.select());
++	videosystem-&gt;window.redraw();
++	return true;
++      }
++      break;
+     default: 
+       {
+ 	return GobGameBase::handle_key(k);
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/games/ggob.h	2005-03-08 14:45:30 UTC (rev 135)
+@@ -24,8 +24,8 @@
+ #include &quot;melee/mcbodies.h&quot;
+ 
+ #include &quot;gamehierarchy.h&quot;
++#include &quot;other/starmap.h&quot;
+ 
+-
+ class Upgrade;
+ class GobStation;
+ 
+@@ -83,27 +83,15 @@
+ 
+ /////////////////////////////////////////////////////////////////////////////////
+ 
+-/*
+-class MainGobGame : public MainGame
+-{
+- public:
+-  virtual void 	init (Log *log, const std::string&amp; save);
+-  void add_gobplayer(const std::string&amp; system, Vector2 pos);
+- protected:
+-};
+-*/
+-
+-//typedef SubGame&lt;MainGame&gt; GobGameBase;
+-//typedef SubGame&lt;MainGobGame&gt; GobGameBase;
+ typedef Game GobGameBase;
+ 
+ /// GOB class adventure game
+ class GobGame : public  GobGameBase
+ {
++  //  std::map&lt;std::string, std::list&lt;SpaceLocation*&gt; &gt; _galaxy;
+ 
+-  std::map&lt;std::string, std::list&lt;SpaceLocation*&gt; &gt; _galaxy;
+-
+  public:
++  StarMap _galaxy;
+   GobPlayer gobplayer;
+ 
+   /// move player to system
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/melee/mframe.h	2005-03-08 14:45:30 UTC (rev 135)
+@@ -20,6 +20,9 @@
+ #include &lt;list&gt;
+ #include &lt;vector&gt;
+ 
++#include &quot;melee.h&quot;
++#include &quot;util/vector2.h&quot;
++
+ //debuging purposes only:
+ extern int total_presences;
+ 
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/melee/mgame.cpp	2005-03-08 14:45:30 UTC (rev 135)
+@@ -79,6 +79,13 @@
+   xpl1Sprite = new SpaceSprite(&amp;melee[MELEE_XPL1], XPL1_FRAMES,
+ 			       SpaceSprite::ALPHA | SpaceSprite::MASKED | 
+ 			       SpaceSprite::MIPMAPED);
++
++  _star = new SpaceSprite(&amp;melee[MELEE_STAR], 1, 
++			  SpaceSprite::ALPHA | 
++			  SpaceSprite::MASKED | 
++			  SpaceSprite::IRREGULAR | 
++			  SpaceSprite::MIPMAPED
++			  );
+   unload_datafile(melee);
+ }
+ 
+@@ -117,6 +124,10 @@
+     {
+       delete xpl1Sprite;
+     }
++  if(_star)
++    {
++      delete _star;
++    }
+ }
+ 
+ 
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/melee/mgame.h	2005-03-08 14:45:30 UTC (rev 135)
+@@ -60,7 +60,7 @@
+   SpaceSprite *kaboomSprite;
+   SpaceSprite *panelSprite;
+   SpaceSprite *xpl1Sprite;
+-  
++  SpaceSprite *_star;
+ };
+ 
+ enum GameStateCode
+
+Modified: trunk/source/melee/msprite.cpp
+===================================================================
+--- trunk/source/melee/msprite.cpp	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/melee/msprite.cpp	2005-03-08 14:45:30 UTC (rev 135)
+@@ -1045,10 +1045,21 @@
+ void SpaceSprite::draw(int x, int y, int index, BITMAP *surface) 
+ {
+   STACKTRACE;
+-  draw(Vector2(x,y), Vector2(b[0][index]-&gt;w, b[0][index]-&gt;h), index, surface);
++  draw(Vector2(x,y), index, surface);
+   return;
+ }
+ 
++void SpaceSprite::draw(Vector2 pos, int index, BITMAP *surface)
++{
++  draw(pos, Vector2(b[0][index]-&gt;w, b[0][index]-&gt;h), index, surface);
++}
++
++void SpaceSprite::draw_centre(Vector2 pos, int index, BITMAP *surface)
++{
++  Vector2 correction = Vector2(b[0][index]-&gt;w/2, b[0][index]-&gt;h/2);
++  draw(pos - correction, index, surface);
++}
++
+ void SpaceSprite::animate(Vector2 pos, int index, Frame *space, double scale) 
+ {
+   STACKTRACE;
+
+Modified: trunk/source/melee/mview.h
+===================================================================
+--- trunk/source/melee/mview.h	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/melee/mview.h	2005-03-08 14:45:30 UTC (rev 135)
+@@ -84,6 +84,7 @@
+ View *get_view( const char *name, View *match ) ;
+ int get_view_num ( const char * name );
+ 
++/// Visible area
+ class View : public BaseClass {
+ 	public:
+ 	ViewType *type;
+
+Modified: trunk/source/melee.h
+===================================================================
+--- trunk/source/melee.h	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/melee.h	2005-03-08 14:45:30 UTC (rev 135)
+@@ -430,6 +430,7 @@
+ void animate_bmp(BITMAP *bmp, Vector2 pos, Frame *space);
+ 
+ 
++/// Sprite 
+ class SpaceSprite 
+ {
+  public:
+@@ -466,7 +467,7 @@
+     
+     NONE = 0
+   };
+-  //sprite_count * rotation new images based upon sprite_count RLE_SPRITES, with gamma correction
++  ///sprite_count * rotation new images based upon sprite_count RLE_SPRITES, with gamma correction
+   SpaceSprite(const DATAFILE *sprites, int sprite_count, int attributes = -1, int rotations = 1);
+   SpaceSprite(BITMAP *image, int _attributes = -1);
+   SpaceSprite(SpaceSprite &amp;old);
+@@ -487,10 +488,18 @@
+   
+   void overlay ( int index1, int index2, Surface *dest);
+ 
++  /// Draw sprite to frame
+   void draw(Vector2 pos, Vector2 size, int index, Frame *frame) ;
++  /// Draw sprite to screen
+   void draw(Vector2 pos, Vector2 size, int index, Surface *bmp) ;
++  /// Draw sprite to screen
++  void draw(Vector2 pos, int index, BITMAP *surface);
++  /// Draw sprite to screen
+   void draw(int x, int y, int index, Surface *bmp) ;
+ 
++  /// Draw sprite to screen 
++  void draw_centre(Vector2 pos, int index, BITMAP *surface);
++  
+   // added GEO
+   virtual void animate(Vector2 pos, int index, Frame *space, double scale = 1);
+   void animate_character(Vector2 pos, int index, int color, Frame *space, double scale = 1);
+
+Modified: trunk/source/other/configrw.cpp
+===================================================================
+--- trunk/source/other/configrw.cpp	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/other/configrw.cpp	2005-03-08 14:45:30 UTC (rev 135)
+@@ -1,7 +1,6 @@
+-/* $Id: configrw.cpp,v 1.1.1.1 2004/08/01 10:21:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Modified: trunk/source/other/orbit.cpp
+===================================================================
+--- trunk/source/other/orbit.cpp	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/other/orbit.cpp	2005-03-08 14:45:30 UTC (rev 135)
+@@ -1,7 +1,6 @@
+-/* $Id: orbit.cpp,v 1.1.1.1 2004/08/01 10:21:23 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+
+Added: trunk/source/other/starmap.cpp
+===================================================================
+--- trunk/source/other/starmap.cpp	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/other/starmap.cpp	2005-03-08 14:45:30 UTC (rev 135)
+@@ -0,0 +1,237 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++#include &lt;allegro.h&gt;
++
++#include &quot;melee.h&quot;
++#include &quot;frame.h&quot;
++#include &quot;melee/mgame.h&quot;
++#include &quot;melee/mview.h&quot;
++#include &quot;starmap.h&quot;
++
++#include &lt;sstream&gt;
++
++StarSystem::StarSystem(const std::string&amp; name, Vector2 pos)
++  :
++  _pos(pos),
++  _name(name)
++{
++  STACKTRACE;
++}
++
++StarSystem::~StarSystem()
++{
++  STACKTRACE;
++}
++
++void StarSystem::add(SpaceLocation* l)
++{
++  STACKTRACE;
++  _item.remove(l);
++  _item.push_back(l);
++}
++
++std::string StarSystem::getName() const
++{
++  STACKTRACE;
++  return _name;
++}
++std::list&lt;SpaceLocation*&gt; StarSystem::getItem() const
++{
++  STACKTRACE;
++  return _item;
++}
++
++Vector2 StarSystem::pos()
++{
++  STACKTRACE;
++  return _pos;
++}
++
++StarMap::StarMap()
++{
++  STACKTRACE;
++  _selectedStar = NULL;
++  _targetStar = NULL;
++}
++
++StarMap::~StarMap()
++{
++  STACKTRACE;
++}
++
++void StarMap::add(StarSystem* s)
++{
++  STACKTRACE;
++  _stars.remove(s);
++  _stars.push_back(s);
++}
++
++void StarMap::redraw()
++{
++  STACKTRACE;
++  scare_mouse();
++
++  BITMAP* starmap = create_bitmap(game-&gt;view-&gt;frame-&gt;window-&gt;w,
++				  game-&gt;view-&gt;frame-&gt;window-&gt;h);   
++ 
++  BITMAP* starArea = create_sub_bitmap(starmap, 0, 0,  starmap-&gt;w, starmap-&gt;h-100);
++  BITMAP* textArea = create_sub_bitmap(starmap, 0, starmap-&gt;h-100, starmap-&gt;w, 100);
++
++
++  clear_to_color(starArea, makecol(256/3, 0, 0));
++
++  for(std::list&lt;StarSystem*&gt;::iterator i = _stars.begin(); i!= _stars.end(); i++)
++    {
++      Vector2 pos = (*i)-&gt;pos();
++      game-&gt;meleedata._star-&gt;draw_centre(pos, 0, starArea);
++      int color = palette_color[15];
++      if(*i == _playerStar)
++	{
++	  color = palette_color[1];
++	}
++      else if(*i == _targetStar)
++	{
++	  color = palette_color[8];
++	}
++      textout_centre(starArea, font, ((*i)-&gt;getName()).c_str(), (int)pos.x, (int)pos.y-15, color);
++    }
++  
++  // Draw path to target star
++  if(_targetStar)
++    {
++      line(starArea, 
++	   (int)_playerStar-&gt;pos().x, (int)_playerStar-&gt;pos().y, 
++	   (int)_targetStar-&gt;pos().x, (int)_targetStar-&gt;pos().y, 
++	   palette_color[15]);
++    }
++
++  // Draw help text
++  if(_targetStar)
++    {
++      std::ostringstream st;
++      st&lt;&lt;&quot;Jump to &quot;&lt;&lt;_targetStar-&gt;getName()&lt;&lt;&quot; distance: &quot;&lt;&lt; (_targetStar-&gt;pos()-_playerStar-&gt;pos()).abs();
++      st&lt;&lt;&quot; Press 'j' to jump &quot;;
++      _text = st.str();
++    }
++  else if(_selectedStar)
++    {
++      std::ostringstream st;
++      st&lt;&lt;_selectedStar-&gt;getName()&lt;&lt;&quot; distance: &quot;&lt;&lt; (_selectedStar-&gt;pos()-_playerStar-&gt;pos()).abs();
++      _text = st.str();
++    }
++  else
++    {
++      _text = &quot;&quot;;
++    }
++  textout_centre(textArea, font, _text.c_str(), textArea-&gt;w/2, textArea-&gt;h/2, -1);
++
++  blit(starmap, 
++       game-&gt;view-&gt;frame-&gt;window-&gt;surface, 
++       0, 0, 
++       game-&gt;view-&gt;frame-&gt;window-&gt;x, 
++       game-&gt;view-&gt;frame-&gt;window-&gt;y, 
++       starmap-&gt;w, starmap-&gt;h);
++
++  destroy_bitmap(textArea);
++  destroy_bitmap(starArea);
++  destroy_bitmap(starmap);
++  unscare_mouse();
++}
++
++static bool minRangeToMouseCmp(StarSystem* s1, StarSystem* s2)
++{
++  Vector2 mouse_pos(mouse_x, mouse_y);
++  if( (mouse_pos - s1-&gt;pos()).abs() &lt; (mouse_pos - s2-&gt;pos()).abs() )
++    {
++      return true;
++    }
++  return false;
++}
++
++StarSystem* StarMap::nearStar()
++{
++  Vector2 mouse_pos(mouse_x, mouse_y);
++  std::list&lt;StarSystem*&gt;::iterator i = std::min_element(_stars.begin(), _stars.end(), minRangeToMouseCmp);
++  if(i!= _stars.end())
++    {
++      if((mouse_pos - (*i)-&gt;pos()).abs()&lt;25)
++	{
++	  return *i;
++	}
++    }
++  return NULL;
++}
++
++std::string StarMap::select()
++{
++  STACKTRACE;
++  _text = &quot;&quot;;
++  _selectedStar = NULL;
++  game-&gt;pause();
++  std::string ret = game-&gt;_name;
++  show_mouse(game-&gt;view-&gt;frame-&gt;window-&gt;surface);
++  redraw();
++   while(1)
++     {
++       poll_mouse();
++       StarSystem* near = nearStar();
++       if(  _selectedStar != near)
++	 {
++	   _selectedStar = near;
++	   redraw();
++	 }
++       
++       if(_targetStar)
++	 {
++	   if (keypressed())
++	     {
++	       int k = readkey();
++	       if(k&gt;&gt;8 == KEY_J) 
++		 {
++		   ret = _targetStar-&gt;getName();
++		   _targetStar = NULL;
++		   break;
++		 }
++	       else if(k&gt;&gt;8 == KEY_ESC) 
++		 {
++		   break;
++		 }
++	     }
++	 }
++       if(mouse_b &amp; 1 &amp;&amp; _selectedStar != _playerStar)
++	 {
++	   _targetStar = _selectedStar;
++	   redraw();
++	 }
++       else
++       if (mouse_b &amp; 2)
++	 {
++	   if(_targetStar)
++	     {
++	       _targetStar = NULL;
++	       _selectedStar = NULL;
++	       _text = &quot;&quot;;
++	       redraw();
++	     }
++	 }
++     };
++  
++  show_mouse(NULL);
++  game-&gt;unpause();
++  return ret;
++}
++
+
+Added: trunk/source/other/starmap.h
+===================================================================
+--- trunk/source/other/starmap.h	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/source/other/starmap.h	2005-03-08 14:45:30 UTC (rev 135)
+@@ -0,0 +1,70 @@
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++
++#ifndef __TW_STARMAP_INCLUDES__
++#define __TW_STARMAP_INCLUDES__
++
++#include &quot;melee/mframe.h&quot;
++
++#include &lt;list&gt;
++#include &lt;string&gt;
++#include &lt;map&gt;
++
++class SpaceLocation;
++
++class StarSystem
++{  
++  /// Star coord
++  Vector2 _pos;
++  /// name
++  std::string _name;
++ public:
++  StarSystem(const std::string&amp; name, Vector2 pos);
++  virtual ~StarSystem();
++
++  /// SpaceObjects in system
++  std::list&lt;SpaceLocation*&gt; _item;
++
++  virtual void add(SpaceLocation* l);
++  std::string getName() const;
++  std::list&lt;SpaceLocation*&gt; getItem() const;
++  Vector2 pos();
++};
++
++class StarMap
++{
++
++  std::string _text;
++  StarSystem* nearStar();
++  StarSystem* _selectedStar;
++  StarSystem* _targetStar;
++ public:
++  StarMap();
++  virtual ~StarMap();
++
++  /// star where player stay
++  StarSystem* _playerStar;
++  /// StarSystem List
++  std::list&lt;StarSystem*&gt; _stars;
++
++  virtual void add(StarSystem* s);
++  virtual void redraw();
++  virtual std::string select();
++};
++
++#endif
++
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-03-07 23:23:00 UTC (rev 134)
++++ trunk/sources.lst	2005-03-08 14:45:30 UTC (rev 135)
+@@ -55,6 +55,7 @@
+ source/other/planet3d.cpp
+ source/other/radar.cpp
+ source/other/dialogs.cpp
++source/other/starmap.cpp
+ source/ships/shptauar.cpp
+ source/ships/shpbogce.cpp
+ source/ships/shpaktgu.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000080.html">[Tw-light-svn] r134 - trunk/source/games
+</A></li>
+	<LI>Next message: <A HREF="000082.html">[Tw-light-svn] r136 - in trunk: . gamedata gamedata/python mingw-libs/include mingw-libs/lib source source/games source/generated source/melee source/other source/python source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#81">[ date ]</a>
+              <a href="thread.html#81">[ thread ]</a>
+              <a href="subject.html#81">[ subject ]</a>
+              <a href="author.html#81">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

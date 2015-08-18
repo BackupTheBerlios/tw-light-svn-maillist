@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r87 - in branches/multiplayer-branch/source: games melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r87%20-%20in%20branches/multiplayer-branch/source%3A%20games%20melee&In-Reply-To=%3C200410222220.i9MMKUAY014790%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000034.html">
+   <LINK REL="Next"  HREF="000036.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r87 - in branches/multiplayer-branch/source: games melee</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r87%20-%20in%20branches/multiplayer-branch/source%3A%20games%20melee&In-Reply-To=%3C200410222220.i9MMKUAY014790%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r87 - in branches/multiplayer-branch/source: games melee">youbastrd at sheep.berlios.de
+       </A><BR>
+    <I>Sat Oct 23 00:20:30 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000034.html">[Tw-light-svn] r86 - trunk/web
+</A></li>
+        <LI>Next message: <A HREF="000036.html">[Tw-light-svn] r88 - trunk/web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2004-10-23 00:20:29 +0200 (Sat, 23 Oct 2004)
+New Revision: 87
+
+Modified:
+   branches/multiplayer-branch/source/games/MultiplayerGame.cpp
+   branches/multiplayer-branch/source/games/MultiplayerGame.h
+   branches/multiplayer-branch/source/melee/PresenceRegistry.cpp
+   branches/multiplayer-branch/source/melee/PresenceRegistry.h
+   branches/multiplayer-branch/source/melee/mship.cpp
+   branches/multiplayer-branch/source/melee/mship.h
+Log:
+finally fixing bug with PresenceRegistry's constructor's behaviour.  CALL_BEFORE_MAIN functions were called before the constructor was!
+
+Modified: branches/multiplayer-branch/source/games/MultiplayerGame.cpp
+===================================================================
+--- branches/multiplayer-branch/source/games/MultiplayerGame.cpp	2004-10-21 20:49:37 UTC (rev 86)
++++ branches/multiplayer-branch/source/games/MultiplayerGame.cpp	2004-10-22 22:20:29 UTC (rev 87)
+@@ -51,8 +51,8 @@
+     _isServer(false)
+ {
+     message.print(5000,15,&quot;Game on!&quot;);
+-    cout &lt;&lt; &quot;gametype constructor:&quot; &lt;&lt; endl;
+-    PresenceRegistry::GetInstance()-&gt;toString();
++//    cout &lt;&lt; &quot;gametype constructor:&quot; &lt;&lt; endl;
++//    PresenceRegistry::GetInstance()-&gt;toString();
+ }
+ 
+ template &lt;class InterfaceType&gt;
+@@ -74,8 +74,10 @@
+     stars = new Stars();
+     add( stars );
+     
+-    yehat = new YehatTerminator(Vector2(0,0), 0, );
+-    add( yehat );
++    humanTeam = new_team();
++    yehat = (YehatTerminator*)create_ship(channel_server, &quot;yehte&quot;, &quot;WussieBot&quot;, random(size), random(PI2), humanTeam);
++    add( yehat-&gt;get_ship_phaser() );
++    add_focus(yehat);
+     
+     if (isServer()) {
+     	//printf(&quot;server:init&quot;);
+@@ -118,6 +120,11 @@
+ void MultiplayerGameTemplate&lt;InterfaceType&gt;::_add(Presence *p) 
+ {
+     if (isServer()) {
++    	if (p-&gt;GetClassID() == 0) {
++    		cout &lt;&lt;&quot;Skipping adding a &quot; &lt;&lt; p-&gt;GetClassName() &lt;&lt; endl;
++    		cout.flush();
++    		return;
++    	}
+     	printf(&quot;adding: (%s:%d) ObjectID=%d &quot;, p-&gt;GetClassName(), p-&gt;GetClassID(), p-&gt;GetObjectID());
+         PresenceCreationDescription pc( p-&gt;GetObjectID(), p-&gt;GetClassID() );
+         printf(&quot;as (%s:%d)\n&quot;, 
+@@ -284,11 +291,11 @@
+ 	// Another system has requested to connect to us, which we have accepted.  Server or peer only.
+     message.print(10000,15,&quot;%s has connected&quot;, ((StaticClientDataStruct*)(server-&gt;GetStaticClientData(packet-&gt;playerId))-&gt;GetData())-&gt;name);
+     
+-    TeamCode human = new_team();
+-    Control *c = create_control(channel_server, &quot;Human&quot;);
+-    Ship *s = create_ship(&quot;yehte&quot;, c, Vector2(size.x/2,size.y/2), 0, human);
+-    add(s-&gt;get_ship_phaser());
+-    add_focus(s);
++    //TeamCode human = new_team();
++    //Control *c = create_control(channel_server, &quot;Human&quot;);
++    //Ship *s = create_ship(&quot;yehte&quot;, c, Vector2(size.x/2,size.y/2), 0, human);
++    //add(s-&gt;get_ship_phaser());
++    //add_focus(s);
+   
+ #ifdef _DEBUG
+ 	message.print(5000,15,&quot;ID_NEW_INCOMING_CONNECTION from PlayerID:%u:%u on %p.&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
+
+Modified: branches/multiplayer-branch/source/games/MultiplayerGame.h
+===================================================================
+--- branches/multiplayer-branch/source/games/MultiplayerGame.h	2004-10-21 20:49:37 UTC (rev 86)
++++ branches/multiplayer-branch/source/games/MultiplayerGame.h	2004-10-22 22:20:29 UTC (rev 87)
+@@ -94,6 +94,7 @@
+ 	~MultiplayerGameTemplate();
+ 	
+ 	YehatTerminator * yehat;
++	TeamCode humanTeam;
+ 
+ 	
+ 	// Methods and data stuctures from class Game /////////////////////////////////////////////////
+
+Modified: branches/multiplayer-branch/source/melee/PresenceRegistry.cpp
+===================================================================
+--- branches/multiplayer-branch/source/melee/PresenceRegistry.cpp	2004-10-21 20:49:37 UTC (rev 86)
++++ branches/multiplayer-branch/source/melee/PresenceRegistry.cpp	2004-10-22 22:20:29 UTC (rev 87)
+@@ -22,42 +22,40 @@
+ 
+ #include &quot;melee/PresenceRegistry.h&quot;
+ 
+-PresenceRegistry presenceRegistry;
++PresenceRegistry * presenceRegistry = NULL;
++int presenceClassCount = 0;
+ 
+-PresenceRegistry::PresenceRegistry() : boo(0) {
+-   cout &lt;&lt; &quot;PR Constructor&quot; &lt;&lt; endl;
+-   cout.flush();
+-   boo ++;
++PresenceRegistry::PresenceRegistry(){
+ }
+ 
+-void PresenceRegistry::registerPresenceClass (const char * className, Presence * (*GetPresenceClassInstance)()) {
+-	//cout &lt;&lt; &quot;register boo=&quot;&lt;&lt;presenceRegistry.boo&lt;&lt;endl;
++void PresenceRegistry::registerPresenceClass (const char * className, Presence * (*GetPresenceClassInstance)(), unsigned classID) {
++	//cout &lt;&lt; &quot;register boo=&quot;&lt;&lt;presenceRegistry-&gt;boo&lt;&lt;endl;
+ 	
+     //Check to see if this class has already been added.
+     //If so, don't do anything.
+     vector &lt;PresenceClassDescription&gt;::iterator iter;
+-    vector &lt;PresenceClassDescription&gt;::iterator iterEnd = presenceRegistry.presenceClassDescriptionList.end();
+-    for (iter = presenceRegistry.presenceClassDescriptionList.begin();
++    vector &lt;PresenceClassDescription&gt;::iterator iterEnd = presenceRegistry-&gt;presenceClassDescriptionList.end();
++    for (iter = presenceRegistry-&gt;presenceClassDescriptionList.begin();
+          iter != iterEnd;
+          ++iter)
+     {
+         if (strcmp(iter-&gt;className, className)==0)
+             return;
+     }
+-    unsigned id = presenceRegistry.presenceClassDescriptionList.size() + 1;
++    unsigned id = classID;//presenceRegistry-&gt;presenceClassDescriptionList.size() + 1;
+     PresenceClassDescription pcd(className,
+         id,
+         GetPresenceClassInstance);
+-    presenceRegistry.presenceClassDescriptionList.push_back(pcd);
++    presenceRegistry-&gt;presenceClassDescriptionList.push_back(pcd);
+     
+-//    cout &lt;&lt; &quot;registering PresenceClass ( &quot; &lt;&lt; className &lt;&lt; &quot;,&quot; 
+-//    	 &lt;&lt; id &lt;&lt; &quot;) as (&quot; &lt;&lt; presenceRegistry.getClassName(id) &lt;&lt; &quot;,&quot; &lt;&lt; presenceRegistry.getClassID(className) &lt;&lt;&quot;)&quot;&lt;&lt; endl;
++//    cout &lt;&lt; &quot;registering PresenceClass (&quot; &lt;&lt; className &lt;&lt; &quot;,&quot; 
++//    	 &lt;&lt; id &lt;&lt; &quot;) as (&quot; &lt;&lt; presenceRegistry-&gt;getClassName(id) &lt;&lt; &quot;,&quot; &lt;&lt; presenceRegistry-&gt;getClassID(className) &lt;&lt;&quot;)&quot;&lt;&lt; endl;
+ //    cout.flush();
+ }
+ 
+ ///
+ Presence * PresenceRegistry::GetPresenceClassDefaultInstance(const unsigned classID) {
+-    PresenceClassDescription * desc = presenceRegistry.getPresenceItem(classID);
++    PresenceClassDescription * desc = presenceRegistry-&gt;getPresenceItem(classID);
+     if (desc)
+     	return desc-&gt;getPresenceClassInstance();
+     
+@@ -66,7 +64,7 @@
+ 
+ ///
+ Presence * PresenceRegistry::GetPresenceClassDefaultInstance(const char * className) { 
+-	PresenceClassDescription * pcd = presenceRegistry.getPresenceItem(className);
++	PresenceClassDescription * pcd = presenceRegistry-&gt;getPresenceItem(className);
+ 	if (pcd)
+ 	   return pcd-&gt;getPresenceClassInstance();
+ 	return NULL;
+@@ -91,14 +89,14 @@
+ }*/
+ 
+ const unsigned PresenceRegistry::getClassID(const char * className) {
+-	PresenceClassDescription * pcd = presenceRegistry.getPresenceItem(className);
++	PresenceClassDescription * pcd = presenceRegistry-&gt;getPresenceItem(className);
+ 	if (pcd)
+ 		return pcd-&gt;classID;
+ 	return 0;	
+ }
+ 
+ const char * PresenceRegistry::getClassName( const unsigned classID ) {
+-	PresenceClassDescription * pcd = presenceRegistry.getPresenceItem(classID);
++	PresenceClassDescription * pcd = presenceRegistry-&gt;getPresenceItem(classID);
+ 	if (pcd)
+ 		return pcd-&gt;className;
+ 	return &quot;&quot;;
+@@ -107,8 +105,8 @@
+ PresenceClassDescription * PresenceRegistry::getPresenceItem(const unsigned classID) 
+ {
+ //	cout &lt;&lt; &quot;checking for ClassID &quot; &lt;&lt; classID &lt;&lt; &quot; list.size&quot; &lt;&lt; presenceClassDescriptionList.size();
+-    vector &lt;PresenceClassDescription&gt;::iterator iter = presenceRegistry.presenceClassDescriptionList.begin();
+-    vector &lt;PresenceClassDescription&gt;::iterator iterEnd = presenceRegistry.presenceClassDescriptionList.end();
++    vector &lt;PresenceClassDescription&gt;::iterator iter = presenceRegistry-&gt;presenceClassDescriptionList.begin();
++    vector &lt;PresenceClassDescription&gt;::iterator iterEnd = presenceRegistry-&gt;presenceClassDescriptionList.end();
+     for ( ;
+          iter != iterEnd;
+          ++iter)
+@@ -127,8 +125,8 @@
+ PresenceClassDescription * PresenceRegistry::getPresenceItem(const char * className) 
+ {
+ //	cout &lt;&lt; &quot;checking for Classname &quot; &lt;&lt; className &lt;&lt; &quot; list.size=&quot; &lt;&lt; presenceClassDescriptionList.size();
+-    vector &lt;PresenceClassDescription&gt;::iterator iter = presenceRegistry.presenceClassDescriptionList.begin();
+-    vector &lt;PresenceClassDescription&gt;::iterator iterEnd = presenceRegistry.presenceClassDescriptionList.end();
++    vector &lt;PresenceClassDescription&gt;::iterator iter = presenceRegistry-&gt;presenceClassDescriptionList.begin();
++    vector &lt;PresenceClassDescription&gt;::iterator iterEnd = presenceRegistry-&gt;presenceClassDescriptionList.end();
+     for ( ;
+          iter != iterEnd;
+          ++iter)
+@@ -145,13 +143,22 @@
+ }
+ 
+ PresenceRegistry * PresenceRegistry::GetInstance() { 
+-	//cout &lt;&lt; &quot;GetInstance:list size=&quot; &lt;&lt; presenceRegistry.presenceClassDescriptionList.size() &lt;&lt; endl;
++	//cout &lt;&lt; &quot;GetInstance:list size=&quot; &lt;&lt; presenceRegistry-&gt;presenceClassDescriptionList.size() &lt;&lt; endl;
+ 	cout.flush();
+     return (PresenceRegistry *)&presenceRegistry; 
+ }
+ 
+ void PresenceRegistry::toString() {
+-//	cout &lt;&lt; &quot;to string  boo(PR)=&quot;&lt;&lt;presenceRegistry.boo&lt;&lt; &quot; boo(this)=&quot;&lt;&lt;boo &lt;&lt;endl;
++	cout &lt;&lt; &quot;PR::to string(): size=&quot;&lt;&lt;presenceRegistry-&gt;presenceClassDescriptionList.size()&lt;&lt; &quot; &quot;;
++    vector &lt;PresenceClassDescription&gt;::iterator iter = presenceRegistry-&gt;presenceClassDescriptionList.begin();
++    vector &lt;PresenceClassDescription&gt;::iterator iterEnd = presenceRegistry-&gt;presenceClassDescriptionList.end();
++    for ( ;
++         iter != iterEnd;
++         ++iter)
++    {
++    	cout &lt;&lt; &quot; (&quot; &lt;&lt; iter-&gt;className &lt;&lt;&quot;:&quot;&lt;&lt;iter-&gt;classID&lt;&lt;&quot;)&quot;&lt;&lt; endl;
++    }
++    cout.flush();
+ 
+ 	//printf(&quot;PresenceRegistry:size=%d\n&quot;, presenceRegistry-&gt;presenceClassDescriptionList.size());
+ 	
+
+Modified: branches/multiplayer-branch/source/melee/PresenceRegistry.h
+===================================================================
+--- branches/multiplayer-branch/source/melee/PresenceRegistry.h	2004-10-21 20:49:37 UTC (rev 86)
++++ branches/multiplayer-branch/source/melee/PresenceRegistry.h	2004-10-22 22:20:29 UTC (rev 87)
+@@ -28,8 +28,11 @@
+ class PresenceRegistry;
+ 
+ /// global instance
+-extern PresenceRegistry presenceRegistry;
++extern PresenceRegistry * presenceRegistry;
+ 
++/// temporary workaround... does CALL_BEFORE_MAIN execute before constructor calls?
++extern int presenceClassCount;
++
+ /// Describes a Presence subclass.  Contains a class name, and classID,
+ /// which is set at compile-time.  Each Presence subclass must have a unique 
+ /// classID
+@@ -69,7 +72,7 @@
+     
+     ///Registers a Presence subclass.  
+     /// @param className the name of the class to register.
+-    static void registerPresenceClass (const char * className, Presence * (*GetPresenceClassInstance)());
++    static void registerPresenceClass (const char * className, Presence * (*GetPresenceClassInstance)(), unsigned classID);
+     
+     ///
+     Presence * GetPresenceClassDefaultInstance(const unsigned ClassID);
+@@ -110,11 +113,14 @@
+     
+ };
+ 
++//#define getpresenceClassCount() (presenceClassCount)
++
+ ///This macro must be called once for every subclass of Presence.  It make the
+ ///subclass available in network code.  Note that the subclass has two requirements:
+ ///- it must have a no-argument constructor
+-///- it must declare, but not implement, 
++///- it must declare, but not implement, these two public methods:
+ /// virtual char * MyPresenceClass::GetClassName(void) const;
++/// virtual unsigned MyPresenceClass::GetClassID(void) const;
+ ///
+ ///Call this macro like this:
+ ///
+@@ -123,9 +129,10 @@
+ ///class MyPresenceClass : public Presence {
+ ///public:
+ ///  MyPresenceClass() {...}
+-///  virtual char * PRESENCE_CLASS::GetClassName(void) const;
++///  virtual char * GetClassName(void) const;
++///  virtual unsigned GetClassID(void) const;
+ ///  ...
+-///}
++///};
+ ///
+ /// (at the end of your .cpp file)
+ ///
+@@ -133,15 +140,19 @@
+ /// @param PRESENCE_CLASS the class to register.
+ ///
+ #define REGISTER_PRESENCE_CLASS(PRESENCE_CLASS) \
+-char * PRESENCE_CLASS::GetClassName(void) const { return # PRESENCE_CLASS ; } \
+-unsigned PRESENCE_CLASS::GetClassID(void) const { return PresenceRegistry::GetInstance()-&gt;getClassID(# PRESENCE_CLASS) ; } \
++char * PRESENCE_CLASS::GetClassName(void) const { return #PRESENCE_CLASS ; } \
++unsigned PRESENCE_CLASS::GetClassID(void) const { return PresenceRegistry::GetInstance()-&gt;getClassID(#PRESENCE_CLASS) ; } \
+ static Presence * GetDefaultInstance ## PRESENCE_CLASS () { return new PRESENCE_CLASS(); } \
+ static void registerBeforeMain ## PRESENCE_CLASS (void) { \
+-  PresenceRegistry::GetInstance()-&gt;registerPresenceClass( # PRESENCE_CLASS ,  GetDefaultInstance ## PRESENCE_CLASS ); \
++  if (presenceRegistry == NULL) presenceRegistry = new PresenceRegistry(); \
++  presenceClassCount++; \
++  PresenceRegistry::GetInstance()-&gt;registerPresenceClass( #PRESENCE_CLASS ,  GetDefaultInstance ## PRESENCE_CLASS , presenceClassCount ); \
+   REGISTER_DISTRIBUTED_CLASS(PRESENCE_CLASS); \
+ } \
+ CALL_BEFORE_MAIN(registerBeforeMain ## PRESENCE_CLASS );
+ 
++
++
+ ///
+ ///
+ #define REGISTER_PRESENCE_CLASS_NO_NETWORK(PRESENCE_CLASS) \
+
+Modified: branches/multiplayer-branch/source/melee/mship.cpp
+===================================================================
+--- branches/multiplayer-branch/source/melee/mship.cpp	2004-10-21 20:49:37 UTC (rev 86)
++++ branches/multiplayer-branch/source/melee/mship.cpp	2004-10-22 22:20:29 UTC (rev 87)
+@@ -999,3 +999,5 @@
+ REGISTER_PRESENCE_CLASS(HomingMissile)
+ REGISTER_PRESENCE_CLASS(Laser)
+ REGISTER_PRESENCE_CLASS(PointLaser)
++REGISTER_PRESENCE_CLASS(Phaser)
++
+
+Modified: branches/multiplayer-branch/source/melee/mship.h
+===================================================================
+--- branches/multiplayer-branch/source/melee/mship.h	2004-10-21 20:49:37 UTC (rev 86)
++++ branches/multiplayer-branch/source/melee/mship.h	2004-10-22 22:20:29 UTC (rev 87)
+@@ -64,6 +64,9 @@
+   Phaser::Phaser(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
+ 		 Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+ 		 int onum_colors, int ofsize, int steps, int step_time) ;
++	Phaser::Phaser() { }
++	virtual char * GetClassName(void) const;
++	virtual unsigned GetClassID(void) const;
+   
+   virtual void animate(Frame *space);
+   virtual void calculate();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000034.html">[Tw-light-svn] r86 - trunk/web
+</A></li>
+	<LI>Next message: <A HREF="000036.html">[Tw-light-svn] r88 - trunk/web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

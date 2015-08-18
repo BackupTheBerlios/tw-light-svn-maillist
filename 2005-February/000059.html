@@ -1,0 +1,318 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r113 - in trunk: doc source source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r113%20-%20in%20trunk%3A%20doc%20source%20source/melee&In-Reply-To=%3C200502131824.j1DIOQYR023095%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000060.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r113 - in trunk: doc source source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r113%20-%20in%20trunk%3A%20doc%20source%20source/melee&In-Reply-To=%3C200502131824.j1DIOQYR023095%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r113 - in trunk: doc source source/melee">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Feb 13 19:24:26 CET 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000060.html">[Tw-light-svn] r114 - in trunk: gamedata source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-13 19:24:22 +0100 (Sun, 13 Feb 2005)
+New Revision: 113
+
+Modified:
+   trunk/doc/Doxyfile
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mnet1.h
+   trunk/source/scp.cpp
+Log:
+Nothing changed
+
+
+Modified: trunk/doc/Doxyfile
+===================================================================
+--- trunk/doc/Doxyfile	2005-01-13 02:29:56 UTC (rev 112)
++++ trunk/doc/Doxyfile	2005-02-13 18:24:22 UTC (rev 113)
+@@ -140,7 +140,7 @@
+ #---------------------------------------------------------------------------
+ # configuration options related to the XML output
+ #---------------------------------------------------------------------------
+-GENERATE_XML           = NO
++GENERATE_XML           = No
+ XML_OUTPUT             = xml
+ XML_SCHEMA             = 
+ XML_DTD                = 
+@@ -171,7 +171,7 @@
+ # Configuration::addtions related to external references   
+ #---------------------------------------------------------------------------
+ TAGFILES               = 
+-GENERATE_TAGFILE       = 
++GENERATE_TAGFILE       = tw-light.xml
+ ALLEXTERNALS           = NO
+ EXTERNAL_GROUPS        = YES
+ PERL_PATH              = /usr/bin/perl
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-01-13 02:29:56 UTC (rev 112)
++++ trunk/source/melee/mgame.h	2005-02-13 18:24:22 UTC (rev 113)
+@@ -63,7 +63,7 @@
+   
+ };
+ 
+-
++/// All games types should inher from this class
+ class Game : public Physics 
+ {
+  public:
+@@ -118,9 +118,9 @@
+   };
+ 
+ 
+-  virtual void preinit();	/**&lt; pre-initialization (enough so that the destructor won't crash) */
+-  virtual void init(Log *log);/**&lt; initialization (loading data, creating a few game objects, whatever)*/
+-  virtual ~Game();        /**&lt; deallocating memory etc.*/
++  virtual void preinit();	///&lt; pre-initialization (enough so that the destructor won't crash) 
++  virtual void init(Log *log);  ///&lt; initialization (loading data, creating a few game objects, whatever)
++  virtual ~Game();              ///&lt; deallocating memory etc.
+   
+   virtual void init_lag();
+   
+@@ -159,7 +159,7 @@
+   /// sets whether the game is done, according to the rules for the
+   /// gametype.
+   virtual void setGameDone(const bool done);
+-  
++
+   /// gets if the game is done.  Will wait a few seconds for dramatic effect.
+   virtual bool isGameDone();
+   
+
+Modified: trunk/source/melee/mnet1.h
+===================================================================
+--- trunk/source/melee/mnet1.h	2005-01-13 02:29:56 UTC (rev 112)
++++ trunk/source/melee/mnet1.h	2005-02-13 18:24:22 UTC (rev 113)
+@@ -13,91 +13,90 @@
+ 
+ 
+ 
+-class GameEvent {
+-public:
+-	short int size;
+-	short int type;
+-	GameEvent() {
+-		size = sizeof(this); 
+-		type = Game::event_invalid;
+-	}
+-	void *operator new (size_t size) {return malloc(size);}
++class GameEvent 
++{
++ public:
++  short int size;
++  short int type;
++  GameEvent() 
++    {
++      size = sizeof(this); 
++      type = Game::event_invalid;
++    }
++  void *operator new (size_t size) {return malloc(size);}
+ };
+-class GameEventChangeLag : public GameEvent {
+-public:
+-	short int old_lag;
+-	short int new_lag;
+-	GameEventChangeLag( int lag_frames ) {
+-		size = sizeof(this);
+-		type = Game::event_change_lag;
+-		old_lag = game-&gt;lag_frames;
+-		new_lag = lag_frames;
+-	}
+-	void execute ( int source );
++
++class GameEventChangeLag : public GameEvent 
++{
++ public:
++  short int old_lag;
++  short int new_lag;
++  GameEventChangeLag( int lag_frames ) 
++    {
++      size = sizeof(this);
++      type = Game::event_change_lag;
++      old_lag = game-&gt;lag_frames;
++      new_lag = lag_frames;
++    }
++  void execute ( int source );
+ };
+-class GameEventMessage : public GameEvent {
+-public:
+-	enum { max_message_length = 150 };
+-	char message[max_message_length];
+-	GameEventMessage( const char *text ) ;
+-	void execute ( int source );
++
++class GameEventMessage : public GameEvent 
++{
++ public:
++  enum { max_message_length = 150 };
++  char message[max_message_length];
++  GameEventMessage( const char *text ) ;
++  void execute ( int source );
+ };
+ 
+-/*
+-class LagHandler {
+-	unsigned char lag;  //a copy of lag_frames
+-	unsigned char size; //bytes per frame
+-	char channel;       //channel to transmit on
+-	void *data;         //serialized
+-//	void log ( void *data, 
+-};*/
+ 
++/// Logging system, usefull for networking &amp; demo recording/playback
++class NetLog : public Log 
++{ 
++ protected:
+ 
+-class NetLog : public Log { //Logging system, usefull for networking &amp; demo recording/playback
+-	protected:
++  int *log_transmitted;      ///&lt;the number of bytes transmitted in each channel
++  void expand_logs(int num_channels) ; ///&lt; intializes these extensions to the logging
++  unsigned char buffy[4096]; ///&lt; a buffer for sending and recieving packets
++  void handle_code(unsigned int code) ;
++  void send_code(unsigned int code) ;
++  enum code 
++    {
++      NET1_CODE_QUIT         = 0x80000001,
++      NET1_CODE_PAUSE        = 0x80000002,
++      NET1_CODE_UNPAUSE      = 0x80000003,
++      NET1_CODE_INCREASE_LAG = 0x80000004,
++      NET1_CODE_DECREASE_LAG = 0x80000005,
++      NET1_CODE_MESSAGE      = 0x90000000
++    };
++  void send_message(char *string) ;
++  
++  void send_packet(); //sends a packet
++  
++ public:
++  
++  bool need_to_transmit;
++  NetTCP net;       ///&lt; the TCP network connection to the opponent player
++  
++  enum {
++    direction_immediate = 16
++  };
++  
++  void recv_packet(); ///&lt; recieves a packet
++  
++  int remote_time; ///&lt; used in calculating ping
++  int ping;            ///&lt; the most recently measured ping
++  
++  virtual void init();
++  virtual void deinit();
++  virtual ~NetLog();
++  virtual void _log(int channel, const void *data, int size);   ///&lt; used for recording data.  this version may transmit it over the network
++  virtual void _unlog(int channel, void *data, int size); ///&lt; used for playing back data.  this version may recieve it over the network
++  void log_file(const char *fname) ;
++  virtual int ready(int channel);
++  
++  virtual void flush() ;
++  virtual bool listen();
++};
+ 
+-	int *log_transmitted;      //the number of bytes transmitted in each channel
+-	void expand_logs(int num_channels) ; //intializes these extensions to the logging
+-	unsigned char buffy[4096]; //a buffer for sending and recieving packets
+-	void handle_code(unsigned int code) ;
+-	void send_code(unsigned int code) ;
+-	enum code {
+-		NET1_CODE_QUIT    = 0x80000001,
+-		NET1_CODE_PAUSE   = 0x80000002,
+-		NET1_CODE_UNPAUSE = 0x80000003,
+-		NET1_CODE_INCREASE_LAG = 0x80000004,
+-		NET1_CODE_DECREASE_LAG = 0x80000005,
+-		NET1_CODE_MESSAGE = 0x90000000
+-		};
+-	void send_message(char *string) ;
+-
+-	void send_packet(); //sends a packet
+-
+-	public:
+-
+-	bool need_to_transmit;
+-	NetTCP net;       // the TCP network connection to the opponent player
+-
+-	enum {
+-		direction_immediate = 16
+-		};
+-
+-	void recv_packet(); //recieves a packet
+-
+-	int remote_time; //used in calculating ping
+-	int ping;            //the most recently measured ping
+-
+-	virtual void init();
+-	virtual void deinit();
+-	virtual ~NetLog();
+-	virtual void _log(int channel, const void *data, int size);   //used for recording data.  this version may transmit it over the network
+-	virtual void _unlog(int channel, void *data, int size); //used for playing back data.  this version may recieve it over the network
+-	void log_file(const char *fname) ;
+-	virtual int ready(int channel);
+-
+-	virtual void flush() ;
+-	virtual bool listen();
+-
+-
+-	};
+-
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-01-13 02:29:56 UTC (rev 112)
++++ trunk/source/scp.cpp	2005-02-13 18:24:22 UTC (rev 113)
+@@ -1968,3 +1968,4 @@
+ 		 _copy_ship_ini, 0);
+   return 0;
+ }
++
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000060.html">[Tw-light-svn] r114 - in trunk: gamedata source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

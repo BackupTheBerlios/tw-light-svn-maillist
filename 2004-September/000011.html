@@ -1,0 +1,2140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r63 - in trunk/source: . melee other sc1ships sc2ships ships util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r63%20-%20in%20trunk/source%3A%20.%20melee%20other%20sc1ships%20sc2ships%20ships%20util&In-Reply-To=%3C200409251922.i8PJMf3j004175%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000010.html">
+   <LINK REL="Next"  HREF="000012.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r63 - in trunk/source: . melee other sc1ships sc2ships ships util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r63%20-%20in%20trunk/source%3A%20.%20melee%20other%20sc1ships%20sc2ships%20ships%20util&In-Reply-To=%3C200409251922.i8PJMf3j004175%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r63 - in trunk/source: . melee other sc1ships sc2ships ships util">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Sep 25 21:22:41 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000010.html">[Tw-light-svn] r62 - in trunk: Util Util/deditor Util/deditor/lua Util/deditor/lua/lib web
+</A></li>
+        <LI>Next message: <A HREF="000012.html">[Tw-light-svn] r64 - in trunk: . gamedata gamedata/ships source source/games source/libraries source/libraries/lua source/libraries/lua/lib source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-09-25 21:22:38 +0200 (Sat, 25 Sep 2004)
+New Revision: 63
+
+Modified:
+   trunk/source/gui.cpp
+   trunk/source/melee.h
+   trunk/source/melee/mcbodies.cpp
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mhelpers.cpp
+   trunk/source/melee/moptions.cpp
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mshot.cpp
+   trunk/source/melee/msprite.cpp
+   trunk/source/melee/mview.cpp
+   trunk/source/other/vbodies.cpp
+   trunk/source/sc1ships/shpandgu.cpp
+   trunk/source/sc1ships/shpchebr.cpp
+   trunk/source/sc1ships/shpearcr.cpp
+   trunk/source/sc1ships/shpilwav.cpp
+   trunk/source/sc1ships/shpkzedr.cpp
+   trunk/source/sc1ships/shpshosc.cpp
+   trunk/source/sc1ships/shpsyrpe.cpp
+   trunk/source/sc1ships/shpvuxin.cpp
+   trunk/source/sc2ships/shpchmav.cpp
+   trunk/source/sc2ships/shpdruma.cpp
+   trunk/source/sc2ships/shpmeltr.cpp
+   trunk/source/sc2ships/shporzne.cpp
+   trunk/source/sc2ships/shppkufu.cpp
+   trunk/source/sc2ships/shpslypr.cpp
+   trunk/source/sc2ships/shputwju.cpp
+   trunk/source/scp.cpp
+   trunk/source/ships/shpaktgu.cpp
+   trunk/source/ships/shpalabc.cpp
+   trunk/source/ships/shpbipka.cpp
+   trunk/source/ships/shpbogce.cpp
+   trunk/source/ships/shpchoex.cpp
+   trunk/source/ships/shpconca.cpp
+   trunk/source/ships/shpearc3.cpp
+   trunk/source/ships/shpforsh.cpp
+   trunk/source/ships/shpgarty.cpp
+   trunk/source/ships/shpilwsp.cpp
+   trunk/source/ships/shprogsq.cpp
+   trunk/source/ships/shpstaba.cpp
+   trunk/source/ships/shptauar.cpp
+   trunk/source/ships/shptausl.cpp
+   trunk/source/ships/shptaust.cpp
+   trunk/source/ships/shptauto.cpp
+   trunk/source/ships/shpyusra.cpp
+   trunk/source/ships/shpzeksh.cpp
+   trunk/source/util/errors.cpp
+   trunk/source/util/sound.cpp
+   trunk/source/util/sound.h
+Log:
+Fixed some bug in AlaryBC
+Fixed bug that sometimes lead to crash at exit
+
+
+Modified: trunk/source/gui.cpp
+===================================================================
+--- trunk/source/gui.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/gui.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -65,27 +65,27 @@
+ {
+   int f, g, h;
+   if (0) ;
+-  else if (videosystem.width &lt;= 250) g = 0;
+-  else if (videosystem.width &lt;= 320) g = 1;
+-  else if (videosystem.width &lt;= 400) g = 2;
+-  else if (videosystem.width &lt;= 640) g = 3;
+-  else if (videosystem.width &lt;= 800) g = 4;
+-  else if (videosystem.width &lt;= 1024) g = 5;
+-  else if (videosystem.width &lt;= 1280) g = 6;
+-  else if (videosystem.width &lt;= 1600) g = 7;
++  else if (videosystem-&gt;width &lt;= 250) g = 0;
++  else if (videosystem-&gt;width &lt;= 320) g = 1;
++  else if (videosystem-&gt;width &lt;= 400) g = 2;
++  else if (videosystem-&gt;width &lt;= 640) g = 3;
++  else if (videosystem-&gt;width &lt;= 800) g = 4;
++  else if (videosystem-&gt;width &lt;= 1024) g = 5;
++  else if (videosystem-&gt;width &lt;= 1280) g = 6;
++  else if (videosystem-&gt;width &lt;= 1600) g = 7;
+   else g = 8;
+   if (0) ;
+-  else if (videosystem.height &lt;= 180) h = 0;
+-  else if (videosystem.height &lt;= 240) h = 1;
+-  else if (videosystem.height &lt;= 300) h = 2;
+-  else if (videosystem.height &lt;= 480) h = 3;
+-  else if (videosystem.height &lt;= 600) h = 4;
+-  else if (videosystem.height &lt;= 768) h = 5;
+-  else if (videosystem.height &lt;= 1024) h = 6;
+-  else if (videosystem.height &lt;= 1280) h = 7;
++  else if (videosystem-&gt;height &lt;= 180) h = 0;
++  else if (videosystem-&gt;height &lt;= 240) h = 1;
++  else if (videosystem-&gt;height &lt;= 300) h = 2;
++  else if (videosystem-&gt;height &lt;= 480) h = 3;
++  else if (videosystem-&gt;height &lt;= 600) h = 4;
++  else if (videosystem-&gt;height &lt;= 768) h = 5;
++  else if (videosystem-&gt;height &lt;= 1024) h = 6;
++  else if (videosystem-&gt;height &lt;= 1280) h = 7;
+   else h = 8;
+   f = (c + g + h + 1) / 2;
+-  return videosystem.get_font(f);
++  return videosystem-&gt;get_font(f);
+ }
+ 
+ void TW_Dialog_Player::redraw() 
+@@ -117,7 +117,8 @@
+   window = w;
+   ifocus = focus;
+   player = NULL;
+-  if (!window) window = &amp;videosystem.window;
++  if (!window) 
++    window = &amp;videosystem-&gt;window;
+   window-&gt;add_callback(this);
+   int i;
+   for (i = 0; d[i].proc; i += 1) ;
+@@ -193,7 +194,7 @@
+ int TW_Dialog_Player::update() 
+ {
+   STACKTRACE;
+-  videosystem.poll_redraw();
++  videosystem-&gt;poll_redraw();
+   BITMAP *old = screen;
+   screen = subscreen;
+   if (!player) player = init_dialog(dialog, ifocus);
+@@ -214,7 +215,8 @@
+ {
+   int return_value;
+   TW_Dialog_Player bob;
+-  if (!window) window = &amp;videosystem.window;
++  if (!window) 
++    window = &amp;videosystem-&gt;window;
+   bob.init(window, d, index);
+   
+   while (keypressed()) readkey();
+@@ -230,7 +232,8 @@
+ {
+   BITMAP *tmp;
+   int n, i, return_value;
+-  if (!window) window = &amp;videosystem.window;
++  if (!window) 
++    window = &amp;videosystem-&gt;window;
+   for (n = 0; d[n].proc; n += 1) ;
+   if (!window-&gt;surface) 
+     tw_error (&quot;tw_dialog_pre - no drawing surface&quot;);
+@@ -727,17 +730,17 @@
+     case MSG_END:
+       if (d-&gt;flags &amp; D_DISABLED) 
+ 	{
+-	  tw_sound.play_sound(menuDisabled, 0.5);
++	  tw_sound-&gt;play_sound(menuDisabled, 0.5);
+         }
+       else 
+ 	{
+-	  tw_sound.play_sound(menuAccept, 0.25);
++	  tw_sound-&gt;play_sound(menuAccept, 0.25);
+         }
+       break;
+ 
+     case MSG_GOTFOCUS:
+       {
+-	tw_sound.play_sound(menuFocus, 0.5);
++	tw_sound-&gt;play_sound(menuFocus, 0.5);
+ 	break;
+       }
+     };
+
+Modified: trunk/source/melee/mcbodies.cpp
+===================================================================
+--- trunk/source/melee/mcbodies.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/mcbodies.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -131,16 +131,16 @@
+       switch(i)
+ 	{
+ 	case 0:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	  break;
+ 	case 1:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	  break;
+ 	case 2:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	  break;
+ 	case 3:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	  break;
+ 	default:
+ 	  {
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/mframe.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -843,16 +843,16 @@
+       switch(i)
+ 	{
+ 	  case 0:
+-	    tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	    tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	    break;
+ 	  case 1:
+-	    tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	    tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	    break;
+ 	  case 2:
+-	    tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	    tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	    break;
+ 	  case 3:
+-	    tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	    tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	    break;
+ 	default:
+ 	  {
+@@ -923,16 +923,16 @@
+   switch(i)
+     {
+     case 0:
+-      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+       break;
+     case 1:
+-      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+       break;
+     case 2:
+-      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+       break;
+     case 3:
+-      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+       break;
+     }
+ 
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/mgame.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -666,12 +666,12 @@
+       play_music();
+       while(!game_done) 
+ 	{
+-	  if(!tw_sound.playing_music())
++	  if(!tw_sound-&gt;playing_music())
+ 	    play_music();
+ 	  
+ 	  unsigned int time = get_time();
+ 	  poll_input();
+-	  videosystem.poll_redraw();
++	  videosystem-&gt;poll_redraw();
+ 	  if ((next_tic_time &lt;= time) &amp;&amp; (next_render_time &gt; game_time) &amp;&amp; game_ready()) 
+ 	    {
+ 	      _STACKTRACE(&quot;Game::play - Game physics&quot;)
+@@ -746,8 +746,7 @@
+ 	tmp = source-&gt;data-&gt;moduleVictory;
+       if (!tmp.empty()) 
+ 	{
+-	  tw_sound.play_music(data_full_path(tmp), 1);
+-	  //tw_sound.play_sound(data_full_path(tmp));
++	  tw_sound-&gt;play_music(data_full_path(tmp), 1);
+ 	}
+       
+     }
+@@ -1052,7 +1051,7 @@
+ 	delete tic_history; tic_history = NULL;
+ 	delete render_history; render_history = NULL;
+ 
+-	tw_sound.play_music(std::string(&quot;&quot;));
++	tw_sound-&gt;play_music(std::string(&quot;&quot;));
+ 
+ 	message.out(&quot;deleteing game objects&quot;);
+ 	destroy_all();
+@@ -1279,7 +1278,7 @@
+ void Game::play_music() 
+ {
+   STACKTRACE;
+-  tw_sound.play_music(data_full_path(&quot;music/Robeter-battle-music-remix.ogg&quot;));
++  tw_sound-&gt;play_music(data_full_path(&quot;music/Robeter-battle-music-remix.ogg&quot;));
+   return;
+ }
+ 
+
+Modified: trunk/source/melee/mhelpers.cpp
+===================================================================
+--- trunk/source/melee/mhelpers.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/mhelpers.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -76,7 +76,7 @@
+ int  GFX_TIMEWARP_WINDOW =  GFX_AUTODETECT_WINDOWED;
+ int GFX_TIMEWARP_FULLSCREEN = GFX_AUTODETECT_FULLSCREEN;
+ 
+-VideoSystem videosystem;
++VideoSystem* videosystem = NULL;
+ 
+ static void tw_display_switch_out() 
+ {
+@@ -84,12 +84,12 @@
+ 
+ static void tw_display_switch_in() 
+ {
+-  if (get_time() &gt; videosystem.last_poll + 1000) 
++  if (get_time() &gt; videosystem-&gt;last_poll + 1000) 
+     {
+-      videosystem.redraw();
++      videosystem-&gt;redraw();
+     }
+   else 
+-    videosystem.screen_corrupted = true;
++    videosystem-&gt;screen_corrupted = true;
+ }
+ 
+ static int _gamma = -1;
+@@ -148,7 +148,7 @@
+ 
+ int tw_color (RGB c) 
+ {
+-  videosystem.color_effects(&amp;c);
++  videosystem-&gt;color_effects(&amp;c);
+   return makecol(c.r, c.g, c.b);
+ }
+ 
+@@ -165,7 +165,7 @@
+   if (screen_corrupted) 
+     {
+       screen_corrupted = false;
+-      videosystem.redraw();
++      videosystem-&gt;redraw();
+       return 1;
+     }
+   return 0;
+@@ -467,13 +467,13 @@
+   int nx = 0, ny = 0, nw = 0, nh = 0;
+   if (parent == this) 
+     {
+-      surface = videosystem.surface;
++      surface = videosystem-&gt;surface;
+       if (surface) 
+ 	{
+ 	  nx = 0;
+ 	  ny = 0;
+-	  nw = videosystem.width;
+-	  nh = videosystem.height;
++	  nw = videosystem-&gt;width;
++	  nh = videosystem-&gt;height;
+ 	}
+     }
+   else 
+@@ -673,7 +673,7 @@
+   help_dialog[2].dp = (void *) text.c_str();
+   help_dialog[2].d1 = 0;
+   help_dialog[2].d2 = 0;
+-  tw_popup_dialog(&amp;videosystem.window, help_dialog, 1);
++  tw_popup_dialog(&amp;videosystem-&gt;window, help_dialog, 1);
+   return;
+ }
+ 
+
+Modified: trunk/source/melee/moptions.cpp
+===================================================================
+--- trunk/source/melee/moptions.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/moptions.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -163,13 +163,13 @@
+   
+   while ( (choice != DIALOG_VIDEO_EXIT) &amp;&amp; (!done) ) 
+     {
+-      sprintf(dialog_string[3], &quot;%dx%d&quot;, videosystem.width, videosystem.height);
++      sprintf(dialog_string[3], &quot;%dx%d&quot;, videosystem-&gt;width, videosystem-&gt;height);
+       
+       
+       //set index for resolution
+       int x=-1, y=-1, x2, y2, i, bpp, bpp2, fs;
+-      x2 = videosystem.width;
+-      y2 = videosystem.height;
++      x2 = videosystem-&gt;width;
++      y2 = videosystem-&gt;height;
+       for (i = 0; resolution[i+1]; i += 1) 
+ 	{
+ 	  x = strtol(resolution[i], NULL, 10);
+@@ -184,7 +184,7 @@
+       
+       video_dialog[DIALOG_VIDEO_RESLIST].d1 = i;
+       //set index for bpp
+-      bpp = videosystem.bpp;
++      bpp = videosystem-&gt;bpp;
+       for (i = 0; true; i += 1) 
+ 	{
+ 	  if (!color_depth[i]) 
+@@ -197,7 +197,7 @@
+       video_dialog[DIALOG_VIDEO_BPPLIST].d1 = i;
+         
+       //set button for fullscreen
+-      video_dialog[DIALOG_VIDEO_FULLSCREEN].flags = videosystem.fullscreen ? D_SELECTED : 0;
++      video_dialog[DIALOG_VIDEO_FULLSCREEN].flags = videosystem-&gt;fullscreen ? D_SELECTED : 0;
+ 
+       int startfs = video_dialog[DIALOG_VIDEO_FULLSCREEN].flags;
+       
+@@ -235,7 +235,7 @@
+ 	  fs     = get_config_int(&quot;Video&quot;, &quot;FullScreen&quot;, false);
+ 	  set_gamma(get_config_int(&quot;Video&quot;, &quot;Gamma&quot;, 128));
+ 	  
+-	  videosystem.set_resolution(x2, y2, bpp2, fs);
++	  videosystem-&gt;set_resolution(x2, y2, bpp2, fs);
+ 	  break;
+ 	  
+ 	  
+@@ -273,7 +273,7 @@
+ 	  
+ 	  //try to set video mode.  If it does not work, back out, and do not confirm
+ 	  //the changes.
+-	  if ( ! videosystem.set_resolution(x2, y2, bpp2, fs))  
++	  if ( ! videosystem-&gt;set_resolution(x2, y2, bpp2, fs))  
+ 	    {
+ 	      done = false;
+ 	    }
+@@ -299,7 +299,7 @@
+ 		fs     = get_config_int(&quot;Video&quot;, &quot;FullScreen&quot;, false);
+ 		set_gamma(get_config_int(&quot;Video&quot;, &quot;Gamma&quot;, 128));
+ 		
+-		i = videosystem.set_resolution(x2, y2, bpp2, fs);
++		i = videosystem-&gt;set_resolution(x2, y2, bpp2, fs);
+ 		done = false;
+ 	      }
+             }
+@@ -315,27 +315,27 @@
+   int i;
+ 
+   //set dialog values
+-  audio_dialog[DIALOG_AUDIO_SOUND_VOL].d2 = iround(100 * tw_sound.load_sound_volume());
+-  audio_dialog[DIALOG_AUDIO_MUSIC_VOL].d2 = iround(100 * tw_sound.load_music_volume());
++  audio_dialog[DIALOG_AUDIO_SOUND_VOL].d2 = iround(100 * tw_sound-&gt;load_sound_volume());
++  audio_dialog[DIALOG_AUDIO_MUSIC_VOL].d2 = iround(100 * tw_sound-&gt;load_music_volume());
+ 	
+   //do the dialog
+   i = tw_popup_dialog(NULL, audio_dialog, 0);
+   if (i != DIALOG_AUDIO_OK) return;
+   
+   //set actual values
+-  tw_sound.set_sound_volume( audio_dialog[DIALOG_AUDIO_SOUND_VOL].d2/100.0);
+-  tw_sound.set_music_volume( audio_dialog[DIALOG_AUDIO_MUSIC_VOL].d2/100.0);
++  tw_sound-&gt;set_sound_volume( audio_dialog[DIALOG_AUDIO_SOUND_VOL].d2/100.0);
++  tw_sound-&gt;set_music_volume( audio_dialog[DIALOG_AUDIO_MUSIC_VOL].d2/100.0);
+ };
+ 
+ int handleSoundSliderChange(void *dp3, int d2) 
+ {
+-  tw_sound.set_sound_volume( audio_dialog[DIALOG_AUDIO_SOUND_VOL].d2/100.0);
++  tw_sound-&gt;set_sound_volume( audio_dialog[DIALOG_AUDIO_SOUND_VOL].d2/100.0);
+   return 0;
+ }
+ 
+ int handleMusicSliderChange(void *dp3, int d2) 
+ {
+-  tw_sound.set_music_volume( audio_dialog[DIALOG_AUDIO_MUSIC_VOL].d2/100.0);
++  tw_sound-&gt;set_music_volume( audio_dialog[DIALOG_AUDIO_MUSIC_VOL].d2/100.0);
+   return 0;
+ }
+ 
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/mship.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -376,7 +376,7 @@
+       text_mode(-1);
+       textprintf_centre(
+ 			spritePanel-&gt;get_bitmap(0), 
+-			videosystem.get_font(1), 
++			videosystem-&gt;get_font(1), 
+ 			30, 51, 
+ 			pallete_color[0], 
+ 			captain_name
+@@ -530,7 +530,7 @@
+       if (nextkeys &amp; keyflag::suicide) 
+ 	{
+ 	  crew  = 0;
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMSHIP_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMSHIP_WAV.wav&quot;));
+ 	  
+ 	  if (meleedata.xpl1Sprite) 
+ 	    {
+@@ -750,7 +750,7 @@
+     {
+       total += crew;
+       crew  = 0;
+-      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMSHIP_WAV.wav&quot;));
++      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMSHIP_WAV.wav&quot;));
+       //modified by Tau - start
+       if (meleedata.xpl1Sprite) 
+ 	{
+@@ -829,8 +829,8 @@
+ 
+ 		if (weapon_sample &gt;= 0)
+ 		  {
+-		    tw_sound.stop_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
+-		    tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
++		    tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
++		    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
+ 		  }
+ 	}
+ 	return;
+@@ -858,8 +858,8 @@
+ 
+     if (special_sample &gt;= 0)
+       {
+-	tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
+-	tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
++	tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
++	tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
+       }
+   }
+ }
+
+Modified: trunk/source/melee/mshot.cpp
+===================================================================
+--- trunk/source/melee/mshot.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/mshot.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -130,7 +130,7 @@
+   STACKTRACE;
+   if(!explosionSample.empty()) 
+     {
+-      tw_sound.play_sound(data_full_path(explosionSample));
++      tw_sound-&gt;play_sound(data_full_path(explosionSample));
+     }
+   else if(damage_factor &gt; 0) 
+     {
+@@ -142,16 +142,16 @@
+       switch(i)
+ 	{
+ 	case 0:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	  break;
+ 	case 1:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	  break;
+ 	case 2:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	  break;
+ 	case 3:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	  break;
+ 	default:
+ 	  {
+
+Modified: trunk/source/melee/msprite.cpp
+===================================================================
+--- trunk/source/melee/msprite.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/msprite.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -256,7 +256,7 @@
+ 	      }
+ 	      break;
+ 	    }
+-	  videosystem.color_effects(&amp;a);
++	  videosystem-&gt;color_effects(&amp;a);
+ 	  c = makeacol_depth(bitmap_color_depth(bmp), a.r, a.g, a.b, a.filler);
+ 	  if ((c == bmc) &amp;&amp; masked) 
+ 	    {
+@@ -394,7 +394,7 @@
+   general_attributes = _attributes;
+   if (general_attributes &amp;  MATCH_SCREEN_FORMAT) 
+     {
+-      bpp = videosystem.bpp;
++      bpp = videosystem-&gt;bpp;
+       if (general_attributes &amp; ALPHA) 
+ 	{
+ 	  bpp = 32; //quick hack, because converting to 16bpp isn't quite working properly
+@@ -668,7 +668,7 @@
+   general_attributes = _attributes;
+   if (general_attributes &amp;  MATCH_SCREEN_FORMAT) 
+     {
+-      bpp = videosystem.bpp;
++      bpp = videosystem-&gt;bpp;
+       if (general_attributes &amp; ALPHA) 
+ 	{
+ 	  bpp = 32; 
+
+Modified: trunk/source/melee/mview.cpp
+===================================================================
+--- trunk/source/melee/mview.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee/mview.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -455,8 +455,8 @@
+ 		}
+ 	else {
+ 		text_mode(0);
+-		videosystem.window.lock();
+-		bmp = videosystem.window.surface;
++		videosystem-&gt;window.lock();
++		bmp = videosystem-&gt;window.surface;
+ 		}
+ 	clean();
+ 	if (!frame) rectfill(bmp, 0, 0, ox, oy, 0);
+@@ -467,7 +467,8 @@
+ 		y += text_height(font);
+ 		}
+ 	if (frame &amp;&amp; !frame-&gt;full_redraw) frame-&gt;add_box(0, 0, x, y);	
+-	if (!frame) videosystem.window.unlock();
++	if (!frame) 
++	  videosystem-&gt;window.unlock();
+ 	ox = x;
+ 	oy = y;
+ 	return;
+
+Modified: trunk/source/melee.h
+===================================================================
+--- trunk/source/melee.h	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/melee.h	2004-09-25 19:22:38 UTC (rev 63)
+@@ -356,6 +356,7 @@
+   virtual int _get_size() const {return sizeof(*this);}
+ };
+ 
++/// Video System
+ class VideoSystem : public BaseClass 
+ {
+  public:
+@@ -378,7 +379,8 @@
+   void (*color_effects)(Color *color);
+   void update_colors();
+   void redraw();
+-} extern videosystem;
++};
++extern VideoSystem* videosystem;
+ 
+ int get_gamma();
+ void set_gamma(int gamma);
+
+Modified: trunk/source/other/vbodies.cpp
+===================================================================
+--- trunk/source/other/vbodies.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/other/vbodies.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -686,16 +686,16 @@
+       switch(i)
+ 	{
+ 	case 0:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	  break;
+ 	case 1:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	  break;
+ 	case 2:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	  break;
+ 	case 3:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	  break;
+ 	default:
+ 	  {
+@@ -714,8 +714,8 @@
+ //  game-&gt;all_damage_direct = true;
+ //  game-&gt;is_nebula = true;
+   friction = 0.0004;
+-	videosystem.color_effects = VNebulaColorEffects;
+-	videosystem.update_colors();
++	videosystem-&gt;color_effects = VNebulaColorEffects;
++	videosystem-&gt;update_colors();
+ }
+ 
+ VNebula::VNebula(double ofriction):Presence()
+@@ -723,8 +723,8 @@
+   STACKTRACE;
+ //  game-&gt;all_damage_direct = true;
+   friction = ofriction;
+-	videosystem.color_effects = VNebulaColorEffects;
+-	videosystem.update_colors();
++	videosystem-&gt;color_effects = VNebulaColorEffects;
++	videosystem-&gt;update_colors();
+ 
+ }
+ 
+@@ -734,8 +734,8 @@
+ //  game-&gt;all_damage_direct = true;
+   friction = ofriction; 
+   ionStorms = oionStorms;
+-	videosystem.color_effects = VNebulaColorEffects;
+-	videosystem.update_colors();
++  videosystem-&gt;color_effects = VNebulaColorEffects;
++  videosystem-&gt;update_colors();
+ }
+ 
+ void VNebula::calculate(void) {
+@@ -756,18 +756,13 @@
+ }
+ 
+ VNebula::~VNebula() {
+-//  game-&gt;all_damage_direct = false;
+-//  game-&gt;is_nebula = false;
+-  videosystem.color_effects = gamma_color_effects;
+-	videosystem.update_colors();
++  videosystem-&gt;color_effects = gamma_color_effects;
++  videosystem-&gt;update_colors();
+ }
+ 
+-VIonStorm::VIonStorm(void):SpaceObject(NULL, Vector2(0,0), 0, NULL) {
++VIonStorm::VIonStorm(void):SpaceObject(NULL, Vector2(0,0), 0, NULL) 
++{
+   STACKTRACE;
+-//	SpaceObject(SpaceLocation *creator, Vector2 opos, double oangle, 
+-//			SpaceSprite *osprite);
+-
+-  ;
+ }
+ 
+ 
+@@ -1355,16 +1350,16 @@
+       switch(i)
+ 	{
+ 	case 0:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	  break;
+ 	case 1:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	  break;
+ 	case 2:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	  break;
+ 	case 3:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	  break;
+ 	default:
+ 	  {
+@@ -1461,16 +1456,16 @@
+       switch(i)
+ 	{
+ 	case 0:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	  break;
+ 	case 1:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	  break;
+ 	case 2:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	  break;
+ 	case 3:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	  break;
+ 	default:
+ 	  {
+@@ -1591,16 +1586,16 @@
+       switch(i)
+ 	{
+ 	case 0:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	  break;
+ 	case 1:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	  break;
+ 	case 2:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	  break;
+ 	case 3:
+-	  tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	  tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	  break;
+ 	default:
+ 	  {
+@@ -1687,16 +1682,16 @@
+     switch(i)
+       {
+       case 0:
+-	tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	break;
+       case 1:
+-	tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	break;
+       case 2:
+-	tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	break;
+       case 3:
+-	tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	break;
+       default:
+ 	{
+
+Modified: trunk/source/sc1ships/shpandgu.cpp
+===================================================================
+--- trunk/source/sc1ships/shpandgu.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpandgu.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -120,16 +120,16 @@
+ 	  switch(i)
+ 	    {
+ 	    case 0:
+-	      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++	      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+ 	      break;
+ 	    case 1:
+-	      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
++	      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL02_WAV.wav&quot;));
+ 	      break;
+ 	    case 2:
+-	      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
++	      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL03_WAV.wav&quot;));
+ 	      break;
+ 	    case 3:
+-	      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
++	      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL04_WAV.wav&quot;));
+ 	      break;
+ 	    default:
+ 	      {
+
+Modified: trunk/source/sc1ships/shpchebr.cpp
+===================================================================
+--- trunk/source/sc1ships/shpchebr.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpchebr.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -123,7 +123,7 @@
+ 			shot-&gt;collide_flag_sameship = bit(LAYER_SPECIAL);
+ 			game-&gt;add(shot);
+ 		}
+-		tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++		tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 		weaponObject-&gt;destroy();
+ 		weaponObject = NULL;
+ 	}
+@@ -205,7 +205,7 @@
+ void ChenjesuDOGI::inflict_damage(SpaceObject *other)
+ {
+   STACKTRACE;
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1]));
+ 
+   if(sameTeam(other)) 
+     return;
+@@ -243,8 +243,8 @@
+ void ChenjesuDOGI::soundExplosion()
+ {
+   STACKTRACE;
+-  tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[2]));
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[2]));
++  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[2]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[2]));
+   return;
+ }
+ 
+
+Modified: trunk/source/sc1ships/shpearcr.cpp
+===================================================================
+--- trunk/source/sc1ships/shpearcr.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpearcr.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -81,7 +81,7 @@
+     }
+   if (fire) 
+     {
+-      tw_sound.play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
++      tw_sound-&gt;play_sound(data_full_path(&quot;sound/boom/BOOMPL01_WAV.wav&quot;));
+     }
+   
+   return(fire);
+
+Modified: trunk/source/sc1ships/shpilwav.cpp
+===================================================================
+--- trunk/source/sc1ships/shpilwav.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpilwav.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -81,8 +81,8 @@
+     else 
+       {
+ 	cloak = TRUE;
+-	tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-	tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	batt -= special_drain;
+       }
+ 
+
+Modified: trunk/source/sc1ships/shpkzedr.cpp
+===================================================================
+--- trunk/source/sc1ships/shpkzedr.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpkzedr.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -162,8 +162,8 @@
+     {
+       collide_flag_sameship = 0;
+       vel = 0;
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+       
+       add(new Laser(this, trajectory_angle(target),
+ 		    pallete_color[laser_color], laser_range, laser_damage,
+@@ -219,8 +219,8 @@
+   STACKTRACE;
+   if (other == ship) 
+     {
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[1]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[1]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1]));
+       damage(ship, 0, -1);
+     } 
+   if (!other-&gt;isPlanet()) state = 0;
+
+Modified: trunk/source/sc1ships/shpshosc.cpp
+===================================================================
+--- trunk/source/sc1ships/shpshosc.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpshosc.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -73,8 +73,8 @@
+ 	      q.end();
+ 	      add(new Animation(this, pos, data-&gt;spriteSpecial, 
+ 				0, specialFrames, 50, DEPTH_EXPLOSIONS, specialScale));
+-	      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-	      tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	      damage(this, 0, 999);
+ 	    }
+ 	  else 
+
+Modified: trunk/source/sc1ships/shpsyrpe.cpp
+===================================================================
+--- trunk/source/sc1ships/shpsyrpe.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpsyrpe.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -157,8 +157,8 @@
+   STACKTRACE;
+   if (other-&gt;isShip() &amp;&amp; other-&gt;damage_factor == 0) 
+     {
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+       damage(other, 0, -1);
+       state = 0;
+   }
+
+Modified: trunk/source/sc1ships/shpvuxin.cpp
+===================================================================
+--- trunk/source/sc1ships/shpvuxin.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc1ships/shpvuxin.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -112,7 +112,7 @@
+ 
+   Ship *target = (Ship *) other;
+ 
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[1]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[1]));
+ 
+   //MYCODE begin
+   int hx,hy,tries, col;
+
+Modified: trunk/source/sc2ships/shpchmav.cpp
+===================================================================
+--- trunk/source/sc2ships/shpchmav.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc2ships/shpchmav.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -301,7 +301,7 @@
+ 		if (!q.currento-&gt;isInvisible() &amp;&amp; !q.currento-&gt;sameTeam(this) &amp;&amp; (q.currento-&gt;collide_flag_anyone&amp;bit(LAYER_LINES))) {
+ 			add(new PointLaser(this, pallete_color[lColor], 1, lFrames,
+                         		this, q.currento, Vector2(0.0, 0.0) ));
+-			tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND1));
++			tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND1));
+ 			lRecharge += lRechargeRate;
+ 			break;
+ 			}
+@@ -325,8 +325,8 @@
+ 			add(new Animation(this, pos,
+ 					  meleedata.kaboomSprite, 0, KABOOM_FRAMES, 
+ 					  50, DEPTH_EXPLOSIONS));
+-			tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+-			tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++			tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
++			tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 			}
+ 		}
+ 	return total;
+
+Modified: trunk/source/sc2ships/shpdruma.cpp
+===================================================================
+--- trunk/source/sc2ships/shpdruma.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc2ships/shpdruma.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -69,8 +69,8 @@
+ 
+     special_recharge = special_rate;
+ 
+-    tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-    tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++    tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+   }
+ }
+ 
+
+Modified: trunk/source/sc2ships/shpmeltr.cpp
+===================================================================
+--- trunk/source/sc2ships/shpmeltr.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc2ships/shpmeltr.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -171,7 +171,7 @@
+ 		  damage_factor *= 2;
+ 		  armour *= 2;
+ 		  range += RangeUp;
+-		  tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0]));
++		  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0]));
+ 		}
+ 	    }
+ 	}
+@@ -183,7 +183,7 @@
+ 	{
+ 	  vel = v * unit_vector(angle);
+ 	  released = TRUE;
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	}
+       else 
+ 	{
+
+Modified: trunk/source/sc2ships/shporzne.cpp
+===================================================================
+--- trunk/source/sc2ships/shporzne.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc2ships/shporzne.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -279,7 +279,7 @@
+ 		  damage(orzship, 0, -1);
+ 		}
+ 	      
+-	      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++	      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	      damage(invading, 0, 1);
+ 	      damage_frame = 50;
+ 	      if ( invading-&gt;spritePanel )
+@@ -295,7 +295,7 @@
+ 	  else if (chance &lt; 10 * frame_time) 
+ 	    {
+ 	      state = 0;
+-	      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[2]));
++	      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[2]));
+ 	      if ( invading-&gt;spritePanel )
+ 		{
+ 		  blit(invading-&gt;data-&gt;spritePanel-&gt;get_bitmap(0), invading-&gt;spritePanel-&gt;get_bitmap(0),
+@@ -389,7 +389,7 @@
+       if (invading-&gt;damage_factor &lt; armour)
+ 	{
+ 	  collide_flag_anyone = 0;
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1]));
+ 	  damage(invading, 0, 1);
+ 	  if (invading-&gt;spritePanel)
+ 	    {
+
+Modified: trunk/source/sc2ships/shppkufu.cpp
+===================================================================
+--- trunk/source/sc2ships/shppkufu.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc2ships/shppkufu.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -49,7 +49,7 @@
+   if (crew &gt; 0) 
+     return r;
+   
+-  tw_sound.play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
++  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+   game-&gt;add(new Animation(this, pos,	meleedata.kaboomSprite, 0, KABOOM_FRAMES, 
+ 			  time_ratio, DEPTH_EXPLOSIONS));
+   
+@@ -176,12 +176,12 @@
+       
+       special_recharge = special_rate;
+ 
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
+       
+       special_sample = (special_sample + 1 + random(13)) % 14;
+ 
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[special_sample]));
+     }
+ }
+ 
+
+Modified: trunk/source/sc2ships/shpslypr.cpp
+===================================================================
+--- trunk/source/sc2ships/shpslypr.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc2ships/shpslypr.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -154,8 +154,8 @@
+ 	      if (damage(q.current, 1)) 
+ 		{
+ 		  batt = batt_max;
+-		  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-		  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++		  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++		  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 		}
+ 	    }
+ 	}
+
+Modified: trunk/source/sc2ships/shputwju.cpp
+===================================================================
+--- trunk/source/sc2ships/shputwju.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/sc2ships/shputwju.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -74,8 +74,8 @@
+ 
+     weapon_recharge = weapon_rate;
+ 
+-    tw_sound.stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
+-    tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0]));
++    tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
++    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0]));
+   }
+ }
+ 
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/scp.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -81,7 +81,7 @@
+ FILE *debug_file;
+ 
+ /*! \brief Blits GUI background bitmap on to a video window */
+-void showTitle(VideoWindow *window = &amp;videosystem.window);
++void showTitle(VideoWindow *window = &amp;videosystem-&gt;window);
+ 
+ /*! \brief MELEE_EX dialog - selects alternate games as opposed to standard melee. 
+   From here you can access diagnostics (DIAGNOSTICS dialog) and ship info. 
+@@ -191,7 +191,7 @@
+ {
+   STACKTRACE;
+   titleMusic = data_full_path(&quot;music/Robeter-Space-Gods-Loop.ogg&quot;);
+-  tw_sound.play_music(titleMusic);
++  tw_sound-&gt;play_music(titleMusic);
+ 
+   menuAccept   = data_full_path(&quot;sound/menu/MENUACCEPT.wav&quot;);
+   menuFocus    = data_full_path(&quot;sound/menu/MENUFOCUS.wav&quot;);
+@@ -264,7 +264,7 @@
+       new_game-&gt;preinit();
+       new_game-&gt;window = new VideoWindow;
+       new_game-&gt;window-&gt;preinit();
+-      new_game-&gt;window-&gt;init(&amp;videosystem.window);
++      new_game-&gt;window-&gt;init(&amp;videosystem-&gt;window);
+       new_game-&gt;window-&gt;locate(0,0,0,0,0,1,0,1);
+       new_game-&gt;init(_log);
+       new_game-&gt;play();
+@@ -519,8 +519,11 @@
+   if (allegro_init() &lt; 0)
+     tw_error_exit(&quot;Allegro initialization failed&quot;);
+   create_user_ini();
+-  videosystem.preinit();
+   
++  VideoSystem video;
++  videosystem = &video;
++  videosystem-&gt;preinit();
++  
+   try {
+     init_time();
+     init_error();
+@@ -612,7 +615,7 @@
+     srand(time(NULL));
+     set_color_conversion(COLORCONV_KEEP_TRANS);
+     
+-    videosystem.set_resolution(screen_width, screen_height, screen_bpp, fullscreen);
++    videosystem-&gt;set_resolution(screen_width, screen_height, screen_bpp, fullscreen);
+     register_bitmap_file_type(&quot;jpg&quot;, load_jpg, NULL);
+     if(!theme)
+ 	theme = agup_theme_by_name(&quot;Photon&quot;);
+@@ -625,9 +628,12 @@
+     gui_text_list_proc = d_agup_text_list_proc;
+ 
+     enable_input(inputs);
+-    tw_sound.set_sound_volume(tw_sound.load_sound_volume());
+-    tw_sound.set_music_volume(tw_sound.load_music_volume());
+     
++    SoundSystem sound;
++    tw_sound = &sound;
++    tw_sound-&gt;set_sound_volume(tw_sound-&gt;load_sound_volume());
++    tw_sound-&gt;set_music_volume(tw_sound-&gt;load_music_volume());
++    
+     showLoadingScreen();
+     
+     View *v = NULL;
+@@ -643,7 +649,7 @@
+     }
+     else {
+       mainmenu.preinit();
+-      mainmenu.init(&amp;videosystem.window);
++      mainmenu.init(&amp;videosystem-&gt;window);
+       mainmenu.doit();
+       mainmenu.deinit();
+     }
+@@ -1392,8 +1398,7 @@
+ 		free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
+ 	}
+ 	
+-	videosystem.redraw();
+-	//	clear_bitmap(screen);
++	videosystem-&gt;redraw();
+ 	return;
+ }
+ 
+@@ -1472,23 +1477,23 @@
+   char blah[256];
+   
+   scare_mouse();
+-  videosystem.window.lock();
+-  clear_to_color(videosystem.window.surface, 0);
++  videosystem-&gt;window.lock();
++  clear_to_color(videosystem-&gt;window.surface, 0);
+   textprintf(screen, font, 40, 20, palette_color[15], &quot;Press the keys combinations you wish to test&quot;);
+   textprintf(screen, font, 40, 40, palette_color[15], &quot;When you're finished, press ESCAPE or F10&quot;);
+-  videosystem.window.unlock();
++  videosystem-&gt;window.unlock();
+   unscare_mouse();
+   
+   while (!key[KEY_F10] &amp;&amp; !key[KEY_ESC]) 
+     {
+-      if (videosystem.poll_redraw()) 
++      if (videosystem-&gt;poll_redraw()) 
+ 	{
+ 	  scare_mouse();
+-	  videosystem.window.lock();
+-	  clear_to_color(videosystem.window.surface, 0);
++	  videosystem-&gt;window.lock();
++	  clear_to_color(videosystem-&gt;window.surface, 0);
+ 	  textprintf(screen, font, 40, 20, palette_color[15], &quot;Press the keys combinations you wish to test&quot;);
+ 	  textprintf(screen, font, 40, 40, palette_color[15], &quot;When you're finished, press ESCAPE or F10&quot;);
+-	  videosystem.window.unlock();
++	  videosystem-&gt;window.unlock();
+ 	  unscare_mouse();
+ 	}
+       rectfill(screen, 50, 60, 500, 60 + 20 * j, palette_color[0]);
+
+Modified: trunk/source/ships/shpaktgu.cpp
+===================================================================
+--- trunk/source/ships/shpaktgu.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpaktgu.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -183,9 +183,9 @@
+ void AktunLaser::inflict_damage(SpaceObject *other)
+ {
+   STACKTRACE;
+-  tw_sound.stop_sound(data_full_path(owner-&gt;data-&gt;sampleWeapon[0]));
++  tw_sound-&gt;stop_sound(data_full_path(owner-&gt;data-&gt;sampleWeapon[0]));
+   Laser::inflict_damage(other);
+-  tw_sound.play_sound(data_full_path(owner-&gt;data-&gt;sampleWeapon[1]));
++  tw_sound-&gt;play_sound(data_full_path(owner-&gt;data-&gt;sampleWeapon[1]));
+ }
+ 
+ AktunComSat::AktunComSat(double oangle, double orange, int odamage,
+@@ -249,7 +249,7 @@
+ 	  game-&gt;add(l);
+ 	  if (l-&gt;exists()) 
+ 	    {
+-	      tw_sound.play_sound(data_full_path(ship-&gt;data-&gt;sampleExtra[0]));
++	      tw_sound-&gt;play_sound(data_full_path(ship-&gt;data-&gt;sampleExtra[0]));
+ 	      lRecharge += lRechargeRate;
+ 	      break;
+ 	    }
+@@ -280,8 +280,8 @@
+ 	state = 0;
+ 	game-&gt;add(new Animation(this, pos,
+ 				meleedata.kaboomSprite, 0, KABOOM_FRAMES, 50, LAYER_EXPLOSIONS));
+-	tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+-	tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++	tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
++	tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	}
+     }
+   return 1;
+
+Modified: trunk/source/ships/shpalabc.cpp
+===================================================================
+--- trunk/source/ships/shpalabc.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpalabc.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -189,6 +189,7 @@
+   extraSpeedLossReduction  = get_config_float(&quot;Extra&quot;, &quot;SpeedLossReduction&quot;, 1);
+   
+   max_shield_flash_time = get_config_float(&quot;Extra&quot;, &quot;ShieldFlashTime&quot;, 1);
++  shield_flash_time = max_shield_flash_time;
+   shield_flash_scale = 0;
+   
+   absorbed_damage = 0;
+@@ -246,9 +247,9 @@
+ 	    SpaceLocation *ani = new Animation(this, pos+rrr*unit_vector(aaa), 
+ 					       data-&gt;spriteExtraExplosion, 0, 10, 50, DEPTH_EXPLOSIONS);
+ 	    game-&gt;add(ani);
+-	    tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[2])); 
++	    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[2])); 
+ 	  }
+-	  tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND4)); 
++	  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND4)); 
+ 	}
+     }
+   
+@@ -517,7 +518,7 @@
+       // give some sound for the shield if the shield absorbs its damage.
+       if (data-&gt;sampleExtra.size() &gt;= 2)
+ 	{
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1]));
+ 	}
+       shield_flash_time = max_shield_flash_time;	// 1 second ?
+       // 0=shield is almost drained, 1=shield is maxed.
+@@ -552,7 +553,7 @@
+       engines_armour -= total;
+       if (engines_armour &lt;=0) 
+ 	{
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	  engines_death_frame = 8;
+ 	  engines_death_count = 500 +random()%100;
+ 	  speed_max /= 2.0;
+@@ -567,7 +568,7 @@
+     int i;
+     for (i=0; i&lt;3; i++)
+       turret[i]-&gt;state = 0;
+-    tw_sound.play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
++    tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+     game-&gt;add(new Animation(this, pos,
+ 			    meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS, 2.0));
+     if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) game-&gt;ship_died(this, source);
+@@ -590,7 +591,7 @@
+       if (engines_armour &gt; 0) 
+ 	{
+ 	  engines_armour = 0;
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	  engines_death_frame = 8;
+ 	  engines_death_count = 500 +random()%100;
+ 	}
+@@ -729,7 +730,7 @@
+     {
+       game-&gt;add(new Animation(this, pos, data-&gt;spriteWeaponExplosion, 0, 10, 50, DEPTH_EXPLOSIONS));
+       state = 0; 
+-      tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND1));
++      tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND1));
+     }
+ };
+ 
+@@ -760,7 +761,7 @@
+   explosionFrameSize  = 50;
+   explosionSample = data-&gt;sampleWeapon[2];
+   smoke_frame = 0;
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[1])); // was vol 64
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[1])); // was vol 64
+ }
+ 
+ 
+@@ -813,7 +814,7 @@
+   sinc_it();
+ 
+   fire_frame[0] = fire_frame[1] = 10;
+-  
++  fire_time[0] = fire_time[1] = 0;
+   alive = true;
+ }
+ 
+@@ -939,7 +940,7 @@
+   if (armour &lt;= 0) 
+     {
+       alive = false;
+-      tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND2));
++      tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND2));
+       game-&gt;add(new FixedAnimation(this, this, ship-&gt;data-&gt;spriteSpecialExplosion,
+ 				   0, 10, 50, DEPTH_EXPLOSIONS));
+       return; 
+@@ -1016,7 +1017,7 @@
+ 	    {
+ 	      recharge += ship-&gt;special_rate;
+ 	      ship-&gt;batt -= ship-&gt;special_drain;
+-	      tw_sound.play_sound(data_full_path(ship-&gt;data-&gt;sampleSpecial[0]));
++	      tw_sound-&gt;play_sound(data_full_path(ship-&gt;data-&gt;sampleSpecial[0]));
+ 	      shots_fired++;
+ 	      if (barrel == 0) 
+ 		{
+@@ -1025,7 +1026,8 @@
+ 					     ship-&gt;specialDamage, ship-&gt;specialRange,
+ 					     ship-&gt;specialArmour, ship, this, 
+ 					     ship-&gt;data-&gt;spriteSpecial, ship-&gt;specialRelativity));
+-		  fire_frame[0] = 0; fire_time[0] =  turret_fire_frame_size;
++		  fire_frame[0] = 0; 
++		  fire_time[0] =  turret_fire_frame_size;
+ 		  barrel = 1; 
+ 		}
+ 	      else 
+@@ -1035,7 +1037,8 @@
+ 					     ship-&gt;specialDamage, ship-&gt;specialRange,
+ 					     ship-&gt;specialArmour, ship, this, 
+ 					     ship-&gt;data-&gt;spriteSpecial, ship-&gt;specialRelativity));
+-		  fire_frame[1] = 0; fire_time[1] =  turret_fire_frame_size;
++		  fire_frame[1] = 0; 
++		  fire_time[1] =  turret_fire_frame_size;
+ 		  barrel = 0; 
+ 		}
+ 	    }
+
+Modified: trunk/source/ships/shpbipka.cpp
+===================================================================
+--- trunk/source/ships/shpbipka.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpbipka.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -477,7 +477,7 @@
+ void BipoleShip::destroyed( SpaceLocation* source )
+ {
+   STACKTRACE;
+-  tw_sound.play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
++  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+   game-&gt;add(new Animation(this, pos,
+ 			  meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, LAYER_EXPLOSIONS));
+ }
+
+Modified: trunk/source/ships/shpbogce.cpp
+===================================================================
+--- trunk/source/ships/shpbogce.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpbogce.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -422,7 +422,7 @@
+   blast_accel = oblast_accel;
+   blast_maxspeed = oblast_maxspeed;
+   hotspot_frame = 0;
+-  tw_sound.play_sound(data_full_path(s));//       play_sound(s, 128);
++  tw_sound-&gt;play_sound(data_full_path(s));//       play_sound(s, 128);
+   explosionSprite = esprite;
+   explosionFrameCount = 10;
+   explosionFrameSize = 50;
+@@ -518,7 +518,7 @@
+   other-&gt;handle_damage(this, 1);
+   if (!s.empty())  
+     {
+-      tw_sound.play_sound(data_full_path(s)); // was vol 160
++      tw_sound-&gt;play_sound(data_full_path(s)); // was vol 160
+     }
+   state = 0;
+ }
+@@ -541,7 +541,7 @@
+ {
+   STACKTRACE;
+   pos += edge();
+-  tw_sound.play_sound(data_full_path(ex_sample)); // was vol 240
++  tw_sound-&gt;play_sound(data_full_path(ex_sample)); // was vol 240
+   game-&gt;add(new Animation(this, pos, ex_sprite, 0, 10, 50, LAYER_EXPLOSIONS));
+   other-&gt;handle_damage(this, damage_factor);
+   state = 0;
+
+Modified: trunk/source/ships/shpchoex.cpp
+===================================================================
+--- trunk/source/ships/shpchoex.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpchoex.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -571,8 +571,8 @@
+ 	    }
+ 	  if(count==0)
+ 	    {
+-	      tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+-	      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++	      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
++	      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	     }
+ 	  count++;
+ 	  
+@@ -581,8 +581,8 @@
+       drillFrames-= frame_time;
+       if ((drillFrames &lt;= 0) &amp;&amp; (!latched)) 
+ 	{
+-	  tw_sound.stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0]));
++	  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0]));
+ 	}
+      }
+    else 
+@@ -693,8 +693,8 @@
+ 		  grabdistance = (distance(other) * 1.1);
+ 		  grabshipangle = (other-&gt;get_angle());
+ 		  drillDamageLeft = weaponDamage;
+-		  tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[1]));
+-		  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1]));
++		  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[1]));
++		  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1]));
+ 		  if ((drillFrames / frame_time)&lt; weaponDamage) 
+ 		    {
+ 		      drillDamagePerDamageFrame = (weaponDamage/drillFrames)
+
+Modified: trunk/source/ships/shpconca.cpp
+===================================================================
+--- trunk/source/ships/shpconca.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpconca.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -155,7 +155,7 @@
+ 	  
+ 	  do_area_damage( );
+ 	  
+-	  tw_sound.play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
++	  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+ 	  game-&gt;add(new Animation(this, pos,	meleedata.kaboomSprite, 0, 
+ 				  KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
+ 	  
+
+Modified: trunk/source/ships/shpearc3.cpp
+===================================================================
+--- trunk/source/ships/shpearc3.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpearc3.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -184,7 +184,7 @@
+       game-&gt;add(new EarthlingCruiserMk3Beam(this, Vector2(0,-6), specialRange,
+ 					    specialDamage, specialDamageShots, 
+ 					    specialFrames, tgt));
+-	    tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	    fire = true; 
+     }
+   
+@@ -203,7 +203,7 @@
+ 	sprite_index = 32;
+ 
+ 	attributes &amp;= ~ATTRIB_STANDARD_INDEX;
+-	tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0]));
++	tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0]));
+ }
+ 
+ 
+@@ -217,7 +217,7 @@
+ void EarthlingCruiserMk3Shot::soundExplosion()
+ {
+   STACKTRACE;
+-  tw_sound.play_sound(data_full_path(explosionSample));
++  tw_sound-&gt;play_sound(data_full_path(explosionSample));
+   return;
+ }
+ 
+
+Modified: trunk/source/ships/shpforsh.cpp
+===================================================================
+--- trunk/source/ships/shpforsh.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpforsh.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -95,8 +95,8 @@
+   SpaceSprite *tmp_s = data-&gt;spriteWeapon;
+   if (weapon_type==2)	
+     tmp_s = data-&gt;spriteExtra;
+-  tw_sound.stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0]));
++  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0]));
+ 	
+   if (weapon_type == 0) 
+     {
+@@ -124,8 +124,8 @@
+   STACKTRACE;
+   if(shockingFrames == 0) 
+     {
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+       shockingFrames = specialFrames;
+       shockVar = 1;
+       recharge_amount = 0; 
+@@ -147,36 +147,36 @@
+ 	}
+       if(shockingFrames == 2000 )
+ 	{
+-	  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 
+ 	  add( new FixedAnimation(this, this, data-&gt;spriteSpecial, 0, 6, 30, LAYER_EXPLOSIONS));
+ 	}
+       if(shockingFrames == 1500 )
+ 	{
+-	  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	  
+ 	  add( new FixedAnimation(this, this, data-&gt;spriteSpecial, 0, 6, 30, LAYER_EXPLOSIONS));
+ 	}
+       if(shockingFrames == 1000 )
+ 	{
+-	  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	  
+ 	  add( new FixedAnimation(this, this, data-&gt;spriteSpecial, 0, 6, 30, LAYER_EXPLOSIONS));
+ 	}
+       if(shockingFrames == 500 )
+ 	{
+-	  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	  
+ 	  add( new FixedAnimation(this, this, data-&gt;spriteSpecial, 0, 6, 30, LAYER_EXPLOSIONS));
+ 	}
+       if(shockingFrames == 50 )
+ 	{
+-	  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[1]));
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[1]));
++	  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[1]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[1]));
+ 	  
+ 	  add( new ForevianShockwave(0, 70, angle , specialVelocity, specialDamage, 
+ 				     specialRange, specialArmour, this, this, special_sprite, 
+@@ -211,8 +211,8 @@
+   if (other==last_hit)
+     return;
+   
+-  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[2]));
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[2]));
++  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[2]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[2]));
+ 	  
+   if (!other-&gt;sameShip(this))
+     damage(other, 0, damage_factor);
+
+Modified: trunk/source/ships/shpgarty.cpp
+===================================================================
+--- trunk/source/ships/shpgarty.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpgarty.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -392,7 +392,7 @@
+ 
+   if (!done_once)
+     {
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0])); //charge
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0])); //charge
+       done_once=TRUE;
+     }
+ 
+@@ -410,7 +410,7 @@
+ 	      charge_frame++;
+ 	      if(charge_frame == 5) 
+ 		{ 
+-		  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0])); //charge
++		  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0])); //charge
+ 		  charge_frame = 0;
+ 		  charge_phase++;
+ 		  damage_factor += Charge;
+@@ -430,7 +430,7 @@
+ 	  released = TRUE;
+ 	  if (Timer &gt; MinTL)
+ 	    {
+-	      tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0])); //shoot
++	      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0])); //shoot
+ 	    }
+ 	}
+       else 
+@@ -457,9 +457,9 @@
+   else if (Timer &lt; MinTL) 
+     {
+       released=TRUE;
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[1])); //cancel if less than min time limit
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1])); //cancel if less than min time limit
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[1])); //cancel if less than min time limit
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1])); //cancel if less than min time limit
+       
+       state=0;
+     }
+@@ -524,7 +524,7 @@
+   armour += damage_factor + direct ; // nullify damage
+   if (((!ship_hit &amp;&amp; !source-&gt;isShip()) ||
+        (ship_hit &amp;&amp; source-&gt;isShip())) &amp;&amp; !released)
+-    tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[2]));
++    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[2]));
+   Shot::handle_damage(source, normal, direct);
+   return 0;
+ }
+
+Modified: trunk/source/ships/shpilwsp.cpp
+===================================================================
+--- trunk/source/ships/shpilwsp.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpilwsp.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -183,8 +183,8 @@
+       freq = 2000 - 80*(int)other-&gt;mass;
+     }
+ 
+-  tw_sound.stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0])); 
++  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0])); 
+   game-&gt;add( new FixedAnimation( this, other, data-&gt;spriteExtra, 0, 
+ 				 data-&gt;spriteExtra-&gt;frames(), time_ratio, LAYER_EXPLOSIONS ));
+   
+
+Modified: trunk/source/ships/shprogsq.cpp
+===================================================================
+--- trunk/source/ships/shprogsq.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shprogsq.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -672,8 +672,7 @@
+ 
+ 	if ( !state )
+ 	{
+-	  // this ship dies :(
+-	  tw_sound.play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
++	  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+ 	  game-&gt;add(new Animation(this, pos, meleedata.kaboomSprite, 0, 
+ 				  KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS));
+ 	}
+@@ -738,16 +737,16 @@
+   switch(i)
+     {
+     case 0:
+-      tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND1));
++      tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND1));
+       break;
+     case 1:
+-      tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND2));
++      tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND2));
+       break;
+     case 2:
+-      tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND3));
++      tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND3));
+       break;
+     case 3:
+-      tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND4));
++      tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND4));
+       break;
+     default:
+       {
+
+Modified: trunk/source/ships/shpstaba.cpp
+===================================================================
+--- trunk/source/ships/shpstaba.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpstaba.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -116,7 +116,7 @@
+ 		}
+ 	if (fire) 
+ 	  {
+-	    tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND1));
++	    tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND1));
+ 	  }
+ 
+ 	return(fire);
+@@ -148,7 +148,7 @@
+   }
+   if (fire) 
+     {
+-      tw_sound.play_sound(data_full_path(MELEE_BOOM_SOUND1));
++      tw_sound-&gt;play_sound(data_full_path(MELEE_BOOM_SOUND1));
+     }
+   
+   Ship::calculate();
+
+Modified: trunk/source/ships/shptauar.cpp
+===================================================================
+--- trunk/source/ships/shptauar.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shptauar.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -256,11 +256,11 @@
+ 	 {
+ 	   if (fire_special)
+ 	     {
+-	       tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	       tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	     }
+ 	   else
+ 	     {
+-	       tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0]));
++	       tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0]));
+ 	     }
+ 	   weapon_sound_timer = iround(weaponSoundTimer * tw_random(0.49, 1.63));
+ 	 }
+@@ -474,15 +474,15 @@
+ 		image-&gt;type = DAT_RLE_SPRITE;
+ 		tmp = create_bitmap_ex( bitmap_color_depth( bmp ), bmp-&gt;w, bmp-&gt;h );
+ 		//void* old_color_effects = videosystem.color_effects;
+-		void* old_color_effects = (void *)videosystem.color_effects; //added (void *) 7/1/2003 Culture20
+-		videosystem.color_effects = TauArchonFreezeColorEffects;
++		void* old_color_effects = (void *)videosystem-&gt;color_effects; //added (void *) 7/1/2003 Culture20
++		videosystem-&gt;color_effects = TauArchonFreezeColorEffects;
+ 	//	videosystem.update_colors();
+ 		blit( bmp, tmp, 0, 0, 0, 0, bmp-&gt;w, bmp-&gt;h );
+ 		image-&gt;dat = get_rle_sprite( tmp );
+ 		SpaceSprite* frozen_sprite = new SpaceSprite( image, 1 );
+ 		destroy_bitmap( tmp );
+ 		//videosystem.color_effects = (void (__cdecl *)(struct RGB *))old_color_effects;
+-		videosystem.color_effects = (void (*)(struct RGB *))old_color_effects; //removed __cdecl 7/1/2003 Culture20
++		videosystem-&gt;color_effects = (void (*)(struct RGB *))old_color_effects; //removed __cdecl 7/1/2003 Culture20
+ 	//	videosystem.update_colors();
+ 		delete image;
+ 		game-&gt;add(new TauArchonFrozen(this, other, frozen_sprite));
+@@ -519,11 +519,11 @@
+ 
+ 	if (tw_random()%2)
+ 	  {
+-	    tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[4]));
++	    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[4]));
+ 	  }
+ 	else
+ 	  {
+-	    tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[5]));
++	    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[5]));
+ 	  }
+ }
+ 
+
+Modified: trunk/source/ships/shptausl.cpp
+===================================================================
+--- trunk/source/ships/shptausl.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shptausl.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -163,8 +163,8 @@
+ 	      batt -= special_drain;
+ 	      special_recharge += special_rate;
+ 	      
+-	      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-	      tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++	      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+ 	      
+ 	      if (special_charge &gt;= max_charge)
+ 		activate_special(); 
+@@ -195,13 +195,13 @@
+       a = special_charge - sub_range;
+       jd = range0 + a * (range1 + a * range2);
+       trace_recharge = 0;
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[2]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[2]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[2]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[2]));
+     }
+   else    
+     {
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[1]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[1]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[1]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[1]));
+     }
+ 
+   special_charge = 0;
+@@ -211,24 +211,27 @@
+ void TauSlider::calculate()
+ {
+   STACKTRACE;
+-        just_exited = false;
+-        Ship::calculate();
+-        if (in_jump) {
+-                trace_recharge -= frame_time;
+-                if (trace_recharge &lt; 0) {
+-                        trace_recharge += trace_rate;
+-                        ct = (ct + 1) % max_trace_number;
+-                        tr[ct] = new TauSliderTrace(this); 
+-						add(tr[ct]);}
+-                //x = normalize(x + jvx * frame_time, X_MAX);
+-                //y = normalize(y + jvy * frame_time, Y_MAX);
+-				pos = normalize(pos + jvp * frame_time, map_size);
+-                jd -= jv * frame_time;
+-                if (jd &lt;= 0) {
+-                        in_jump = false;
+-                        layer = LAYER_SHIPS;
+-                        collide_flag_anyone = collide_flag_reserve; }                        
+-        }        
++  just_exited = false;
++  Ship::calculate();
++  if (in_jump) 
++    {
++      trace_recharge -= frame_time;
++      if (trace_recharge &lt; 0) 
++	{
++	  trace_recharge += trace_rate;
++	  ct = (ct + 1) % max_trace_number;
++	  tr[ct] = new TauSliderTrace(this); 
++	  add(tr[ct]);
++	}
++      pos = normalize(pos + jvp * frame_time, map_size);
++      jd -= jv * frame_time;
++      if (jd &lt;= 0) 
++	{
++	  in_jump = false;
++	  layer = LAYER_SHIPS;
++	  collide_flag_anyone = collide_flag_reserve; 
++	}
++    }        
+ }
+ 
+ int TauSlider::handle_damage(SpaceLocation *source, int normal, int direct) {
+
+Modified: trunk/source/ships/shptaust.cpp
+===================================================================
+--- trunk/source/ships/shptaust.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shptaust.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -175,7 +175,7 @@
+   smoke_frame = 0;
+   first_frame = 12;
+   
+-  tw_sound.play_sound(data_full_path(s));
++  tw_sound-&gt;play_sound(data_full_path(s));
+ }
+ 
+ 
+
+Modified: trunk/source/ships/shptauto.cpp
+===================================================================
+--- trunk/source/ships/shptauto.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shptauto.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -134,7 +134,7 @@
+       can_switch = false;
+       if (TauTor_state) 
+ 	{
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1]));
+ 	  residual_drain = 0.0;
+ 	  recharge_amount = extra_recharge;
+ 	  weapon_rate  = extra_rate;
+@@ -147,7 +147,7 @@
+ 	  transition_count = transition_time;
+ 	  residual_drain = 0.0;
+ 	  recharge_amount = 0;
+-	  tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[0]));
++	  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+ 	  weapon_rate  = special_rate;
+ 	  weapon_drain = special_drain; 
+ 	}
+@@ -176,7 +176,7 @@
+   
+   if (TauTor_state &amp;&amp; (batt == 0)) 
+     {
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleExtra[1]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[1]));
+       residual_drain = 0.0;
+       recharge_amount = extra_recharge;
+       weapon_rate  = extra_rate;
+
+Modified: trunk/source/ships/shpyusra.cpp
+===================================================================
+--- trunk/source/ships/shpyusra.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpyusra.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -210,8 +210,8 @@
+   rel_dist = distance( other );
+   change_owner( other );       // are now part of the other ship
+   std::string smpl = data-&gt;sampleWeapon[1 + random() % 2];
+-  tw_sound.stop_sound(data_full_path(smpl));
+-  tw_sound.play_sound(data_full_path(smpl));
++  tw_sound-&gt;stop_sound(data_full_path(smpl));
++  tw_sound-&gt;play_sound(data_full_path(smpl));
+ }
+ 
+ int YushSpear::handle_damage( SpaceLocation* other, double normal, double direct )
+
+Modified: trunk/source/ships/shpzeksh.cpp
+===================================================================
+--- trunk/source/ships/shpzeksh.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/ships/shpzeksh.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -78,8 +78,8 @@
+ int ZekfahanShocker::activate_weapon()
+ {
+   STACKTRACE;
+-  tw_sound.stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleWeapon[0]));
++  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleWeapon[0]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[0]));
+   
+   add(new AnimatedShot(this, Vector2(42.0, 15.0), angle , weaponVelocity,
+ 		       weaponDamage, weaponRange, weaponArmour, this, data-&gt;spriteWeapon, 5, 12, 1.0));
+@@ -93,8 +93,8 @@
+   STACKTRACE;
+   if(shockingFrames == 0)
+     {
+-      tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
+-      tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[0]));
++      tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[0]));
++      tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[0]));
+       
+       shockingFrames = specialFrames;
+       shockVar = 1;
+@@ -118,8 +118,8 @@
+       }
+     if(shockVar &amp;&amp; shockingFrames &lt;= 50 )
+       {
+-	tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[1]));
+-	tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[1]));
++	tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[1]));
++	tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[1]));
+ 	
+ 	add( new Shockwave(Vector2(0, 70), angle , specialVelocity, 
+ 			   specialDamage, specialRange, specialArmour, this, this, 
+@@ -144,8 +144,8 @@
+ void Shockwave::inflict_damage(SpaceObject *other) 
+ {
+   STACKTRACE;
+-  tw_sound.stop_sound(data_full_path(data-&gt;sampleSpecial[2]));
+-  tw_sound.play_sound(data_full_path(data-&gt;sampleSpecial[2]));
++  tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleSpecial[2]));
++  tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleSpecial[2]));
+  
+   damage(other, 0, damage_factor);
+   add( new Animation(this, pos, data-&gt;spriteSpecial, 0, 6, 30, LAYER_EXPLOSIONS));
+
+Modified: trunk/source/util/errors.cpp
+===================================================================
+--- trunk/source/util/errors.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/util/errors.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -85,9 +85,9 @@
+   int i;
+   
+   if (popup) 
+-    i = tw_popup_dialog(&amp;videosystem.window, dialog, 2) - 2;
++    i = tw_popup_dialog(&amp;videosystem-&gt;window, dialog, 2) - 2;
+   else
+-    i = tw_do_dialog   (&amp;videosystem.window, dialog, 2) - 2;
++    i = tw_do_dialog   (&amp;videosystem-&gt;window, dialog, 2) - 2;
+   return i + 1;
+ }
+ 
+@@ -140,7 +140,7 @@
+   log_debug(UserStackTraceHelper::get_stack_trace_string().c_str());
+   
+   
+-  if (videosystem.width &lt;= 0) {
++  if (videosystem-&gt;width &lt;= 0) {
+     allegro_message(&quot;Critical Error$: %s\n&quot;, error_string);
+     log_debug(&quot;\nUnable to display messge, shutting down\n&quot;);
+     throw -1;
+@@ -167,7 +167,7 @@
+     selection = ES_ABORT;
+   log_debug(&quot;Option \&quot;%s\&quot; selected\n&quot;, es[selection]);
+   
+-  videosystem.screen_corrupted = true;
++  videosystem-&gt;screen_corrupted = true;
+   
+   if (selection == ES_DEBUG) {//&quot;Debug&quot;
+     __error_flag |= 1;
+@@ -214,7 +214,7 @@
+ 
+ void tw_error_exit(const char* message) {
+ 	log_debug(&quot;\nCritical Error!: %s\n\n&quot;, message);
+-	if ((videosystem.width &gt; 0) &amp;&amp; (strlen(message) &lt; 1000)) {
++	if ((videosystem-&gt;width &gt; 0) &amp;&amp; (strlen(message) &lt; 1000)) {
+ 		char buf[1024];
+ 		sprintf(buf, &quot;Critical Error!: %s&quot;, message);
+ 		tw_alert (buf, &quot;Quit&quot;);
+@@ -249,13 +249,12 @@
+   #ifdef DEBUG
+   //  debug_log(GetStackNodeString(srcline).c_str());
+   #endif 
+-
+-  call_stack.push(srcline);
++      call_stack.push(srcline);
+ }
+ 
+ UserStackTraceHelper::~UserStackTraceHelper()
+ {
+-  call_stack.pop();
++      call_stack.pop();
+ }
+ 
+ std::string UserStackTraceHelper::GetStackNodeString(SOURCE_LINE* stNode)
+
+Modified: trunk/source/util/sound.cpp
+===================================================================
+--- trunk/source/util/sound.cpp	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/util/sound.cpp	2004-09-25 19:22:38 UTC (rev 63)
+@@ -26,7 +26,8 @@
+ #include &quot;other/twconfig.h&quot;
+ #include &quot;errors.h&quot;
+ 
+-SoundSystem tw_sound;
++SoundSystem* tw_sound = NULL;
++
+ SoundSystem::SoundSystem(bool sound_on)
+ {
+   STACKTRACE;
+
+Modified: trunk/source/util/sound.h
+===================================================================
+--- trunk/source/util/sound.h	2004-09-25 16:33:16 UTC (rev 62)
++++ trunk/source/util/sound.h	2004-09-25 19:22:38 UTC (rev 63)
+@@ -67,6 +67,6 @@
+   /// \brief return true if music playing
+   bool playing_music();
+ };
+-extern SoundSystem tw_sound;
++extern SoundSystem* tw_sound;
+ 
+ #endif
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000010.html">[Tw-light-svn] r62 - in trunk: Util Util/deditor Util/deditor/lua Util/deditor/lua/lib web
+</A></li>
+	<LI>Next message: <A HREF="000012.html">[Tw-light-svn] r64 - in trunk: . gamedata gamedata/ships source source/games source/libraries source/libraries/lua source/libraries/lua/lib source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

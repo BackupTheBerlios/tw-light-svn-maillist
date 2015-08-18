@@ -1,0 +1,1768 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r139 - in trunk: . gamedata/python source source/games source/melee source/other source/python source/util web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-April/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r139%20-%20in%20trunk%3A%20.%20gamedata/python%20source%20source/games%20source/melee%20source/other%20source/python%20source/util%20web&In-Reply-To=%3C200504302131.j3ULVauE026876%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000086.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r139 - in trunk: . gamedata/python source source/games source/melee source/other source/python source/util web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r139%20-%20in%20trunk%3A%20.%20gamedata/python%20source%20source/games%20source/melee%20source/other%20source/python%20source/util%20web&In-Reply-To=%3C200504302131.j3ULVauE026876%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r139 - in trunk: . gamedata/python source source/games source/melee source/other source/python source/util web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Apr 30 23:31:36 CEST 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000086.html">[Tw-light-svn] r140 - in trunk/doc: . plot plot/Back Home plot/Extras plot/New Dangers plot/New Races plot/The New Arm Adventures plot/The REAL threat
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#85">[ date ]</a>
+              <a href="thread.html#85">[ thread ]</a>
+              <a href="subject.html#85">[ subject ]</a>
+              <a href="author.html#85">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-04-30 23:31:35 +0200 (Sat, 30 Apr 2005)
+New Revision: 139
+
+Added:
+   trunk/web/twplot.zip
+Modified:
+   trunk/gamedata/python/start.py
+   trunk/makefile
+   trunk/source/ais.h
+   trunk/source/frame.cpp
+   trunk/source/games/gamehierarchy.cpp
+   trunk/source/games/gdefender.cpp
+   trunk/source/games/ggob.cpp
+   trunk/source/melee/mcontrol.cpp
+   trunk/source/melee/mcontrol.h
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mhelpers.cpp
+   trunk/source/melee/mitems.cpp
+   trunk/source/melee/mnet1.cpp
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mship.h
+   trunk/source/melee/msprite.cpp
+   trunk/source/other/starmap.cpp
+   trunk/source/python/game.cpp
+   trunk/source/python/python_class.cpp
+   trunk/source/python/python_class.h
+   trunk/source/scp.cpp
+   trunk/source/util/net_tcp.cpp
+   trunk/source/util/sound.cpp
+Log:
+fixed issue #40
+
+Modified: trunk/gamedata/python/start.py
+===================================================================
+--- trunk/gamedata/python/start.py	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/gamedata/python/start.py	2005-04-30 21:31:35 UTC (rev 139)
+@@ -1,5 +1,7 @@
+ import ggob
+ 
++print &quot;Gob Start script&quot;
++
+ game = ggob.GobGame.get_this()
+ 
+ # System Arix
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/makefile	2005-04-30 21:31:35 UTC (rev 139)
+@@ -207,7 +207,7 @@
+ 	find source -type f &quot;(&quot; -name &quot;*.c&quot; -o -name &quot;*.cpp&quot; &quot;)&quot; &gt;sources.lst
+ 
+ add_stacktrace:
+-	find source -name '*.cpp'|grep -v 'libraries'|grep -v 'errors.cpp'|grep -v 'utils.cpp'|xargs ./Util/addStackTrace.pl 
++	find source -name '*.cpp'|grep -v 'libraries'|grep -v 'errors.cpp'|grep -v 'utils.cpp'|grep -v 'frame.cpp'|xargs ./Util/addStackTrace.pl 
+ 
+ install:
+ 	./install-sh -c -m 755 $(NAME) $(EXECPATH)/$(NAME)
+
+Modified: trunk/source/ais.h
+===================================================================
+--- trunk/source/ais.h	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/ais.h	2005-04-30 21:31:35 UTC (rev 139)
+@@ -120,7 +120,7 @@
+   bool turn_right;
+   bool fire_weapon;
+   bool fire_special;
+-  KeyCode convert();
++  TWKeyCode convert();
+ };
+ 
+ #endif  // __AIS_H__
+
+Modified: trunk/source/frame.cpp
+===================================================================
+--- trunk/source/frame.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/frame.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -124,7 +124,6 @@
+ 
+ Frame::Frame(int max_items) 
+ {
+-  STACKTRACE;
+   window = new VideoWindow();
+   window-&gt;preinit();
+   surface = NULL;
+@@ -165,7 +164,6 @@
+ /*! \brief weild code to enlarge amount of items */
+ void Frame::enlarge_list(int increment) 
+ {
+-  STACKTRACE;
+   DirtyItem *temp;
+   
+   temp = item;
+@@ -223,49 +221,42 @@
+ /*! \brief Add pixel item to item list */
+ void Frame::add_pixel(int x, int y)
+ {
+-  STACKTRACE;
+   add_to_list(x, y, 0, 0, erase_pixel, draw_pixel);
+ }
+ 
+ /*! \brief Add box item to item list */
+ void Frame::add_box(double x, double y, double w, double h)
+ {
+-  STACKTRACE;
+   add_to_list((int)x, (int)y, (int)w, (int)h, erase_box, draw_box);
+ }
+ 
+ /*! \brief Add circle item to item list */
+ void Frame::add_circle(int x, int y, int a, int b)
+ {
+-  STACKTRACE;
+   add_to_list(x, y, a, b, erase_circle, draw_circle);
+ }
+ 
+ /*! \brief to be deleted? */
+ void Frame::add_old_circle(int x, int y, int a, int b)
+ {
+-  STACKTRACE;
+   add_to_old_list(x, y, a, b, erase_circle, draw_circle);
+ }
+ 
+ /*! \brief to be deleted? */
+ void Frame::add_line(int x, int y, int a, int b)
+ {
+-  STACKTRACE;
+   add_to_list(x, y, a, b, erase_line, draw_line);
+ }
+ 
+ /*! \brief to be deleted? */
+ void Frame::add_old_pixel(int x, int y)
+ {
+-  STACKTRACE;
+   add_to_old_list(x, y, 0, 0, erase_pixel, draw_pixel);
+ }
+ 
+ /*! \brief to be deleted? */
+ void Frame::add_old_box(int x, int y, int a, int b)
+ {
+-  STACKTRACE;
+   add_to_old_list(
+ 		  x, 
+ 		  y, 
+@@ -278,14 +269,12 @@
+ /*! \brief to be deleted? */
+ void Frame::add_old_line(int x, int y, int a, int b)
+ {
+-  STACKTRACE;
+   add_to_old_list(x, y, a, b, erase_line, draw_line);
+ }
+ 
+ /*! \brief Clear screen, copy items to old items, destroy items */
+ void Frame::erase()
+ {
+-  STACKTRACE;
+   
+   int c;
+   if (!surface) 
+@@ -366,7 +355,6 @@
+ /*! \brief Draw frame */
+ void Frame::draw()
+ {
+-  STACKTRACE;
+ 
+   int c;
+   BACKGROUND_COLOR = tw_color ( background_red, background_green, background_blue );
+
+Modified: trunk/source/games/gamehierarchy.cpp
+===================================================================
+--- trunk/source/games/gamehierarchy.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/games/gamehierarchy.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -40,13 +40,14 @@
+ 
+ 
+ MainGame::MainGame()
+-{
++{
++  STACKTRACE;
+   g_maingame = this;
+   _active_subgame = &quot;&quot;;
+ }
+ 
+ void MainGame::addsubgame(Game *asubgame, const std::string&amp; name)
+-{
++{
+   STACKTRACE;
+ 
+   asubgame-&gt;_name = name;
+@@ -65,7 +66,7 @@
+ 
+ 
+ void MainGame::removesubgame(Game* g)
+-{
++{
+   STACKTRACE;
+ 
+   _subgame.erase(_subgame.find(g-&gt;_name));
+@@ -76,7 +77,7 @@
+ 
+ 
+ int MainGame::play()
+-{
++{
+   STACKTRACE;
+ 
+   // Nothing to play
+@@ -101,12 +102,14 @@
+ }
+ 
+ void MainGame::setActiveGame(const std::string&amp; name)
+-{
++{
++  STACKTRACE;
+   _active_subgame = name;
+ }
+ 
+ bool MainGame::switch_to(const std::string&amp; name)
+-{
++{
++  STACKTRACE;
+   if(_subgame.find(name)!=_subgame.end())
+     {
+       setActiveGame(name);
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/games/gdefender.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -122,6 +122,7 @@
+ DefenderStation::DefenderStation( SpaceSprite *sprite, SpaceLocation *orbit)
+   : Orbiter ( sprite, orbit, 600 ) 
+ {
++  STACKTRACE;
+   health = maxhealth = 30;
+   regentime = 6000;
+   nextregentime = 0;
+@@ -181,6 +182,7 @@
+ 
+ int DefenderGame::isGameDone() 
+ {
++  STACKTRACE;
+   if (lostGame || 
+       defendergame-&gt;player-&gt;ship == NULL || 
+       !defendergame-&gt;player-&gt;ship-&gt;exists()) 
+@@ -195,6 +197,7 @@
+ 
+ void DefenderGame::preinit() 
+ {
++  STACKTRACE;
+   Game::preinit();
+   //because the desctructor deals with stationsprite, we have to initialize it here
+   //just in case the normal init() function doesn't get called
+@@ -212,6 +215,7 @@
+ 
+ void DefenderGame::fps() 
+ {
++  STACKTRACE;
+   int s = 0;
+   if (starbase) 
+     s = iround(starbase-&gt;health);
+@@ -224,7 +228,8 @@
+ }
+ 
+ void DefenderGame::restart() 
+-{  
++{
++  STACKTRACE;  
+   for(std::list&lt;SpaceLocation*&gt;::iterator i = item.begin();
+       i != item.end(); i++)
+     {
+@@ -254,6 +259,7 @@
+ 
+ void DefenderGame::init( Log * _log, const std::string&amp; save) 
+ {
++  STACKTRACE;
+   Game::init(_log, save);
+   
+   prepare();
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/games/ggob.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -97,12 +97,14 @@
+ 
+ void GobGame::prepare()
+ {
++  STACKTRACE;
+   GobGameBase::prepare();
+ }
+ 
+ 
+ void GobGame::setGameDone(int done)
+ {
++  STACKTRACE;
+ 
+     return GobGameBase::setGameDone(done);
+ }
+@@ -120,6 +122,7 @@
+ 
+ void GobGame::switch_system(const std::string&amp; name)
+ {
++  STACKTRACE;
+   if(name == _name)
+     return;
+ 
+@@ -168,6 +171,7 @@
+ 
+ void GobGame::AddPanel()
+ {
++  STACKTRACE;
+   if (_player_panel) 
+     _player_panel-&gt;die();
+   _player_panel = NULL;
+@@ -221,6 +225,7 @@
+ 
+ SpaceSprite* GobGame::LoadStationSprite(std::string datafile, std::string name)
+ {
++  STACKTRACE;
+   DATAFILE *tmpdata; 
+   tmpdata = load_datafile_object(datafile.c_str(), name.c_str());
+   if (!tmpdata) 
+@@ -256,15 +261,12 @@
+   _name = &quot;FakeSystem_123&quot;;
+   _galaxy.add(s);
+ 
+-  /*
+-  if(Load(data_full_path(&quot;xml/GOB/start.xml&quot;)) == 1)
++  if(!python::exec_file(&quot;start&quot;))
+     {
+-      tw_error(&quot;unable to locate start.xml&quot;);
+-    };  
+-  */
+-
++      tw_error(&quot;Load statrt script error&quot;);
++      //      throw &quot;Load statrt script error&quot;;
++    }
+   python::exec_file(&quot;start&quot;);
+-  
+   _galaxy._stars.remove(s);
+   delete s;
+   
+@@ -285,6 +287,7 @@
+ 
+ GobGame::GobGame()
+ {
++  STACKTRACE;
+   DATAFILE *tmpdata; 
+   tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;defender&quot;);
+   if (!tmpdata) 
+@@ -539,19 +542,23 @@
+ 
+ void GobGame::add_stars()
+ {
++  STACKTRACE;
+   add(new Stars());
+ }
+ void GobGame::add_asteroid()
+ {
++  STACKTRACE;
+   add(new GobAsteroid());
+ }
+ void GobGame::add_system(std::string name, int x, int y)
+ {
++  STACKTRACE;
+   _galaxy.add(new StarSystem(name,Vector2(x,y)));
+   gobgame-&gt;switch_system(name);
+ }
+ void GobGame::add_player(std::string system, int x, int y)
+ {
++  STACKTRACE;
+   add_gobplayer(system, Vector2(x,y));
+ }
+ 
+@@ -579,6 +586,7 @@
+ 
+ GobPlayer::GobPlayer()
+ {
++  STACKTRACE;
+   ship = NULL;
+ }
+ 
+@@ -1096,19 +1104,7 @@
+   gobplayer.ship-&gt;translate(pos);
+ }
+ 
+-/*
+-void MainGobGame::init (Log *log, const std::string&amp; save)
+-{
+-  MainGame::init(log,save);
+-  
+-  if(Load(data_full_path(&quot;xml/GOB/start.xml&quot;)) == 1)
+-    {
+-      tw_error(&quot;unable to locate start.xml&quot;);
+-    };  
+-}	
+ 
+-*/
+-
+ REGISTER_GAME(GobGame, &quot;GOB&quot;)
+ 
+ 
+
+Modified: trunk/source/melee/mcontrol.cpp
+===================================================================
+--- trunk/source/melee/mcontrol.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mcontrol.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -260,14 +260,14 @@
+       if (0) ;
+       else if (already &lt; 0) 
+ 	{//unbuffering
+-	  game-&gt;log-&gt;unbuffer(channel + Game::_channel_buffered, &amp;keys, sizeof(KeyCode));
++	  game-&gt;log-&gt;unbuffer(channel + Game::_channel_buffered, &amp;keys, sizeof(TWKeyCode));
+ 	  keys = intel_ordering_short(keys);
+ 	  already += 1;
+ 	}
+       else if (already &lt; lf) 
+ 	{//buffering
+ 	  keys = intel_ordering_short(keys);
+-	  game-&gt;log-&gt;buffer(channel + Game::_channel_buffered, &amp;keys, sizeof(KeyCode));
++	  game-&gt;log-&gt;buffer(channel + Game::_channel_buffered, &amp;keys, sizeof(TWKeyCode));
+ 	  keys = intel_ordering_short(keys);
+ 	  already += 1;
+ 	}
+@@ -310,7 +310,7 @@
+   if (channel != Game::channel_none) 
+     {
+       attributes |= ATTRIB_LOGGED;
+-      _prediction_keys = new KeyCode[_prediction_keys_size];
++      _prediction_keys = new TWKeyCode[_prediction_keys_size];
+       _prediction_keys_index = 0;
+       if (channel &amp; Game::_channel_buffered) 
+ 	{
+
+Modified: trunk/source/melee/mcontrol.h
+===================================================================
+--- trunk/source/melee/mcontrol.h	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mcontrol.h	2005-04-30 21:31:35 UTC (rev 139)
+@@ -52,7 +52,7 @@
+   /*! \brief points at the current ship being controlled */
+ 	Ship *ship;
+   /*! \brief keys currently pressed */
+-	KeyCode keys;
++	TWKeyCode keys;
+   /*! \brief name of instance */
+ 	char *iname;
+ 	SpaceObject *target;
+@@ -99,7 +99,7 @@
+ 
+ 	enum {_prediction_keys_size = 128};//must be a power of 2
+ //half-assed network bypass for prediction
+-	KeyCode *_prediction_keys;
++	TWKeyCode *_prediction_keys;
+ 	unsigned char _prediction_keys_index;
+ 
+   /*! \brief for future mid-game lag changes */
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mframe.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -174,7 +174,6 @@
+ 	}
+ 
+ void Query::end() {
+-  STACKTRACE;
+ 	}
+ 
+ 
+@@ -295,12 +294,10 @@
+ 	}
+ 
+ void Query2::end() {
+-  STACKTRACE;
+ 	}
+ 
+ 
+ Presence::Presence() {
+-  STACKTRACE;
+ 	total_presences += 1;
+ 	attributes = 0;
+ 	state = 1;
+@@ -311,17 +308,14 @@
+ 	}
+ 
+ void Presence::animate(Frame *space) {
+-  STACKTRACE;
+   return;
+ }
+ 
+ void Presence::calculate() 
+ {
+-  STACKTRACE;
+ }
+ bool Presence::die() 
+ {
+-  STACKTRACE;
+   if (!exists()) tw_error(&quot;Presence::die - already dead&quot;);
+   state = 0;
+   return true;
+@@ -329,7 +323,6 @@
+ 
+ void Presence::death()
+ {
+-  STACKTRACE;
+ }
+ 
+ Presence::~Presence() {STACKTRACE
+@@ -368,11 +361,9 @@
+ 	}
+ 
+ SpaceLocation *Presence::get_focus() {
+-  STACKTRACE;
+ 	return NULL;
+ 	}
+ SpaceLocation *SpaceLocation::get_focus() {
+-  STACKTRACE;
+ 	return this;
+ 	}
+ 
+@@ -388,7 +379,6 @@
+ 	collide_flag_sameship(0)
+ 
+ {
+-  STACKTRACE;
+ 	id |= SPACE_LOCATION;
+ 	attributes |= ATTRIB_SYNCHED;
+ 	attributes |= ATTRIB_LOCATION;
+@@ -426,7 +416,6 @@
+ }
+ 
+ bool SpaceLocation::change_owner(SpaceLocation *new_owner) {
+-  STACKTRACE;
+ 	if (new_owner) {
+ 		ally_flag = new_owner-&gt;ally_flag;
+ 		ship = new_owner-&gt;ship;
+@@ -441,7 +430,6 @@
+ 	}
+ 
+ void SpaceLocation::death() {
+-  STACKTRACE;
+ }
+ 
+ double SpaceLocation::get_angle_ex() const
+@@ -476,7 +464,6 @@
+ 
+ double SpaceLocation::distance(SpaceLocation *l)
+ {
+-  STACKTRACE;
+   return(distance_from(normal_pos(), l-&gt;normal_pos()));
+ }
+ 
+@@ -494,7 +481,6 @@
+ 
+ void SpaceLocation::change_vel(Vector2 dvel)
+ {
+-  STACKTRACE;
+ 	vel += dvel;
+ }
+ 
+@@ -502,7 +488,6 @@
+ */
+ void SpaceLocation::change_pos(Vector2 dpos)
+ {
+-  STACKTRACE;
+ 	pos = normalize(pos + dpos);
+ }
+ 
+@@ -510,29 +495,24 @@
+ */
+ void SpaceLocation::change_pos(double scale)
+ {
+-  STACKTRACE;
+ 	pos *= scale;
+ }
+ 
+ void SpaceLocation::ship_died() {
+-  STACKTRACE;
+ 	ship = NULL;
+ }
+ void SpaceLocation::target_died() 
+ {
+-  STACKTRACE;
+   set_target(NULL);
+ }
+ 
+ double SpaceLocation::trajectory_angle(SpaceLocation *l) {
+-  STACKTRACE;
+ 	return ::trajectory_angle(pos, l-&gt;normal_pos());
+ }
+ 
+ 
+ bool inline SpaceLocation::detectable()
+ {
+-  STACKTRACE;
+ 	int i;
+ 	i = attributes &amp; ATTRIB_UNDETECTABLE;
+ 
+@@ -543,7 +523,6 @@
+ 
+ 
+ int SpaceLocation::canCollide(SpaceLocation *other) {
+-  STACKTRACE;
+ 	if (!detectable()) return 0;
+ 	if (sameShip(other)) return ((1 &lt;&lt; other-&gt;layer) &amp; collide_flag_sameship);
+ 	else if (sameTeam(other)) return ((1 &lt;&lt; other-&gt;layer) &amp; collide_flag_sameteam);
+@@ -557,7 +536,6 @@
+ 
+ void SpaceLocation::set_team(TeamCode k)
+ {
+-  STACKTRACE;
+ 	ally_flag &amp;= ~team_mask;
+ 	ally_flag |= k &lt;&lt; team_shift;
+ }
+@@ -575,17 +553,14 @@
+ }
+ 
+ void Presence::set_depth(double d) {
+-  STACKTRACE;
+ 	_depth = int(floor(ldexp(d, 8)));
+ }
+ 
+ double Presence::get_depth() {
+-  STACKTRACE;
+ 	return ldexp((double)_depth, -8);
+ }
+ 
+ Planet *SpaceLocation::nearest_planet() {
+-  STACKTRACE;
+ 	Planet *p = NULL;
+ 	double r = 99999999;
+ 	Query q;
+@@ -605,26 +580,22 @@
+ 
+ int SpaceLocation::translate( Vector2 delta) 
+ {
+-  STACKTRACE;
+   pos = normalize ( pos + delta, map_size );
+   return true;
+ }
+ 
+ int SpaceLocation::accelerate(SpaceLocation *source, double angle, double velocity, double max_speed) 
+ {
+-  STACKTRACE;
+   _accelerate(angle, velocity, max_speed);
+   return true;
+ }
+ int SpaceLocation::accelerate(SpaceLocation *source, Vector2 delta_v, double max_speed) 
+ {
+-  STACKTRACE;
+   _accelerate(delta_v, max_speed);
+   return true;
+ }
+ void SpaceLocation::_accelerate(double angle, double velocity, double max_speed) 
+ {
+-  STACKTRACE;
+   double ovm, nvm;
+   Vector2 nv;
+ 
+@@ -646,7 +617,6 @@
+ 
+ void SpaceLocation::_accelerate(Vector2 delta_v, double max_speed) 
+ {
+-  STACKTRACE;
+   double ovm, nvm;
+   Vector2 nv;
+ 
+@@ -675,7 +645,6 @@
+ 				       double velocity, 
+ 				       double max_speed) 
+ {
+-  STACKTRACE;
+ 	Planet *p = nearest_planet();
+ 	if (!p) return SpaceLocation::accelerate(source, angle, velocity, max_speed);
+ 	double tmp;
+@@ -689,12 +658,10 @@
+ 
+ void SpaceLocation::animate(Frame* f) 
+ {
+-  STACKTRACE;
+ }
+ 
+ void SpaceLocation::calculate() 
+ {
+-  STACKTRACE;
+   if (get_target() &amp;&amp; !get_target()-&gt;exists()) 
+     {
+       target_died();
+@@ -708,14 +675,12 @@
+ 
+ void SpaceObject::set_sprite(SpaceSprite *new_sprite) 
+ {
+-  STACKTRACE;
+   sprite = new_sprite;
+   size = new_sprite-&gt;size();
+ }
+ 
+ void SpaceObject::calculate() 
+ {
+-  STACKTRACE;
+   SpaceLocation::calculate();
+   if ((attributes &amp; ATTRIB_STANDARD_INDEX) &amp;&amp; sprite) 
+     {
+@@ -733,7 +698,6 @@
+   sprite(osprite),
+   sprite_index(0)
+ {
+-  STACKTRACE;
+   attributes |= ATTRIB_OBJECT;
+   if (game &amp;&amp; game-&gt;friendly_fire) collide_flag_sameteam = ALL_LAYERS;
+   collide_flag_sameship = 0;
+@@ -745,14 +709,12 @@
+ 
+ void SpaceObject::animate(Frame *space) 
+ {
+-  STACKTRACE;
+   sprite-&gt;animate(pos, sprite_index, space);
+   return;
+ }
+ 
+ void SpaceObject::collide(SpaceObject *other) 
+ {
+-  STACKTRACE;
+   double tmp;
+   
+   if (this == other) {tw_error(&quot;SpaceObject::collide - self!&quot;);}
+@@ -824,7 +786,6 @@
+ 
+ double SpaceObject::collide_ray(Vector2 lp1, Vector2 lp2, double llength)
+ {
+-  STACKTRACE;
+ 	int collide_x = (int)(lp2.x);
+ 	int collide_y = (int)(lp2.y);
+ 	Vector2 d;
+@@ -843,7 +804,6 @@
+ 
+ void SpaceObject::inflict_damage(SpaceObject *other) 
+ {
+-  STACKTRACE;
+   int i;
+   if (damage_factor &gt; 0) 
+     {
+@@ -879,7 +839,6 @@
+ }
+ 
+ void SpaceObject::death() {
+-  STACKTRACE;
+ 	if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) {
+ 		physics-&gt;object_died(this, NULL);
+ 		attributes &amp;= ~ ATTRIB_NOTIFY_ON_DEATH;
+@@ -893,7 +852,6 @@
+ 	length(llength),
+ 	color(lcolor)
+ 	{
+-  STACKTRACE;
+ 	id = SPACE_LINE;
+ 	attributes |= ATTRIB_LINE;// | ATTRIB_COLLIDE_STATIC;
+ 	layer = LAYER_LINES;
+@@ -925,7 +883,6 @@
+ 
+ void SpaceLine::inflict_damage(SpaceObject *other) 
+ {
+-  STACKTRACE;
+   int i;
+   i = iround_down(damage_factor / 2);
+   if(i &gt;= BOOM_SAMPLES)
+@@ -958,7 +915,6 @@
+ 
+ void SpaceLine::animate(Frame *space) 
+ {
+-  STACKTRACE;
+   
+   Vector2 p1 = corner( pos );
+   Vector2 p2 = p1 + edge() * space_zoom;
+@@ -968,7 +924,6 @@
+ 
+ void SpaceLine::collide(SpaceObject *o)
+ {
+-  STACKTRACE;
+   double old_length = length;
+   
+   if((!canCollide(o)) || (!o-&gt;canCollide(this)))
+@@ -983,7 +938,6 @@
+ static void delete_presence(Presence* p){delete p;}
+ static void delete_item(SpaceLocation* p){delete p;}
+ void Physics::destroy_all() {
+-  STACKTRACE;
+   std::for_each(presence.begin(),presence.end(), delete_presence);
+   presence.clear();
+   std::for_each(item.begin(),item.end(),delete_item);
+@@ -997,7 +951,6 @@
+ 
+ void Physics::preinit() 
+ {
+-  STACKTRACE;
+   quadrant.clear();
+   item.clear();
+   presence.clear();
+@@ -1008,23 +961,19 @@
+ 
+ unsigned int Physics::get_code(unsigned int ship, TeamCode team) 
+ {
+-  STACKTRACE;
+   return (ship &lt;&lt; SpaceLocation::ship_shift) | (team &lt;&lt; SpaceLocation::team_shift);
+ }
+ 
+ unsigned int Physics::new_ship() {
+-  STACKTRACE;
+ 	last_ship += 1;
+ 	return last_ship;
+ 	}
+ TeamCode Physics::new_team() {
+-  STACKTRACE;
+ 	last_team += 1;
+ 	return last_team;
+ 	}
+ void Physics::switch_team(unsigned int ship, TeamCode team) 
+ {
+-  STACKTRACE;
+   int j;
+   j = (ship &amp; SpaceLocation::ship_mask) | (team &lt;&lt; SpaceLocation::team_shift);
+ 
+@@ -1038,7 +987,6 @@
+ 
+ void Physics::merge_teams(TeamCode team1, TeamCode team2) 
+ {
+-  STACKTRACE;
+   
+   for(std::list&lt;SpaceLocation*&gt;::iterator i = item.begin();i!=item.end();i++)
+     {
+@@ -1050,7 +998,6 @@
+ 
+ void Physics::init() 
+ {
+-  STACKTRACE;
+   int i;
+   size = Vector2(3840.0, 3840.0);
+   frame_time = 25;
+@@ -1065,7 +1012,6 @@
+ 
+ 
+ void Physics::add(SpaceLocation *o) {
+-  STACKTRACE;
+ 	if (o-&gt;attributes &amp; ATTRIB_INGAME) {tw_error(&quot;addItem - already added&quot;);}
+ 	if (!o-&gt;isLocation()) {tw_error(&quot;addItem - catastrophic&quot;);}
+ 	//if (!o-&gt;_serial) _list(o);
+@@ -1089,7 +1035,6 @@
+ 
+ bool Physics::remove(SpaceLocation *o) 
+ {
+-  STACKTRACE;
+   if (!(o-&gt;attributes &amp; ATTRIB_INGAME)) 
+     {tw_error(&quot;removeItem - not added&quot;);}
+   o-&gt;attributes &amp;= ~ATTRIB_INGAME;
+@@ -1108,7 +1053,6 @@
+ }
+ 
+ void Physics::add(Presence *p) {
+-  STACKTRACE;
+   if (p-&gt;attributes &amp; ATTRIB_INGAME) 
+     {tw_error(&quot;addPresence - already added&quot;);}
+   if (p-&gt;isLocation()) {
+@@ -1121,7 +1065,6 @@
+ 
+ bool Physics::remove(Presence *o) 
+ {
+-  STACKTRACE;
+   if (!(o-&gt;attributes &amp; ATTRIB_INGAME)) 
+     {tw_error(&quot;removePresence - not added&quot;);}
+   if (o-&gt;isLocation()) 
+@@ -1157,7 +1100,6 @@
+ 
+ void Physics::calculate() 
+ {
+-  STACKTRACE;
+   int i;
+   
+   //adjust time
+@@ -1301,7 +1243,6 @@
+ 
+ void Physics::collide() 
+ {
+-  STACKTRACE;
+   PMASKDATA_FLOAT *tmp;
+   int l = 0;
+   tmp = new PMASKDATA_FLOAT[item.size()];
+@@ -1356,7 +1297,6 @@
+ }
+ 
+ void Physics::prepare() {
+-  STACKTRACE;
+ 	::physics_time = this-&gt;game_time;
+ 	::render_time = this-&gt;game_time;
+ 	::frame_time = this-&gt;frame_time;
+@@ -1366,7 +1306,6 @@
+ }
+ int Physics::checksum() 
+ {
+-  STACKTRACE;
+   Uint32 g = 0;
+   return g;
+ 
+@@ -1395,14 +1334,12 @@
+ 
+ void Physics::ship_died(Ship *who, SpaceLocation *source)
+ {
+-  STACKTRACE;
+ 	// nothing ...
+ }
+ 
+ 
+ void Physics::object_died(SpaceObject *who, SpaceLocation *source)
+ {
+-  STACKTRACE;
+   if (who &amp;&amp; who-&gt;isShip())
+     {
+       ship_died((Ship*)who, source);
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mgame.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -1065,6 +1065,7 @@
+ 
+ Game::Game()
+ {
++  STACKTRACE;
+   _game_state = GAME_STATE_PLAYING;
+ }
+ 
+@@ -1306,18 +1307,21 @@
+ }
+ 
+ int Game::isGameDone() 
+-{ 
++{
++  STACKTRACE; 
+   return _game_state;
+ }
+ 
+ void Game::setGameDone(const int done)
+-{ 
++{
++  STACKTRACE; 
+   _game_state = done; 
+ }
+ 
+ 
+ void Game::GameMenu()
+ {
++  STACKTRACE;
+   int mainRet = tw_do_dialog(NULL, ingameMenuDialog, INGAME_MENU_HELP);
+   switch (mainRet) 
+     {
+@@ -1361,11 +1365,13 @@
+ 
+ std::string Game::Save()
+ {
++  STACKTRACE;
+   return &quot;&quot;;
+ }
+ 
+ int Game::Load(std::string xml)
+ {
++  STACKTRACE;
+   return 0;
+ }
+ 
+
+Modified: trunk/source/melee/mhelpers.cpp
+===================================================================
+--- trunk/source/melee/mhelpers.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mhelpers.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -76,6 +76,7 @@
+ int  GFX_TIMEWARP_WINDOW =  GFX_AUTODETECT_WINDOWED;
+ int GFX_TIMEWARP_FULLSCREEN = GFX_AUTODETECT_FULLSCREEN;
+ 
++
+ VideoSystem* videosystem = NULL;
+ 
+ static void tw_display_switch_out() 
+
+Modified: trunk/source/melee/mitems.cpp
+===================================================================
+--- trunk/source/melee/mitems.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mitems.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -79,7 +79,20 @@
+ 		rectfill(space-&gt;surface, ix, iy, ix+d-1, iy+(int)H, col1);
+ 	rectfill(space-&gt;surface, ix+d, iy, ix+len, iy+(int)H, col2);
+ 
+-	space-&gt;add_box(ix, iy, ix+len, iy+H);
++	// For some unknown reason if health bar update using add_box
++	// animate time greatly increase. Until we know what cause the problem
++	// we should use &quot;add_line&quot;
++	if(H&lt;5)
++	{
++		for(int i = 0; i&lt;=H;i++)
++		{
++			space-&gt;add_line(ix, iy+i, ix+len, iy+i);
++		}
++	}
++	else
++	{
++		space-&gt;add_box(ix, iy, ix+len, iy+H);
++	}
+ }
+ 
+ 
+@@ -105,6 +118,8 @@
+ 
+ 	draw_bar(mother,  dy, iround(mother-&gt;batt_max * scale), H, mother-&gt;batt/mother-&gt;batt_max,
+ 		makecol(255, 50, 50), makecol(150, 0, 0), space);
++		
++	//space-&gt;add_box(ix, iy, ix+len, iy+H);
+ 
+ }
+ 
+
+Modified: trunk/source/melee/mnet1.cpp
+===================================================================
+--- trunk/source/melee/mnet1.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mnet1.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -18,7 +18,8 @@
+ 	size = sizeof(GameEvent) + l;
+ 	type = Game::event_message;
+ }
+-void GameEventMessage::execute( int source ) {STACKTRACE
++void GameEventMessage::execute( int source ) {
++  STACKTRACE;
+ 	char buffy[64+max_message_length];
+ 	char *tmp = buffy;
+ 	int c = 15;
+@@ -32,7 +33,8 @@
+ 	::message.out(buffy, 6000, c);
+ }
+ 
+-void GameEventChangeLag::execute( int source ) {STACKTRACE
++void GameEventChangeLag::execute( int source ) {
++  STACKTRACE;
+ 	if (source != Game::channel_server) return;
+ 	if (old_lag != game-&gt;lag_frames) return;
+ 	int i;
+@@ -96,7 +98,8 @@
+ 		}
+ 	}
+ 
+-void NetLog::init() {STACKTRACE
++void NetLog::init() {
++  STACKTRACE;
+ 	remote_time = 0;
+ 	ping = -1;
+ 	log_transmitted = NULL;
+@@ -104,7 +107,8 @@
+ 	net.init();
+ 	Log::init();
+ 	}
+-void NetLog::deinit() {STACKTRACE
++void NetLog::deinit() {
++  STACKTRACE;
+ 	net.deinit();
+ 	}
+ NetLog::~NetLog() {STACKTRACE
+@@ -112,7 +116,7 @@
+ 	}
+ 
+ void NetLog::send_packet() {
+-	STACKTRACE;
++  STACKTRACE;
+ 	int i, j, k, pos = 8;
+ 	if (!net.isConnected()) { tw_error(&quot;NetLog::send_packet() - no connection!&quot;); }
+ 	for (i = 0; i &lt; log_num; i += 1) if (log_dir[i] &amp; direction_write) {
+@@ -146,7 +150,7 @@
+ 	return;
+ 	}
+ void NetLog::recv_packet() {
+-	STACKTRACE;
++  STACKTRACE;
+ 	int pos, len;
+ 	int i, j, k, l;
+ 	len = net.recv(4, 4, &amp;buffy);
+@@ -182,12 +186,13 @@
+ 	}
+ 
+ void NetLog::send_code(unsigned int code) {
+-	STACKTRACE;
++  STACKTRACE;
+ 	if (!(code &amp; 0x80000000)) { tw_error (&quot;NetLog::send_special -- bade code!&quot;); }
+ 	net.send(sizeof(unsigned int), &amp;code);
+ 	return;
+ 	}
+-void NetLog::send_message(char *string) {STACKTRACE;
++void NetLog::send_message(char *string) {
++  STACKTRACE;
+ 	int i;
+ 	i = sprintf((char*)&amp;buffy[4], &quot;remote: %s&quot;, string);
+ 	if (i &gt; 1000) { tw_error (&quot;net1_send_message -- message length exceeds maximum&quot;); }
+@@ -199,7 +204,8 @@
+ 	message.out((char*)&amp;buffy[4], 5000, 9);
+ 	return;
+ 	}
+-void NetLog::handle_code(unsigned int code) {STACKTRACE
++void NetLog::handle_code(unsigned int code) {
++  STACKTRACE;
+ 	switch (code &amp; 0xF0000000) {
+ 		case NET1_CODE_QUIT &amp; 0xF0000000: {
+ 			switch (code) {
+@@ -223,7 +229,8 @@
+ 	return;
+ 	}
+ 
+-void NetLog::expand_logs(int num_channels) {STACKTRACE
++void NetLog::expand_logs(int num_channels) {
++  STACKTRACE;
+ 	int old_log_num = log_num;
+ 	Log::expand_logs(num_channels);
+ 	if (log_num) {
+@@ -237,7 +244,8 @@
+ 		}
+ 	return;
+ 	}
+-void NetLog::_log(int channel, const void *data, int size) {STACKTRACE
++void NetLog::_log(int channel, const void *data, int size) {
++  STACKTRACE;
+ 	if (channel &gt;= log_num) expand_logs(channel+1);
+ 	Log::_log(channel, data, size);
+ 	need_to_transmit = true;
+@@ -245,6 +253,7 @@
+ 	return;
+ 	}
+ void NetLog::_unlog(int channel, void *data, int size) {
++  STACKTRACE;
+ 	while (ready(channel) &lt; size) {
+ 		if (game) game-&gt;idle();
+ 		else idle(1);
+@@ -252,7 +261,8 @@
+ 	Log::_unlog(channel, data, size);
+ 	return;
+ 	}
+-void NetLog::log_file(const char *fname) {STACKTRACE
++void NetLog::log_file(const char *fname) {
++  STACKTRACE;
+ 	if (!(log_dir[channel_file_data] &amp; direction_write)) {
+ 			while (file_ready(fname, NULL) == -1) {
+ 			if (game) game-&gt;idle(1);
+@@ -263,7 +273,8 @@
+ 	return;
+ 	}
+ 
+-void NetLog::flush() {STACKTRACE
++void NetLog::flush() {
++  STACKTRACE;
+ 	if (!need_to_transmit) return;
+ 	while (!net.ready2send()) {
+ 		if (game) game-&gt;idle();
+@@ -272,7 +283,8 @@
+ 	send_packet();
+ 	}
+ 
+-bool NetLog::listen() {STACKTRACE
++bool NetLog::listen() {
++  STACKTRACE;
+ 	bool b = false;
+ 	while (net.ready2recv()) {
+ 		recv_packet();
+@@ -281,7 +293,8 @@
+ 	return b;
+ 	}
+ 
+-int NetLog::ready(int channel) {STACKTRACE
++int NetLog::ready(int channel) {
++  STACKTRACE;
+ 	if (net.ready2recv()) recv_packet();
+ 	return Log::ready(channel);
+ 	}
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mship.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -395,6 +395,7 @@
+ 
+ void Ship::set_target(SpaceObject* target)
+ {
++  STACKTRACE;
+   if(_target_TeamIndicator &amp;&amp; _target_TeamIndicator-&gt;exists())
+     {
+       _target_TeamIndicator-&gt;die();
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/mship.h	2005-04-30 21:31:35 UTC (rev 139)
+@@ -20,7 +20,7 @@
+ #include &quot;mframe.h&quot;
+ 
+ 
+-typedef short KeyCode;
++typedef short TWKeyCode;
+ 
+ struct keyflag 
+ {
+@@ -134,7 +134,7 @@
+   
+   int update_panel;
+   
+-  KeyCode nextkeys;
++  TWKeyCode nextkeys;
+   
+   char thrust;
+   char thrust_backwards;
+
+Modified: trunk/source/melee/msprite.cpp
+===================================================================
+--- trunk/source/melee/msprite.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/melee/msprite.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -1080,11 +1080,13 @@
+ 
+ void SpaceSprite::draw(Vector2 pos, int index, BITMAP *surface)
+ {
++  STACKTRACE;
+   draw(pos, Vector2(b[0][index]-&gt;w, b[0][index]-&gt;h), index, surface);
+ }
+ 
+ void SpaceSprite::draw_centre(Vector2 pos, int index, BITMAP *surface)
+ {
++  STACKTRACE;
+   Vector2 correction = Vector2(b[0][index]-&gt;w/2, b[0][index]-&gt;h/2);
+   draw(pos - correction, index, surface);
+ }
+
+Modified: trunk/source/other/starmap.cpp
+===================================================================
+--- trunk/source/other/starmap.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/other/starmap.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -164,6 +164,7 @@
+ 
+ StarSystem* StarMap::nearStar()
+ {
++  STACKTRACE;
+   Vector2 mouse_pos(mouse_x, mouse_y);
+   std::list&lt;StarSystem*&gt;::iterator i = std::min_element(_stars.begin(), _stars.end(), minRangeToMouseCmp);
+   if(i!= _stars.end())
+
+Modified: trunk/source/python/game.cpp
+===================================================================
+--- trunk/source/python/game.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/python/game.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -23,12 +23,14 @@
+  * 
+  */
+ 
++ /* Modyfied by Yura Semashko for TW-Light project */
+ 
+ #include &quot;game.h&quot;
+ #include &lt;stdlib.h&gt;
+ #include &lt;sys/types.h&gt;
+ #include &lt;dirent.h&gt;
+ 
++#include &quot;util/errors.h&quot;
+ 
+ std::string game::User_data_dir; 
+ std::string game::Global_data_dir; 
+@@ -48,6 +50,7 @@
+ 
+ void game::set_game_data_dir(std::string game_dir)
+ {
++  STACKTRACE;
+     Game_data_dir = game_dir;
+ }
+ 
+
+Modified: trunk/source/python/python_class.cpp
+===================================================================
+--- trunk/source/python/python_class.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/python/python_class.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -22,15 +22,15 @@
+  * 
+  */
+ 
++ /* Modyfied by Yura Semashko for TW-Light project */
++ 
+ #include &quot;python_class.h&quot;
+ #include &quot;game.h&quot;
++#include &quot;util/errors.h&quot;
++
+ #include &lt;iostream&gt; 
+ 
+-//using namespace std;
+ 
+-PyObject * data::globals;
+-PyObject * python::module;
+-
+ /*
+  * Start Python
+  */
+@@ -44,7 +44,7 @@
+     // Cleanup the global namespace of python interpreter
+     // Note that we don't have to DECREF data::globals, because they're a
+     // borrowed reference of py_module.
+-    Py_XDECREF (module);
++  // Py_XDECREF (module);
+     Py_Finalize ();
+ }
+ 
+@@ -53,6 +53,7 @@
+  */
+ void python::insert_path( char *name )
+ {
++  STACKTRACE;
+     char buf[256];
+     
+     sprintf ( buf, &quot;import sys ; sys.path.insert(0, \&quot;%s\&quot;)&quot;, name );
+@@ -68,6 +69,7 @@
+  */
+ void python::exec_string(char * s)
+ {
++  STACKTRACE;
+     PyRun_SimpleString(s);
+ }
+ 
+@@ -96,6 +98,7 @@
+  */
+ void python::show_traceback(void)
+ {
++  STACKTRACE;
+     if ( PyErr_Occurred() )
+     {
+         PyErr_Print();
+@@ -114,113 +117,3 @@
+     return result;
+ }
+ 
+-// Make a C++ instance available to Python
+-PyObject *python::pass_instance (void *instance, const char *class_name)
+-{
+-    char class_ptr[256];
+-    char class_addr[256];
+-    char *buffer = class_addr;
+-
+-    // Construct the python shadow class matching the &quot;instance&quot; class 
+-    strcat (strcpy (class_ptr, class_name), &quot;Ptr&quot;);
+-    
+-    // Construct SWIG's representation of the &quot;instance&quot; pointer
+-    *(buffer++) = '_';
+-    buffer = ptr_to_string (buffer, &amp;instance, sizeof (void *));
+-    strcpy (buffer, &quot;_p_&quot;);
+-    strcpy (buffer+3, class_name);
+-
+-    // Now create the Python object corresponding to &quot;instance&quot;
+-    PyObject *cls = PyDict_GetItemString (data::globals, class_ptr);
+-    PyObject *arg = Py_BuildValue (&quot;(s)&quot;, class_addr);
+-    PyObject *res = PyObject_CallObject (cls, arg);
+-    
+-#ifdef PY_DEBUG
+-    show_traceback ();
+-#endif
+-
+-    // Clean up
+-    Py_DECREF (arg);
+-    
+-    // Voila: &quot;res&quot; is 'identical' to &quot;instance&quot; :)
+-    return res;
+-}
+-
+-// Convert a pointer to a string (like SWIG 1.3.7 does)
+-char *python::ptr_to_string (char *c, void *ptr, int sz)
+-{
+-    static char hex[17] = &quot;0123456789abcdef&quot;;
+-    int i;
+-    unsigned char *u = (unsigned char *) ptr;
+-    register unsigned char uu;
+-
+-    for (i = 0; i &lt; sz; i++,u++)
+-    {
+-        uu = *u;
+-        *(c++) = hex[(uu &amp; 0xf0) &gt;&gt; 4];
+-        *(c++) = hex[uu &amp; 0xf];
+-    }
+-
+-    return c;
+-}
+-
+-PyObject * python::get_tuple (igzstream &amp; file)
+-{
+-    PyObject * tuple; 
+-    u_int32 l;
+-    l &lt;&lt; file;
+-
+-    tuple = PyTuple_New (l);
+-
+-    for (u_int32 i = 0; i &lt; l; i++) 
+-    {
+-        std::string ms;
+-        u_int32 j;
+-        char c;
+-        
+-        c &lt;&lt; file;
+-        switch (c) 
+-        {
+-            case 's':
+-                ms &lt;&lt; file;
+-                // Stolen reference
+-                PyTuple_SetItem (tuple, i, PyString_FromString (ms.c_str ()));
+-                break;
+-                
+-            case 'i':
+-                j &lt;&lt; file;
+-                // Stolen reference
+-                PyTuple_SetItem (tuple, i, PyInt_FromLong (j));
+-                break; 
+-        }
+-    }
+-    return tuple; 
+-}
+-
+-void python::put_tuple (PyObject * tuple, ogzstream &amp; file)
+-{
+-    u_int32 l = PyTuple_Size (tuple);
+-    l &gt;&gt; file;
+-    for (u_int32 i = 0; i &lt; l; i++) 
+-    {
+-        // Borrowed reference
+-        PyObject * item = PyTuple_GetItem (tuple, i);
+-        
+-        // Check for the type of this object
+-        // String?
+-        if (PyString_Check (item)) 
+-        {
+-            's' &gt;&gt; file;
+-            char * s = PyString_AsString (item); 
+-            std::string (s) &gt;&gt; file;
+-        }
+-        
+-        // Integer?
+-        else if (PyInt_Check (item)) 
+-        {
+-            'i' &gt;&gt; file;
+-            u_int32 li = PyInt_AsLong (item); 
+-            li &gt;&gt; file;
+-        }
+-    }
+-}
+
+Modified: trunk/source/python/python_class.h
+===================================================================
+--- trunk/source/python/python_class.h	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/python/python_class.h	2005-04-30 21:31:35 UTC (rev 139)
+@@ -93,54 +93,8 @@
+      */
+     static void show_traceback( void );
+     
+-    /** 
+-     * Magic function that makes any C object available to Python!
+-     * 
+-     * @param instance pointer to the instance to pass.
+-     * @param class_name name of the class of the passed instance.
+-     * 
+-     * @return pointer to the passed %object.
+-     */
+-    static PyObject *pass_instance (void* instance, const char* class_name);
+ 
+-    /** 
+-     * Loads a Python tuple previously saved with put_tuple ().
+-     * 
+-     * @param file Opened file where to load the tuple from.
+-     * 
+-     * @return Restored Python tuple.
+-     */
+-    static PyObject * get_tuple (igzstream &amp; file); 
+-
+-    /** 
+-     * Save a Python tuple into a file.
+-     *
+-     * @warning The Python tuple MUST ONLY be composed of Python strings
+-     * or integers!
+-     * 
+-     * @param tuple Python tuple to save.
+-     * @param file Opened file where to save the tuple to.
+-     */
+-    static void put_tuple (PyObject * tuple, ogzstream &amp; file);  
+-
+-    static PyObject *module;
+-private:
+-    /**
+-     * Convert a Pointer to a String, like SWIG 1.3.7+ does
+-     *
+-     */
+-    static char *python::ptr_to_string (char *c, void *ptr, int sz);
+ };
+ 
+-#ifndef SWIG
+-namespace data
+-{
+-    /**
+-     * Global namespace to use in scripts.
+-     * 
+-     */ 
+-    extern PyObject *globals;
+-}
+-#endif
+ 
+ #endif // PYTHON_CLASS_H__
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/scp.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -24,6 +24,7 @@
+ #include &quot;util/sound.h&quot;
+ 
+ #include &lt;allegro.h&gt;
++//#include &lt;alleggl.h&gt;
+ #ifdef WIN32
+ #include &lt;allegro/platform/aintwin.h&gt;
+ #include &lt;winalleg.h&gt;
+@@ -797,7 +798,7 @@
+   python::init();  
+   python::insert_path(DATAFILE_PATH&quot;/python&quot;);
+   init_ggob();
+-  python::module = python::import_module(&quot;ggob&quot;);
++  //  python::module = python::import_module(&quot;ggob&quot;);
+ 
+   int i;
+   int auto_port = -1;
+@@ -808,6 +809,7 @@
+   log_debug(&quot;Log started at %s\n&quot;, asctime(localtime(&amp;start_time)));
+   if (allegro_init() &lt; 0)
+     tw_error_exit(&quot;Allegro initialization failed&quot;);
++  //install_allegro_gl();
+   create_user_ini();
+   
+   g_game_data = load_datafile(data_full_path(&quot;gamedata.dat&quot;).c_str());
+
+Modified: trunk/source/util/net_tcp.cpp
+===================================================================
+--- trunk/source/util/net_tcp.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/util/net_tcp.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -33,6 +33,7 @@
+ #include &lt;string.h&gt;
+ #include &lt;stdio.h&gt;
+ #include &quot;net_tcp.h&quot;
++#include &quot;errors.h&quot;
+ #if defined(NETWORK_BSD) &amp;&amp; !defined(NETWORK_NO_INCLUDE)
+ #	include &lt;unistd.h&gt;
+ #	include &lt;sys/time.h&gt;
+@@ -68,6 +69,7 @@
+ 
+ 
+ const char *NetTCP::network_type() {
++  STACKTRACE;
+ #	if defined NETWORK_WINSOCK
+ 		return &quot;Winsock 1 TCP&quot;;
+ #	elif defined NETWORK_BSD
+@@ -95,6 +97,7 @@
+ static fd_set read_set, write_set, except_set;
+ static timeval tmv = {0, 0};
+ int NetTCP::init() {
++  STACKTRACE;
+ #	if defined NETWORK_WINSOCK
+ 		if (! (network_status &amp; NETWORK_STATUS_WINSOCK_STARTED)) {
+ 			WSADATA info;
+@@ -115,6 +118,7 @@
+ 	}
+ 
+ void NetTCP::deinit() {
++  STACKTRACE;
+ 	message (&quot;NetTCP::deinit: network shut down&quot;);
+ 	if (isConnected()) disconnect();
+ 	return;
+@@ -123,6 +127,7 @@
+ 
+ 
+ void NetTCP::optimize4bandwidth() {
++  STACKTRACE;
+ #	ifdef NETWORK_WINSOCK
+ 		BOOL tmp = 0;
+ 		setsockopt ( s, IPPROTO_TCP, TCP_NODELAY, (const char *)&amp;tmp, sizeof(tmp));
+@@ -132,6 +137,7 @@
+ 	}
+ 
+ void NetTCP::optimize4latency() {
++  STACKTRACE;
+ #	ifdef NETWORK_WINSOCK
+ 		int tmp = 1;
+ 		setsockopt ( s, IPPROTO_TCP, TCP_NODELAY, (const char *)&amp;tmp, sizeof(tmp));
+@@ -254,12 +260,14 @@
+ 	}
+ 
+ int NetTCP::disconnect() {
++  STACKTRACE;
+ 	close_socket(s);
+ 	s = INVALID_SOCKET;
+ 	return 0;
+ 	}
+ 
+ int NetTCP::ready2send() {
++  STACKTRACE;
+ 	int r;
+ 	tmv.tv_sec = 0;
+ 	tmv.tv_usec = 0;
+@@ -269,6 +277,7 @@
+ 	return r;
+ 	}
+ int NetTCP::ready2recv() {
++  STACKTRACE;
+ 	int r;
+ 	tmv.tv_sec = 0;
+ 	tmv.tv_usec = 0;
+@@ -278,6 +287,7 @@
+ 	return r;
+ 	}
+ int NetTCP::send(int size, const void *data) {
++  STACKTRACE;
+ 	int sofar = 0;
+ 	while (sofar &lt; size) {
+ 		int tmp = ::send(s, ((char*) data) + sofar, size - sofar, 0);
+@@ -286,6 +296,7 @@
+ 	return sofar;
+ 	}
+ int NetTCP::recv(int min, int max, void *data) {
++  STACKTRACE;
+ 	int sofar = 0;
+ 	while (1) {
+ 		int tmp = ::recv(s, ((char*) data) + sofar, max - sofar, 0);
+@@ -309,6 +320,7 @@
+ 		}
+ 	}
+ bool NetTCP::isConnected() {
++  STACKTRACE;
+ 	if (s == INVALID_SOCKET) return false;
+ 	return true;
+ 	}
+@@ -317,9 +329,11 @@
+ #else
+ 
+ int NetTCP::init() {
++  STACKTRACE;
+ 	return 0;
+ 	}
+ void NetTCP::deinit() {
++  STACKTRACE;
+ 	}
+ int NetTCP::listen(int port, int (*cancel_callback)()) {
+ 	throw(&quot;Networking is disabled in this program.\nProbably you should try a windows or unix version instead.&quot;);
+@@ -330,27 +344,35 @@
+ 	return -1;
+ 	}
+ int NetTCP::disconnect() {
++  STACKTRACE;
+ 	return 0;
+ 	}
+ int NetTCP::ready2send() {
++  STACKTRACE;
+ 	return 0;
+ 	}
+ int NetTCP::ready2recv() {
++  STACKTRACE;
+ 	return 0;
+ 	}
+ int NetTCP::send(int size, const void *data) {
++  STACKTRACE;
+ 	return 0;
+ 	}
+ int NetTCP::recv(int min, int max, void *data) {
++  STACKTRACE;
+ 	return 0;
+ 	}
+ void NetTCP::optimize4bandwidth() {
++  STACKTRACE;
+ 	return;
+ 	}
+ void NetTCP::optimize4latency() {
++  STACKTRACE;
+ 	return;
+ 	}
+ bool NetTCP::isConnected() {
++  STACKTRACE;
+ 	return true;
+ 	}
+ 
+
+Modified: trunk/source/util/sound.cpp
+===================================================================
+--- trunk/source/util/sound.cpp	2005-03-13 18:19:31 UTC (rev 138)
++++ trunk/source/util/sound.cpp	2005-04-30 21:31:35 UTC (rev 139)
+@@ -274,9 +274,9 @@
+ 
+ bool SoundSystem::playing_music()
+ {
++  STACKTRACE;
+   if(!mix_ok)
+     return false;
+   
+-  STACKTRACE;
+   return Mix_PlayingMusic();
+ }
+
+Added: trunk/web/twplot.zip
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/web/twplot.zip
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000086.html">[Tw-light-svn] r140 - in trunk/doc: . plot plot/Back Home plot/Extras plot/New Dangers plot/New Races plot/The New Arm Adventures plot/The REAL threat
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#85">[ date ]</a>
+              <a href="thread.html#85">[ thread ]</a>
+              <a href="subject.html#85">[ subject ]</a>
+              <a href="author.html#85">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

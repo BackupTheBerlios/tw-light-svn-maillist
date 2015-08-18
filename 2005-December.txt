@@ -1,0 +1,122 @@
+From youbastrd at berlios.de  Fri Dec 23 18:45:10 2005
+From: youbastrd at berlios.de (youbastrd at BerliOS)
+Date: Fri, 23 Dec 2005 18:45:10 +0100
+Subject: [Tw-light-svn] r203 - in trunk/gamedata: default_ini/ships music/ditty
+Message-ID: <200512231745.jBNHjAS5010955@sheep.berlios.de>
+
+Author: youbastrd
+Date: 2005-12-23 18:45:08 +0100 (Fri, 23 Dec 2005)
+New Revision: 203
+
+Added:
+   trunk/gamedata/music/ditty/bipoleditty.it
+Modified:
+   trunk/gamedata/default_ini/ships/shpbipka.ini
+Log:
+Adding new victory ditty for Bipole Katamaran.  On behalf of Richard
+
+Modified: trunk/gamedata/default_ini/ships/shpbipka.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpbipka.ini	2005-11-03 03:03:22 UTC (rev 202)
++++ trunk/gamedata/default_ini/ships/shpbipka.ini	2005-12-23 17:45:08 UTC (rev 203)
+@@ -51,7 +51,7 @@
+ Plus_Fire = Special
+ 
+ [Music]
+-Victory = music/ditty/ariditty.mod
++Victory = music/ditty/bipoleditty.it
+ 
+ [Sound]
+ WeaponSample0 = sound/ships/shpbipka/WAVE_A01_WAV.wav
+
+Added: trunk/gamedata/music/ditty/bipoleditty.it
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/ditty/bipoleditty.it
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+
+
+From youbastrd at berlios.de  Fri Dec 23 18:50:43 2005
+From: youbastrd at berlios.de (youbastrd at BerliOS)
+Date: Fri, 23 Dec 2005 18:50:43 +0100
+Subject: [Tw-light-svn] r204 - in trunk/gamedata: default_ini/ships music/ditty
+Message-ID: <200512231750.jBNHohJD014078@sheep.berlios.de>
+
+Author: youbastrd
+Date: 2005-12-23 18:50:32 +0100 (Fri, 23 Dec 2005)
+New Revision: 204
+
+Added:
+   trunk/gamedata/music/ditty/earthingmk3ditty.it
+Modified:
+   trunk/gamedata/default_ini/ships/shpearc3.ini
+Log:
+Adding new victory ditty for Earthing Cruiser MK3.  On behalf of Richard.
+
+Modified: trunk/gamedata/default_ini/ships/shpearc3.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpearc3.ini	2005-12-23 17:45:08 UTC (rev 203)
++++ trunk/gamedata/default_ini/ships/shpearc3.ini	2005-12-23 17:50:32 UTC (rev 204)
+@@ -64,7 +64,7 @@
+ CaptName16 = Belt
+ 
+ [Music]
+-Victory = music/ditty/humditty.mod
++Victory = music/ditty/earthingmk3ditty.it
+ 
+ [Sound]
+ WeaponSample0 = sound/ships/shpearc3/WAVE_A00_WAV.wav
+
+Added: trunk/gamedata/music/ditty/earthingmk3ditty.it
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/ditty/earthingmk3ditty.it
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+
+
+From youbastrd at berlios.de  Wed Dec 28 01:19:13 2005
+From: youbastrd at berlios.de (youbastrd at BerliOS)
+Date: Wed, 28 Dec 2005 01:19:13 +0100
+Subject: [Tw-light-svn] r205 - trunk/source/other
+Message-ID: <200512280019.jBS0JDbJ025851@sheep.berlios.de>
+
+Author: youbastrd
+Date: 2005-12-28 01:19:07 +0100 (Wed, 28 Dec 2005)
+New Revision: 205
+
+Modified:
+   trunk/source/other/dialogs.cpp
+Log:
+fix bug # 79:  Default selection of available ships in fleet editor should not include "special" ships
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-12-23 17:50:32 UTC (rev 204)
++++ trunk/source/other/dialogs.cpp	2005-12-28 00:19:07 UTC (rev 205)
+@@ -347,7 +347,7 @@
+   //FLEET_DIALOG_TW_EXP_TOGGLE_TOGGLE
+   { d_check_proc_fleeteditor,10,  70,   240,  16,   255,  0,    0,D_EXIT | D_SELECTED,0,    0,    (void *)"The Ur-Quan Masters", NULL, NULL },
+   //FLEET_DIALOG_TW_SPECIAL_TOGGLE
+-  { d_check_proc_fleeteditor,10,  88,   240,  16,   255,  0,    0,D_EXIT | D_SELECTED,0,    0,    (void *)"Special ", NULL, NULL },
++  { d_check_proc_fleeteditor,10,  88,   240,  16,   255,  0,    0,D_EXIT,       0,    0,    (void *)"Special ", NULL, NULL },
+   //FLEET_DIALOG_SORTBY_TEXT1
+   { d_agup_textbox_proc,     10, 121,    64,  17,   255,  0,    0,     0,       0,    0,    (void *)"Sort By:", NULL, NULL },
+   //FLEET_DIALOG_SORTBY_BUTTON1
+@@ -435,3 +435,4 @@
+   { d_tw_yield_proc,   0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
+   { NULL,              0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL }
+ };
++
+
+
+

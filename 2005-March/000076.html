@@ -1,0 +1,1745 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r130 - in trunk: gamedata/xml/GOB source/games source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-March/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r130%20-%20in%20trunk%3A%20gamedata/xml/GOB%20source/games%20source/melee&In-Reply-To=%3C200503061630.j26GUrAD010416%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000075.html">
+   <LINK REL="Next"  HREF="000077.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r130 - in trunk: gamedata/xml/GOB source/games source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r130%20-%20in%20trunk%3A%20gamedata/xml/GOB%20source/games%20source/melee&In-Reply-To=%3C200503061630.j26GUrAD010416%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r130 - in trunk: gamedata/xml/GOB source/games source/melee">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Mar  6 17:30:53 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000075.html">[Tw-light-svn] r129 - trunk/source/games
+</A></li>
+        <LI>Next message: <A HREF="000077.html">[Tw-light-svn] r131 - in trunk/source: melee other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#76">[ date ]</a>
+              <a href="thread.html#76">[ thread ]</a>
+              <a href="subject.html#76">[ subject ]</a>
+              <a href="author.html#76">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-03-06 17:30:51 +0100 (Sun, 06 Mar 2005)
+New Revision: 130
+
+Modified:
+   trunk/gamedata/xml/GOB/start.xml
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/mview.cpp
+Log:
+Start position moved back to planet
+
+
+Modified: trunk/gamedata/xml/GOB/start.xml
+===================================================================
+--- trunk/gamedata/xml/GOB/start.xml	2005-03-06 15:42:43 UTC (rev 129)
++++ trunk/gamedata/xml/GOB/start.xml	2005-03-06 16:30:51 UTC (rev 130)
+@@ -105,5 +105,5 @@
+ 	&lt;GobAsteroid/&gt;
+       &lt;/SpaceObjects&gt;
+   &lt;/System&gt;
+-  &lt;Player system=&quot;Arix&quot; x=&quot;0&quot; y=&quot;0&quot;/&gt;
++  &lt;Player system=&quot;Arix&quot; x=&quot;12400&quot; y=&quot;12400&quot;/&gt;
+ &lt;/GOB&gt;
+\ No newline at end of file
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-03-06 15:42:43 UTC (rev 129)
++++ trunk/source/games/ggob.cpp	2005-03-06 16:30:51 UTC (rev 130)
+@@ -98,10 +98,16 @@
+   GobGameBase::prepare();
+   if(maingame-&gt;gobplayer._teleport)
+     {
++      message.flush();
+       ShipType* type = maingame-&gt;gobplayer.ship-&gt;type;
++      double crew = maingame-&gt;gobplayer.ship-&gt;crew;
+       maingame-&gt;gobplayer.ship = NULL;
+       maingame-&gt;gobplayer.new_ship(type);
+       add_focus(_player_control, _player_control-&gt;channel);
++
++      maingame-&gt;gobplayer.ship-&gt;crew = crew;
++      maingame-&gt;gobplayer.ship-&gt;batt = 0;
++
+       maingame-&gt;gobplayer._teleport = 0;
+     }
+ }
+@@ -384,7 +390,7 @@
+   STACKTRACE;
+   switch (k &gt;&gt; 8) 
+     {
+-    case KEY_F6: 
++    case KEY_J: 
+       {
+ 	setGameDone(GAME_STATE_SUSPENDED);
+ 	maingame-&gt;gobplayer._teleport = 1;
+@@ -462,23 +468,6 @@
+   }
+   Ship *ship = create_ship(channel_server, enemy_types[e], &quot;WussieBot&quot;, 
+ 			   random(size), random(PI2), enemy_team);
+-  /*
+-  if (!strcmp(enemy_types[e], &quot;shosc&quot;)) 
+-    ((ShofixtiScout*)ship)-&gt;specialDamage /= 4;
+-  if (!strcmp(enemy_types[e], &quot;zfpst&quot;)) 
+-    ((ZoqFotPikStinger*)ship)-&gt;specialDamage /= 2;
+-  if (!strcmp(enemy_types[e], &quot;syrpe&quot;)) 
+-    ((SyreenPenetrator*)ship)-&gt;specialDamage /= 2;
+-  if (!strcmp(enemy_types[e], &quot;dragr&quot;)) 
+-    ship-&gt;special_drain *= 2;
+-  if (!strcmp(enemy_types[e], &quot;chmav&quot;)) 
+-    {
+-      ((ChmmrAvatar*)ship)-&gt;weaponDamage += 1;
+-      ((ChmmrAvatar*)ship)-&gt;weaponDamage /= 2;
+-      ((ChmmrAvatar*)ship)-&gt;specialForce *= 2;
+-      ((ChmmrAvatar*)ship)-&gt;specialRange *= 2;
+-    }
+-  */
+ 
+   int sb, bz;
+   sb = 1 + e / 4;
+@@ -1039,14 +1028,14 @@
+     };  
+ }	
+ 
+-void MainGobGame::add_gobplayer(const std::string&amp; system)
++void MainGobGame::add_gobplayer(const std::string&amp; system, Vector2 pos)
+ {
+   STACKTRACE;
+    switch_to(system);
+    gobplayer.init(game-&gt;new_team());
+    game-&gt;add_focus(gobgame-&gt;_player_control, gobgame-&gt;_player_control-&gt;channel);
+    gobplayer.new_ship(shiptype(&quot;supbl&quot;));
+-
++   gobplayer.ship-&gt;translate(pos);
+ }
+ 
+ REGISTER_GAME(MainGobGame, &quot;GOB&quot;)
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-03-06 15:42:43 UTC (rev 129)
++++ trunk/source/games/ggob.h	2005-03-06 16:30:51 UTC (rev 130)
+@@ -91,7 +91,7 @@
+  public:
+   GobPlayer gobplayer;
+   virtual void 	init (Log *log, const std::string&amp; save);
+-  void add_gobplayer(const std::string&amp; system);
++  void add_gobplayer(const std::string&amp; system, Vector2 pos);
+  protected:
+ };
+ 
+
+Modified: trunk/source/melee/mview.cpp
+===================================================================
+--- trunk/source/melee/mview.cpp	2005-03-06 15:42:43 UTC (rev 129)
++++ trunk/source/melee/mview.cpp	2005-03-06 16:30:51 UTC (rev 130)
+@@ -1,7 +1,7 @@
+ /* $Id: mview.cpp,v 1.1.1.1 2004/08/01 10:21:22 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -40,7 +40,7 @@
+ int FULL_REDRAW = 0;
+ int camera_hides_cloakers = 0;
+ 
+-                              // units
++// units
+ View  *space_view;
+ 
+ Vector2 space_view_size;   // pixels (should be an integer value)
+@@ -49,22 +49,24 @@
+ int    space_mip_i;    // ?
+ double space_mip;      // ?
+ 
+-Vector2 space_size;         // game-pixels
++Vector2 space_size;         ///&lt; game-pixels
+ 
+-Vector2 space_corner = 0;       // game-pixels : uppper left corner
+-Vector2 space_center_nowrap = 0;// game-pixels : center, non-wrapped
+-Vector2 space_vel = 0;          // game-pixels / millisecond : center
+-Vector2 space_center = 0;       // game-pixels : center
++Vector2 space_corner = 0;       ///&lt; game-pixels : uppper left corner
++Vector2 space_center_nowrap = 0;///&lt; game-pixels : center, non-wrapped
++Vector2 space_vel = 0;          ///&lt; game-pixels / millisecond : center
++Vector2 space_center = 0;       ///&lt; game-pixels : center
+ 
+ 
++message_type message;
+ 
+-View * ViewType::create( View * old ) {
++View * ViewType::create( View * old ) 
++{
+   STACKTRACE;
+-	View * r = _create();
+-	r-&gt;preinit();
+-	r-&gt;type = this;
+-	r-&gt;init ( old );
+-	return r;
++  View * r = _create();
++  r-&gt;preinit();
++  r-&gt;type = this;
++  r-&gt;init ( old );
++  return r;
+ }
+ 
+ 
+@@ -75,414 +77,434 @@
+ ViewType *viewtypelist = NULL;
+ 
+ 
+-void set_view ( View * new_default ) {STACKTRACE
+-	if (!new_default) {tw_error( &quot;new default view is NULL&quot;);}
+-	if (!new_default-&gt;type) {tw_error(&quot;new default view has no type info&quot;);}
+-	if (_default_view) delete _default_view;
+-	_default_view = new_default;
+-	return;
++void set_view ( View * new_default ) 
++{
++  STACKTRACE;
++  if (!new_default) {tw_error( &quot;new default view is NULL&quot;);}
++  if (!new_default-&gt;type) {tw_error(&quot;new default view has no type info&quot;);}
++  if (_default_view) delete _default_view;
++  _default_view = new_default;
++  return;
+ }
+ 
+ 
++View *get_view ( const char *name, View *old ) 
++{
++  STACKTRACE;
++  int i;
++  if ((name == NULL) &amp;&amp; _default_view) 
++    {
++      name = _default_view-&gt;type-&gt;name;
++    }
++  if (!old) 
++    old = _default_view;
+ 
+-
+-View *get_view ( const char *name, View *old ) {STACKTRACE
+-	int i;
+-	if ((name == NULL) &amp;&amp; _default_view) {
+-		name = _default_view-&gt;type-&gt;name;
+-	}
+-	if (!old) old = _default_view;
+-
+-	i = get_view_num ( name );
+-	if ( i &lt; 0 ) return NULL;
+-	View *v = viewtypelist[i].create(old);
+-	return v;
++  i = get_view_num ( name );
++  if ( i &lt; 0 ) return NULL;
++  View *v = viewtypelist[i].create(old);
++  return v;
+ }
+ 
+-int get_view_num ( const char *name ) {STACKTRACE
+-	int i;
+-	if (!name) return -1;
+-	for (i = 0; i &lt; num_views; i += 1) {
+-		if (strncmp(viewtypelist[i].name, name, 64) == 0) {
+-			return i;
+-		}
+-	}
+-	return -1;
++int get_view_num ( const char *name ) 
++{
++  STACKTRACE;
++  int i;
++  if (!name) return -1;
++  for (i = 0; i &lt; num_views; i += 1) {
++    if (strncmp(viewtypelist[i].name, name, 64) == 0) {
++      return i;
++    }
++  }
++  return -1;
+ }
+ 
+ 
+-
+-void View::preinit() {
++void View::preinit() 
++{
+   STACKTRACE;
+-	frame = NULL;
+-	window = NULL;
+-	type = NULL;
++  frame = NULL;
++  window = NULL;
++  type = NULL;
+ }
+ 
+-void View::refresh () { STACKTRACE
+-	if (frame) frame-&gt;full_redraw = true; 
+-	return; 
++void View::refresh () 
++{ 
++  STACKTRACE;
++  if (frame) 
++    frame-&gt;full_redraw = true; 
++  return; 
+ }
+ 
+-void View::prepare ( Frame *frame, int time ) {STACKTRACE
++void View::prepare ( Frame *frame, int time ) 
++{
++  STACKTRACE;
+ 
+-	Vector2 oc = camera.pos;
+-	camera.pos += camera.vel * time;
++  Vector2 oc = camera.pos;
++  camera.pos += camera.vel * time;
++  
++  frame-&gt;prepare();
++  
++  ::space_view = this;
++  
++  view_size.x = window-&gt;w;
++  view_size.y = window-&gt;h;
++  
++  ::space_view_size = view_size;
++  double tz = magnitude(view_size) / 1.41421356237309504880168872;
++  ::space_zoom = tz / camera.z;
++  ::space_mip = -log(space_zoom) / log(2.0);
++  ::space_mip_i = iround_down(::space_mip);
++  ::space_size  = view_size * space_zoom;
++  
++  ::space_corner = normalize2(camera.pos - space_size /2, map_size);
++  ::space_center = normalize2(camera.pos, map_size);
++  ::space_vel = camera.vel;
++  ::space_center_nowrap = camera.pos;
++  
++  camera.pos = oc;
++  
++  return;
++}
+ 
+-	frame-&gt;prepare();
+ 
+-	::space_view = this;
+-
+-	view_size.x = window-&gt;w;
+-	view_size.y = window-&gt;h;
+-
+-	::space_view_size = view_size;
+-	double tz = magnitude(view_size) / 1.41421356237309504880168872;
+-	::space_zoom = tz / camera.z;
+-	::space_mip = -log(space_zoom) / log(2.0);
+-	::space_mip_i = iround_down(::space_mip);
+-	::space_size  = view_size * space_zoom;
+-
+-	::space_corner = normalize2(camera.pos - space_size /2, map_size);
+-	::space_center = normalize2(camera.pos, map_size);
+-	::space_vel = camera.vel;
+-	::space_center_nowrap = camera.pos;
+-	
+-	camera.pos = oc;
+-
+-	return;
++void View::animate(Game *game) 
++{
++  STACKTRACE;
++  if (FULL_REDRAW) frame-&gt;full_redraw = true;
++  frame-&gt;erase();
++  prepare(frame, 0);
++  
++  if (frame-&gt;surface) 
++    {
++      if (frame-&gt;surface) 
++	game-&gt;animate(frame);
++      message.animate(frame);
++    }
++  
++  scare_mouse();
++  frame-&gt;draw();
++  unscare_mouse();
++  return;
+ }
+ 
+-
+-void View::animate(Game *game) {
++void View::config() 
++{
+   STACKTRACE;
+-	if (FULL_REDRAW) frame-&gt;full_redraw = true;
+-	frame-&gt;erase();
+-	prepare(frame, 0);
++  return;
++}
+ 
+-	if (frame-&gt;surface) {
+-		if (frame-&gt;surface) game-&gt;animate(frame);
+-		message.animate(frame);
+-	}
+-
+-	scare_mouse();
+-	frame-&gt;draw();
+-	unscare_mouse();
+-	return;
+-	}
+-
+-void View::config() {
++bool View::screen2game(Vector2 *_pos) 
++{
+   STACKTRACE;
+-	return;
+-	}
+-bool View::screen2game(Vector2 *_pos) {
+-  STACKTRACE;
+-	Vector2 pos = *_pos;
+-	Vector2 opos = pos;
++  Vector2 pos = *_pos;
++  Vector2 opos = pos;
++  
++  pos.x -= window-&gt;x;
++  pos.y -= window-&gt;y;
++  
++  pos /= space_zoom;
++  
++  pos += camera.pos - space_size / 2;
++  pos = normalize (pos, map_size);
++  *_pos = pos;
++  if ((opos.x &lt; window-&gt;x) || 
++      (opos.x &gt;= window-&gt;x + window-&gt;w) || 
++      (opos.y &lt; window-&gt;y) || 
++      (opos.y &gt;= window-&gt;y + window-&gt;h))
++    return false;
++  return true;
++}
+ 
+-	pos.x -= window-&gt;x;
+-	pos.y -= window-&gt;y;
+-
+-	pos /= space_zoom;
+-
+-	pos += camera.pos - space_size / 2;
+-	pos = normalize (pos, map_size);
+-	*_pos = pos;
+-	if ((opos.x &lt; window-&gt;x) || 
+-		(opos.x &gt;= window-&gt;x + window-&gt;w) || 
+-		(opos.y &lt; window-&gt;y) || 
+-		(opos.y &gt;= window-&gt;y + window-&gt;h))
+-		return false;
+-	return true;
+-	}
+-double View::in_view(Vector2 pos, Vector2 size) {
++double View::in_view(Vector2 pos, Vector2 size) 
++{
+   STACKTRACE;
+-	pos = corner(pos, size);
+-	size = size * space_zoom;
+-
+-	double a = size.x, b = size.y;
+-	double c;
+-	c = pos.x + size.x - space_view_size.x;
+-	if (c &gt; 0) a -= c;
+-	c = pos.x;
+-	if (c &lt; 0) a += c;
+-	if (a &lt; 0) return 0;
+-	c = pos.y + size.y - space_view_size.y;
+-	if (c &gt; 0) b -= c;
+-	c = pos.y;
+-	if (c &lt; 0) b += c;
+-	if (b &lt; 0) return 0;
+-	return a * b / (size.x * size.y);
++  pos = corner(pos, size);
++  size = size * space_zoom;
++  
++  double a = size.x, b = size.y;
++  double c;
++  c = pos.x + size.x - space_view_size.x;
++  if (c &gt; 0) a -= c;
++  c = pos.x;
++  if (c &lt; 0) a += c;
++  if (a &lt; 0) return 0;
++  c = pos.y + size.y - space_view_size.y;
++  if (c &gt; 0) b -= c;
++  c = pos.y;
++  if (c &lt; 0) b += c;
++  if (b &lt; 0) return 0;
++  return a * b / (size.x * size.y);
+ }
+ int View::focus(CameraPosition *pos, SpaceLocation *la, SpaceLocation *lb) {
+   STACKTRACE;
+-	if (!la &amp;&amp; !lb) return 0;
+-	if (!la) la = lb;
+-	if (!lb) lb = la;
+-	Vector2 p, p2;
+-	p = la-&gt;normal_pos();
+-	p2 = lb-&gt;normal_pos();
+-	double c, d;
++  if (!la &amp;&amp; !lb) return 0;
++  if (!la) la = lb;
++  if (!lb) lb = la;
++  Vector2 p, p2;
++  p = la-&gt;normal_pos();
++  p2 = lb-&gt;normal_pos();
++  double c, d;
+ 
+-	Vector2 a = Vector2(
+-		min_delta(p.x, p2.x, map_size.x),
+-		min_delta(p.y, p2.y, map_size.y)
+-		);
++  Vector2 a = Vector2(
++		      min_delta(p.x, p2.x, map_size.x),
++		      min_delta(p.y, p2.y, map_size.y)
++		      );
+ 
+-	p = normalize(p-a/2, map_size);
++  p = normalize(p-a/2, map_size);
+ 
+-	c = fabs(a.x) + 1;
+-	d = fabs(a.y) + 1;
+-	//if (c &lt; d) c = d;
+-	c = sqrt(c*c + d*d);
++  c = fabs(a.x) + 1;
++  d = fabs(a.y) + 1;
++  //if (c &lt; d) c = d;
++  c = sqrt(c*c + d*d);
+ 
+-	pos-&gt;pos = p;
+-	if (lb != la) {
+-		pos-&gt;z = c;
+-		return 2;
+-	}
+-	else return 1;
++  pos-&gt;pos = p;
++  if (lb != la) {
++    pos-&gt;z = c;
++    return 2;
++  }
++  else return 1;
+ }
+ 
+ /*void View::see_also(SpaceLocation *o) {
+   STACKTRACE;
+-	if (!o) return;
+-	double x2, y2;
+-	x2 = b-&gt;normal_x();
+-	y2 = b-&gt;normal_y();
+-	double a, b, c, d;
+-	a = min_delta(x, x2, X_MAX);
+-	b = min_delta(y, y2, Y_MAX);
+-	c = view_x / (fabs(a) + 1);
+-	d = view_y / (fabs(b) + 1);
+-	if (c &gt; d) c = d;
+-	x = normalize(x-a/2, X_MAX);
+-	y = normalize(y-b/2, Y_MAX);
+-	z = c;
+-	return;
+-	}*/
++  if (!o) return;
++  double x2, y2;
++  x2 = b-&gt;normal_x();
++  y2 = b-&gt;normal_y();
++  double a, b, c, d;
++  a = min_delta(x, x2, X_MAX);
++  b = min_delta(y, y2, Y_MAX);
++  c = view_x / (fabs(a) + 1);
++  d = view_y / (fabs(b) + 1);
++  if (c &gt; d) c = d;
++  x = normalize(x-a/2, X_MAX);
++  y = normalize(y-b/2, Y_MAX);
++  z = c;
++  return;
++  }*/
+ //make these static...
+ 
+ void View::track (const CameraPosition &amp;target, CameraPosition *origin) {
+-	STACKTRACE
+-	if (!origin) origin = &amp;this-&gt;camera;
+-	Vector2 d;
+-	d = target.pos - origin-&gt;pos;
++  STACKTRACE
++    if (!origin) origin = &amp;this-&gt;camera;
++  Vector2 d;
++  d = target.pos - origin-&gt;pos;
+ 
+-	d = normalize2(d + map_size/2, map_size) - map_size/2;
++  d = normalize2(d + map_size/2, map_size) - map_size/2;
+ 
+-	origin-&gt;pos += d;
+-	// debug GEO.
+-	// origin isn't normalized, this can grow very big. When a normalization
+-	// is used, this normalization must then handle a very large value; it
+-	// then encounters the limit 999. So, add a normalization ?
+-	normalize(origin-&gt;pos, map_size);
++  origin-&gt;pos += d;
++  // debug GEO.
++  // origin isn't normalized, this can grow very big. When a normalization
++  // is used, this normalization must then handle a very large value; it
++  // then encounters the limit 999. So, add a normalization ?
++  normalize(origin-&gt;pos, map_size);
+ 
+-	origin-&gt;vel = d / frame_time;
+-	origin-&gt;z = target.z;
++  origin-&gt;vel = d / frame_time;
++  origin-&gt;z = target.z;
+ }
+ void View::track (const CameraPosition &amp;target, double smooth_time, CameraPosition *origin) {
+-	STACKTRACE
+-	if (!origin) origin = &amp;this-&gt;camera;
+-	Vector2 d;
+-	d.x = -min_delta( origin-&gt;pos.x, target.pos.x, map_size.x);
+-	d.y = -min_delta( origin-&gt;pos.y, target.pos.y, map_size.y);
+-	Vector2 dd;
+-	dd = d - origin-&gt;vel * frame_time;
++  STACKTRACE
++    if (!origin) origin = &amp;this-&gt;camera;
++  Vector2 d;
++  d.x = -min_delta( origin-&gt;pos.x, target.pos.x, map_size.x);
++  d.y = -min_delta( origin-&gt;pos.y, target.pos.y, map_size.y);
++  Vector2 dd;
++  dd = d - origin-&gt;vel * frame_time;
+ 
+-	origin-&gt;z = target.z;
+-	//if (origin-&gt;z &lt; 100) origin-&gt;z = 100;
+-	//if (origin-&gt;z &gt; 10000) origin-&gt;z = 10000;
++  origin-&gt;z = target.z;
++  //if (origin-&gt;z &lt; 100) origin-&gt;z = 100;
++  //if (origin-&gt;z &gt; 10000) origin-&gt;z = 10000;
+ 
+-/*	double r1 = (dx * dx + dy * dy) / (frame_time * frame_time);
++  /*	double r1 = (dx * dx + dy * dy) / (frame_time * frame_time);
+ 	double r2 = (ddx * ddx + ddy * ddy) / (frame_time * frame_time);
+ 
+ 	if ( 1 ) {
+-		double d = (log(origin-&gt;z) / log(10) -2) /2;
+-		d = 0.5 - 0.4 * d;
+-		d = 0.5;
+-		dx = origin-&gt;vx * d + dx * (1.0 - d);
+-		dy = origin-&gt;vy * d + dy * (1.0 - d);
+-		dx = ddx * (1.0 - d);
+-		dx += origin-&gt;vx * (1.0 - d);
+-		dy -= ddy * (1.0 - d);
+-		dy += origin-&gt;vy * d;*/
+-/*	}*/
++	double d = (log(origin-&gt;z) / log(10) -2) /2;
++	d = 0.5 - 0.4 * d;
++	d = 0.5;
++	dx = origin-&gt;vx * d + dx * (1.0 - d);
++	dy = origin-&gt;vy * d + dy * (1.0 - d);
++	dx = ddx * (1.0 - d);
++	dx += origin-&gt;vx * (1.0 - d);
++	dy -= ddy * (1.0 - d);
++	dy += origin-&gt;vy * d;*/
++  /*	}*/
+ 
+-	origin-&gt;vel = d / frame_time;
+-	origin-&gt;pos += d;
++  origin-&gt;vel = d / frame_time;
++  origin-&gt;pos += d;
+ 
+-	// debug GEO.
+-	// origin isn't normalized, this can grow very big. When a normalization
+-	// is used, this normalization must then handle a very large value; it
+-	// then encounters the limit 999. So, add a normalization ?
+-	normalize(origin-&gt;pos, map_size);
++  // debug GEO.
++  // origin isn't normalized, this can grow very big. When a normalization
++  // is used, this normalization must then handle a very large value; it
++  // then encounters the limit 999. So, add a normalization ?
++  normalize(origin-&gt;pos, map_size);
+ 
+-	return;
++  return;
+ }
+ 
+ void View::init(View *old) {
+   STACKTRACE;
+-	if (window || frame) {
+-		tw_error(&quot;View::init - hmm...&quot;);
+-	}
+-	if (old) {
+-		camera = old-&gt;camera;
+-		key_zoom_in = old-&gt;key_zoom_in;
+-		key_zoom_out = old-&gt;key_zoom_out;
+-		key_alter1 = old-&gt;key_alter1;
+-		key_alter2 = old-&gt;key_alter2;
+-		frame = new Frame(1024);
+-		window = frame-&gt;window;
+-	}
+-	else {
+-		frame = new Frame(1024);
+-		window = frame-&gt;window;
+-		camera.pos = Vector2(0,0);
+-		camera.z = 960;
+-		camera.vel = Vector2(0,0);
++  if (window || frame) {
++    tw_error(&quot;View::init - hmm...&quot;);
++  }
++  if (old) {
++    camera = old-&gt;camera;
++    key_zoom_in = old-&gt;key_zoom_in;
++    key_zoom_out = old-&gt;key_zoom_out;
++    key_alter1 = old-&gt;key_alter1;
++    key_alter2 = old-&gt;key_alter2;
++    frame = new Frame(1024);
++    window = frame-&gt;window;
++  }
++  else {
++    frame = new Frame(1024);
++    window = frame-&gt;window;
++    camera.pos = Vector2(0,0);
++    camera.z = 960;
++    camera.vel = Vector2(0,0);
+ 
+-		tw_set_config_file ( &quot;client.ini&quot; );
+-		key_zoom_in  = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_zoomin&quot;,  &quot;EQUALS&quot;));
+-		key_zoom_out = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_zoomout&quot;, &quot;MINUS&quot;));
+-		key_alter1   = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_alter1&quot;,  &quot;0&quot;));
+-		key_alter2   = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_alter2&quot;,  &quot;BACKSLASH&quot;));
+-	}
+-	window-&gt;add_callback(this);
+-	//if (window-&gt;surface) ;
+-	return;
++    tw_set_config_file ( &quot;client.ini&quot; );
++    key_zoom_in  = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_zoomin&quot;,  &quot;EQUALS&quot;));
++    key_zoom_out = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_zoomout&quot;, &quot;MINUS&quot;));
++    key_alter1   = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_alter1&quot;,  &quot;0&quot;));
++    key_alter2   = name_to_key(get_config_string(&quot;View&quot;, &quot;Key_alter2&quot;,  &quot;BACKSLASH&quot;));
++  }
++  window-&gt;add_callback(this);
++  //if (window-&gt;surface) ;
++  return;
+ }
+ void View::replace ( View * v ) {STACKTRACE
+-	if (frame) {
+-		window-&gt;remove_callback(this);
+-		delete frame;
+-		frame = NULL;
+-		window = NULL;
+-	}
+-	frame = v-&gt;frame;
+-	window = frame-&gt;window;
+-	view_size = v-&gt;view_size;
++				   if (frame) {
++				     window-&gt;remove_callback(this);
++				     delete frame;
++				     frame = NULL;
++				     window = NULL;
++				   }
++ frame = v-&gt;frame;
++ window = frame-&gt;window;
++ view_size = v-&gt;view_size;
+ 
+-	window-&gt;remove_callback(v);
+-	window-&gt;add_callback(this);
++ window-&gt;remove_callback(v);
++ window-&gt;add_callback(this);
+ 	
+-	v-&gt;frame = NULL;
+-	v-&gt;window = NULL;
+-	delete v;
++ v-&gt;frame = NULL;
++ v-&gt;window = NULL;
++ delete v;
+ 
+-	return;
++ return;
+ }
+ View::~View() {STACKTRACE
+-	if (frame) {
+-		window-&gt;remove_callback(this);
+-		delete frame;
+-	}
++		 if (frame) {
++		   window-&gt;remove_callback(this);
++		   delete frame;
++		 }
+ }
+ void View::calculate(Game *game) {
+   STACKTRACE;}
+ 
+ void message_type::out(char *string, int dur, int c) {
+   STACKTRACE;
+-	ASSERT (c &lt; 256);
+-	if (num_messages == max_messages - 1) {
+-		messages[0].end_time = -1;
+-		clean();
+-		}
+-	if (num_messages &gt;= max_messages - 1) throw &quot;bad dog!&quot;;
+-	messages[num_messages].string = strdup(string);
+-	if (game) messages[num_messages].end_time = game-&gt;game_time + dur;
+-	else messages[num_messages].end_time = 0 + dur;
+-	messages[num_messages].color = palette_color[c];
+-	num_messages += 1;
++  ASSERT (c &lt; 256);
++  if (num_messages == max_messages - 1) {
++    messages[0].end_time = -1;
++    clean();
++  }
++  if (num_messages &gt;= max_messages - 1) throw &quot;bad dog!&quot;;
++  messages[num_messages].string = strdup(string);
++  if (game) messages[num_messages].end_time = game-&gt;game_time + dur;
++  else messages[num_messages].end_time = 0 + dur;
++  messages[num_messages].color = palette_color[c];
++  num_messages += 1;
+ 
+-	clean();
+-	return;
+-	}
++  clean();
++  return;
++}
+ void message_type::print(int dur, int c, const char *format, ...) {
+   STACKTRACE;
+-	char buf[1024];
+-	va_list those_dots;
+-	va_start (those_dots, format);
++  char buf[1024];
++  va_list those_dots;
++  va_start (those_dots, format);
+ #ifdef ALLEGRO_MSVC
+-	_vsnprintf(buf, 1000, format, those_dots);
+-//#elif NO_VSNPRINTF
++  _vsnprintf(buf, 1000, format, those_dots);
++  //#elif NO_VSNPRINTF
+ #elif defined VSNPRINTF 
+-	vsnprintf(buf, 1000, format, those_dots);
++  vsnprintf(buf, 1000, format, those_dots);
+ #else 
+-	vsprintf(buf, format, those_dots);
+-	//vsnprintf(buf, 1000, format, those_dots); //it would be nice to use this line...
++  vsprintf(buf, format, those_dots);
++  //vsnprintf(buf, 1000, format, those_dots); //it would be nice to use this line...
+ #endif
+-	va_end (those_dots);
+-	out(buf, dur, c);
+-	return;
+-	}
++  va_end (those_dots);
++  out(buf, dur, c);
++  return;
++}
+ void message_type::clean() {
+   STACKTRACE;
+-	int kill_time;
+-	if (game) kill_time = game-&gt;game_time;
+-	else kill_time = 0;
+-	for (int i = 0; i &lt; num_messages; i += 1) {
+-		if (messages[i].end_time &lt;= kill_time) {
+-			free (messages[i].string);
+-			num_messages -= 1;
+-			memmove (&amp;messages[i], &amp;messages[i+1], (num_messages - i) * sizeof(entry_type));
+-			i -= 1;
+-			}
+-		}
+-	return;
+-	}
++  int kill_time;
++  if (game) kill_time = game-&gt;game_time;
++  else kill_time = 0;
++  for (int i = 0; i &lt; num_messages; i += 1) {
++    if (messages[i].end_time &lt;= kill_time) {
++      free (messages[i].string);
++      num_messages -= 1;
++      memmove (&amp;messages[i], &amp;messages[i+1], (num_messages - i) * sizeof(entry_type));
++      i -= 1;
++    }
++  }
++  return;
++}
+ void message_type::flush() {
+   STACKTRACE;
+-	for (int i = 0; i &lt; num_messages; i += 1) {
+-		if (messages[i].string)
+-			free (messages[i].string);
+-		}
+-	num_messages = ox = oy = 0;
+-	return;
+-	}
++  for (int i = 0; i &lt; num_messages; i += 1) {
++    if (messages[i].string)
++      free (messages[i].string);
++  }
++  num_messages = ox = oy = 0;
++  return;
++}
+ 
+-void message_type::animate(Frame *frame) {
++void message_type::animate(Frame *frame) 
++{
+   STACKTRACE;
+ 
+-	if (num_messages &lt;= 0)
+-		return;
++  if (num_messages &lt;= 0)
++    return;
+ 
+-	int i, x = 0, y = 0, tmp;
+-	BITMAP *bmp;
+-	if (frame) {
+-		text_mode(-1);
+-		bmp = frame-&gt;surface;
+-		}
+-	else {
+-		text_mode(0);
+-		videosystem-&gt;window.lock();
+-		bmp = videosystem-&gt;window.surface;
+-		}
+-	clean();
+-	if (!frame) rectfill(bmp, 0, 0, ox, oy, 0);
+-	for (i = 0; i &lt; num_messages; i += 1) {
+-		textprintf(bmp, font, 0, y, messages[i].color, &quot;%s&quot;, messages[i].string);
+-		tmp = text_length(font, messages[i].string);
+-		if (x &lt; tmp) x = tmp;
+-		y += text_height(font);
+-		}
+-	if (frame &amp;&amp; !frame-&gt;full_redraw) frame-&gt;add_box(0, 0, x, y);	
+-	if (!frame) 
+-	  videosystem-&gt;window.unlock();
+-	ox = x;
+-	oy = y;
+-	return;
+-	}
+-message_type message;
++  int i, x = 0, y = 0, tmp;
++  BITMAP *bmp;
++  if (frame) {
++    text_mode(-1);
++    bmp = frame-&gt;surface;
++  }
++  else {
++    text_mode(0);
++    videosystem-&gt;window.lock();
++    bmp = videosystem-&gt;window.surface;
++  }
++  clean();
++  if (!frame) rectfill(bmp, 0, 0, ox, oy, 0);
++  for (i = 0; i &lt; num_messages; i += 1) {
++    textprintf(bmp, font, 0, y, messages[i].color, &quot;%s&quot;, messages[i].string);
++    tmp = text_length(font, messages[i].string);
++    if (x &lt; tmp) x = tmp;
++    y += text_height(font);
++  }
++  if (frame &amp;&amp; !frame-&gt;full_redraw) frame-&gt;add_box(0, 0, x, y);	
++  if (!frame) 
++    videosystem-&gt;window.unlock();
++  ox = x;
++  oy = y;
++  return;
++}
+ 
+-void View::_event( Event *e ) {
++void View::_event( Event *e ) 
++{
+   STACKTRACE;
+-	if ( e-&gt;type == Event::VIDEO ) {
+-		const VideoEvent *ve = (const VideoEvent*) e;
+-		const VideoWindow *w = ve-&gt;window;
+-		if (w != window) return;
+-		//if (w-&gt;surface) set_window(w-&gt;surface, w-&gt;x, w-&gt;y, w-&gt;w, w-&gt;h);
+-	}
++  if ( e-&gt;type == Event::VIDEO ) {
++    const VideoEvent *ve = (const VideoEvent*) e;
++    const VideoWindow *w = ve-&gt;window;
++    if (w != window) return;
++    //if (w-&gt;surface) set_window(w-&gt;surface, w-&gt;x, w-&gt;y, w-&gt;w, w-&gt;h);
++  }
+ }
+ 
+ 
+@@ -491,116 +513,116 @@
+ 
+ 
+ class View_Everything : public View {
+-	public:
+-	virtual void calculate(Game *game);
+-	};
++public:
++  virtual void calculate(Game *game);
++};
+ void View_Everything::calculate (Game *game) {STACKTRACE
+-	double a, b, c;
+-	//sqrt(view_w * view_w + view_h * view_h) / 1.41421356237309504880168872
+-	c = 1.414 / magnitude(view_size);
+-	a = map_size.x * view_size.x * c;
+-	b = map_size.y * view_size.y * c;
+-	if (b &gt; a) a = b;
+-	camera.z = a;
+-	return;
+-	}
++						double a, b, c;
++//sqrt(view_w * view_w + view_h * view_h) / 1.41421356237309504880168872
++ c = 1.414 / magnitude(view_size);
++ a = map_size.x * view_size.x * c;
++ b = map_size.y * view_size.y * c;
++ if (b &gt; a) a = b;
++ camera.z = a;
++ return;
++}
+ 
+ 
+ 
+ 
+ class View_Hero : public View {
+-	double f;
+-	double max, min;
+-	public:
+-	virtual void calculate(Game *game);
+-	virtual void init(View *old);
+-	//virtual void set_window (BITMAP *dest, int x, int y, int w, int h);
+-	};
++  double f;
++  double max, min;
++public:
++  virtual void calculate(Game *game);
++  virtual void init(View *old);
++  //virtual void set_window (BITMAP *dest, int x, int y, int w, int h);
++};
+ void View_Hero::init(View *old) {
+   STACKTRACE;
+-	View::init(old);
+-	f = 0;
+-	min = 30;//480;
+-	max = 480000;
+-	return;
+-	}
++  View::init(old);
++  f = 0;
++  min = 30;//480;
++  max = 480000;
++  return;
++}
+ 
+ void View_Hero::calculate (Game *game) {STACKTRACE
+-	CameraPosition n = camera;
+-	if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
+-	if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
+-	if (n.z &lt; min) n.z = min;
+-	if (n.z &gt; max) n.z = max;
+-	if (key_pressed(key_alter1)) f += 0.006 * frame_time;
+-	else f -= 0.006 * frame_time;
+-	if (f &lt; 0) f = 0;
+-	if (f &gt; 1.2) f = 1.2;
+-	SpaceLocation *c = NULL;
+-	if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
+-	focus ( &amp;n, c );
+-	if (c) {
+-		n.pos += (f) * n.z / 4 * unit_vector(c-&gt;get_angle_ex());
+-	}
+-	track ( n, frame_time );
+-	return;
++					  CameraPosition n = camera;
++ if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
++ if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
++ if (n.z &lt; min) n.z = min;
++ if (n.z &gt; max) n.z = max;
++ if (key_pressed(key_alter1)) f += 0.006 * frame_time;
++ else f -= 0.006 * frame_time;
++ if (f &lt; 0) f = 0;
++ if (f &gt; 1.2) f = 1.2;
++ SpaceLocation *c = NULL;
++ if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
++ focus ( &amp;n, c );
++ if (c) {
++   n.pos += (f) * n.z / 4 * unit_vector(c-&gt;get_angle_ex());
++ }
++ track ( n, frame_time );
++ return;
+ }
+ 
+ 
+ 
+ 
+ class View_Enemy : public View {
+-	public:
+-	virtual void calculate(Game *game);
+-	};
++public:
++  virtual void calculate(Game *game);
++};
+ void View_Enemy::calculate (Game *game) {STACKTRACE
+-	SpaceLocation *c = NULL;
+-	if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
+-	if (!c) return;
+-	CameraPosition n = camera;
+-	if (c-&gt;get_target() &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;get_target()-&gt;isInvisible())) {
+-		if (c-&gt;distance(c-&gt;get_target()) &lt; 3000) {
+-			focus(&amp;n, c, c-&gt;get_target());
+-			n.z *= 1.4;
+-		}
+-		else focus(&amp;n, c);
+-	}
+-	else focus(&amp;n, c);
+-	if (n.z &lt; 480) n.z = 480;
+-	track(n);
+-	return;
++					   SpaceLocation *c = NULL;
++ if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
++ if (!c) return;
++ CameraPosition n = camera;
++ if (c-&gt;get_target() &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;get_target()-&gt;isInvisible())) {
++   if (c-&gt;distance(c-&gt;get_target()) &lt; 3000) {
++     focus(&amp;n, c, c-&gt;get_target());
++     n.z *= 1.4;
++   }
++   else focus(&amp;n, c);
++ }
++ else focus(&amp;n, c);
++ if (n.z &lt; 480) n.z = 480;
++ track(n);
++ return;
+ }
+ 
+ 
+ 
+ 
+ class View_Enemy_Discrete : public View {
+-	public:
+-	virtual void calculate(Game *game);
+-	};
++public:
++  virtual void calculate(Game *game);
++};
+ void View_Enemy_Discrete::calculate (Game *game) {STACKTRACE
+-	SpaceLocation *c = NULL;
+-	if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
+-	if (!c) return;
+-	CameraPosition n = camera;
+-	if (c-&gt;get_target() &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;get_target()-&gt;isInvisible())) {
+-		focus(&amp;n, c, c-&gt;get_target());
+-		n.z *= 1.4;
+-		}
+-	else
+-	{
+-		focus(&amp;n, c);
+-		// but, if the target is invisible, you usually want more zoom to plan where to go, right...
+-		n.z = 900;
+-	}
++						    SpaceLocation *c = NULL;
++ if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
++ if (!c) return;
++ CameraPosition n = camera;
++ if (c-&gt;get_target() &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;get_target()-&gt;isInvisible())) {
++   focus(&amp;n, c, c-&gt;get_target());
++   n.z *= 1.4;
++ }
++ else
++   {
++     focus(&amp;n, c);
++     // but, if the target is invisible, you usually want more zoom to plan where to go, right...
++     n.z = 900;
++   }
+ 
+-	if (n.z &lt; 480) n.z = 480;
++ if (n.z &lt; 480) n.z = 480;
+ 
+ 
+-	double ref_size = 480;
+-	n.z = ref_size * pow( 2, iround( ceil(log(n.z/ref_size) / log(2.0))) );
+-	track(n);
+-	return;
+-	}
++ double ref_size = 480;
++ n.z = ref_size * pow( 2, iround( ceil(log(n.z/ref_size) / log(2.0))) );
++ track(n);
++ return;
++}
+ 
+ 
+ 
+@@ -614,36 +636,36 @@
+ 
+ 
+ class View_Split2a : public View {
+-	double max, min;
+-	enum {num_windows = 2};
+-	CameraPosition cam[num_windows];
+-	Frame *frames[num_windows];
+-	public:
+-	virtual void calculate(Game *game);
+-	virtual void init(View *old);
+-	virtual void animate(Game *game);
+-	virtual ~View_Split2a();
+-	};
++  double max, min;
++  enum {num_windows = 2};
++  CameraPosition cam[num_windows];
++  Frame *frames[num_windows];
++public:
++  virtual void calculate(Game *game);
++  virtual void init(View *old);
++  virtual void animate(Game *game);
++  virtual ~View_Split2a();
++};
+ void View_Split2a::init(View *old) {
+   STACKTRACE;
+-	View::init(old);
++  View::init(old);
+ 
+-	min = 480;
+-	max = 4800;
++  min = 480;
++  max = 4800;
+ 
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
+-	for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
+-	frames[0]-&gt;window-&gt;locate(0,0.0, 0,0, 0,0.5, 0, 1);
+-	frames[1]-&gt;window-&gt;locate(0,0.5, 0,0, 0,0.5, 0, 1);
+-	return;
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
++  for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
++  frames[0]-&gt;window-&gt;locate(0,0.0, 0,0, 0,0.5, 0, 1);
++  frames[1]-&gt;window-&gt;locate(0,0.5, 0,0, 0,0.5, 0, 1);
++  return;
++}
+ View_Split2a::~View_Split2a()
+ {
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		delete frames[i];
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) {
++    delete frames[i];
++  }
+ }
+ void View_Split2a::animate(Game *game) 
+ {
+@@ -679,70 +701,70 @@
+ }
+ 
+ void View_Split2a::calculate (Game *game) {STACKTRACE
+-	CameraPosition n;
+-	SpaceLocation *c;
+-	int i;
++					     CameraPosition n;
++ SpaceLocation *c;
++ int i;
+ 
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		n = cam[i];
+-		switch (i) {
+-		case 0:
+-			if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
+-			if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
+-			break;
+-		case 1:
+-			if (key_pressed(key_alter1)) n.z *= 1 + 0.002 * frame_time;
+-			if (key_pressed(key_alter2)) n.z /= 1 + 0.002 * frame_time;
+-			break;
+-		default:
+-			break;
+-		}
+-		if (n.z &lt; min) n.z = min;
+-		if (n.z &gt; max) n.z = max;
+-		c = NULL;
+-		if (game-&gt;num_focuses &gt; i) c = game-&gt;focus[(game-&gt;focus_index + i) % game-&gt;num_focuses]-&gt;get_focus();
+-		focus ( &amp;n, c );
+-		track ( n, frame_time, &amp;cam[i] );
+-	}
++ for (i = 0; i &lt; num_windows; i += 1) {
++   n = cam[i];
++   switch (i) {
++   case 0:
++     if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
++     if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
++     break;
++   case 1:
++     if (key_pressed(key_alter1)) n.z *= 1 + 0.002 * frame_time;
++     if (key_pressed(key_alter2)) n.z /= 1 + 0.002 * frame_time;
++     break;
++   default:
++     break;
++   }
++   if (n.z &lt; min) n.z = min;
++   if (n.z &gt; max) n.z = max;
++   c = NULL;
++   if (game-&gt;num_focuses &gt; i) c = game-&gt;focus[(game-&gt;focus_index + i) % game-&gt;num_focuses]-&gt;get_focus();
++   focus ( &amp;n, c );
++   track ( n, frame_time, &amp;cam[i] );
++ }
+ 
+-	camera = cam[0];
+-	return;
+-	}
++ camera = cam[0];
++ return;
++}
+ 
+ 
+ 
+ 
+ class View_Split2b : public View {
+-	double max, min;
+-	enum {num_windows = 2};
+-	CameraPosition cam[num_windows];
+-	Frame *frames[num_windows];
+-	public:
+-	virtual void calculate(Game *game);
+-	virtual void init(View *old);
+-	virtual void animate(Game *game);
+-	virtual ~View_Split2b();
+-	};
++  double max, min;
++  enum {num_windows = 2};
++  CameraPosition cam[num_windows];
++  Frame *frames[num_windows];
++public:
++  virtual void calculate(Game *game);
++  virtual void init(View *old);
++  virtual void animate(Game *game);
++  virtual ~View_Split2b();
++};
+ void View_Split2b::init(View *old) {
+   STACKTRACE;
+-	View::init(old);
++  View::init(old);
+ 
+-	min = 480;
+-	max = 4800;
++  min = 480;
++  max = 4800;
+ 
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
+-	for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
+-	frames[0]-&gt;window-&gt;locate(0,0, 0,0.0, 0,1, 0, .5);
+-	frames[1]-&gt;window-&gt;locate(0,0, 0,0.5, 0,1, 0, .5);
+-	return;
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
++  for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
++  frames[0]-&gt;window-&gt;locate(0,0, 0,0.0, 0,1, 0, .5);
++  frames[1]-&gt;window-&gt;locate(0,0, 0,0.5, 0,1, 0, .5);
++  return;
++}
+ View_Split2b::~View_Split2b()
+ {
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		delete frames[i];
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) {
++    delete frames[i];
++  }
+ }
+ void View_Split2b::animate(Game *game) 
+ {
+@@ -814,100 +836,100 @@
+ 
+ 
+ class View_Split3 : public View {
+-	double max, min;
+-	enum {num_windows = 3};
+-	CameraPosition cam[num_windows];
+-	Frame *frames[num_windows];
+-	public:
+-	virtual void calculate(Game *game);
+-	virtual void init(View *old);
+-	virtual void animate(Game *game);
+-	virtual ~View_Split3();
+-	};
++  double max, min;
++  enum {num_windows = 3};
++  CameraPosition cam[num_windows];
++  Frame *frames[num_windows];
++public:
++  virtual void calculate(Game *game);
++  virtual void init(View *old);
++  virtual void animate(Game *game);
++  virtual ~View_Split3();
++};
+ void View_Split3::init(View *old) {
+   STACKTRACE;
+-	View::init(old);
++  View::init(old);
+ 
+-	min = 480;
+-	max = 4800;
++  min = 480;
++  max = 4800;
+ 
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
+-	for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
+-	frames[0]-&gt;window-&gt;locate(0,0.0/3, 0,0, 0,1/3.0, 0,1);
+-	frames[1]-&gt;window-&gt;locate(0,1.0/3, 0,0, 0,1/3.0, 0,1);
+-	frames[2]-&gt;window-&gt;locate(0,2.0/3, 0,0, 0,1/3.0, 0,1);
+-	return;
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
++  for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
++  frames[0]-&gt;window-&gt;locate(0,0.0/3, 0,0, 0,1/3.0, 0,1);
++  frames[1]-&gt;window-&gt;locate(0,1.0/3, 0,0, 0,1/3.0, 0,1);
++  frames[2]-&gt;window-&gt;locate(0,2.0/3, 0,0, 0,1/3.0, 0,1);
++  return;
++}
+ View_Split3::~View_Split3()
+ {
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		delete frames[i];
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) {
++    delete frames[i];
++  }
+ }
+ void View_Split3::animate(Game *game) {
+   STACKTRACE;
+-	VideoWindow *tmpw;
+-	Frame *tmpf;
+-	CameraPosition tmpc;
+-	int i;
++  VideoWindow *tmpw;
++  Frame *tmpf;
++  CameraPosition tmpc;
++  int i;
+ 
+-	tmpw = window;
+-	tmpf = frame;
+-	tmpc = camera;
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		frames[i]-&gt;window-&gt;init(window);
+-	}
++  tmpw = window;
++  tmpf = frame;
++  tmpc = camera;
++  for (i = 0; i &lt; num_windows; i += 1) {
++    frames[i]-&gt;window-&gt;init(window);
++  }
+ 
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		window = frames[i]-&gt;window;
+-		frame = frames[i];
+-		camera = cam[i];
+-		View::animate(game);
+-	}
++  for (i = 0; i &lt; num_windows; i += 1) {
++    window = frames[i]-&gt;window;
++    frame = frames[i];
++    camera = cam[i];
++    View::animate(game);
++  }
+ 
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		frames[i]-&gt;window-&gt;init(NULL);
+-	}
++  for (i = 0; i &lt; num_windows; i += 1) {
++    frames[i]-&gt;window-&gt;init(NULL);
++  }
+ 
+-	frame = tmpf;
+-	window = tmpw;
+-	camera = tmpc;
+-	view_size.x = window-&gt;w;
+-	view_size.y = window-&gt;w;
++  frame = tmpf;
++  window = tmpw;
++  camera = tmpc;
++  view_size.x = window-&gt;w;
++  view_size.y = window-&gt;w;
+ }
+ 
+ void View_Split3::calculate (Game *game) {STACKTRACE
+-	CameraPosition n;
+-	SpaceLocation *c;
+-	int i;
++					    CameraPosition n;
++ SpaceLocation *c;
++ int i;
+ 
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		n = cam[i];
+-		switch (i) {
+-		case 0:
+-			if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
+-			if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
+-			break;
+-		case 1:
+-			if (key_pressed(key_alter1)) n.z *= 1 + 0.002 * frame_time;
+-			if (key_pressed(key_alter2)) n.z /= 1 + 0.002 * frame_time;
+-			break;
+-		default:
+-			break;
+-		}
+-		if (n.z &lt; min) n.z = min;
+-		if (n.z &gt; max) n.z = max;
+-		c = NULL;
+-		if (game-&gt;num_focuses &gt; i) c = game-&gt;focus[(game-&gt;focus_index + i) % game-&gt;num_focuses]-&gt;get_focus();
+-		focus ( &amp;n, c );
+-		track ( n, frame_time, &amp;cam[i] );
+-	}
++ for (i = 0; i &lt; num_windows; i += 1) {
++   n = cam[i];
++   switch (i) {
++   case 0:
++     if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
++     if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
++     break;
++   case 1:
++     if (key_pressed(key_alter1)) n.z *= 1 + 0.002 * frame_time;
++     if (key_pressed(key_alter2)) n.z /= 1 + 0.002 * frame_time;
++     break;
++   default:
++     break;
++   }
++   if (n.z &lt; min) n.z = min;
++   if (n.z &gt; max) n.z = max;
++   c = NULL;
++   if (game-&gt;num_focuses &gt; i) c = game-&gt;focus[(game-&gt;focus_index + i) % game-&gt;num_focuses]-&gt;get_focus();
++   focus ( &amp;n, c );
++   track ( n, frame_time, &amp;cam[i] );
++ }
+ 
+-	camera = cam[0];
+-	return;
+-	}
++ camera = cam[0];
++ return;
++}
+ 
+ 
+ 
+@@ -915,110 +937,110 @@
+ 
+ 
+ class View_Split4 : public View {
+-	double max, min;
+-	enum {num_windows = 4};
+-	CameraPosition cam[num_windows];
+-	Frame *frames[num_windows];
+-	public:
+-	virtual void calculate(Game *game);
+-	virtual void init(View *old);
+-	virtual void animate(Game *game);
+-	virtual ~View_Split4();
+-	};
++  double max, min;
++  enum {num_windows = 4};
++  CameraPosition cam[num_windows];
++  Frame *frames[num_windows];
++public:
++  virtual void calculate(Game *game);
++  virtual void init(View *old);
++  virtual void animate(Game *game);
++  virtual ~View_Split4();
++};
+ void View_Split4::init(View *old) {
+   STACKTRACE;
+-	View::init(old);
++  View::init(old);
+ 
+-	min = 480;
+-	max = 4800;
++  min = 480;
++  max = 4800;
+ 
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
+-	for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
+-	frames[0]-&gt;window-&gt;locate(0,0.0/2, 0,0.0/2, 0,0.5, 0,0.5);
+-	frames[1]-&gt;window-&gt;locate(0,1.0/2, 0,0.0/2, 0,0.5, 0,0.5);
+-	frames[2]-&gt;window-&gt;locate(0,0.0/2, 0,1.0/2, 0,0.5, 0,0.5);
+-	frames[3]-&gt;window-&gt;locate(0,1.0/2, 0,1.0/2, 0,0.5, 0,0.5);
+-	return;
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) cam[i] = camera;
++  for (i = 0; i &lt; num_windows; i += 1) frames[i] = new Frame(1024);
++  frames[0]-&gt;window-&gt;locate(0,0.0/2, 0,0.0/2, 0,0.5, 0,0.5);
++  frames[1]-&gt;window-&gt;locate(0,1.0/2, 0,0.0/2, 0,0.5, 0,0.5);
++  frames[2]-&gt;window-&gt;locate(0,0.0/2, 0,1.0/2, 0,0.5, 0,0.5);
++  frames[3]-&gt;window-&gt;locate(0,1.0/2, 0,1.0/2, 0,0.5, 0,0.5);
++  return;
++}
+ View_Split4::~View_Split4()
+ {
+-	int i;
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		delete frames[i];
+-	}
++  int i;
++  for (i = 0; i &lt; num_windows; i += 1) {
++    delete frames[i];
++  }
+ }
+ void View_Split4::animate(Game *game) {
+   STACKTRACE;
+-	VideoWindow *tmpw;
+-	Frame *tmpf;
+-	CameraPosition tmpc;
+-	int i;
++  VideoWindow *tmpw;
++  Frame *tmpf;
++  CameraPosition tmpc;
++  int i;
+ 
+-	tmpw = window;
+-	tmpf = frame;
+-	tmpc = camera;
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		frames[i]-&gt;window-&gt;init(window);
+-	}
++  tmpw = window;
++  tmpf = frame;
++  tmpc = camera;
++  for (i = 0; i &lt; num_windows; i += 1) {
++    frames[i]-&gt;window-&gt;init(window);
++  }
+ 
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		window = frames[i]-&gt;window;
+-		frame = frames[i];
+-		camera = cam[i];
+-		View::animate(game);
+-	}
++  for (i = 0; i &lt; num_windows; i += 1) {
++    window = frames[i]-&gt;window;
++    frame = frames[i];
++    camera = cam[i];
++    View::animate(game);
++  }
+ 
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		frames[i]-&gt;window-&gt;init(NULL);
+-	}
++  for (i = 0; i &lt; num_windows; i += 1) {
++    frames[i]-&gt;window-&gt;init(NULL);
++  }
+ 
+-	frame = tmpf;
+-	window = tmpw;
+-	camera = tmpc;
+-	view_size.x = window-&gt;w;
+-	view_size.y = window-&gt;w;
++  frame = tmpf;
++  window = tmpw;
++  camera = tmpc;
++  view_size.x = window-&gt;w;
++  view_size.y = window-&gt;w;
+ }
+ 
+ void View_Split4::calculate (Game *game) {STACKTRACE
+-	CameraPosition n;
+-	SpaceLocation *c;
+-	int i;
++					    CameraPosition n;
++ SpaceLocation *c;
++ int i;
+ 
+-	for (i = 0; i &lt; num_windows; i += 1) {
+-		n = cam[i];
+-		switch (i) {
+-		case 0:
+-			if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
+-			if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
+-			break;
+-		case 1:
+-			if (key_pressed(key_alter1)) n.z *= 1 + 0.002 * frame_time;
+-			if (key_pressed(key_alter2)) n.z /= 1 + 0.002 * frame_time;
+-			break;
+-		default:
+-			break;
+-		}
+-		if (n.z &lt; min) n.z = min;
+-		if (n.z &gt; max) n.z = max;
+-		c = NULL;
+-		if (game-&gt;num_focuses &gt; i) c = game-&gt;focus[(game-&gt;focus_index + i) % game-&gt;num_focuses]-&gt;get_focus();
+-		focus ( &amp;n, c );
+-		track ( n, frame_time, &amp;cam[i] );
+-	}
++ for (i = 0; i &lt; num_windows; i += 1) {
++   n = cam[i];
++   switch (i) {
++   case 0:
++     if (key_pressed(key_zoom_in))  n.z /= 1 + 0.002 * frame_time;
++     if (key_pressed(key_zoom_out)) n.z *= 1 + 0.002 * frame_time;
++     break;
++   case 1:
++     if (key_pressed(key_alter1)) n.z *= 1 + 0.002 * frame_time;
++     if (key_pressed(key_alter2)) n.z /= 1 + 0.002 * frame_time;
++     break;
++   default:
++     break;
++   }
++   if (n.z &lt; min) n.z = min;
++   if (n.z &gt; max) n.z = max;
++   c = NULL;
++   if (game-&gt;num_focuses &gt; i) c = game-&gt;focus[(game-&gt;focus_index + i) % game-&gt;num_focuses]-&gt;get_focus();
++   focus ( &amp;n, c );
++   track ( n, frame_time, &amp;cam[i] );
++ }
+ 
+-	camera = cam[0];
+-	return;
+-	}
++ camera = cam[0];
++ return;
++}
+ 
+ 
+ 
+-REGISTER_VIEW ( View_Hero, &quot;Hero&quot; )
+-REGISTER_VIEW ( View_Enemy, &quot;Enemy&quot; )
+-REGISTER_VIEW ( View_Enemy_Discrete, &quot;Enemy_Discrete&quot; )
+-REGISTER_VIEW ( View_Split2a, &quot;Split_2_Horizontal&quot; )
+-REGISTER_VIEW ( View_Split2b, &quot;Split_2_Vertical&quot; )
+-REGISTER_VIEW ( View_Split3, &quot;Split_3_Horizontal&quot; )
+-REGISTER_VIEW ( View_Split4, &quot;Split_4_Quad&quot; )
+-REGISTER_VIEW ( View_Everything, &quot;Everything&quot; )
++REGISTER_VIEW ( View_Hero, &quot;Hero&quot; );
++REGISTER_VIEW ( View_Enemy, &quot;Enemy&quot; );
++REGISTER_VIEW ( View_Enemy_Discrete, &quot;Enemy_Discrete&quot; );
++REGISTER_VIEW ( View_Split2a, &quot;Split_2_Horizontal&quot; );
++REGISTER_VIEW ( View_Split2b, &quot;Split_2_Vertical&quot; );
++REGISTER_VIEW ( View_Split3, &quot;Split_3_Horizontal&quot; );
++REGISTER_VIEW ( View_Split4, &quot;Split_4_Quad&quot; );
++REGISTER_VIEW ( View_Everything, &quot;Everything&quot; );
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000075.html">[Tw-light-svn] r129 - trunk/source/games
+</A></li>
+	<LI>Next message: <A HREF="000077.html">[Tw-light-svn] r131 - in trunk/source: melee other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#76">[ date ]</a>
+              <a href="thread.html#76">[ thread ]</a>
+              <a href="subject.html#76">[ subject ]</a>
+              <a href="author.html#76">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

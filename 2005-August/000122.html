@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r176 - in trunk: gamedata/default_ini source/generated source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r176%20-%20in%20trunk%3A%20gamedata/default_ini%20source/generated%20source/melee&In-Reply-To=%3C200508082249.j78MnQVM028506%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000121.html">
+   <LINK REL="Next"  HREF="000123.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r176 - in trunk: gamedata/default_ini source/generated source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r176%20-%20in%20trunk%3A%20gamedata/default_ini%20source/generated%20source/melee&In-Reply-To=%3C200508082249.j78MnQVM028506%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r176 - in trunk: gamedata/default_ini source/generated source/melee">yurand at berlios.de
+       </A><BR>
+    <I>Tue Aug  9 00:49:26 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000121.html">[Tw-light-svn] r175 - in trunk: . Util/deditor gamedata/default_ini gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source/games source/melee source/other source/tml
+</A></li>
+        <LI>Next message: <A HREF="000123.html">[Tw-light-svn] r177 - trunk/source/ais
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#122">[ date ]</a>
+              <a href="thread.html#122">[ thread ]</a>
+              <a href="subject.html#122">[ subject ]</a>
+              <a href="author.html#122">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-08-09 00:49:04 +0200 (Tue, 09 Aug 2005)
+New Revision: 176
+
+Modified:
+   trunk/gamedata/default_ini/client.ini
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+Log:
+Fixed &quot;not redraw after showing menu&quot; bug
+
+Modified: trunk/gamedata/default_ini/client.ini
+===================================================================
+--- trunk/gamedata/default_ini/client.ini	2005-08-06 18:09:53 UTC (rev 175)
++++ trunk/gamedata/default_ini/client.ini	2005-08-08 22:49:04 UTC (rev 176)
+@@ -2,13 +2,13 @@
+ AutoUnload = 0
+ 
+ [Video]
+-ScreenWidth = 800
+-ScreenHeight = 600
++ScreenWidth = 640
++ScreenHeight = 480
+ 
+ BitsPerPixel = 32
+ ;valid = values are 8 (ugly), 15, 16, 24 (slow), and 32
+ 
+-FullScreen = 1
++FullScreen = 0
+ ; = 0 = windowed, 1 = fullscreen
+ 
+ ;This = will select the theme by its string name. The names for the non-bitmap
+@@ -21,8 +21,8 @@
+ 
+ 
+ [Sound]
+-SoundVolume = 0.500000
+-MusicVolume = 0.500000
++SoundVolume = 0.110000
++MusicVolume = 0.110000
+ SoundBuffer = 1024
+ 
+ 
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-08-06 18:09:53 UTC (rev 175)
++++ trunk/source/generated/tml_wrap.cpp	2005-08-08 22:49:04 UTC (rev 176)
+@@ -3905,6 +3905,36 @@
+ }
+ 
+ 
++static PyObject *_wrap_GameAction_set_camera_mode(PyObject *, PyObject *args) {
++    PyObject *resultobj;
++    std::string *arg1 = 0 ;
++    int res1 = 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GameAction_set_camera_mode&quot;,&amp;obj0)) goto fail;
++    {
++        std::string *ptr = (std::string *)0;
++        res1 = SWIG_AsPtr_std_string(obj0, &amp;ptr);
++        if (!res1) {
++            if (!PyErr_Occurred())
++            SWIG_type_error(&quot;std::string&quot;, obj0);
++        } else if (!ptr) {
++            SWIG_null_ref(&quot;std::string&quot;);
++        }
++        if (SWIG_arg_fail(1)) SWIG_fail;
++        arg1 = ptr;
++    }
++    GameAction::set_camera_mode((std::string const &amp;)*arg1);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    if (res1 == SWIG_NEWOBJ) delete arg1;
++    return resultobj;
++    fail:
++    if (res1 == SWIG_NEWOBJ) delete arg1;
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_GameAction(PyObject *, PyObject *args) {
+     PyObject *resultobj;
+     GameAction *result;
+@@ -4338,28 +4368,19 @@
+ }
+ 
+ 
+-static PyObject *_wrap_EventManager_shipDeathByName(PyObject *, PyObject *args) {
++static PyObject *_wrap_EventManager_shipDeathById(PyObject *, PyObject *args) {
+     PyObject *resultobj;
+-    std::string *arg1 = 0 ;
++    double arg1 ;
+     std::string *arg2 = 0 ;
+     int result;
+-    int res1 = 0 ;
+     int res2 = 0 ;
+     PyObject * obj0 = 0 ;
+     PyObject * obj1 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;OO:EventManager_shipDeathByName&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:EventManager_shipDeathById&quot;,&amp;obj0,&amp;obj1)) goto fail;
+     {
+-        std::string *ptr = (std::string *)0;
+-        res1 = SWIG_AsPtr_std_string(obj0, &amp;ptr);
+-        if (!res1) {
+-            if (!PyErr_Occurred())
+-            SWIG_type_error(&quot;std::string&quot;, obj0);
+-        } else if (!ptr) {
+-            SWIG_null_ref(&quot;std::string&quot;);
+-        }
++        arg1 = (double)(SWIG_As_double(obj0)); 
+         if (SWIG_arg_fail(1)) SWIG_fail;
+-        arg1 = ptr;
+     }
+     {
+         std::string *ptr = (std::string *)0;
+@@ -4373,16 +4394,14 @@
+         if (SWIG_arg_fail(2)) SWIG_fail;
+         arg2 = ptr;
+     }
+-    result = (int)EventManager::shipDeathByName((std::string const &amp;)*arg1,(std::string const &amp;)*arg2);
++    result = (int)EventManager::shipDeathById(arg1,(std::string const &amp;)*arg2);
+     
+     {
+         resultobj = SWIG_From_int((int)(result)); 
+     }
+-    if (res1 == SWIG_NEWOBJ) delete arg1;
+     if (res2 == SWIG_NEWOBJ) delete arg2;
+     return resultobj;
+     fail:
+-    if (res1 == SWIG_NEWOBJ) delete arg1;
+     if (res2 == SWIG_NEWOBJ) delete arg2;
+     return NULL;
+ }
+@@ -6368,6 +6387,7 @@
+ 	 { (char *)&quot;GameAction_end_game&quot;, _wrap_GameAction_end_game, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_scroll_text&quot;, _wrap_GameAction_scroll_text, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_print_message&quot;, _wrap_GameAction_print_message, METH_VARARGS, NULL},
++	 { (char *)&quot;GameAction_set_camera_mode&quot;, _wrap_GameAction_set_camera_mode, METH_VARARGS, NULL},
+ 	 { (char *)&quot;new_GameAction&quot;, _wrap_new_GameAction, METH_VARARGS, NULL},
+ 	 { (char *)&quot;delete_GameAction&quot;, _wrap_delete_GameAction, METH_VARARGS, NULL},
+ 	 { (char *)&quot;GameAction_swigregister&quot;, GameAction_swigregister, METH_VARARGS, NULL},
+@@ -6389,7 +6409,7 @@
+ 	 { (char *)&quot;EventManager_setSingleTimeEvent&quot;, _wrap_EventManager_setSingleTimeEvent, METH_VARARGS, NULL},
+ 	 { (char *)&quot;EventManager_setRepeatableTimeEvent&quot;, _wrap_EventManager_setRepeatableTimeEvent, METH_VARARGS, NULL},
+ 	 { (char *)&quot;EventManager_disableEvent&quot;, _wrap_EventManager_disableEvent, METH_VARARGS, NULL},
+-	 { (char *)&quot;EventManager_shipDeathByName&quot;, _wrap_EventManager_shipDeathByName, METH_VARARGS, NULL},
++	 { (char *)&quot;EventManager_shipDeathById&quot;, _wrap_EventManager_shipDeathById, METH_VARARGS, NULL},
+ 	 { (char *)&quot;EventManager_shipDeathByType&quot;, _wrap_EventManager_shipDeathByType, METH_VARARGS, NULL},
+ 	 { (char *)&quot;EventManager_distanceMoreThen&quot;, _wrap_EventManager_distanceMoreThen, METH_VARARGS, NULL},
+ 	 { (char *)&quot;EventManager_distanceLessThen&quot;, _wrap_EventManager_distanceLessThen, METH_VARARGS, NULL},
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-08-06 18:09:53 UTC (rev 175)
++++ trunk/source/melee/mgame.cpp	2005-08-08 22:49:04 UTC (rev 176)
+@@ -1159,6 +1159,7 @@
+ bool Game::handle_key(int k) 
+ {
+   STACKTRACE;
++  
+   switch (k &gt;&gt; 8) 
+     {
+     case KEY_H:
+@@ -1175,6 +1176,7 @@
+ 	pause();
+ 	showHelpText();
+ 	unpause();
++	redraw();
+ 	return true;
+       }
+       break;
+@@ -1183,6 +1185,7 @@
+ 	pause();
+ 	Save(home_ini_full_path(&quot;.savegame&quot;));
+ 	unpause();
++	redraw();
+ 	return true;
+       }
+       break;
+@@ -1191,6 +1194,7 @@
+ 	pause();
+ 	Load(home_ini_full_path(&quot;.savegame&quot;));
+ 	unpause();
++	redraw();
+ 	return true;
+       }
+       break;
+@@ -1199,6 +1203,7 @@
+ 	pause();
+ 	options_menu(this);
+ 	unpause();
++	redraw();
+ 	return true;
+       }
+       break;
+@@ -1259,6 +1264,7 @@
+ 	pause();
+ 	GameMenu();
+ 	unpause();
++	redraw();
+ 	return true;
+       }
+     case KEY_F12: 
+@@ -1311,7 +1317,7 @@
+   return _game_state;
+ }
+ 
+-void Game::setGameDone(const int done)
++void Game::setGameDone(int done)
+ {
+   STACKTRACE; 
+   _game_state = done; 
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-08-06 18:09:53 UTC (rev 175)
++++ trunk/source/melee/mgame.h	2005-08-08 22:49:04 UTC (rev 176)
+@@ -178,7 +178,7 @@
+  public:
+   /// sets whether the game is done, according to the rules for the
+   /// gametype.
+-  virtual void setGameDone(const int done);
++  virtual void setGameDone(int done);
+ 
+   /// gets if the game is done.  Will wait a few seconds for dramatic effect.
+   virtual int isGameDone();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000121.html">[Tw-light-svn] r175 - in trunk: . Util/deditor gamedata/default_ini gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source/games source/melee source/other source/tml
+</A></li>
+	<LI>Next message: <A HREF="000123.html">[Tw-light-svn] r177 - trunk/source/ais
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#122">[ date ]</a>
+              <a href="thread.html#122">[ thread ]</a>
+              <a href="subject.html#122">[ subject ]</a>
+              <a href="author.html#122">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

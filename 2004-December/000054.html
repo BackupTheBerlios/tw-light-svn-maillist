@@ -1,0 +1,1265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r106 - branches/mp-branch-2/source/libraries/raknet
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-December/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r106%20-%20branches/mp-branch-2/source/libraries/raknet&In-Reply-To=%3C200412031832.iB3IW9vp028412%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000055.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r106 - branches/mp-branch-2/source/libraries/raknet</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r106%20-%20branches/mp-branch-2/source/libraries/raknet&In-Reply-To=%3C200412031832.iB3IW9vp028412%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r106 - branches/mp-branch-2/source/libraries/raknet">youbastrd at sheep.berlios.de
+       </A><BR>
+    <I>Fri Dec  3 19:32:09 CET 2004</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000055.html">[Tw-light-svn] r107 - in branches/mp-branch-2: . source source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2004-12-03 19:32:06 +0100 (Fri, 03 Dec 2004)
+New Revision: 106
+
+Modified:
+   branches/mp-branch-2/source/libraries/raknet/DistributedNetworkObjectHeader.h
+   branches/mp-branch-2/source/libraries/raknet/Multiplayer.h
+   branches/mp-branch-2/source/libraries/raknet/NetworkTypes.h
+   branches/mp-branch-2/source/libraries/raknet/PacketEnumerations.h
+   branches/mp-branch-2/source/libraries/raknet/RakClient.cpp
+   branches/mp-branch-2/source/libraries/raknet/RakClient.h
+   branches/mp-branch-2/source/libraries/raknet/RakClientInterface.h
+   branches/mp-branch-2/source/libraries/raknet/RakPeer.cpp
+   branches/mp-branch-2/source/libraries/raknet/RakPeer.h
+   branches/mp-branch-2/source/libraries/raknet/RakPeerInterface.h
+   branches/mp-branch-2/source/libraries/raknet/RakServer.cpp
+   branches/mp-branch-2/source/libraries/raknet/RakServer.h
+   branches/mp-branch-2/source/libraries/raknet/RakServerInterface.h
+   branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.cpp
+   branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.h
+   branches/mp-branch-2/source/libraries/raknet/SimpleMutex.cpp
+   branches/mp-branch-2/source/libraries/raknet/SimpleMutex.h
+Log:
+updating raknet libraries to version that's in the trunk
+
+Modified: branches/mp-branch-2/source/libraries/raknet/DistributedNetworkObjectHeader.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/DistributedNetworkObjectHeader.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/DistributedNetworkObjectHeader.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -480,4 +480,4 @@
+ 	SynchronizationMethod6##_INTERPOLATION_CODE(AuthoritativeNetwork6, VariableName6)	\
+ }
+ 
+-// Extend this pattern as many times as necessary.  If anyone figures out a way to automate a way to do that with the preprocessor let me know
++// Extend this pattern as many times as necessary.  If anyone figures out a way to automate a way to do that with the preprocessor let me know
+\ No newline at end of file
+
+Modified: branches/mp-branch-2/source/libraries/raknet/Multiplayer.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/Multiplayer.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/Multiplayer.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -47,6 +47,7 @@
+ 	virtual void ReceiveRemotePortRefused(Packet *packet,InterfaceType *interfaceType);
+ 	virtual void ReceiveVoicePacket(Packet *packet,InterfaceType *interfaceType);
+ 	virtual void ReceivePong(Packet *packet,InterfaceType *interfaceType);
++	virtual void ReceiveAdvertisedSystem(Packet *packet,InterfaceType *interfaceType);
+ 	// -----------------------------------------------------------------
+ 
+ 	// -----------------------------------------------------------------
+@@ -173,6 +174,9 @@
+ 		case ID_PONG:
+ 			ReceivePong(p,interfaceType);
+ 			break;
++		case ID_ADVERTISE_SYSTEM:
++			ReceiveAdvertisedSystem(p,interfaceType);
++			break;
+ 		case ID_UPDATE_DISTRIBUTED_NETWORK_OBJECT:
+ 			ReceiveDistributedNetworkObject(p,interfaceType);
+ 			break;
+@@ -213,8 +217,8 @@
+ void Multiplayer&lt;InterfaceType&gt;::ProcessUnhandledPacket(Packet *p, unsigned char packetIdentifier, InterfaceType *interfaceType)
+ {
+ 	// Remove the annoying warnings
+-	//packetIdentifier;
+-	//interfaceType;
++	packetIdentifier;
++	interfaceType;
+ 
+ 	// This class should have been overrided to handle user defined packets
+ #ifdef _DEBUG
+@@ -425,14 +429,31 @@
+ {
+ 	// Peer or client.  Response from a ping for an unconnected system.
+ #ifdef _DEBUG
+-	unsigned long time;
++	unsigned long time, dataLength;
+ 	memcpy((char*)&amp;time, packet-&gt;data+sizeof(unsigned char), sizeof(unsigned long));
+-	printf(&quot;ID_PONG from PlayerID:%u:%u on %p. Value is %i\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType, time);
++	dataLength = packet-&gt;length - sizeof(unsigned char) - sizeof(unsigned long);
++	printf(&quot;ID_PONG from PlayerID:%u:%u on %p.\nPing is %i\nData is %i bytes long.\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType, time, dataLength);
++	if (dataLength &gt; 0)
++		printf(&quot;Data is %s\n&quot;, packet-&gt;data+sizeof(unsigned char)+sizeof(unsigned long));
+ #endif
+ 	//	ProcessUnhandledPacket(packet, ID_PONG,interfaceType);
+ }
+ 
+ template &lt;class InterfaceType&gt;
++void Multiplayer&lt;InterfaceType&gt;::ReceiveAdvertisedSystem(Packet *packet,InterfaceType *interfaceType)
++{
++	// Got a packet from another RakNet system indicating that it exists.
++	// Currently this is used for the master server for the server to indicate its external
++	// IP to a client as well as open the NAT
++#ifdef _DEBUG
++	printf(&quot;ID_ADVERTISED_SYSTEM from PlayerID:%u:%u on %p.\nIf you are running a client connecting to a server behind a NAT, you should\ncall Disconnect and connect to the to the IP specified by packet-&gt;playerId instead\n&quot;,packet-&gt;playerId.binaryAddress, packet-&gt;playerId.port, interfaceType);
++#endif
++
++	// When you get this packet, you should disconnect if you are not already connected.  Then connect
++	// To the IP / port given by packet-&gt;playerID.  You can translate a PlayerID to an IP with PlayerIDToDottedIP
++}
++
++template &lt;class InterfaceType&gt;
+ void Multiplayer&lt;InterfaceType&gt;::ReceiveDistributedNetworkObject(Packet *packet,InterfaceType *interfaceType)
+ {
+ 	// Packet to create a distributed network object
+
+Modified: branches/mp-branch-2/source/libraries/raknet/NetworkTypes.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/NetworkTypes.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/NetworkTypes.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -45,6 +45,7 @@
+ };
+ 
+ #pragma pack(push,1)
++#pragma pack(1)
+ struct ConnectionAcceptStruct
+ {
+ 	unsigned char typeId;
+@@ -52,28 +53,24 @@
+ 	PlayerID externalID; // We tell the remote system its own IP / port this way
+ 	PlayerIndex playerIndex; // For internal use
+ };
+-#pragma pack(pop)
+ 
+-#pragma pack(push,1)
++#pragma pack(1)
+ struct PingStruct
+ {
+ 	unsigned char typeId; // ID_PING or ID_PONG
+ 	unsigned long sendPingTime;
+ 	unsigned long sendPongTime;
+ };
+-#pragma pack(pop)
+ 
+-#pragma pack(push,1)
++#pragma pack(1)
+ struct UnconnectedPingStruct
+ {
+ 	unsigned char typeId; // ID_PING or ID_PONG
+ 	unsigned long sendPingTime;
+ };
+-#pragma pack(pop)
+ 
+ // Timestamp automatically used for this type of packet
+-
+-#pragma pack(push,1)
++#pragma pack(1)
+ struct SetRandomNumberSeedStruct
+ {
+ 	unsigned char ts; // ID_TIMESTAMP
+@@ -82,17 +79,16 @@
+ 	unsigned long seed;
+ 	unsigned long nextSeed;
+ };
+-#pragma pack(pop)
+ 
+-#pragma pack(push,1)
++#pragma pack(1)
+ struct NewIncomingConnectionStruct
+ {
+ 	unsigned char typeId; // ID_NEW_INCOMING_CONNECTION
+ 	PlayerID externalID; // We tell the remote system its own IP / port this way
+ };
++
+ #pragma pack(pop)
+ 
+-
+ const PlayerIndex UNASSIGNED_PLAYER_INDEX=65535;
+ const PlayerID UNASSIGNED_PLAYER_ID={0xFFFFFFFF, 0xFFFF};
+ const ObjectID UNASSIGNED_OBJECT_ID=65535;
+
+Modified: branches/mp-branch-2/source/libraries/raknet/PacketEnumerations.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/PacketEnumerations.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/PacketEnumerations.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -17,7 +17,6 @@
+ 	//
+ 	// Ignore these:
+ 	ID_PING, // Ping (internal use only)
+-	ID_PONG, // Pong.  Returned if we ping a system we are not connected so
+ 	ID_PING_OPEN_CONNECTIONS, // Only reply to the unconnected ping if we have open connections
+ 	ID_REQUEST_STATIC_DATA, // Someone asked for our static data (internal use only)
+ 	ID_CONNECTION_REQUEST, // Asking for a new connection (internal use only)
+@@ -28,6 +27,7 @@
+ 	ID_SET_RANDOM_NUMBER_SEED, // Server / Client only - The server is broadcasting a random number seed (internal use only)
+ 	ID_RPC_WITH_TIMESTAMP, // Same as RPC, but treat the first 4 bytes as a timestamp
+ 	// Handle these below.  Possible recipients in [...]
++	ID_PONG, // [CLIENT|PEER] Pong.  Returned if we ping a system we are not connected so.  First byte is ID_PONG, second 4 bytes is the ping, following bytes is system specific enumeration data.
+ 	ID_RSA_PUBLIC_KEY_MISMATCH, // [CLIENT|PEER] We preset an RSA public key which does not match what the system we connected to is using.
+ 	ID_REMOTE_DISCONNECTION_NOTIFICATION, // [CLIENT] In a client/server enviroment, a client other than ourselves has disconnected gracefully.  Packet::playerID is modified to reflect the playerID of this client.
+ 	ID_REMOTE_CONNECTION_LOST, // [CLIENT] In a client/server enviroment, a client other than ourselves has been forcefully dropped.  Packet::playerID is modified to reflect the playerID of this client.
+@@ -58,8 +58,8 @@
+ 	ID_MASTER_SERVER_DELIST_SERVER, // [MASTERSERVER] Remove a game server from the master server.
+ 	ID_MASTER_SERVER_UPDATE_SERVER, // [MASTERSERVER|MASTERCLIENT] Add or update the information for a server.
+ 	ID_MASTER_SERVER_SET_SERVER, // [MASTERSERVER|MASTERCLIENT] Add or set the information for a server.
+-	ID_RESERVED3, // For future versions
+-	ID_RESERVED4, // For future versions
++	ID_RELAYED_CONNECTION_NOTIFICATION, // [MASTERSERVER|MASTERCLIENT] This message indicates a game client is connecting to a game server, and is relayed through the master server.
++	ID_ADVERTISE_SYSTEM, // [PEER|SERVER|CLIENT] Inform a remote system of our IP/Port.
+ 	ID_RESERVED5, // For future versions
+ 	ID_RESERVED6, // For future versions
+ 	ID_RESERVED7, // For future versions
+@@ -74,7 +74,6 @@
+ 	// In the unlikely event that you need more than 256 types, including the built-in types, then you'll need
+ 	// to request a special edition with larger identifiers, or change it yourself
+ 	//
+-    ID_PRESENCE_CREATION,
+ 
+ 
+ 
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakClient.cpp
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakClient.cpp	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakClient.cpp	2004-12-03 18:32:06 UTC (rev 106)
+@@ -56,9 +56,9 @@
+ 	RakPeer::Disconnect(blockDuration);
+ }
+ 
+-void RakClient::InitializeSecurity(char *RSAe, char *RSAn)
++void RakClient::InitializeSecurity(char *pubKeyP, char *pubKeyQ)
+ {
+-	RakPeer::InitializeSecurity(RSAe, RSAn,0,0);
++	RakPeer::InitializeSecurity(pubKeyP, pubKeyQ,0,0);
+ }
+ 
+ void RakClient::SetPassword(char *_password)
+@@ -452,6 +452,16 @@
+ 	return RakPeer::GetMTUSize();
+ }
+ 
++void RakClient::AllowConnectionResponseIPMigration(bool allow)
++{
++	RakPeer::AllowConnectionResponseIPMigration(allow);
++}
++
++void RakClient::AdvertiseSystem(char *host, unsigned short remotePort)
++{
++	RakPeer::AdvertiseSystem(host, remotePort);
++}
++
+ RakNetStatisticsStruct* const RakClient::GetStatistics(void)
+ {
+ 	return RakPeer::GetStatistics(remoteSystemList[0].playerId);
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakClient.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakClient.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakClient.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -44,8 +44,8 @@
+ 	// If a key has been altered.
+ 	//
+ 	// Parameters:
+-	// RSAe, RSAn - Public keys generated from the RSACrypt class.  See the Encryption sample.  Can be 0
+-	void InitializeSecurity(char *RSAe, char *RSAn);
++	// pubKeyP, pubKeyQ - Public keys generated from the RSACrypt class.  See the Encryption sample.  Can be 0
++	void InitializeSecurity(char *pubKeyP, char *pubKeyQ);
+ 
+ 	// Set the password to use when connecting to a server.  The password persists between connections.
+ 	// Pass 0 for no password.
+@@ -288,6 +288,22 @@
+ 	int GetMTUSize(void) const;
+ 
+ 	// Description:
++	// Allow or disallow connection responses from any IP.  Normally this should be false, but may be necessary
++	// when connection to servers with multiple IP addresses.
++	//
++	// Parameters:
++	// allow - True to allow this behavior, false to not allow.  Defaults to false.  Value persists between connections
++	void AllowConnectionResponseIPMigration(bool allow);
++
++	// Description:
++	// Sends a one byte message ID_ADVERTISE_SYSTEM to the remote unconnected system.
++	// This will tell the remote system our external IP outside the LAN, and can be used for NAT punch through
++	//
++	// host: Either a dotted IP address or a domain name
++	// remotePort: Which port to connect to on the remote machine.
++	void AdvertiseSystem(char *host, unsigned short remotePort);
++
++	// Description:
+ 	// Returns a structure containing a large set of network statistics for the server/client connection
+ 	// You can map this data to a string using the C style StatisticsToString function
+ 	//
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakClientInterface.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakClientInterface.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakClientInterface.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -44,8 +44,8 @@
+ 	// If a key has been altered.
+ 	//
+ 	// Parameters:
+-	// RSAe, RSAn - Public keys generated from the RSACrypt class.  See the Encryption sample.  Can be 0
+-	virtual void InitializeSecurity(char *RSAe, char *RSAn)=0;
++	// pubKeyP, pubKeyQ - Public keys generated from the RSACrypt class.  See the Encryption sample.  Can be 0
++	virtual void InitializeSecurity(char *pubKeyP, char *pubKeyQ)=0;
+ 
+ 	// Set the password to use when connecting to a server.  The password persists between connections.
+ 	// Pass 0 for no password.
+@@ -289,6 +289,22 @@
+ 	virtual int GetMTUSize(void) const=0;
+ 
+ 	// Description:
++	// Allow or disallow connection responses from any IP.  Normally this should be false, but may be necessary
++	// when connection to servers with multiple IP addresses.
++	//
++	// Parameters:
++	// allow - True to allow this behavior, false to not allow.  Defaults to false.  Value persists between connections
++	virtual void AllowConnectionResponseIPMigration(bool allow)=0;
++
++	// Description:
++	// Sends a one byte message ID_ADVERTISE_SYSTEM to the remote unconnected system.
++	// This will tell the remote system our external IP outside the LAN, and can be used for NAT punch through
++	//
++	// host: Either a dotted IP address or a domain name
++	// remotePort: Which port to connect to on the remote machine.
++	virtual void AdvertiseSystem(char *host, unsigned short remotePort)=0;
++
++	// Description:
+ 	// Returns a structure containing a large set of network statistics for the server/client connection
+ 	// You can map this data to a string using the C style StatisticsToString function
+ 	//
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakPeer.cpp
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakPeer.cpp	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakPeer.cpp	2004-12-03 18:32:06 UTC (rev 106)
+@@ -68,6 +68,7 @@
+ 	occasionalPing=false;
+ 	connectionSocket=INVALID_SOCKET;
+ 	myPlayerId=UNASSIGNED_PLAYER_ID;
++	allowConnectionResponseIPMigration=false;
+ }
+ 
+ // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@@ -243,11 +244,11 @@
+ // (e and p,q) public keys before connecting to prevent MitM
+ //
+ // Parameters:
+-// RSAe, RSAn - Public keys generated from the RSACrypt class.  See the Encryption sample
+-// RSAp, RSAq - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
++// pubKeyP, pubKeyQ - Public keys generated from the RSACrypt class.  See the Encryption sample
++// privKeyE, privKeyN - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
+ // If the private keys are 0, then a new key will be generated when this function is called
+ // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-void RakPeer::InitializeSecurity(char *RSAe, char *RSAn, char *RSAp, char *RSAq)
++void RakPeer::InitializeSecurity(char *pubKeyP, char *pubKeyQ, char *privKeyE, char *privKeyN)
+ {
+ 	if (endThreads==false)
+ 		return;
+@@ -255,12 +256,12 @@
+ 	// Setting the client key is e,n,
+ 	// Setting the server key is p,q
+ 	// These are mutually exclusive
+-	if ((RSAe &amp;&amp; RSAn &amp;&amp; (RSAp || RSAq)) ||
+-		(RSAp &amp;&amp; RSAq &amp;&amp; (RSAe || RSAn)) ||
+-		(RSAe &amp;&amp; RSAn==0) ||
+-		(RSAn &amp;&amp; RSAe==0) ||
+-		(RSAp &amp;&amp; RSAq==0) ||
+-		(RSAq &amp;&amp; RSAp==0))
++	if ((pubKeyP &amp;&amp; pubKeyQ &amp;&amp; (privKeyE || privKeyN)) ||
++		(privKeyE &amp;&amp; privKeyN &amp;&amp; (pubKeyP || pubKeyQ)) ||
++		(pubKeyP &amp;&amp; pubKeyQ==0) ||
++		(pubKeyQ &amp;&amp; pubKeyP==0) ||
++		(privKeyE &amp;&amp; privKeyN==0) ||
++		(privKeyN &amp;&amp; privKeyE==0))
+ 	{
+ 		// Invalid parameters
+ 		assert(0);
+@@ -272,25 +273,25 @@
+ 
+ 	usingSecurity=true;
+ 
+-	if (RSAe==0 &amp;&amp; RSAn==0 &amp;&amp;RSAp==0 &amp;&amp; RSAq==0)
++	if (pubKeyP==0 &amp;&amp; pubKeyQ==0 &amp;&amp;privKeyE==0 &amp;&amp; privKeyN==0)
+ 	{
+ 		keysLocallyGenerated=true;
+ 		rsacrypt.generateKeys();
+ 	}
+ 	else
+ 	{
+-		if (RSAe &amp;&amp; RSAn)
++		if (pubKeyP &amp;&amp; pubKeyQ)
+ 		{
+ 			// Save public keys
+-			memcpy((char*)&amp;publicKeyE, RSAe, sizeof(publicKeyE));
+-			memcpy(publicKeyN, RSAn, sizeof(publicKeyN));
++			memcpy((char*)&amp;publicKeyP, pubKeyP, sizeof(publicKeyP));
++			memcpy(publicKeyQ, pubKeyQ, sizeof(publicKeyQ));
+ 		}
+-		else if (RSAp &amp;&amp; RSAq)
++		else if (privKeyE &amp;&amp; privKeyN)
+ 		{
+ 			BIGHALFSIZE(RSA_BIT_SIZE, p);
+ 			BIGHALFSIZE(RSA_BIT_SIZE, q);
+-			memcpy(p, RSAp, sizeof(p));
+-			memcpy(q, RSAq, sizeof(q));
++			memcpy(p, privKeyE, sizeof(p));
++			memcpy(q, privKeyN, sizeof(q));
+ 			// Save private keys
+ 			rsacrypt.setPrivateKey(p, q);
+ 		}
+@@ -1093,10 +1094,7 @@
+ 		outgoingBitStream.WriteBits((unsigned char*)&amp;ch, 5); // Write the char with 5 bits
+ 	}
+ 
+-	if (bitStream)
+-		outgoingBitStream.WriteCompressed(bitStream-&gt;GetNumberOfBitsUsed());
+-	else
+-		outgoingBitStream.WriteCompressed((int)0);
++	outgoingBitStream.WriteCompressed(bitStream-&gt;GetNumberOfBitsUsed());
+ 
+ 	// False to write the raw data from another bitstream, rather than shifting from user data
+ 	if (bitStream &amp;&amp; bitStream-&gt;GetNumberOfBitsUsed() &gt; 0)
+@@ -1730,6 +1728,22 @@
+ 
+ // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ // Description:
++// Sets the data to send with an  (LAN server discovery) /(offline ping) response
++// See the Ping sample project for how this is used.
++// data: a block of data to store, or 0 for none
++// length: The length of data in bytes, or 0 for none
++// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
++void RakPeer::SetOfflinePingResponse(char *data, const unsigned long length)
++{
++	rakPeerMutexes[offlinePingResponse_Mutex].Lock();
++	offlinePingResponse.Reset();
++	if (data &amp;&amp; length &gt; 0)
++		offlinePingResponse.Write(data, length);
++	rakPeerMutexes[offlinePingResponse_Mutex].Unlock();
++}
++
++// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
++// Description:
+ // Return the unique PlayerID that represents you on the the network
+ // Note that unlike in previous versions, this is a struct and is not sequential
+ // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@@ -1851,6 +1865,42 @@
+ 
+ // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ // Description:
++// Allow or disallow connection responses from any IP.  Normally this should be false, but may be necessary
++// when connection to servers with multiple IP addresses
++//
++// Parameters:
++// allow - True to allow this behavior, false to not allow.  Defaults to false.  Value persists between connections
++// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
++void RakPeer::AllowConnectionResponseIPMigration(bool allow)
++{
++	allowConnectionResponseIPMigration=allow;
++}
++
++// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
++// Description:
++// Sends a one byte message ID_ADVERTISE_SYSTEM to the remote unconnected system.
++// This will tell the remote system our external IP outside the LAN, and can be used for NAT punch through
++//
++// Requires:
++// The sender and recipient must already be started via a successful call to Initialize
++//
++// host: Either a dotted IP address or a domain name
++// remotePort: Which port to connect to on the remote machine.
++// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
++void RakPeer::AdvertiseSystem(char *host, unsigned short remotePort)
++{
++	// If the host starts with something other than 0, 1, or 2 it's (probably) a domain name.
++	if (host[0] &lt; '0' || host[0] &gt; '2')
++	{
++		host = (char*) SocketLayer::Instance()-&gt;DomainNameToIP(host);
++	}
++
++	unsigned char c = ID_ADVERTISE_SYSTEM;
++	SocketLayer::Instance()-&gt;SendTo(connectionSocket, (char*)&amp;c, sizeof(c), (char*)host, remotePort);	
++}
++
++// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
++// Description:
+ // Enables or disables our tracking of bytes input to and output from the network.
+ // This is required to get a frequency table, which is used to generate a new compression layer.
+ // You can call this at any time - however you SHOULD only call it when disconnected.  Otherwise you will only track
+@@ -2504,7 +2554,7 @@
+ 	Packet *packet;
+ 	big::u32 e;
+ 	RSA_BIT_SIZE n, message,encryptedMessage;
+-	big::RSACrypt&lt;RSA_BIT_SIZE&gt; rsaEncrypt;
++	big::RSACrypt&lt;RSA_BIT_SIZE&gt; pubKeyPncrypt;
+ 
+ 	// Make sure that we still want to connect
+ 	bool requestedConnection=false;
+@@ -2534,8 +2584,8 @@
+ 	// If we preset a size and it doesn't match, or the keys do not match, then tell the user
+ 	if (usingSecurity==true &amp;&amp; keysLocallyGenerated==false)
+ 	{
+-		if (memcmp((char*)&amp;e, (char*)&amp;publicKeyE, sizeof(big::u32))!=0 ||
+-			memcmp(n, publicKeyN, sizeof(RSA_BIT_SIZE))!=0)
++		if (memcmp((char*)&amp;e, (char*)&amp;publicKeyP, sizeof(big::u32))!=0 ||
++			memcmp(n, publicKeyQ, sizeof(RSA_BIT_SIZE))!=0)
+ 		{
+ 			packet = PacketPool::Instance()-&gt;GetPointer();
+ 			packet-&gt;data = new unsigned char[1];
+@@ -2562,8 +2612,8 @@
+ 	memset(message, 0, sizeof(message));
+ 	assert(sizeof(message) &gt;= sizeof(randomNumber));
+ 	memcpy(message, randomNumber, sizeof(randomNumber));
+-	rsaEncrypt.setPublicKey(e,n);
+-	rsaEncrypt.encrypt(message,encryptedMessage);
++	pubKeyPncrypt.setPublicKey(e,n);
++	pubKeyPncrypt.encrypt(message,encryptedMessage);
+ 
+ 	if (threadSleepTimer&gt;=0)
+ 		rakPeerMutexes[RakPeer::requestedConnections_MUTEX].Lock();
+@@ -2701,7 +2751,9 @@
+ 			// cheat packets.  Anything else really is a cheat packet
+ 			if (!((unsigned char)(data)[0]==ID_CONNECTION_REQUEST ||
+ 				((unsigned char)(data)[0]==ID_PING &amp;&amp; length==sizeof(UnconnectedPingStruct)) ||
+-				((unsigned char)(data)[0]==ID_PONG &amp;&amp; length==sizeof(UnconnectedPingStruct)) ||
++				((unsigned char)(data)[0]==ID_PONG &amp;&amp; length&gt;=sizeof(UnconnectedPingStruct)) ||
++				((unsigned char)(data)[0]==ID_PING_OPEN_CONNECTIONS &amp;&amp; length==sizeof(UnconnectedPingStruct)) ||
++				((unsigned char)(data)[0]==ID_ADVERTISE_SYSTEM &amp;&amp; length==sizeof(unsigned char)) ||
+ 				((unsigned char)(data)[0]==ID_SECURED_CONNECTION_CONFIRMATION &amp;&amp; length==1+20+sizeof(RSA_BIT_SIZE))
+ 				))
+ 			{
+@@ -2839,25 +2891,31 @@
+ 			unsigned char AESKey[16];
+ 			bool setAESKey;
+ 			setAESKey=false;
+-			requestedConnection=false;
+-			if (rakPeer-&gt;threadSleepTimer&gt;=0)
+-				rakPeer-&gt;rakPeerMutexes[RakPeer::requestedConnections_MUTEX].Lock();
+-			for (i=0; i &lt; rakPeer-&gt;requestedConnectionsList.size();i++)
++
++			if (rakPeer-&gt;allowConnectionResponseIPMigration==false)
+ 			{
+-				if (rakPeer-&gt;requestedConnectionsList[i]-&gt;playerId==playerId)
++				requestedConnection=false;
++				if (rakPeer-&gt;threadSleepTimer&gt;=0)
++					rakPeer-&gt;rakPeerMutexes[RakPeer::requestedConnections_MUTEX].Lock();
++				for (i=0; i &lt; rakPeer-&gt;requestedConnectionsList.size();i++)
+ 				{
+-					// We did request this connection
+-					requestedConnection=true;
+-					setAESKey=rakPeer-&gt;requestedConnectionsList[i]-&gt;setAESKey;
+-					if (setAESKey)
+-						memcpy(AESKey, rakPeer-&gt;requestedConnectionsList[i]-&gt;AESKey, 16);
+-					delete rakPeer-&gt;requestedConnectionsList[i];
+-					rakPeer-&gt;requestedConnectionsList.del(i);
+-					break;
++					if (rakPeer-&gt;requestedConnectionsList[i]-&gt;playerId==playerId)
++					{
++						// We did request this connection
++						requestedConnection=true;
++						setAESKey=rakPeer-&gt;requestedConnectionsList[i]-&gt;setAESKey;
++						if (setAESKey)
++							memcpy(AESKey, rakPeer-&gt;requestedConnectionsList[i]-&gt;AESKey, 16);
++						delete rakPeer-&gt;requestedConnectionsList[i];
++						rakPeer-&gt;requestedConnectionsList.del(i);
++						break;
++					}
+ 				}
++				if (rakPeer-&gt;threadSleepTimer&gt;=0)
++					rakPeer-&gt;rakPeerMutexes[RakPeer::requestedConnections_MUTEX].Unlock();
+ 			}
+-			if (rakPeer-&gt;threadSleepTimer&gt;=0)
+-				rakPeer-&gt;rakPeerMutexes[RakPeer::requestedConnections_MUTEX].Unlock();
++			else
++				requestedConnection=true; // Don't bother checking who replied			
+ 
+ 			 if (requestedConnection)
+ 			 {
+@@ -2939,26 +2997,46 @@
+ #endif
+ 			 }
+ 		 }
+-		 else if (((unsigned char)(data)[0]== ID_PING  || (unsigned char)(data)[0]==ID_PING_OPEN_CONNECTIONS) &amp;&amp; length==sizeof(UnconnectedPingStruct))
++		 else if (((unsigned char)(data)[0]==ID_PING || (unsigned char)(data)[0]==ID_PING_OPEN_CONNECTIONS)
++			 &amp;&amp; length==sizeof(UnconnectedPingStruct))
+ 		 {
+ 			 if ((unsigned char)(data)[0]==ID_PING_OPEN_CONNECTIONS &amp;&amp; rakPeer-&gt;GetMaximumIncomingConnections()==0)
+ 				 return; // Sender wanted to get replies only for systems accepting connections
+ 			 data[0]=ID_PONG;
+-			 SocketLayer::Instance()-&gt;SendTo( rakPeer-&gt;connectionSocket, data, sizeof(UnconnectedPingStruct), playerId.binaryAddress, playerId.port);
++			 RakNet::BitStream tempBitStream(sizeof(UnconnectedPingStruct));
++			 tempBitStream.Write(data, sizeof(UnconnectedPingStruct));
++			 rakPeer-&gt;rakPeerMutexes[RakPeer::offlinePingResponse_Mutex].Lock();
++			 tempBitStream.Write((char*)rakPeer-&gt;offlinePingResponse.GetData(), rakPeer-&gt;offlinePingResponse.GetNumberOfBytesUsed());
++			 rakPeer-&gt;rakPeerMutexes[RakPeer::offlinePingResponse_Mutex].Unlock();
++			 SocketLayer::Instance()-&gt;SendTo( rakPeer-&gt;connectionSocket, (char*) tempBitStream.GetData(), tempBitStream.GetNumberOfBytesUsed(), playerId.binaryAddress, playerId.port);
+ 		 }
+-		 else if ((unsigned char)(data)[0]== ID_PONG &amp;&amp; length==sizeof(UnconnectedPingStruct))
++		 else if ((unsigned char)(data)[0]==ID_ADVERTISE_SYSTEM &amp;&amp; length==sizeof(unsigned char))
+ 		 {
++			 // Push this up to the game
+ 			 Packet *packet = PacketPool::Instance()-&gt;GetPointer();
++			 packet-&gt;data = new unsigned char [1 * sizeof(unsigned char)];
++			 packet-&gt;data[0]=ID_ADVERTISE_SYSTEM;
++			 packet-&gt;length=1 * sizeof(unsigned char);
++			 packet-&gt;bitSize=8 * sizeof(unsigned char);
++			 rakPeer-&gt;incomingQueueMutex.Lock();
++			 (rakPeer-&gt;incomingPacketQueue).push(packet);
++			 rakPeer-&gt;incomingQueueMutex.Unlock();
++		 }			 
++		 else if ((unsigned char)(data)[0]== ID_PONG &amp;&amp; length&gt;=sizeof(UnconnectedPingStruct))
++		 {
++			 Packet *packet = PacketPool::Instance()-&gt;GetPointer();
++			 unsigned long time;
+ 
+-			 packet-&gt;data = new unsigned char [sizeof(UnconnectedPingStruct)];
+-			 unsigned long time;
++			 // Write ID_PONG, then the time, then the unconnected data
++			 packet-&gt;data = new unsigned char [length];
++			 memcpy(packet-&gt;data, data, length);
++
+ 			 memcpy((char*)&amp;time, data+sizeof(unsigned char), sizeof(unsigned long));
+ 			 time = RakNetGetTime() - time;
+-			 packet-&gt;data[0]=ID_PONG;
+ 			 memcpy(packet-&gt;data+sizeof(unsigned char), (char*)&amp;time, sizeof(unsigned long));
+ 			 
+-			 packet-&gt;length=sizeof(UnconnectedPingStruct);
+-			 packet-&gt;bitSize=sizeof(UnconnectedPingStruct) * 8;
++			 packet-&gt;length=length;
++			 packet-&gt;bitSize=packet-&gt;length * 8;
+ 			 packet-&gt;playerId=playerId;
+ 			 packet-&gt;playerIndex=(PlayerIndex)rakPeer-&gt;GetIndexFromPlayerID(playerId);
+ 
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakPeer.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakPeer.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakPeer.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -62,10 +62,10 @@
+ 	// (e and p,q) public keys before connecting to prevent MitM
+ 	//
+ 	// Parameters:
+-	// RSAe, RSAn - Public keys generated from the RSACrypt class.  See the Encryption sample
+-	// RSAp, RSAq - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
++	// pubKeyP, pubKeyQ - Public keys generated from the RSACrypt class.  See the Encryption sample
++	// privKeyE, privKeyN - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
+ 	// If the private keys are 0, then a new key will be generated when this function is called
+-	void InitializeSecurity(char *RSAe, char *RSAn, char *RSAp, char *RSAq);
++	void InitializeSecurity(char *pubKeyP, char *pubKeyQ, char *privKeyE, char *privKeyN);
+ 
+ 	// Description
+ 	// Must be called while offline
+@@ -410,6 +410,13 @@
+ 	// target: Who to send your static data to.  Specify UNASSIGNED_PLAYER_ID to broadcast to all
+ 	void SendStaticData(PlayerID target);
+ 
++	// Description:
++	// Sets the data to send with an  (LAN server discovery) /(offline ping) response
++	// See the Ping sample project for how this is used.
++	// data: a block of data to store, or 0 for none
++	// length: The length of data in bytes, or 0 for none
++	void SetOfflinePingResponse(char *data, const unsigned long length);
++
+ 	// --------------------------------------------------------------------------------------------
+ 	// Network Functions - Functions dealing with the network in general
+ 	// --------------------------------------------------------------------------------------------
+@@ -469,9 +476,37 @@
+ 	const char* PlayerIDToDottedIP(PlayerID playerId) const;
+ 
+ 	// Description:
++	// Converts a dotted IP to a playerId
++	//
++	// Parameters:
++	// host: [input] Either a dotted IP address or a domain name
++	// remotePort: [input] Which port to connect to on the remote machine.
++	// playerId: [output] The result of this operation
++	void IPToPlayerID(const char* host, unsigned short remotePort, PlayerID *playerId);
++
++	// Description:
+ 	// Returns an IP address at index 0 to GetNumberOfAddresses-1
+ 	const char* GetLocalIP(unsigned int index);
+ 
++	// Description:
++	// Allow or disallow connection responses from any IP.  Normally this should be false, but may be necessary
++	// when connection to servers with multiple IP addresses.
++	//
++	// Parameters:
++	// allow - True to allow this behavior, false to not allow.  Defaults to false.  Value persists between connections
++	void AllowConnectionResponseIPMigration(bool allow);
++
++	// Description:
++	// Sends a one byte message ID_ADVERTISE_SYSTEM to the remote unconnected system.
++	// This will tell the remote system our external IP outside the LAN, and can be used for NAT punch through
++	//
++	// Requires:
++	// The sender and recipient must already be started via a successful call to Initialize
++	//
++	// host: Either a dotted IP address or a domain name
++	// remotePort: Which port to connect to on the remote machine.
++	void AdvertiseSystem(char *host, unsigned short remotePort);
++
+ 	// --------------------------------------------------------------------------------------------
+ 	// Compression Functions - Functions related to the compression layer
+ 	// --------------------------------------------------------------------------------------------
+@@ -605,8 +640,6 @@
+ 	void RecordConnectionAttempt(const char* host, unsigned short remotePort);
+ 	void RemoveFromRequestedConnectionsList(PlayerID playerId);
+ 	bool SendConnectionRequest(const char* host, unsigned short remotePort);
+-	// Converts a dotted IP to a playerId
+-	void IPToPlayerID(const char* host, unsigned short remotePort, PlayerID *playerId);
+ 	// Get the reliability layer associated with a playerID.  Returns 0 if none
+ 	RemoteSystemStruct *GetRemoteSystemFromPlayerID(PlayerID playerID) const;
+ 	// When we get a connection request from an ip / port, either accept or reject it
+@@ -641,7 +674,7 @@
+ 	bool occasionalPing; // Do we occasionally ping the other systems?
+ 	unsigned short maximumNumberOfPeers,maximumIncomingConnections;
+ 	// localStaticData necessary because we may not have a RemoteSystemStruct representing ourselves in the list
+-	RakNet::BitStream incomingPasswordBitStream, outgoingPasswordBitStream, localStaticData;
++	RakNet::BitStream incomingPasswordBitStream, outgoingPasswordBitStream, localStaticData, offlinePingResponse;
+ 	PlayerID myPlayerId;
+ 
+ 	// This is an array of pointers to RemoteSystemStruct
+@@ -658,6 +691,7 @@
+ 		outgoingPasswordBitStream_Mutex,
+ 		remoteSystemList_Mutex, // This mutex is a writer lock for reserving player IDs only
+ //		updateCycleIsRunning_Mutex,
++		offlinePingResponse_Mutex,
+ 		NUMBER_OF_RAKPEER_MUTEXES
+ 	};
+ 	SimpleMutex rakPeerMutexes[NUMBER_OF_RAKPEER_MUTEXES];
+@@ -722,8 +756,8 @@
+ 
+ 	// Encryption and security
+ 	big::RSACrypt&lt;RSA_BIT_SIZE&gt; rsacrypt;
+-	big::u32 publicKeyE;
+-	RSA_BIT_SIZE publicKeyN;
++	big::u32 publicKeyP;
++	RSA_BIT_SIZE publicKeyQ;
+ 	bool keysLocallyGenerated, usingSecurity;
+ 	unsigned long randomNumberExpirationTime;
+ 	unsigned char newRandomNumber[20], oldRandomNumber[20];
+@@ -731,6 +765,10 @@
+ 	// How long it has been since things were updated by a call to receive
+ 	// Update thread uses this to determine how long to sleep for
+ 	unsigned long lastUserUpdateCycle;
++
++	// True to allow connection accepted packets from anyone.  False to only allow these packets from servers
++	// we requested a connection to.
++	bool allowConnectionResponseIPMigration;
+ };
+ 
+ #endif
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakPeerInterface.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakPeerInterface.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakPeerInterface.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -56,10 +56,10 @@
+ 	// (e and p,q) public keys before connecting to prevent MitM
+ 	//
+ 	// Parameters:
+-	// RSAe, RSAn - Public keys generated from the RSACrypt class.  See the Encryption sample
+-	// RSAp, RSAq - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
++	// pubKeyP, pubKeyQ - Public keys generated from the RSACrypt class.  See the Encryption sample
++	// privKeyE, privKeyN - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
+ 	// If the private keys are 0, then a new key will be generated when this function is called
+-	virtual void InitializeSecurity(char *RSAe, char *RSAn, char *RSAp, char *RSAq)=0;
++	virtual void InitializeSecurity(char *pubKeyP, char *pubKeyQ, char *privKeyE, char *privKeyN)=0;
+ 
+ 	// Description
+ 	// Must be called while offline
+@@ -402,6 +402,13 @@
+ 	// target: Who to send your static data to.  Specify UNASSIGNED_PLAYER_ID to broadcast to all
+ 	virtual void SendStaticData(PlayerID target)=0;
+ 
++	// Description:
++	// Sets the data to send with an  (LAN server discovery) /(offline ping) response
++	// See the Ping sample project for how this is used.
++	// data: a block of data to store, or 0 for none
++	// length: The length of data in bytes, or 0 for none
++	virtual void SetOfflinePingResponse(char *data, const unsigned long length)=0;
++
+ 	// --------------------------------------------------------------------------------------------
+ 	// Network Functions - Functions dealing with the network in general
+ 	// --------------------------------------------------------------------------------------------
+@@ -462,9 +469,34 @@
+ 	virtual const char* PlayerIDToDottedIP(PlayerID playerId) const=0;
+ 
+ 	// Description:
++	// Converts a dotted IP to a playerId
++	//
++	// Parameters:
++	// host: [input] Either a dotted IP address or a domain name
++	// remotePort: [input] Which port to connect to on the remote machine.
++	// playerId: [output] The result of this operation
++	virtual void IPToPlayerID(const char* host, unsigned short remotePort, PlayerID *playerId)=0;
++
++	// Description:
+ 	// Returns an IP address at index 0 to GetNumberOfAddresses-1
+ 	virtual const char* GetLocalIP(unsigned int index)=0;
+ 
++	// Description:
++	// Allow or disallow connection responses from any IP.  Normally this should be false, but may be necessary
++	// when connection to servers with multiple IP addresses.
++	//
++	// Parameters:
++	// allow - True to allow this behavior, false to not allow.  Defaults to false.  Value persists between connections
++	void AllowConnectionResponseIPMigration(bool allow);
++
++	// Description:
++	// Sends a one byte message ID_ADVERTISE_SYSTEM to the remote unconnected system.
++	// This will tell the remote system our external IP outside the LAN, and can be used for NAT punch through
++	//
++	// host: Either a dotted IP address or a domain name
++	// remotePort: Which port to connect to on the remote machine.
++	virtual void AdvertiseSystem(char *host, unsigned short remotePort)=0;
++
+ 	// --------------------------------------------------------------------------------------------
+ 	// Compression Functions - Functions related to the compression layer
+ 	// --------------------------------------------------------------------------------------------
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakServer.cpp
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakServer.cpp	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakServer.cpp	2004-12-03 18:32:06 UTC (rev 106)
+@@ -28,9 +28,9 @@
+ {
+ }
+ 
+-void RakServer::InitializeSecurity(char *RSAp, char *RSAq)
++void RakServer::InitializeSecurity(char *privKeyE, char *privKeyN)
+ {
+-	RakPeer::InitializeSecurity(0,0, RSAp, RSAq);
++	RakPeer::InitializeSecurity(0,0, privKeyE, privKeyN);
+ }
+ 
+ void RakServer::DisableSecurity(void)
+@@ -409,6 +409,11 @@
+ 	RakPeer::SendStaticData(playerId);
+ }
+ 
++void RakServer::SetOfflinePingResponse(char *data, const unsigned long length)
++{
++	RakPeer::SetOfflinePingResponse(data,length);
++}
++
+ RakNet::BitStream * RakServer::GetStaticClientData(PlayerID playerId)
+ {
+ 	return RakPeer::GetRemoteStaticData(playerId);
+@@ -495,6 +500,12 @@
+ {
+ 	return RakPeer::GetMTUSize();
+ }
++
++void RakServer::AdvertiseSystem(char *host, unsigned short remotePort)
++{
++	RakPeer::AdvertiseSystem(host, remotePort);
++}
++
+ RakNetStatisticsStruct * const RakServer::GetStatistics(PlayerID playerId)
+ {
+ 	return RakPeer::GetStatistics(playerId);
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakServer.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakServer.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakServer.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -42,9 +42,9 @@
+ 	// for incoming connections.
+ 	//
+ 	// Parameters:
+-	// RSAp, RSAq - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
++	// privateKeyE, privateKeyN - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
+ 	// If the private keys are 0, then a new key will be generated when this function is called
+-	void InitializeSecurity(char *RSAp, char *RSAq);
++	void InitializeSecurity(char *privateKeyE, char *privateKeyN);
+ 
+ 	// Description
+ 	// Must be called while offline
+@@ -278,6 +278,13 @@
+ 	// The server must be active for this to have meaning
+ 	void SendStaticServerDataToClient(PlayerID playerId);
+ 
++	// Description:
++	// Sets the data to send with an (LAN server discovery) /(offline ping) response
++	// See the Ping sample project for how this is used.
++	// data: a block of data to store, or 0 for none
++	// length: The length of data in bytes, or 0 for none
++	void SetOfflinePingResponse(char *data, const unsigned long length);
++
+ 	// Returns a pointer to an attached client's character name specified by the playerId
+ 	// Returns 0 if no such player is connected
+ 	// Note that you can modify the client data here.  Changes won't be reflected on clients unless you force them to
+@@ -383,6 +390,14 @@
+ 	int GetMTUSize(void) const;
+ 
+ 	// Description:
++	// Sends a one byte message ID_ADVERTISE_SYSTEM to the remote unconnected system.
++	// This will tell the remote system our external IP outside the LAN, and can be used for NAT punch through
++	//
++	// host: Either a dotted IP address or a domain name
++	// remotePort: Which port to connect to on the remote machine.
++	void AdvertiseSystem(char *host, unsigned short remotePort);
++
++	// Description:
+ 	// Returns a structure containing a large set of network statistics for the specified system
+ 	// You can map this data to a string using the C style StatisticsToString function
+ 	//
+
+Modified: branches/mp-branch-2/source/libraries/raknet/RakServerInterface.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/RakServerInterface.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/RakServerInterface.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -42,9 +42,9 @@
+ 	// for incoming connections.
+ 	//
+ 	// Parameters:
+-	// RSAp, RSAq - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
++	// privKeyE, privKeyN - A pointer to the private keys from the RSACrypt class.  See the Encryption sample
+ 	// If the private keys are 0, then a new key will be generated when this function is called
+-	virtual void InitializeSecurity(char *RSAp, char *RSAq)=0;
++	virtual void InitializeSecurity(char *privKeyE, char *privKeyN)=0;
+ 
+ 	// Description
+ 	// Must be called while offline
+@@ -279,6 +279,13 @@
+ 	// The server must be active for this to have meaning
+ 	virtual void SendStaticServerDataToClient(PlayerID playerId)=0;
+ 
++	// Description:
++	// Sets the data to send with an  (LAN server discovery) /(offline ping) response
++	// See the Ping sample project for how this is used.
++	// data: a block of data to store, or 0 for none
++	// length: The length of data in bytes, or 0 for none
++	virtual void SetOfflinePingResponse(char *data, const unsigned long length)=0;
++
+ 	// Returns a pointer to an attached client's character name specified by the playerId
+ 	// Returns 0 if no such player is connected
+ 	// Note that you can modify the client data here.  Changes won't be reflected on clients unless you force them to
+@@ -384,6 +391,14 @@
+ 	virtual int GetMTUSize(void) const=0;
+ 
+ 	// Description:
++	// Sends a one byte message ID_ADVERTISE_SYSTEM to the remote unconnected system.
++	// This will tell the remote system our external IP outside the LAN, and can be used for NAT punch through
++	//
++	// host: Either a dotted IP address or a domain name
++	// remotePort: Which port to connect to on the remote machine.
++	virtual void AdvertiseSystem(char *host, unsigned short remotePort)=0;
++
++	// Description:
+ 	// Returns a structure containing a large set of network statistics for the specified system
+ 	// You can map this data to a string using the C style StatisticsToString function
+ 	//
+
+Modified: branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.cpp
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.cpp	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.cpp	2004-12-03 18:32:06 UTC (rev 106)
+@@ -46,7 +46,6 @@
+ //-------------------------------------------------------------------------------------------------------
+ ReliabilityLayer::ReliabilityLayer() : updateBitStream(MAXIMUM_MTU_SIZE) // preallocate the update bitstream so we can avoid a lot of reallocs at runtime
+ {
+-	receivedPackets=0;
+ 	InitializeVariables();
+ 	#ifdef __USE_IO_COMPLETION_PORTS
+ 	readWriteSocket=INVALID_SOCKET;
+@@ -119,9 +118,9 @@
+ 	memset(waitingForSequencedPacketReadIndex, 0, NUMBER_OF_ORDERED_STREAMS);
+ 	memset(waitingForOrderedPacketWriteIndex, 0, NUMBER_OF_ORDERED_STREAMS);
+ 	memset(waitingForSequencedPacketWriteIndex, 0, NUMBER_OF_ORDERED_STREAMS);
++	memset(receivedPackets, 0, RECEIVED_PACKET_LOG_LENGTH * sizeof(unsigned long));
+ 	memset(&amp;statistics, 0, sizeof(statistics));
+ 	statistics.connectionStartTime=RakNetGetTime();
+-	lastPacketCounterResetTime=statistics.connectionStartTime;
+ 	splitPacketId=0L;
+ 	packetNumber=0;
+ //	lastPacketSendTime=retransmittedFrames=sentPackets=sentFrames=receivedPacketsCount=bytesSent=bytesReceived=0;
+@@ -237,11 +236,8 @@
+ 	//reliabilityLayerMutexes[resendQueue_MUTEX].Unlock();
+ 	//	}
+ 
+-	if (receivedPackets)
+-	{
+-		delete [] receivedPackets;
+-		receivedPackets=0;
+-	}
++	
++
+ }
+ void ReliabilityLayer::FreeThreadSafeMemory(void)
+ {
+@@ -372,7 +368,6 @@
+ 			// make it through within NUMBER_OF_TRIES tries. If the last time this packet 
+ 			// number was used is older than that
+ 			// then it must be a different packet
+-			/*
+ 			if (internalPacket-&gt;packetNumber &gt;= RECEIVED_PACKET_LOG_LENGTH)
+ 			{
+ 				statistics.invalidMessagesReceived++;
+@@ -384,7 +379,6 @@
+ 				#endif
+ 				return true;
+ 			}
+-			*/
+ 
+ 			// testing
+ 	//		if (internalPacket-&gt;reliability==UNRELIABLE)
+@@ -392,19 +386,13 @@
+ 	//		else if (internalPacket-&gt;reliability==RELIABLE_SEQUENCED || internalPacket-&gt;reliability==RELIABLE_ORDERED || internalPacket-&gt;reliability==RELIABLE)
+ 	//			printf(&quot;Got reliable packet number %i\n&quot;, internalPacket-&gt;packetNumber);
+ 
+-			if (receivedPackets==0)
+-			{
+-				receivedPackets=new unsigned long[65536];// Range of PacketNumberType
+-				memset(receivedPackets, 0, 65536 * sizeof(unsigned long));
+-			}
+-			else if (receivedPackets[internalPacket-&gt;packetNumber] &gt; time - TIMEOUT_TIME) 
++			if (receivedPackets[internalPacket-&gt;packetNumber] &gt; time - TIMEOUT_TIME) 
+ 				// I can receive RECEIVED_PACKET_LOG_LENGTH packets per TIMEOUT_TIME seconds before overrun on timestamps
+ 			{
+ 				// SHOW - duplicate packets
+ #ifdef _DEBUG
+-				// printf(&quot;Warning - got duplicate packet (%i).  Did RECEIVED_PACKET_LOG_LENGTH overrun?\n&quot;,internalPacket-&gt;packetNumber);
++				printf(&quot;Warning - got duplicate packet (%i).  Did RECEIVED_PACKET_LOG_LENGTH overrun?\n&quot;,internalPacket-&gt;packetNumber);
+ 				// testing
+-				//printf(&quot;Got duplicate packet\n&quot;);
+ #endif
+ 
+ 				statistics.duplicateMessagesReceived++;
+@@ -840,9 +828,11 @@
+ 	// This variable is used as the identifier of the packet on the remote machine.
+ 	// When it cycles it will reuse older numbers but that is ok because by the time it
+ 	// cycles those older packets will be pretty much guaranteed to arrive by then
+-	
+-	IncrementPacketNumber(internalPacket-&gt;creationTime);
+-	
++	reliabilityLayerMutexes[packetNumber_MUTEX].Lock();
++	if (++packetNumber==RECEIVED_PACKET_LOG_LENGTH)
++		packetNumber=0;
++	reliabilityLayerMutexes[packetNumber_MUTEX].Unlock();
++
+ 	if (internalPacket-&gt;reliability==RELIABLE_SEQUENCED || internalPacket-&gt;reliability==UNRELIABLE_SEQUENCED)
+ 	{
+ 		// Assign the sequence stream and index
+@@ -879,7 +869,7 @@
+ 	if (splitPacket) // If it uses a secure header it will be generated here
+ 	{
+ 		// Must split the packet.  This will also generate the SHA1 if it is required.  It also adds it to the send list.
+-		SplitPacketAndDeleteOriginal(internalPacket, MTUSize, internalPacket-&gt;creationTime);
++		SplitPacketAndDeleteOriginal(internalPacket, MTUSize);
+ 		return true;
+ 	}
+ 	
+@@ -1881,7 +1871,7 @@
+ // Split the passed packet into chunks under MTU_SIZEbytes (including headers) and save those new chunks
+ // Optimized version
+ //-------------------------------------------------------------------------------------------------------
+-void ReliabilityLayer::SplitPacketAndDeleteOriginal(InternalPacket *internalPacket, int MTUSize, unsigned long time)
++void ReliabilityLayer::SplitPacketAndDeleteOriginal(InternalPacket *internalPacket, int MTUSize)
+ {
+ 	// Doing all sizes in bytes in this function so I don't write partial bytes with split packets
+ 	internalPacket-&gt;splitPacketCount=1; // This causes GetBitStreamHeaderLength to account for the split packet header
+@@ -1948,7 +1938,11 @@
+ 		{
+ 			// For every further packet we use a new packetNumber.
+ 			// Note that all split packets are reliable
+-			IncrementPacketNumber(time);
++			reliabilityLayerMutexes[packetNumber_MUTEX].Lock();
++			internalPacketArray[splitPacketIndex]-&gt;packetNumber=packetNumber;
++			if (++packetNumber==RECEIVED_PACKET_LOG_LENGTH)
++				packetNumber=0;
++			reliabilityLayerMutexes[packetNumber_MUTEX].Unlock();
+ 		}
+ 
+ 		// Add the new packet to send list at the correct priority
+@@ -2310,13 +2304,3 @@
+ 
+ 	return &statistics;
+ }
+-
+-//-------------------------------------------------------------------------------------------------------
+-// Update the current packet number for sends
+-//-------------------------------------------------------------------------------------------------------
+-void ReliabilityLayer::IncrementPacketNumber(unsigned long time)
+-{
+-	reliabilityLayerMutexes[packetNumber_MUTEX].Lock();
+-	++packetNumber;
+-	reliabilityLayerMutexes[packetNumber_MUTEX].Unlock();
+-}
+\ No newline at end of file
+
+Modified: branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/ReliabilityLayer.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -27,6 +27,16 @@
+ #define NUMBER_OF_ORDERED_STREAMS 32 // 2^5
+ 
+ const unsigned long TIMEOUT_TIME = 10000; // If no response to a reliable packet for this long kill the connection
++// -----------------------------------------------------------------------------------------------------------------
++// If you change MAX_AVERAGE_PACKETS_PER_SECOND or TIMEOUT_TIME,
++// you must make sure RECEIVED_PACKET_LOG_LENGTH &lt; the range of PacketNumberType (held in InternalPacket.h)
++// -----------------------------------------------------------------------------------------------------------------
++ // *** Pay attention to the value of RECEIVED_PACKET_LOG_LENGTH when changing this! ***
++const int MAX_AVERAGE_PACKETS_PER_SECOND=6553; // 6553.5 is the maximum for an unsigned short
++ 
++// *** This value must be less than the range of PacketNumberType. PacketNumberType is in InternalPacket.h  ***
++const int RECEIVED_PACKET_LOG_LENGTH=(TIMEOUT_TIME/1000)*MAX_AVERAGE_PACKETS_PER_SECOND;
++// -----------------------------------------------------------------------------------------------------------------
+ 
+ #include &quot;BitStream.h&quot;
+ 
+@@ -137,7 +147,7 @@
+ 	bool IsOlderOrderedPacket(unsigned char newPacketOrderingIndex, unsigned char waitingForPacketOrderingIndex);
+ 
+ 	// Split the passed packet into chunks under MTU_SIZE bytes (including headers) and save those new chunks
+-	void SplitPacketAndDeleteOriginal(InternalPacket *internalPacket, int MTUSize, unsigned long time);
++	void SplitPacketAndDeleteOriginal(InternalPacket *internalPacket, int MTUSize);
+ 
+ 	// Insert a packet into the split packet list
+ 	void InsertIntoSplitPacketList(InternalPacket * internalPacket);
+@@ -172,9 +182,6 @@
+ 	// Initialize the variables
+ 	void InitializeVariables(void);
+ 
+-	// Update the current packet number for sends
+-	void IncrementPacketNumber(unsigned long time);
+-
+ 	// STUFF TO MUTEX HERE
+ 	enum
+ 	{
+@@ -216,10 +223,9 @@
+ //	unsigned long lastPacketSendTime,retransmittedFrames, sentPackets, sentFrames, receivedPacketsCount, bytesSent, bytesReceived,lastPacketReceivedTime;
+ 	unsigned long lostPacketResendDelay;
+ 	unsigned long splitPacketId;
+-	unsigned long *receivedPackets;
++	unsigned long receivedPackets[RECEIVED_PACKET_LOG_LENGTH];
+ 	unsigned long blockWindowIncreaseUntilTime;
+ 	RakNetStatisticsStruct statistics;
+-	unsigned long lastPacketCounterResetTime;
+ 
+ 	// Windowing algorithm:
+ 	// Start at a minimum size
+
+Modified: branches/mp-branch-2/source/libraries/raknet/SimpleMutex.cpp
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/SimpleMutex.cpp	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/SimpleMutex.cpp	2004-12-03 18:32:06 UTC (rev 106)
+@@ -14,8 +14,9 @@
+ SimpleMutex::SimpleMutex()
+ {
+ #ifdef _WIN32
+-	hMutex = CreateMutex(NULL, FALSE, 0);
+-	assert(hMutex);
++//	hMutex = CreateMutex(NULL, FALSE, 0);
++//	assert(hMutex);
++	InitializeCriticalSection(&amp;criticalSection);
+ #else
+ 	int error = pthread_mutex_init(&amp;hMutex, 0);
+ 	assert(error==0);
+@@ -25,7 +26,8 @@
+ SimpleMutex::~SimpleMutex()
+ {
+ #ifdef _WIN32
+-	CloseHandle(hMutex);
++//	CloseHandle(hMutex);
++	DeleteCriticalSection(&amp;criticalSection);
+ #else
+ 	pthread_mutex_destroy(&amp;hMutex);
+ #endif
+@@ -40,6 +42,7 @@
+ void SimpleMutex::Lock(void)
+ {
+ 	#ifdef _WIN32
++	/*
+ 	DWORD d = WaitForSingleObject(hMutex, INFINITE);
+ 	#ifdef _DEBUG
+ 	if (d==WAIT_FAILED)
+@@ -67,7 +70,9 @@
+ 	}
+ 
+ 	assert(d==WAIT_OBJECT_0);
+-	#endif
++	*/
++	EnterCriticalSection(&amp;criticalSection);
++
+ 	#else
+ 	int error = pthread_mutex_lock(&amp;hMutex);
+ 	assert(error==0);
+@@ -77,7 +82,8 @@
+ void SimpleMutex::Unlock(void)
+ {
+ #ifdef _WIN32
+-	ReleaseMutex(hMutex);
++//	ReleaseMutex(hMutex);
++	LeaveCriticalSection(&amp;criticalSection);
+ #else
+ 	int error = pthread_mutex_unlock(&amp;hMutex);
+ 	assert(error==0);
+
+Modified: branches/mp-branch-2/source/libraries/raknet/SimpleMutex.h
+===================================================================
+--- branches/mp-branch-2/source/libraries/raknet/SimpleMutex.h	2004-11-29 05:15:42 UTC (rev 105)
++++ branches/mp-branch-2/source/libraries/raknet/SimpleMutex.h	2004-12-03 18:32:06 UTC (rev 106)
+@@ -26,7 +26,8 @@
+ 	void Unlock(void);
+ private:
+ 	#ifdef _WIN32
+-	HANDLE hMutex;
++	//HANDLE hMutex;
++	CRITICAL_SECTION criticalSection; // Docs say this is faster than a mutex for single process access
+ 	#else
+ 	pthread_mutex_t hMutex;
+ 	#endif
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000055.html">[Tw-light-svn] r107 - in branches/mp-branch-2: . source source/games source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

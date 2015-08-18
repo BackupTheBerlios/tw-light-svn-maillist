@@ -1,0 +1,1612 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r128 - in trunk: gamedata source source/ais source/melee source/sc1ships source/sc2ships source/ships
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r128%20-%20in%20trunk%3A%20gamedata%20source%20source/ais%20source/melee%20source/sc1ships%20source/sc2ships%20source/ships&In-Reply-To=%3C200502271515.j1RFFWYj009931%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000073.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r128 - in trunk: gamedata source source/ais source/melee source/sc1ships source/sc2ships source/ships</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r128%20-%20in%20trunk%3A%20gamedata%20source%20source/ais%20source/melee%20source/sc1ships%20source/sc2ships%20source/ships&In-Reply-To=%3C200502271515.j1RFFWYj009931%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r128 - in trunk: gamedata source source/ais source/melee source/sc1ships source/sc2ships source/ships">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Feb 27 16:15:32 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000073.html">[Tw-light-svn] r127 - in trunk/source: . melee sc1ships
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-27 16:15:31 +0100 (Sun, 27 Feb 2005)
+New Revision: 128
+
+Modified:
+   trunk/gamedata/ingame.txt
+   trunk/source/ais/c_other.cpp
+   trunk/source/ais/c_wussie.cpp
+   trunk/source/doxygen.cpp
+   trunk/source/melee/mcontrol.h
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mitems.cpp
+   trunk/source/melee/mship.cpp
+   trunk/source/melee/mship.h
+   trunk/source/melee/mshot.cpp
+   trunk/source/melee/mview.cpp
+   trunk/source/sc1ships/shpchebr.cpp
+   trunk/source/sc1ships/shpearcr.cpp
+   trunk/source/sc1ships/shpilwav.cpp
+   trunk/source/sc1ships/shpkzedr.cpp
+   trunk/source/sc1ships/shpmmrxf.cpp
+   trunk/source/sc1ships/shpmycpo.cpp
+   trunk/source/sc1ships/shpspael.cpp
+   trunk/source/sc1ships/shpvuxin.cpp
+   trunk/source/sc2ships/shpchmav.cpp
+   trunk/source/sc2ships/shporzne.cpp
+   trunk/source/ships/shpalabc.cpp
+   trunk/source/ships/shpchoex.cpp
+   trunk/source/ships/shpconho.cpp
+   trunk/source/ships/shpdragr.cpp
+   trunk/source/ships/shpearc3.cpp
+   trunk/source/ships/shprogsq.cpp
+   trunk/source/ships/shpstaba.cpp
+   trunk/source/ships/shptauda.cpp
+   trunk/source/ships/shptaust.cpp
+Log:
+Implemented issue  0000013: add targeting square
+Use 'O' key to toggle targets
+
+
+Modified: trunk/gamedata/ingame.txt
+===================================================================
+--- trunk/gamedata/ingame.txt	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/gamedata/ingame.txt	2005-02-27 15:15:31 UTC (rev 128)
+@@ -13,8 +13,9 @@
+   - zooms out on some viewing modes.
+   + (or =) zooms in on some viewing modes.
+   0 and 9 also effect the camera in some viewing modes.
+-  ctrl+T = toggle team indicators on/off
+-  ctrl+H = toggle healthbar indicators on/off
++  T = toggle team indicators on/off
++  H = toggle healthbar indicators on/off
++  O = toggle track target indicator
+   ctrl+Alt+k = kill all ships and ship-objects in the melee-game
+ Melee:  
+   Starts a battle with the current team settings.
+
+Modified: trunk/source/ais/c_other.cpp
+===================================================================
+--- trunk/source/ais/c_other.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ais/c_other.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -61,14 +61,14 @@
+     {
+       int r = 0;
+       double a;
+-      if (!ship-&gt;target) 
++      if (!ship-&gt;get_target()) 
+ 	return 0;
+-      if (!ship-&gt;target-&gt;exists()) 
++      if (!ship-&gt;get_target()-&gt;exists()) 
+ 	{
+-	  ship-&gt;target = NULL;
++	  ship-&gt;set_target(NULL);
+ 	  return 0;
+ 	}
+-      a = ship-&gt;trajectory_angle(ship-&gt;target) - ship-&gt;get_angle();
++      a = ship-&gt;trajectory_angle(ship-&gt;get_target()) - ship-&gt;get_angle();
+       a = fmod(a + PI2, PI2);
+       if (a &lt; PI) 
+ 	{
+@@ -79,7 +79,7 @@
+ 	  r |= keyflag::left;
+ 	  return r;
+ 	}
+-      a = int(ship-&gt;distance(ship-&gt;target));
++      a = int(ship-&gt;distance(ship-&gt;get_target()));
+       if (a &gt; 2000) 
+ 	{
+ 	  r |= keyflag::thrust;
+
+Modified: trunk/source/ais/c_wussie.cpp
+===================================================================
+--- trunk/source/ais/c_wussie.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ais/c_wussie.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -198,7 +198,7 @@
+   int avoid_planet = FALSE;
+   Query ap;
+   SpaceObject *p;
+-  if (ship-&gt;target &amp;&amp; !ship-&gt;target-&gt;isInvisible ())
++  if (ship-&gt;get_target() &amp;&amp; !ship-&gt;get_target()-&gt;isInvisible ())
+     last_seen_time = game-&gt;game_time;
+   else if ((rand () &amp; 32767) &lt; frame_time)
+     last_seen_time = game-&gt;game_time - 1000;
+@@ -227,7 +227,7 @@
+     }
+   if (!avoid_planet)
+     {
+-      if (!ship-&gt;target || (last_seen_time &lt; game-&gt;game_time - 3000)) 
++      if (!ship-&gt;get_target() || (last_seen_time &lt; game-&gt;game_time - 3000)) 
+ 	{
+ 	  if ((rand() &amp; 4095) &lt; frame_time) 
+ 	    {
+@@ -236,12 +236,12 @@
+ 	    }
+ 	  return 0;
+ 	}
+-      if (!ship-&gt;target-&gt;exists ())
++      if (!ship-&gt;get_target()-&gt;exists ())
+ 	{
+-	  ship-&gt;target = NULL;
++	  ship-&gt;set_target(NULL);
+ 	  return 0;
+ 	}
+-      distance = ship-&gt;distance (ship-&gt;target);
++      distance = ship-&gt;distance (ship-&gt;get_target());
+       switch (tactic[state])
+ 	{
+ 	default:
+@@ -258,24 +258,24 @@
+ 	    {
+ 	      velocity = ship-&gt;speed_max;
+ 	    }
+-	  angle = intercept_angle2( ship-&gt;normal_pos(), ship-&gt;get_vel() * rel, velocity, ship-&gt;target-&gt;normal_pos(),
+-				    ship-&gt;target-&gt;get_vel() ) - ship-&gt;get_angle();
++	  angle = intercept_angle2( ship-&gt;normal_pos(), ship-&gt;get_vel() * rel, velocity, ship-&gt;get_target()-&gt;normal_pos(),
++				    ship-&gt;get_target()-&gt;get_vel() ) - ship-&gt;get_angle();
+ 	}break;
+ 	
+ 	case TACTIC_DIRECT_INTERCEPT:
+-	  angle = ship-&gt;trajectory_angle (ship-&gt;target) - ship-&gt;get_angle ();
++	  angle = ship-&gt;trajectory_angle (ship-&gt;get_target()) - ship-&gt;get_angle ();
+ 	  break;
+ 	  
+ 	case TACTIC_RANGE:
+ 	  if (tactic_state == STATE_TOO_FAR)
+ 	    {
+-	      angle = ship-&gt;trajectory_angle (ship-&gt;target) - ship-&gt;get_angle ();
++	      angle = ship-&gt;trajectory_angle (ship-&gt;get_target()) - ship-&gt;get_angle ();
+ 	      if (distance &lt; min_range[state])
+ 		tactic_state = STATE_TOO_CLOSE;
+ 	    }
+ 	  else
+ 	    {
+-	      angle = ship-&gt;trajectory_angle (ship-&gt;target) - ship-&gt;get_angle () + PI;
++	      angle = ship-&gt;trajectory_angle (ship-&gt;get_target()) - ship-&gt;get_angle () + PI;
+ 	      if (distance &gt; max_range[state])
+ 		tactic_state = STATE_TOO_FAR;
+ 	    }
+@@ -302,15 +302,15 @@
+     }
+   action |= keyflag::thrust;
+   int i, j;
+-  if (!ship-&gt;target)
++  if (!ship-&gt;get_target())
+     return action;
+-  if (!ship-&gt;target-&gt;exists ())
++  if (!ship-&gt;get_target()-&gt;exists ())
+     {
+-      ship-&gt;target = NULL;
++      ship-&gt;set_target(NULL);
+       return action;
+     }
+   
+-  distance = ship-&gt;distance (ship-&gt;target);
++  distance = ship-&gt;distance (ship-&gt;get_target());
+   for (j = 0; j &lt; 2; j++)
+     {
+       fireoption[j] = FALSE;
+@@ -409,10 +409,10 @@
+ 	      break;
+ 	      
+ 	    case OPTION_MINE:
+-	      a = atan(ship-&gt;target-&gt;get_vel ());
++	      a = atan(ship-&gt;get_target()-&gt;get_vel ());
+ 	      if (fabs
+ 		  (normalize
+-		   (ship-&gt;target-&gt;trajectory_angle (ship) + PI/2,
++		   (ship-&gt;get_target()-&gt;trajectory_angle (ship) + PI/2,
+ 		    PI2) - a) &lt; sweep[j])
+ 		fireoption[j] = TRUE;
+ 	      field_fire = FALSE;
+@@ -453,14 +453,14 @@
+ 		  normalize (bomby[j], map_size.y);
+ 		  bomb =
+ 		    new SpaceLocation (NULL, Vector2(bombx[j], bomby[j]), 0);
+-		  if (ship-&gt;target-&gt;distance (bomb) &gt; bombdistance[j])
++		  if (ship-&gt;get_target()-&gt;distance (bomb) &gt; bombdistance[j])
+ 		    {
+ 		      option_held[j] = FALSE;
+ 		      dontfireoption[j] = TRUE;
+ 		    }
+ 		  else
+ 		    {
+-		      bombdistance[j] = ship-&gt;target-&gt;distance (bomb);
++		      bombdistance[j] = ship-&gt;get_target()-&gt;distance (bomb);
+ 		    }
+ 		  delete bomb;
+ 		}
+@@ -500,7 +500,7 @@
+ 		  (ship-&gt;get_vel().y * rel[state][j]) +
+ 		  (option_velocity[state][j] *
+ 		   sin (ship-&gt;get_angle ()));
+-		bombdistance[j] = ship-&gt;distance (ship-&gt;target);
++		bombdistance[j] = ship-&gt;distance (ship-&gt;get_target());
+ 	      }
+ 	  }
+ 	if (option_type[state][j][i] == OPTION_HOLD)
+
+Modified: trunk/source/doxygen.cpp
+===================================================================
+--- trunk/source/doxygen.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/doxygen.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -39,8 +39,10 @@
+  *       - - zooms out on some viewing modes.
+  *       - + (or =) zooms in on some viewing modes.
+  *       - 0 also effect the camera in some viewing modes.
+- *       - ctrl+T = toggle team indicators on/off
+- *       - ctrl+H = toggle healthbar indicators on/off
++ *       - T = toggle team indicators on/off
++ *       - H = toggle healthbar indicators on/off
++ *       - O = toggle track target indicator
++ *       - ctrl+Alt+k = kill all ships and ship-objects in the melee-game
+  *       - Also, if some controllers are set to keyboard, customizable
+  *	 - buttons may cause ship actions.  Be default these are:
+  *       - Config 0:
+@@ -68,9 +70,7 @@
+  * 
+  *   - Introduce the most interesting and cool TimeWarp ships
+  *   - Simplify and fix melee engine
+- *   - Add TimeWarp Markup Language (TML) support
+  *   - Write plot
+- *   - Implement plot with TML
+  *
+  * \subsection intoro Introduce the most interesting and cool TimeWarp ships
+  * 
+@@ -99,17 +99,11 @@
+  * 
+  *  Almost done.
+  * 
+- * \subsection TML_subsec Add TimeWarp Markup Language (TML) support
+  * 
+- *  No progress.
+- * 
+  * \subsection plot_subsec Write plot
+  * 
+  *  The Plot is fully writen.
+  *
+- * \subsection plot_impl_subsec  Implement plot with TML
+- * 
+- *  No progress.
+  *
+  * \section licene_sec License
+  *
+
+Modified: trunk/source/melee/mcontrol.h
+===================================================================
+--- trunk/source/melee/mcontrol.h	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mcontrol.h	2005-02-27 15:15:31 UTC (rev 128)
+@@ -34,6 +34,7 @@
+ extern char **control_name;
+ Control *getController(const char *type, const char *name, int channel);
+ 
++/// Exactly as it say 
+ class Control : public Presence {	
+ 	public:
+ 
+@@ -45,7 +46,7 @@
+ 	unsigned char target_sign_color;
+   /*! \brief this pertains to network traffic - see comment above calculate() in mcontrol.cpp */
+   int already;
+-	int channel;
++  int channel;
+ 
+ 
+   /*! \brief points at the current ship being controlled */
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mframe.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -397,33 +397,45 @@
+ 		ship = creator-&gt;ship;
+ 		data = creator-&gt;data;
+ 		if (data) data-&gt;lock();
+-		target = creator-&gt;target;
++		set_target( creator-&gt;get_target());
+ 		}
+ 	else {
+ 		ally_flag = 0;
+ 		ship = NULL;
+ 		data = NULL;
+-		target = NULL;
++		set_target(NULL);
+ 		}
+ }
+ 
+ 
+-SpaceLocation::~SpaceLocation() {STACKTRACE
+-	if (data) data-&gt;unlock();
++SpaceLocation::~SpaceLocation() 
++{
++  STACKTRACE;
++  if (data) 
++    data-&gt;unlock();
++}
+ 
+-	}
++SpaceObject* SpaceLocation::get_target()
++{
++  return _target;
++}
+ 
++void SpaceLocation::set_target(SpaceObject* target)
++{
++  _target = target;
++}
++
+ bool SpaceLocation::change_owner(SpaceLocation *new_owner) {
+   STACKTRACE;
+ 	if (new_owner) {
+ 		ally_flag = new_owner-&gt;ally_flag;
+ 		ship = new_owner-&gt;ship;
+-		target = new_owner-&gt;target;
++		set_target( new_owner-&gt;get_target());
+ 		}
+ 	else {
+ 		ally_flag = 0;
+ 		ship = NULL;
+-		target = NULL;
++		set_target( NULL);
+ 		}
+ 	return true;
+ 	}
+@@ -506,9 +518,10 @@
+   STACKTRACE;
+ 	ship = NULL;
+ }
+-void SpaceLocation::target_died() {
++void SpaceLocation::target_died() 
++{
+   STACKTRACE;
+-	target = NULL;
++  set_target(NULL);
+ }
+ 
+ double SpaceLocation::trajectory_angle(SpaceLocation *l) {
+@@ -682,7 +695,7 @@
+ void SpaceLocation::calculate() 
+ {
+   STACKTRACE;
+-  if (target &amp;&amp; !target-&gt;exists()) 
++  if (get_target() &amp;&amp; !get_target()-&gt;exists()) 
+     {
+       target_died();
+     }
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mframe.h	2005-02-27 15:15:31 UTC (rev 128)
+@@ -176,10 +176,18 @@
+ /// \brief any item in the game that has a location, base class for all items in game
+ class SpaceLocation : public Presence 
+ { 
++
++ private:
+   friend class Physics;
+   friend struct Query;
++  
++ protected:
++  SpaceObject *_target; ///&lt; it's target, if it has one
++ public: 
++  
++  virtual SpaceObject* get_target();
++  virtual void set_target(SpaceObject*);
+ 
+- protected: public: 
+   //aught to be protected, but we're lazy
+   Vector2 pos;
+   union 
+@@ -206,7 +214,6 @@
+ 
+   Ship *ship;          ///&lt; the ship it's associated with
+   ShipData *data;      ///&lt; the data module it depends upon
+-  SpaceObject *target; ///&lt; it's target, if it has one
+ 
+   inline  bool sameShip (const SpaceLocation *other) {return ally_flag == other-&gt;ally_flag;}
+   virtual bool sameTeam (const SpaceLocation *other) const;
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mgame.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -848,6 +848,7 @@
+   music = &quot;&quot;;
+   indteamtoggle = 0;
+   indhealthtoggle = 0;
++  _targrettrack = 0;
+   indhealthtoggle = ~indhealthtoggle;
+ }
+ 
+@@ -1157,6 +1158,9 @@
+     case KEY_T:
+ 	  indteamtoggle = ~indteamtoggle;
+       break;
++    case KEY_O:
++	  _targrettrack = ~_targrettrack;
++	  break;
+     case KEY_F1: 
+       {// help
+ 	pause();
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mgame.h	2005-02-27 15:15:31 UTC (rev 128)
+@@ -233,6 +233,7 @@
+   int show_fps;
+   unsigned char local_checksum, client_checksum, server_checksum;
+   int indhealthtoggle, indteamtoggle;
++  int _targrettrack;
+ };
+ 
+ 
+
+Modified: trunk/source/melee/mitems.cpp
+===================================================================
+--- trunk/source/melee/mitems.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mitems.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -264,7 +264,7 @@
+ 	vel.y = va * sin(angle) - vb * cos(angle);
+ 	return;
+ 	}
+-// this should be places elsewhere I think ...
++
+ TeamIndicator::TeamIndicator(Ship *s, int *atoggle)
+ {
+   STACKTRACE;
+
+Modified: trunk/source/melee/mship.cpp
+===================================================================
+--- trunk/source/melee/mship.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mship.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -33,6 +33,7 @@
+ #include &quot;mview.h&quot;
+ #include &quot;other/twconfig.h&quot;
+ #include &quot;scp.h&quot;
++#include &quot;mitems.h&quot;
+ 
+ /*------------------------------*
+  *		Ship Class Registration *
+@@ -237,25 +238,26 @@
+ }
+ 
+ void init_ships() {
+-     _register_shiptype_dir ( home_ini_full_path(&quot;ships&quot;).c_str(), FA_DIREC|FA_RDONLY, 3 );
+- return;
++  _register_shiptype_dir ( home_ini_full_path(&quot;ships&quot;).c_str(), FA_DIREC|FA_RDONLY, 3 );
++  return;
+ }
+ 
+ 
+ 
+ int hot_color[HOT_COLORS] =
+-{
+-  122, 123, 124, 125, 126, 127,
+-  42,  43,  44,  45,  46,  47
+-};
++  {
++    122, 123, 124, 125, 126, 127,
++    42,  43,  44,  45,  46,  47
++  };
+ 
+ 
+ Ship::Ship(SpaceLocation *creator, Vector2 opos, double oangle, SpaceSprite *osprite) :
+-	SpaceObject(creator, opos, oangle, osprite),
+-	death_counter(-1),
+-	update_panel(false),
+-	target_pressed(false),
+-	control(NULL)
++  SpaceObject(creator, opos, oangle, osprite),
++  death_counter(-1),
++  update_panel(false),
++  target_pressed(false),
++  control(NULL),
++  _target_TeamIndicator(NULL)
+ {
+   STACKTRACE;
+   attributes |= ATTRIB_SHIP;
+@@ -296,7 +298,8 @@
+   death_counter(-1),
+   update_panel(false),
+   target_pressed(false),
+-  control(NULL)
++  control(NULL),
++  _target_TeamIndicator(NULL)
+ {
+   STACKTRACE;
+   shipData-&gt;lock();
+@@ -379,7 +382,7 @@
+ 			30, 51, 
+ 			pallete_color[0], 
+ 			captain_name
+-		);
++			);
+       spritePanel-&gt;unlock();
+     }
+   
+@@ -389,6 +392,23 @@
+   hashotspots = true;
+ }
+ 
++
++void Ship::set_target(SpaceObject* target)
++{
++  if(_target_TeamIndicator &amp;&amp; _target_TeamIndicator-&gt;exists())
++    {
++      _target_TeamIndicator-&gt;die();
++    }
++  _target_TeamIndicator = NULL;
++  if(target &amp;&amp; !strcmp(control-&gt;getTypeName(),&quot;Keyboard/Joystick&quot;))
++    {
++      /// dangerous stuff
++      _target_TeamIndicator = new TeamIndicator((Ship*)target, &amp;(game-&gt;_targrettrack));
++	game-&gt;add(_target_TeamIndicator);
++    }
++  SpaceObject::set_target(target);
++}
++
+ void Ship::death() 
+ {
+   STACKTRACE;
+@@ -397,6 +417,14 @@
+       game-&gt;ship_died(this, NULL);
+       attributes &amp;= ~ATTRIB_NOTIFY_ON_DEATH;
+     }
++    if(_target_TeamIndicator)
++    {
++      if(_target_TeamIndicator-&gt;exists())
++	{
++	  _target_TeamIndicator-&gt;die();
++	}
++      _target_TeamIndicator = NULL;
++    }
+   return;
+ }
+ 
+@@ -420,8 +448,8 @@
+ RGB Ship::crewPanelColor(int k)
+ {
+   STACKTRACE;
+-	RGB c = {0,225,0};
+-	return c;
++  RGB c = {0,225,0};
++  return c;
+ }
+ 
+ RGB Ship::battPanelColor(int k)
+@@ -653,7 +681,7 @@
+   
+   target_pressed = target_next | target_prev | target_closest;
+   if (control)
+-    target = control-&gt;target;
++    set_target(control-&gt;target);
+   
+   calculate_turn_left();
+   calculate_turn_right();
+@@ -779,59 +807,59 @@
+ void Ship::assigntarget(SpaceObject *otarget)
+ {
+   STACKTRACE;
+-	target = otarget;
++  set_target(otarget);
+ }
+ 
+ 
+ void Ship::calculate_thrust() {
+   STACKTRACE;
+-	if (thrust)
+-		accelerate_gravwhip(this, angle, accel_rate * frame_time, speed_max);
+-	return;
++  if (thrust)
++    accelerate_gravwhip(this, angle, accel_rate * frame_time, speed_max);
++  return;
+ }
+ 
+ void Ship::calculate_turn_left()
+ {
+   STACKTRACE;
+   if(turn_left)
+-		turn_step -= turn_rate * frame_time;
++    turn_step -= turn_rate * frame_time;
+ }
+ 
+ void Ship::calculate_turn_right()
+ {
+   STACKTRACE;
+   if(turn_right)
+-		turn_step += turn_rate * frame_time;
++    turn_step += turn_rate * frame_time;
+ }
+ 
+ void Ship::calculate_fire_weapon() {
+   STACKTRACE;
+-	weapon_low = FALSE;
++  weapon_low = FALSE;
+ 
+-	if (fire_weapon) {
+-		if (batt &lt; weapon_drain) {
+-			weapon_low = true;
+-			return;
+-		}
++  if (fire_weapon) {
++    if (batt &lt; weapon_drain) {
++      weapon_low = true;
++      return;
++    }
+ 
+-		if (weapon_recharge &gt; 0)
+-			return;
++    if (weapon_recharge &gt; 0)
++      return;
+ 
+-		if (!activate_weapon())
+-			return;
++    if (!activate_weapon())
++      return;
+ 
+-		batt -= weapon_drain;
+-		if (recharge_amount &gt; 1)
+-			recharge_step = recharge_rate;
+-		weapon_recharge += weapon_rate;
++    batt -= weapon_drain;
++    if (recharge_amount &gt; 1)
++      recharge_step = recharge_rate;
++    weapon_recharge += weapon_rate;
+ 
+-		if (weapon_sample &gt;= 0)
+-		  {
+-		    tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
+-		    tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
+-		  }
+-	}
+-	return;
++    if (weapon_sample &gt;= 0)
++      {
++	tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
++	tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleWeapon[weapon_sample]));
++      }
++  }
++  return;
+ }
+ 
+ void Ship::calculate_fire_special()
+@@ -891,99 +919,99 @@
+ 
+ void Ship::animate(Frame *frame) {
+   STACKTRACE;
+-	SpaceObject::animate(frame);
++  SpaceObject::animate(frame);
+ }
+ 
+ double Ship::get_angle_ex() const
+ {
+-	return normalize(angle + turn_step, PI2);
++  return normalize(angle + turn_step, PI2);
+ }
+ 
+ ShipType *Ship::get_shiptype()
+ {
+   STACKTRACE;
+-	return type;
++  return type;
+ }
+ 
+ 
+ Phaser::Phaser(
+-	SpaceLocation *creator, Vector2 opos, Vector2 _rpos, 
+-	Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+-	int onum_colors, int ofsize, int steps, int step_size) :
+-	SpaceObject(creator, opos, 0.0, sprite),
+-	rel_pos(_rpos),
+-	ship(ship),
+-	sprite_index(osprite_index),
+-	colors(ocolors),
+-	num_colors(onum_colors),
+-	color_index(0),
+-	frame_size(ofsize),
+-	frame_step(ofsize),
+-	phaser_step_position(0),
+-	phaser_steps(steps),
+-	phaser_step_size(step_size)
++	       SpaceLocation *creator, Vector2 opos, Vector2 _rpos, 
++	       Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
++	       int onum_colors, int ofsize, int steps, int step_size) :
++  SpaceObject(creator, opos, 0.0, sprite),
++  rel_pos(_rpos),
++  ship(ship),
++  sprite_index(osprite_index),
++  colors(ocolors),
++  num_colors(onum_colors),
++  color_index(0),
++  frame_size(ofsize),
++  frame_step(ofsize),
++  phaser_step_position(0),
++  phaser_steps(steps),
++  phaser_step_size(step_size)
+ {
+   STACKTRACE;
+-	layer = LAYER_HOTSPOTS;
+-	set_depth(DEPTH_HOTSPOTS);
+-	collide_flag_anyone = 0;
+-	mass = 0;
++  layer = LAYER_HOTSPOTS;
++  set_depth(DEPTH_HOTSPOTS);
++  collide_flag_anyone = 0;
++  mass = 0;
+ 
+-	attributes |= ATTRIB_UNDETECTABLE;
++  attributes |= ATTRIB_UNDETECTABLE;
+ 
+-	// extra check
+-	// note that if this happens, there's something wrong in the ships' constructor...
+-	if (sprite_index &gt;= sprite-&gt;frames())
+-		sprite_index = 0;
++  // extra check
++  // note that if this happens, there's something wrong in the ships' constructor...
++  if (sprite_index &gt;= sprite-&gt;frames())
++    sprite_index = 0;
+ 
+-	return;
++  return;
+ }
+ 
+ void Phaser::animate(Frame *space) {
+   STACKTRACE;
+-	sprite-&gt;animate_character(pos, 
+-		sprite_index, pallete_color[colors[color_index]], space);
+-	return;
++  sprite-&gt;animate_character(pos, 
++			    sprite_index, pallete_color[colors[color_index]], space);
++  return;
+ }
+ 
+ void Phaser::calculate() {
+   STACKTRACE;
+-	if (!exists())
+-		return;
+-	frame_step -= frame_time;
++  if (!exists())
++    return;
++  frame_step -= frame_time;
+ 
+-	while (frame_step &lt; 0) {
+-		frame_step += frame_size;
+-		color_index++;
+-		if (color_index == num_colors)
+-			state = 0;
+-	}
++  while (frame_step &lt; 0) {
++    frame_step += frame_size;
++    color_index++;
++    if (color_index == num_colors)
++      state = 0;
++  }
+ 
+-	if (phaser_step_position &lt; phaser_step_size) {
+-		if (ship &amp;&amp; !ship-&gt;exists())
+-			ship = NULL;
+-		phaser_step_position += frame_time;
+-		if (phaser_step_position &gt;= phaser_step_size) {
+-			if (phaser_steps &gt; 1) {
+-				Vector2 d = rel_pos / phaser_steps;
+-				game-&gt;add(new Phaser(this, pos + d, rel_pos-d, ship, sprite, sprite_index, colors, num_colors, frame_size, phaser_steps-1, phaser_step_size));
+-			}
+-			else if (ship) {
+-				game-&gt;add(ship);
+-				ship-&gt;materialize();
+-				ship = NULL;
+-			}
+-		}
+-	}
+-	SpaceObject::calculate();
++  if (phaser_step_position &lt; phaser_step_size) {
++    if (ship &amp;&amp; !ship-&gt;exists())
++      ship = NULL;
++    phaser_step_position += frame_time;
++    if (phaser_step_position &gt;= phaser_step_size) {
++      if (phaser_steps &gt; 1) {
++	Vector2 d = rel_pos / phaser_steps;
++	game-&gt;add(new Phaser(this, pos + d, rel_pos-d, ship, sprite, sprite_index, colors, num_colors, frame_size, phaser_steps-1, phaser_step_size));
++      }
++      else if (ship) {
++	game-&gt;add(ship);
++	ship-&gt;materialize();
++	ship = NULL;
++      }
++    }
++  }
++  SpaceObject::calculate();
+ }
+ 
+ SpaceLocation *Ship::get_ship_phaser() {
+   STACKTRACE;
+-	return new Phaser(this,
+-		pos - unit_vector(angle ) * PHASE_MAX * size.x,
+-		unit_vector(angle ) * PHASE_MAX * size.x,
+-		this, sprite, sprite_index, hot_color, HOT_COLORS,
+-		PHASE_DELAY, PHASE_MAX, PHASE_DELAY
+-	);
++  return new Phaser(this,
++		    pos - unit_vector(angle ) * PHASE_MAX * size.x,
++		    unit_vector(angle ) * PHASE_MAX * size.x,
++		    this, sprite, sprite_index, hot_color, HOT_COLORS,
++		    PHASE_DELAY, PHASE_MAX, PHASE_DELAY
++		    );
+ }
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mship.h	2005-02-27 15:15:31 UTC (rev 128)
+@@ -97,6 +97,8 @@
+   virtual double get_angle_ex() const; ///&lt; stupid helper for camera
+   
+  public:
++  virtual void set_target(SpaceObject* target);
++
+   ShipType *type;
+   virtual ShipType *get_shiptype();
+   
+@@ -175,6 +177,9 @@
+   virtual double handle_speed_loss(SpaceLocation *source, double normal);
+   
+   virtual void animate(Frame *frame);
++
++ protected:
++    Presence* _target_TeamIndicator;
+ };
+ 
+ 
+
+Modified: trunk/source/melee/mshot.cpp
+===================================================================
+--- trunk/source/melee/mshot.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mshot.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -237,15 +237,15 @@
+ 	turn_step(0.0)
+ {
+   STACKTRACE;
+-	target = otarget;
++	set_target( otarget);
+ 	id = SPACE_HOMING_MISSILE;
+ }
+ 
+ void HomingMissile::calculate() {
+   STACKTRACE;
+ 	Missile::calculate();
+-	if (target &amp;&amp; !target-&gt;isInvisible()) {
+-		double d_a = normalize(trajectory_angle(target) - (angle + turn_step), PI2);
++	if (get_target() &amp;&amp; !get_target()-&gt;isInvisible()) {
++		double d_a = normalize(trajectory_angle(get_target()) - (angle + turn_step), PI2);
+ 		if (d_a &gt; PI) d_a -= PI2;
+ 		double ta = turn_rate * frame_time;
+ 		if (fabs(d_a) &lt; ta) ta = fabs(d_a);
+@@ -277,8 +277,8 @@
+ 	Vector2 old_vel = vel;
+ 
+ 	double ta = 0;
+-	if (target &amp;&amp; !target-&gt;isInvisible()) {
+-		Vector2 tpos = target-&gt;normal_pos() + target-&gt;vel * 0;
++	if (get_target() &amp;&amp; !get_target()-&gt;isInvisible()) {
++		Vector2 tpos = get_target()-&gt;normal_pos() + get_target()-&gt;vel * 0;
+ 		double da = normalize(atan3(min_delta(tpos,pos)) - (angle + turn_step));
+ 		if (da &gt; PI) da -= PI2;
+ 		double ta = turn_rate * 0;
+
+Modified: trunk/source/melee/mview.cpp
+===================================================================
+--- trunk/source/melee/mview.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/melee/mview.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -557,9 +557,9 @@
+ 	if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
+ 	if (!c) return;
+ 	CameraPosition n = camera;
+-	if (c-&gt;target &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;target-&gt;isInvisible())) {
+-		if (c-&gt;distance(c-&gt;target) &lt; 3000) {
+-			focus(&amp;n, c, c-&gt;target);
++	if (c-&gt;get_target() &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;get_target()-&gt;isInvisible())) {
++		if (c-&gt;distance(c-&gt;get_target()) &lt; 3000) {
++			focus(&amp;n, c, c-&gt;get_target());
+ 			n.z *= 1.4;
+ 		}
+ 		else focus(&amp;n, c);
+@@ -582,8 +582,8 @@
+ 	if (game-&gt;num_focuses) c = game-&gt;focus[game-&gt;focus_index]-&gt;get_focus();
+ 	if (!c) return;
+ 	CameraPosition n = camera;
+-	if (c-&gt;target &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;target-&gt;isInvisible())) {
+-		focus(&amp;n, c, c-&gt;target);
++	if (c-&gt;get_target() &amp;&amp; !(camera_hides_cloakers &amp;&amp; c-&gt;get_target()-&gt;isInvisible())) {
++		focus(&amp;n, c, c-&gt;get_target());
+ 		n.z *= 1.4;
+ 		}
+ 	else
+
+Modified: trunk/source/sc1ships/shpchebr.cpp
+===================================================================
+--- trunk/source/sc1ships/shpchebr.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpchebr.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -181,16 +181,18 @@
+   STACKTRACE;
+ 	AnimatedShot::calculate();
+ 
+-	if (ship &amp;&amp; ship-&gt;exists()) {
+-		target = ship-&gt;target; }
++	if (ship &amp;&amp; ship-&gt;exists()) 
++	  {
++		set_target( ship-&gt;get_target()); 
++	}
+ 	else {
+ 		state = 0;
+ 		return;  }
+ 
+-	if (target &amp;&amp; !target-&gt;isInvisible()) {
+-		angle = trajectory_angle(target);
++	if (get_target() &amp;&amp; !get_target()-&gt;isInvisible()) {
++		angle = trajectory_angle(get_target());
+ 
+-		double ra = normalize(target-&gt;get_angle() - (angle - PI), PI2);
++		double ra = normalize(get_target()-&gt;get_angle() - (angle - PI), PI2);
+ 		if (ra &gt; PI) ra -= PI2;
+ 
+ 		if (fabs(ra) &lt; avoidanceAngle)
+
+Modified: trunk/source/sc1ships/shpearcr.cpp
+===================================================================
+--- trunk/source/sc1ships/shpearcr.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpearcr.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -91,7 +91,7 @@
+   double ov, int odamage, double orange, int oarmour, double otrate,
+   Ship *oship, SpaceSprite *osprite) :
+   HomingMissile(oship, opos, oangle, ov, odamage, orange, oarmour, otrate, 
+-		oship, osprite, oship-&gt;target)
++		oship, osprite, oship-&gt;get_target())
+ {
+   STACKTRACE;
+ 	collide_flag_sameship = bit(LAYER_SHIPS) | bit(LAYER_SHOTS);
+
+Modified: trunk/source/sc1ships/shpilwav.cpp
+===================================================================
+--- trunk/source/sc1ships/shpilwav.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpilwav.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -45,13 +45,13 @@
+   STACKTRACE;
+ 	// note that target=0 is only set after this routine is called in ship::calculate
+ 	// so we need to check if it exists ...
+-	if (cloak &amp;&amp; target &amp;&amp; target-&gt;exists()) {
+-		if (distance(target) &lt; weaponRange * 3) {
++	if (cloak &amp;&amp; get_target() &amp;&amp; get_target()-&gt;exists()) {
++		if (distance(get_target()) &lt; weaponRange * 3) {
+ 			angle = 
+ 				intercept_angle2(pos, vel * 1.0, weaponVelocity, 
+-					target-&gt;normal_pos(), target-&gt;get_vel() );
++					get_target()-&gt;normal_pos(), get_target()-&gt;get_vel() );
+ 			}
+-		else angle = trajectory_angle(target);
++		else angle = trajectory_angle(get_target());
+ 		}
+ 	cloak = FALSE;
+ 	game-&gt;add(new AnimatedShot(this, Vector2(0.0, size.y / 2.0),
+
+Modified: trunk/source/sc1ships/shpkzedr.cpp
+===================================================================
+--- trunk/source/sc1ships/shpkzedr.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpkzedr.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -149,8 +149,8 @@
+   if (air_frames &gt; max_air_frames - 350) 
+     return;
+   
+-  target = ship-&gt;target;
+-  if((target == NULL) || (air_frames &lt; (max_air_frames / 2)) || target-&gt;isInvisible()) 
++  set_target( ship-&gt;get_target());
++  if((get_target() == NULL) || (air_frames &lt; (max_air_frames / 2)) || get_target()-&gt;isInvisible()) 
+     {
+       collide_flag_sameship |= bit(LAYER_SHIPS);
+       changeDirection(trajectory_angle(ship));
+@@ -158,23 +158,23 @@
+     }
+   collide_flag_sameship &amp;= ~bit(LAYER_SHIPS);
+   
+-  if ((distance(target) &lt; laser_range) &amp;&amp; (batt &lt;= 0)) 
++  if ((distance(get_target()) &lt; laser_range) &amp;&amp; (batt &lt;= 0)) 
+     {
+       collide_flag_sameship = 0;
+       vel = 0;
+       tw_sound-&gt;stop_sound(data_full_path(data-&gt;sampleExtra[0]));
+       tw_sound-&gt;play_sound(data_full_path(data-&gt;sampleExtra[0]));
+       
+-      add(new Laser(this, trajectory_angle(target),
++      add(new Laser(this, trajectory_angle(get_target()),
+ 		    pallete_color[laser_color], laser_range, laser_damage,
+ 		    laser_frames, this, Vector2(0.0, -size.y / 2.0)));
+       batt = recharge_frames;
+     }
+   else 
+     {
+-      Vector2 t = target-&gt;normal_pos();
+-      double ta = target-&gt;get_angle();
+-      double a = target-&gt;trajectory_angle(this) - target-&gt;get_angle();
++      Vector2 t = get_target()-&gt;normal_pos();
++      double ta = get_target()-&gt;get_angle();
++      double a = get_target()-&gt;trajectory_angle(this) - get_target()-&gt;get_angle();
+       a = normalize(a,PI2);
+       Vector2 l = t + unit_vector(ta+PI/2) * laser_range * 0.8;
+       Vector2 r = t + unit_vector(ta+PI*3/2) * laser_range * 0.8;
+
+Modified: trunk/source/sc1ships/shpmmrxf.cpp
+===================================================================
+--- trunk/source/sc1ships/shpmmrxf.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpmmrxf.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -110,10 +110,10 @@
+   else if(form == Y_FORM) {
+     add(new HomingMissile(this, Vector2(-13.0, 2.0),
+       angle - 25.0 * ANGLE_RATIO, missileVelocity, missileDamage, missileRange,
+-      missileArmour, missileTurnRate, this, data-&gt;spriteWeapon, target));
++      missileArmour, missileTurnRate, this, data-&gt;spriteWeapon, get_target()));
+     add(new HomingMissile(this, Vector2(13.0, 2.0),
+       angle + 25.0 * ANGLE_RATIO, missileVelocity, missileDamage, missileRange,
+-      missileArmour, missileTurnRate, this, data-&gt;spriteWeapon, target));
++      missileArmour, missileTurnRate, this, data-&gt;spriteWeapon, get_target()));
+   }
+   return(TRUE);
+ }
+
+Modified: trunk/source/sc1ships/shpmycpo.cpp
+===================================================================
+--- trunk/source/sc1ships/shpmycpo.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpmycpo.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -72,7 +72,7 @@
+     int odamage, double orange, double otrate, Ship *oship,
+     SpaceSprite *osprite, int ofcount) :
+   HomingMissile( oship, opos, oangle, ov, odamage, orange, 0, otrate, oship, 
+-      osprite, oship-&gt;target),
++      osprite, oship-&gt;get_target()),
+ //  v(ov),
+   frame_count(ofcount),
+   max_damage(odamage)
+
+Modified: trunk/source/sc1ships/shpspael.cpp
+===================================================================
+--- trunk/source/sc1ships/shpspael.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpspael.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -51,7 +51,7 @@
+   STACKTRACE;
+ 	SpaceLocation *tmp = new HomingMissile( this, 
+ 		Vector2(0.0, -size.y / 1.5), angle + PI, specialVelocity, specialDamage, specialRange, 
+-		specialArmour, specialTurnRate, this, data-&gt;spriteSpecial, target);
++		specialArmour, specialTurnRate, this, data-&gt;spriteSpecial, get_target());
+ 		tmp-&gt;collide_flag_sameship |= bit(LAYER_SHIPS);
+ 		tmp-&gt;collide_flag_sameteam |= bit(LAYER_SHIPS);
+ 	add(tmp);
+
+Modified: trunk/source/sc1ships/shpvuxin.cpp
+===================================================================
+--- trunk/source/sc1ships/shpvuxin.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc1ships/shpvuxin.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -72,8 +72,8 @@
+   slowdown_factor(slowdown)
+ {
+   STACKTRACE;
+-  if((ship-&gt;target) &amp;&amp; (!ship-&gt;target-&gt;isInvisible()))
+-    angle = trajectory_angle(ship-&gt;target);
++  if((ship-&gt;get_target()) &amp;&amp; (!ship-&gt;get_target()-&gt;isInvisible()))
++    angle = trajectory_angle(ship-&gt;get_target());
+   else
+     angle = ship-&gt;get_angle() - PI;
+ 
+@@ -94,8 +94,8 @@
+ 		return;
+ 		}
+ 
+-	if((ship-&gt;target) &amp;&amp; (!ship-&gt;target-&gt;isInvisible())) {
+-		angle = trajectory_angle(ship-&gt;target);
++	if((ship-&gt;get_target()) &amp;&amp; (!ship-&gt;get_target()-&gt;isInvisible())) {
++		angle = trajectory_angle(ship-&gt;get_target());
+ 		vel = v * unit_vector(angle);
+ 		}
+ 	AnimatedShot::calculate();
+@@ -149,10 +149,10 @@
+ void VuxIntruder::relocate() 
+ {
+   STACKTRACE;
+-  if ( control ) target = control-&gt;target; 
+-  if (target &amp;&amp; (distance(target) &gt; 500)) {
+-    pos = target-&gt;normal_pos() + (unit_vector(angle) * 125.0);
+-    angle = trajectory_angle(target);
++  if ( control ) set_target( control-&gt;target); 
++  if (get_target() &amp;&amp; (distance(get_target()) &gt; 500)) {
++    pos = get_target()-&gt;normal_pos() + (unit_vector(angle) * 125.0);
++    angle = trajectory_angle(get_target());
+     if (angle &gt; PI2) angle -= PI2;
+     if (angle &lt; 0) angle += PI2;
+   }
+
+Modified: trunk/source/sc2ships/shpchmav.cpp
+===================================================================
+--- trunk/source/sc2ships/shpchmav.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc2ships/shpchmav.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -126,9 +126,9 @@
+ int ChmmrAvatar::activate_special()
+ {
+   STACKTRACE;
+-	if (target &amp;&amp; target-&gt;exists() &amp;&amp; (!target-&gt;isInvisible()) &amp;&amp; (target-&gt;mass &gt; 0) &amp;&amp; (distance(target) &lt; specialRange)) {
++	if (get_target() &amp;&amp; get_target()-&gt;exists() &amp;&amp; (!get_target()-&gt;isInvisible()) &amp;&amp; (get_target()-&gt;mass &gt; 0) &amp;&amp; (distance(get_target()) &lt; specialRange)) {
+ 		add(new ChmmrBeam(this, special_rate));
+-		target-&gt;accelerate(this, target-&gt;trajectory_angle(this), specialForce / target-&gt;mass, MAX_SPEED);
++		get_target()-&gt;accelerate(this, get_target()-&gt;trajectory_angle(this), specialForce / get_target()-&gt;mass, MAX_SPEED);
+ 		return (true);
+ 		}
+ 	return false;
+@@ -164,7 +164,7 @@
+ 	frame(0),
+ 	frame_count(oframes),
+ 	ship(oship),
+-	target(oship-&gt;target)
++	target(oship-&gt;get_target())
+ {
+   STACKTRACE;
+ 	set_depth(DEPTH_HOTSPOTS);
+@@ -174,8 +174,8 @@
+ 		return;
+ 	}
+ 
+-	target = ship-&gt;target;
+-	if(!(target &amp;&amp; target-&gt;exists()) || (target-&gt;isInvisible())) {
++	set_target( ship-&gt;get_target());
++	if(!(get_target() &amp;&amp; get_target()-&gt;exists()) || (get_target()-&gt;isInvisible())) {
+ 		state = 0;
+ 		return;
+ 	}
+@@ -193,15 +193,13 @@
+ 		state = 0;
+ 		return;
+ 	}
+-	target = ship-&gt;target;
++	set_target(ship-&gt;get_target());
+ 
+ 	if((!(target &amp;&amp; target-&gt;exists())) || (target-&gt;isInvisible())) {
+ 		state = 0;
+ 		return;
+ 	}
+ 
+-//	x = ship-&gt;normal_x();
+-//	y = ship-&gt;normal_y();
+ 	pos = ship-&gt;normal_pos();
+ 	frame += frame_time;
+ 	if (frame &gt; frame_count) state = 0;
+
+Modified: trunk/source/sc2ships/shporzne.cpp
+===================================================================
+--- trunk/source/sc2ships/shporzne.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/sc2ships/shporzne.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -328,8 +328,8 @@
+ 	angle = trajectory_angle(ship);
+       else 
+ 	{
+-	  if(ship-&gt;target &amp;&amp; ship-&gt;target-&gt;exists() &amp;&amp; (!ship-&gt;target-&gt;isInvisible()))
+-                                angle = trajectory_angle(ship-&gt;target);
++	  if(ship-&gt;get_target() &amp;&amp; ship-&gt;get_target()-&gt;exists() &amp;&amp; (!ship-&gt;get_target()-&gt;isInvisible()))
++                                angle = trajectory_angle(ship-&gt;get_target());
+ 	  else 
+ 	    {  
+ 	      returning = true;
+
+Modified: trunk/source/ships/shpalabc.cpp
+===================================================================
+--- trunk/source/ships/shpalabc.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shpalabc.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -130,7 +130,7 @@
+   AlaryBCTurret (AlaryBC *oship, double blah_or, double oa, double oangle,
+ 		 double omin_angle, double omax_angle, int team);
+   double get_aim(SpaceObject *tgt);
+-  SpaceObject *get_target(SpaceObject *tgt);
++  SpaceObject *get_turret_target(SpaceObject *tgt);
+   virtual void calculate();
+   void sinc_it();
+ };
+@@ -331,7 +331,7 @@
+   game-&gt;add(new AlaryBCTorpedo(this, 30*side, 0, angle, 
+ 			       350/*oinactive*/, weaponAccel, weaponVelocity,
+ 			       weaponLifetime, weaponProximity, weaponArmour, 
+-			       weaponTR, target,
++			       weaponTR, get_target(),
+ 			       data-&gt;spriteWeapon, warheadDamage,  warheadRange, 
+ 			       warheadArmour, warheadVelocity, warheadTR));
+   
+@@ -636,7 +636,7 @@
+   wh_turn_rate(wtr), wh_range(wrange)
+ {
+   STACKTRACE;
+-  target = otarget;
++  set_target( otarget);
+   layer = LAYER_SHOTS;
+   set_depth(DEPTH_SHOTS);
+ 
+@@ -666,9 +666,9 @@
+   
+   if (inactive &gt; 0) inactive -= frame_time;
+   
+-  if (target) if ((!target-&gt;isInvisible()) &amp;&amp; (inactive &lt;=0)) 
++  if (get_target()) if ((!get_target()-&gt;isInvisible()) &amp;&amp; (inactive &lt;=0)) 
+     {
+-      double d_a = normalize(trajectory_angle(target) - angle, PI2);
++      double d_a = normalize(trajectory_angle(get_target()) - angle, PI2);
+       if (d_a &gt; PI) d_a -= PI2;
+       double ta = turn_rate * frame_time;
+       if (fabs(d_a) &lt; ta) ta = fabs(d_a);
+@@ -676,32 +676,32 @@
+       else angle -= ta;
+       angle = normalize(angle, PI2);
+       
+-      if (distance(target) &lt; proximity) 
++      if (distance(get_target()) &lt; proximity) 
+ 	{
+ 	  game-&gt;add(new Animation(this, pos, data-&gt;spriteWeaponExplosion, 0, 10, 50, DEPTH_EXPLOSIONS));
+ 	  
+ 	  game-&gt;add(new AlaryBCWarhead(this, 0, 10, angle,
+ 				       wh_v, wh_damage, wh_range*(1+0.0025*(tw_random()%101)), 
+-				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, target));
++				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, get_target()));
+ 	  game-&gt;add(new AlaryBCWarhead(this, 0, 10, angle - 50*PI/180,
+ 				       wh_v, wh_damage, wh_range*(1+0.0025*(tw_random()%101)), 
+-				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, target));
++				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, get_target()));
+ 	  game-&gt;add(new AlaryBCWarhead(this, 0, 10, angle + 50*PI/180,
+ 				       wh_v, wh_damage, wh_range*(1+0.0025*(tw_random()%101)), 
+-				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, target));
++				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, get_target()));
+ 	  game-&gt;add(new AlaryBCWarhead(this, 0, 10, angle - 75*PI/180,
+ 				       wh_v, wh_damage, wh_range*(1+0.0025*(tw_random()%101)), 
+-				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, target));
++				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, get_target()));
+ 	  game-&gt;add(new AlaryBCWarhead(this, 0, 10, angle + 75*PI/180,
+ 				       wh_v, wh_damage, wh_range*(1+0.0025*(tw_random()%101)), 
+-				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, target));
++				       wh_armour, wh_turn_rate, data-&gt;spriteExtra, get_target()));
+ 			
+ 	  state = 0;
+ 	}
+     }
+   else 
+     {
+-      if (inactive &lt;= 0) target = NULL;
++      if (inactive &lt;= 0) set_target( NULL);
+       
+       //find another target???????
+       
+@@ -792,7 +792,7 @@
+ 				double omin_angle, double omax_angle, int team) :
+   SpaceLocation(oship,0,oangle)
+ {
+-  target = NULL;
++  set_target(NULL);
+   shots_fired = 0;
+   barrel = 0;
+   ship = oship;
+@@ -871,7 +871,7 @@
+   return (-1);
+ }
+ 
+-SpaceObject *AlaryBCTurret::get_target(SpaceObject *tgt)
++SpaceObject *AlaryBCTurret::get_turret_target(SpaceObject *tgt)
+ {
+   STACKTRACE;
+   double d_a, prix=-1, prix_c, aim; //!!!
+@@ -893,7 +893,7 @@
+ 	    
+ 	    if (q.currento-&gt;isShip()) 
+ 	      {
+-		if (q.currento == ship-&gt;target) prix_c = 4;
++		if (q.currento == ship-&gt;get_target()) prix_c = 4;
+ 	      else
+ 		prix_c = 3; 
+ 	      }
+@@ -963,30 +963,31 @@
+ 
+   if (ship-&gt;turrets_on) 
+     {
+-      if (target) 
++      if (get_target()) 
+ 	{
+-	  if (!target-&gt;exists()) 
++	  if (!get_target()-&gt;exists()) 
+ 	    {
+ 	      shots_fired = 0;
+-	      target = get_target(NULL); 
++	      set_target(get_turret_target(NULL)); 
+ 	    }
+ 	}
+       else 
+ 	{
+ 	  shots_fired = 0;
+-	  target = get_target(NULL); }
++	  set_target( get_turret_target(NULL)); 
++	}
+       
+-      aim = get_aim(target);
++      aim = get_aim(get_target());
+ 
+       if (aim &lt; 0) 
+ 	{
+ 	  shots_fired = 0;
+-	  target = get_target(NULL); 
++	  set_target(get_turret_target(NULL)); 
+ 	}
+     }
+   else 
+     {
+-    target = NULL;
++    set_target(NULL);
+     shots_fired = 0;
+     aim = -1; 
+   }
+@@ -1009,9 +1010,9 @@
+     angle -= delta;
+   
+   if (recharge &gt; 0) recharge -= frame_time;
+-  if (target &amp;&amp; (recharge &lt;= 0)) 
++  if (get_target() &amp;&amp; (recharge &lt;= 0)) 
+     {
+-      if (fabs(d_a) &lt;= (0.25 * (target-&gt;size.x+target-&gt;size.y)/2.0) / distance(target)) 
++      if (fabs(d_a) &lt;= (0.25 * (get_target()-&gt;size.x+get_target()-&gt;size.y)/2.0) / distance(get_target())) 
+ 	{
+ 	  if (ship-&gt;batt &gt;= ship-&gt;special_drain) 
+ 	    {
+
+Modified: trunk/source/ships/shpchoex.cpp
+===================================================================
+--- trunk/source/ships/shpchoex.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shpchoex.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -260,7 +260,7 @@
+   Ship *oship, SpaceSprite *osprite, int oframe_count,
+     int R, int Rm, int G, int Gm, int B, int Bm) :
+   HomingMissile(oship, Vector2(ox,oy), oangle, ov, odamage, orange, oarmour, otrate, 
+-		oship, osprite, oship-&gt;target), 
++		oship, osprite, oship-&gt;get_target()), 
+   explosion(game-&gt;meleedata.asteroidExplosionSprite), frame_count(oframe_count) 
+ {
+   STACKTRACE;
+
+Modified: trunk/source/ships/shpconho.cpp
+===================================================================
+--- trunk/source/ships/shpconho.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shpconho.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -128,7 +128,7 @@
+ {
+   STACKTRACE;
+   add(new TorpedoMissile(0.0, (size.y / 2.0),
+-    angle, specialVelocity, specialDamage, specialDDamage, specialRange, specialArmour, specialTurnRate, this, this, data-&gt;spriteSpecial, target));
++    angle, specialVelocity, specialDamage, specialDDamage, specialRange, specialArmour, specialTurnRate, this, this, data-&gt;spriteSpecial, get_target()));
+   return(TRUE);
+ }
+ 
+
+Modified: trunk/source/ships/shpdragr.cpp
+===================================================================
+--- trunk/source/ships/shpdragr.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shpdragr.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -199,7 +199,7 @@
+ 			o = (Shot *) a.currento;
+ 			if ((distance(o) &lt; MineRadius) &amp;&amp; (o-&gt;canCollide(this))
+ 					&amp;&amp; (o-&gt;isHomingMissile()))
+-				((HomingMissile *) o)-&gt;target = this;
++				((HomingMissile *) o)-&gt;set_target(this);
+ 			}
+ 		}
+ 	
+
+Modified: trunk/source/ships/shpearc3.cpp
+===================================================================
+--- trunk/source/ships/shpearc3.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shpearc3.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -127,7 +127,7 @@
+ 				if (s &gt; PI) s -= PI2;
+ 				if (fabs(s) &lt;= weaponTrackingAngle) {
+ 					d_a = s - launch_angle;
+-					if (tgt == target) {
++					if (tgt == get_target()) {
+ 						track_angle = s;
+ 						break; }
+ 					if (fabs(d_a) &lt; track_min) {
+@@ -231,15 +231,15 @@
+ {
+   STACKTRACE;
+ 	set_depth(DEPTH_EXPLOSIONS);
+-	target = tgt;
++	set_target(tgt);
+ 	base_length = length;
+ 	rel_pos.x *= -1;
+ 	pos = normalize(pos + rotate(rel_pos, -PI/2+lpos-&gt;get_angle()));
+ 	vel = lpos-&gt;get_vel();
+ 	id |= SPACE_LASER;
+ 	damage_factor = ldamage;
+-	angle = trajectory_angle(target);
+-	if (!target-&gt;canCollide(this) || !canCollide(target)) state = 0;
++	angle = trajectory_angle(get_target());
++	if (!get_target()-&gt;canCollide(this) || !canCollide(get_target())) state = 0;
+ 
+ 	if(!(lpos &amp;&amp; lpos-&gt;exists()))
+ 	{
+@@ -269,7 +269,7 @@
+ 	else 
+ 		state = 0;
+ 
+-	if ((!target) &amp;&amp; (switch_counter &lt;= 0)) {
++	if ((!get_target()) &amp;&amp; (switch_counter &lt;= 0)) {
+ 		SpaceObject *o;
+ 		double rng = 1e40;
+ 		SpaceObject *tgt = NULL;
+@@ -284,18 +284,18 @@
+ 			}
+ 		}
+ 		if (tgt) {
+-			target = tgt;
++			set_target(tgt);
+ //			switch_counter = 55;
+ 			got_spark = false; }
+ 	}
+ 
+-	if (target &amp;&amp; (distance(target) &lt;= base_length)) {
++	if (get_target() &amp;&amp; (distance(get_target()) &lt;= base_length)) {
+ 		length = base_length;
+-		if (target-&gt;exists() &amp;&amp; canCollide(target) &amp;&amp; target-&gt;canCollide(this)) {
+-			angle = trajectory_angle(target); }
+-		if (!target-&gt;exists()) target = NULL; }
++		if (get_target()-&gt;exists() &amp;&amp; canCollide(get_target()) &amp;&amp; get_target()-&gt;canCollide(this)) {
++			angle = trajectory_angle(get_target()); }
++		if (!get_target()-&gt;exists()) set_target( NULL); }
+ 	else {
+-		target = NULL;
++		set_target( NULL);
+ 		if (switch_counter &lt;= 0)
+ //			die();
+ 			length = 0;
+@@ -330,7 +330,7 @@
+   STACKTRACE;
+ 	int aa = get_tw_aa_mode();
+ 	SpaceLine::animate(space);
+-	if ((aa &amp; AA_BLEND) &amp;&amp; (aa &amp; AA_ALPHA) &amp;&amp; !(aa &amp; AA_NO_AA) &amp;&amp; (length &lt; base_length*0.9999) &amp;&amp; (target)) {
++	if ((aa &amp; AA_BLEND) &amp;&amp; (aa &amp; AA_ALPHA) &amp;&amp; !(aa &amp; AA_NO_AA) &amp;&amp; (length &lt; base_length*0.9999) &amp;&amp; (get_target())) {
+ 		int	_old_trans = aa_get_trans();
+ 		aa_set_trans(rand()%156);
+ 		data-&gt;spriteSpecial-&gt;animate(pos, 0, space);
+
+Modified: trunk/source/ships/shprogsq.cpp
+===================================================================
+--- trunk/source/ships/shprogsq.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shprogsq.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -422,14 +422,14 @@
+ 	for (a.begin(this, bit(LAYER_SHIPS), 999999.0); a.current; a.next())
+ 	{
+ 		o = a.currento;
+-		if (o-&gt;target == this )
++		if (o-&gt;get_target() ==  this )
+ 		{
+ 			for ( i = 0; i &lt; crew_max; ++i )
+ 			{
+ 				if ( !fighter[i] )
+ 					continue;
+ 
+-				o-&gt;target = fighter[i];
++				o-&gt;set_target ( fighter[i]);
+ 				break;
+ 			}
+ 
+
+Modified: trunk/source/ships/shpstaba.cpp
+===================================================================
+--- trunk/source/ships/shpstaba.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shpstaba.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -71,16 +71,16 @@
+   STACKTRACE;
+    
+ 	double a;
+-	if (target) {
+-		double r = distance(target);
++	if (get_target()) {
++		double r = distance(get_target());
+ 		r = r / weaponVelocity;
+ //		double x = min_delta( normal_x() , target-&gt;normal_x() - 
+ //				-target-&gt;get_vx() * r, X_MAX);
+ //		double y = min_delta( normal_y() , target-&gt;normal_y() - 
+ //				-target-&gt;get_vy() * r, Y_MAX);
+ 		Vector2 tmppos;
+-		tmppos = min_delta( normal_pos() , target-&gt;normal_pos() - 
+-				-target-&gt;get_vel() * r, map_size);
++		tmppos = min_delta( normal_pos() , get_target()-&gt;normal_pos() - 
++				-get_target()-&gt;get_vel() * r, map_size);
+ 
+ //		a = atan3(y, x) - PI;
+ 		a = atan(tmppos) - PI;
+
+Modified: trunk/source/ships/shptauda.cpp
+===================================================================
+--- trunk/source/ships/shptauda.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shptauda.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -168,7 +168,7 @@
+   STACKTRACE;
+ 	int aa = get_tw_aa_mode();
+ 	SpaceLine::animate(space);
+-	if ((aa &amp; AA_BLEND) &amp;&amp; (aa &amp; AA_ALPHA) &amp;&amp; !(aa &amp; AA_NO_AA) &amp;&amp; (length &lt; base_length*0.9999) &amp;&amp; (target)) {
++	if ((aa &amp; AA_BLEND) &amp;&amp; (aa &amp; AA_ALPHA) &amp;&amp; !(aa &amp; AA_NO_AA) &amp;&amp; (length &lt; base_length*0.9999) &amp;&amp; (get_target())) {
+ 		int	_old_trans = aa_get_trans();
+ 		// changed tw_random into rand - GEO - so that physics are not affected by the animation
+ 		aa_set_trans(rand()%136);	//graphics
+
+Modified: trunk/source/ships/shptaust.cpp
+===================================================================
+--- trunk/source/ships/shptaust.cpp	2005-02-27 12:46:51 UTC (rev 127)
++++ trunk/source/ships/shptaust.cpp	2005-02-27 15:15:31 UTC (rev 128)
+@@ -113,7 +113,7 @@
+   else rx = 13;
+   if (slot%2)	rx = -rx;
+   game-&gt;add(new TauStormMissile (this, rx, 10, angle, weaponAccel,
+-				 weaponVelocity, weaponTurnRate, target,
++				 weaponVelocity, weaponTurnRate, get_target(),
+ 				 iround(weaponFuel*(1+weaponRandom*(100-random()%201)/100.0)), 
+ 				 weaponThrust, weaponMass,
+ 				 weaponBoosterSpeed, data-&gt;spriteWeapon,
+@@ -131,7 +131,7 @@
+   else rx = 13;
+   if (slot%2)	rx = -rx;
+   game-&gt;add(new TauStormMissile (this, rx, 10, angle, specialAccel,
+-				 specialVelocity, specialTurnRate, target,
++				 specialVelocity, specialTurnRate, get_target(),
+ 				 iround(specialFuel*(1+specialRandom*(100-random()%201)/100.0)), 
+ 				 specialThrust, weaponMass,
+ 				 specialBoosterSpeed, data-&gt;spriteSpecial,
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000073.html">[Tw-light-svn] r127 - in trunk/source: . melee sc1ships
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

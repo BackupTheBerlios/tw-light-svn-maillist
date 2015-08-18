@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r184 - trunk/source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r184%20-%20trunk/source/melee&In-Reply-To=%3C200508180452.j7I4qU5r025458%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000129.html">
+   <LINK REL="Next"  HREF="000131.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r184 - trunk/source/melee</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r184%20-%20trunk/source/melee&In-Reply-To=%3C200508180452.j7I4qU5r025458%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r184 - trunk/source/melee">youbastrd at berlios.de
+       </A><BR>
+    <I>Thu Aug 18 06:52:30 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000129.html">[Tw-light-svn] r183 - trunk/source/melee
+</A></li>
+        <LI>Next message: <A HREF="000131.html">[Tw-light-svn] r185 - trunk/source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2005-08-18 06:52:11 +0200 (Thu, 18 Aug 2005)
+New Revision: 184
+
+Modified:
+   trunk/source/melee/mgame.cpp
+Log:
+Fix: 61 and 63: &quot;Teamkilling should not play killer's victory
+ditty&quot; and &quot;Victory ditty should not play on suicide&quot;
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-08-18 04:30:43 UTC (rev 183)
++++ trunk/source/melee/mgame.cpp	2005-08-18 04:52:11 UTC (rev 184)
+@@ -761,6 +761,15 @@
+   STACKTRACE;
+   if (source &amp;&amp; source-&gt;data) 
+     {
++      // don't play a victory ditty for a ship that has just killed itself
++      if (who == source)
++	 return;
++	 
++      // don't play a victory ditty for a teamkill
++      if (who &amp;&amp; source &amp;&amp; 
++          who-&gt;get_team() == source-&gt;get_team())
++         return;
++
+       std::string tmp = &quot;&quot;;
+       //if (source &amp;&amp; source-&gt;ship &amp;&amp; source-&gt;ship-&gt;data) tmp = source-&gt;ship-&gt;data-&gt;moduleVictory;
+       // note: it's not guaranteed that a ship exists longer than its weapon, while data keep existing, right ?
+@@ -771,9 +780,7 @@
+ 	{
+ 	  tw_sound-&gt;play_music(data_full_path(tmp), 1);
+ 	}
+-      
+     }
+-  return;
+ }
+ 
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000129.html">[Tw-light-svn] r183 - trunk/source/melee
+</A></li>
+	<LI>Next message: <A HREF="000131.html">[Tw-light-svn] r185 - trunk/source/melee
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,562 @@
+From yurand at mail.berlios.de  Fri Jan 26 11:29:07 2007
+From: yurand at mail.berlios.de (yurand at BerliOS)
+Date: Fri, 26 Jan 2007 11:29:07 +0100
+Subject: [Tw-light-svn] r210 - trunk
+Message-ID: <200701261029.l0QAT7QH026503@sheep.berlios.de>
+
+Author: yurand
+Date: 2007-01-26 11:29:07 +0100 (Fri, 26 Jan 2007)
+New Revision: 210
+
+Modified:
+   trunk/makefile
+Log:
+change to use python 2.4
+
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2006-05-08 12:41:42 UTC (rev 209)
++++ trunk/makefile	2007-01-26 10:29:07 UTC (rev 210)
+@@ -133,7 +133,7 @@
+ 	LIBS += $(LIBS_CONFIG) -lc -lXt -L/usr/X11R6/lib -lX11 -lm -lz
+ endif
+ 
+-CFLAGS += -I./source -I./source/libraries -I/usr/include/python2.3
++CFLAGS += -I./source -I./source/libraries -I/usr/include/python2.4
+ 
+ LIBS += -lSDL_mixer
+ 
+
+
+
+From yurand at mail.berlios.de  Fri Jan 26 11:50:43 2007
+From: yurand at mail.berlios.de (yurand at BerliOS)
+Date: Fri, 26 Jan 2007 11:50:43 +0100
+Subject: [Tw-light-svn] r211 - in trunk: . source/games source/libraries
+	source/libraries/cppunit source/melee source/other source/sc1ships
+Message-ID: <200701261050.l0QAoh0O029451@sheep.berlios.de>
+
+Author: yurand
+Date: 2007-01-26 11:50:42 +0100 (Fri, 26 Jan 2007)
+New Revision: 211
+
+Removed:
+   trunk/source/libraries/boost/
+   trunk/source/libraries/cppunit/DllMain.cpp
+Modified:
+   trunk/source/games/gflmelee.cpp
+   trunk/source/melee/mframe.h
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mship.h
+   trunk/source/other/gobwarpouttrail.h
+   trunk/source/other/vtarget.h
+   trunk/source/sc1ships/shpumgdr.cpp
+   trunk/sources.lst
+Log:
+Make 4.1 compiler works, (added boost dependancy in the proccess)
+
+
+Modified: trunk/source/games/gflmelee.cpp
+===================================================================
+--- trunk/source/games/gflmelee.cpp	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/games/gflmelee.cpp	2007-01-26 10:50:42 UTC (rev 211)
+@@ -70,7 +70,7 @@
+   ImIndicator(SpaceLocation *o);
+   ~ImIndicator();
+   void newtarget(SpaceLocation *o);
+-  int ImIndicator::colortype(SpaceLocation *o);
++  int colortype(SpaceLocation *o);
+   void animate(Frame *frame);
+ };
+ 
+
+Deleted: trunk/source/libraries/cppunit/DllMain.cpp
+===================================================================
+--- trunk/source/libraries/cppunit/DllMain.cpp	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/libraries/cppunit/DllMain.cpp	2007-01-26 10:50:42 UTC (rev 211)
+@@ -1,15 +0,0 @@
+-#define WIN32_LEAN_AND_MEAN 
+-#define NOGDI
+-#define NOUSER
+-#define NOKERNEL
+-#define NOSOUND
+-
+-#include <windows.h>
+-
+-BOOL APIENTRY 
+-DllMain( HANDLE hModule, 
+-         DWORD  ul_reason_for_call, 
+-         LPVOID lpReserved )
+-{
+-  return TRUE;
+-}
+
+Modified: trunk/source/melee/mframe.h
+===================================================================
+--- trunk/source/melee/mframe.h	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/melee/mframe.h	2007-01-26 10:50:42 UTC (rev 211)
+@@ -203,7 +203,7 @@
+ 
+  public: 
+   
+-  SpaceLocation::SpaceLocation();
++  SpaceLocation();
+ 
+   virtual void add_event(boost::shared_ptr<TGameEvent> e);
+   virtual SpaceObject* get_target();
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/melee/mgame.h	2007-01-26 10:50:42 UTC (rev 211)
+@@ -127,7 +127,7 @@
+ 
+   virtual void preinit();	///< pre-initialization (enough so that the destructor won't crash) 
+   virtual void init(Log *log, const std::string& save);  ///< initialization (loading data, creating a few game objects, whatever)
+-  Game::Game();
++  Game();
+   virtual ~Game();              ///< deallocating memory etc.
+   
+   virtual void init_lag();
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/melee/mship.h	2007-01-26 10:50:42 UTC (rev 211)
+@@ -115,7 +115,7 @@
+ 	 * @param step_size 
+ 	 * @param effect 
+ 	 */
+-  Phaser::Phaser(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
++  Phaser(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
+ 		 SpaceSprite *sprite, int osprite_index, int *ocolors, 
+ 		 int onum_colors, int ofsize, int steps, int step_time, PhaserEffectPtr effect) ;
+   virtual ~Phaser();
+
+Modified: trunk/source/other/gobwarpouttrail.h
+===================================================================
+--- trunk/source/other/gobwarpouttrail.h	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/other/gobwarpouttrail.h	2007-01-26 10:50:42 UTC (rev 211)
+@@ -89,7 +89,7 @@
+    * @param system the name of the star system the player wishes to travel to.
+    * @param the instance of GobGame
+    */ 
+-  static GobWarpOutTrail * GobWarpOutTrail::getGobWarpOutTrail(Ship * ship, 
++  static GobWarpOutTrail * getGobWarpOutTrail(Ship * ship, 
+ 	const std::string & targetSystem,
+ 	GobGame * gobGame);
+ 
+
+Modified: trunk/source/other/vtarget.h
+===================================================================
+--- trunk/source/other/vtarget.h	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/other/vtarget.h	2007-01-26 10:50:42 UTC (rev 211)
+@@ -91,7 +91,7 @@
+   double X2[9]; double Y2[9];
+   double gamma;
+   
+-  void AimSys::SetupDefaults(void);
++  void SetupDefaults(void);
+   AimSys(SpaceLocation* sourceP, 
+ 			   SpaceLocation* targetP, 
+ 			   double weaponSpeed, double Relativity,
+
+Modified: trunk/source/sc1ships/shpumgdr.cpp
+===================================================================
+--- trunk/source/sc1ships/shpumgdr.cpp	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/source/sc1ships/shpumgdr.cpp	2007-01-26 10:50:42 UTC (rev 211)
+@@ -34,7 +34,7 @@
+ 	virtual bool change_owner(SpaceLocation *new_owner);
+   virtual void calculate();
+   virtual void inflict_damage(SpaceObject *other);
+-  virtual void UmgahCone::animate(Frame* space);
++  virtual void animate(Frame* space);
+   virtual int canCollide(SpaceLocation* other);
+ 
+ };
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2007-01-26 10:29:07 UTC (rev 210)
++++ trunk/sources.lst	2007-01-26 10:50:42 UTC (rev 211)
+@@ -1,188 +1,188 @@
+-source/ais/c_input.cpp
+-source/ais/c_other.cpp
+-source/ais/c_wussie.cpp
+-source/doxygen.cpp
+-source/frame.cpp
+-source/games/gamehierarchy.cpp
+-source/games/gdefender.cpp
+-source/games/gflmelee.cpp
+-source/games/ggob.cpp
+-source/generated/tml_wrap.cpp
+-source/gui.cpp
+-source/input.cpp
+-source/libraries/agup/aalg.c
+-source/libraries/agup/aase.c
+-source/libraries/agup/abeos.c
+-source/libraries/agup/abitmap.c
+-source/libraries/agup/agtk.c
+-source/libraries/agup/agup.c
+-source/libraries/agup/ans.c
+-source/libraries/agup/aphoton.c
+-source/libraries/agup/awin95.c
+-source/libraries/cppunit/AdditionalMessage.cpp
+-source/libraries/cppunit/Asserter.cpp
+-source/libraries/cppunit/BeOsDynamicLibraryManager.cpp
+-source/libraries/cppunit/BriefTestProgressListener.cpp
+-source/libraries/cppunit/CompilerOutputter.cpp
+-source/libraries/cppunit/DefaultProtector.cpp
+-source/libraries/cppunit/DynamicLibraryManager.cpp
+-source/libraries/cppunit/DynamicLibraryManagerException.cpp
+-source/libraries/cppunit/Exception.cpp
+-source/libraries/cppunit/Message.cpp
+-source/libraries/cppunit/PlugInManager.cpp
+-source/libraries/cppunit/PlugInParameters.cpp
+-source/libraries/cppunit/Protector.cpp
+-source/libraries/cppunit/ProtectorChain.cpp
+-source/libraries/cppunit/RepeatedTest.cpp
+-source/libraries/cppunit/ShlDynamicLibraryManager.cpp
+-source/libraries/cppunit/SourceLine.cpp
+-source/libraries/cppunit/StringTools.cpp
+-source/libraries/cppunit/SynchronizedObject.cpp
+-source/libraries/cppunit/Test.cpp
+-source/libraries/cppunit/TestAssert.cpp
+-source/libraries/cppunit/TestCase.cpp
+-source/libraries/cppunit/TestCaseDecorator.cpp
+-source/libraries/cppunit/TestComposite.cpp
+-source/libraries/cppunit/TestDecorator.cpp
+-source/libraries/cppunit/TestFactoryRegistry.cpp
+-source/libraries/cppunit/TestFailure.cpp
+-source/libraries/cppunit/TestLeaf.cpp
+-source/libraries/cppunit/TestNamer.cpp
+-source/libraries/cppunit/TestPath.cpp
+-source/libraries/cppunit/TestPlugInDefaultImpl.cpp
+-source/libraries/cppunit/TestResult.cpp
+-source/libraries/cppunit/TestResultCollector.cpp
+-source/libraries/cppunit/TestRunner.cpp
+-source/libraries/cppunit/TestSetUp.cpp
+-source/libraries/cppunit/TestSuccessListener.cpp
+-source/libraries/cppunit/TestSuite.cpp
+-source/libraries/cppunit/TestSuiteBuilderContext.cpp
+-source/libraries/cppunit/TextOutputter.cpp
+-source/libraries/cppunit/TextTestProgressListener.cpp
+-source/libraries/cppunit/TextTestResult.cpp
+-source/libraries/cppunit/TextTestRunner.cpp
+-source/libraries/cppunit/TypeInfoHelper.cpp
+-source/libraries/cppunit/UnixDynamicLibraryManager.cpp
+-source/libraries/cppunit/Win32DynamicLibraryManager.cpp
+-source/libraries/cppunit/XmlDocument.cpp
+-source/libraries/cppunit/XmlElement.cpp
+-source/libraries/cppunit/XmlOutputter.cpp
+-source/libraries/cppunit/XmlOutputterHook.cpp
+-source/libraries/jpgalleg/decode.c
+-source/libraries/jpgalleg/encode.c
+-source/libraries/jpgalleg/io.c
+-source/libraries/jpgalleg/jpgalleg.c
+-source/melee/manim.cpp
+-source/melee/mcbodies.cpp
+-source/melee/mcontrol.cpp
+-source/melee/mfleet.cpp
+-source/melee/mframe.cpp
+-source/melee/mgame.cpp
+-source/melee/mhelpers.cpp
+-source/melee/mitems.cpp
+-source/melee/mlog.cpp
+-source/melee/mmain.cpp
+-source/melee/mmath.cpp
+-source/melee/mnet1.cpp
+-source/melee/moptions.cpp
+-source/melee/mship.cpp
+-source/melee/mshot.cpp
+-source/melee/mshpdata.cpp
+-source/melee/mshppan.cpp
+-source/melee/msprite.cpp
+-source/melee/mtarget.cpp
+-source/melee/mview.cpp
+-source/melee/WarpOutTrail.cpp
+-source/other/configrw.cpp
+-source/other/dialogs.cpp
+-source/other/fontmorph.cpp
+-source/other/gobwarpouttrail.cpp
+-source/other/gup.cpp
+-source/other/nullphas.cpp
+-source/other/objanim.cpp
+-source/other/orbit.cpp
+-source/other/planet3d.cpp
+-source/other/radar.cpp
+-source/other/shippart.cpp
+-source/other/starmap.cpp
+-source/other/twconfig.cpp
+-source/other/vbodies.cpp
+-source/other/vtarget.cpp
+-source/python/game.cpp
+-source/python/python_class.cpp
+-source/sc1ships/shpandgu.cpp
+-source/sc1ships/shparisk.cpp
+-source/sc1ships/shpchebr.cpp
+-source/sc1ships/shpearcr.cpp
+-source/sc1ships/shpilwav.cpp
+-source/sc1ships/shpkzedr.cpp
+-source/sc1ships/shpmmrxf.cpp
+-source/sc1ships/shpmycpo.cpp
+-source/sc1ships/shpshosc.cpp
+-source/sc1ships/shpspael.cpp
+-source/sc1ships/shpsyrpe.cpp
+-source/sc1ships/shpumgdr.cpp
+-source/sc1ships/shpvuxin.cpp
+-source/sc1ships/shpyehte.cpp
+-source/sc2ships/shpchmav.cpp
+-source/sc2ships/shpdruma.cpp
+-source/sc2ships/shpkohma.cpp
+-source/sc2ships/shpmeltr.cpp
+-source/sc2ships/shporzne.cpp
+-source/sc2ships/shppkufu.cpp
+-source/sc2ships/shpslypr.cpp
+-source/sc2ships/shpsupbl.cpp
+-source/sc2ships/shpthrto.cpp
+-source/sc2ships/shputwju.cpp
+-source/sc2ships/shpzfpst.cpp
+-source/scp.cpp
+-source/ships/shpaktgu.cpp
+-source/ships/shpalabc.cpp
+-source/ships/shpbahbu.cpp
+-source/ships/shpbipka.cpp
+-source/ships/shpbogce.cpp
+-source/ships/shpchoex.cpp
+-source/ships/shpconca.cpp
+-source/ships/shpconho.cpp
+-source/ships/shpdragr.cpp
+-source/ships/shpearc3.cpp
+-source/ships/shpforsh.cpp
+-source/ships/shpgarty.cpp
+-source/ships/shpilwsp.cpp
+-source/ships/shpkahbo.cpp
+-source/ships/shprogsq.cpp
+-source/ships/shpsamat.cpp
+-source/ships/shpstaba.cpp
+-source/ships/shptauar.cpp
+-source/ships/shptauda.cpp
+-source/ships/shptaume.cpp
+-source/ships/shptausl.cpp
+-source/ships/shptaust.cpp
+-source/ships/shptauto.cpp
+-source/ships/shpwolmi.cpp
+-source/ships/shpyusra.cpp
+-source/ships/shpzeksh.cpp
+-source/tests/gameconfigtest.cpp
+-source/tests/testdatapath.cpp
+-source/tests/testmain.cpp
+-source/tml/eventmanager.cpp
+-source/tml/gameaction.cpp
+-source/tml/gameconfig.cpp
+-source/tml/gamedialog.cpp
+-source/tml/gameevent.cpp
+-source/util/aarot.c
+-source/util/aastr.c
+-source/util/aautil.c
+-source/util/base.cpp
+-source/util/endian.cpp
+-source/util/errors.cpp
+-source/util/errors_c.c
+-source/util/get_time.c
+-source/util/history.cpp
+-source/util/net_tcp.cpp
+-source/util/pmask.c
+-source/util/random.cpp
+-source/util/round.c
+-source/util/sound.cpp
+-source/util/types.cpp
+-source/util/vector2.cpp
++source/other/fontmorph.cpp
++source/other/starmap.cpp
++source/other/planet3d.cpp
++source/other/vtarget.cpp
++source/other/configrw.cpp
++source/other/orbit.cpp
++source/other/objanim.cpp
++source/other/twconfig.cpp
++source/other/dialogs.cpp
++source/other/gobwarpouttrail.cpp
++source/other/nullphas.cpp
++source/other/radar.cpp
++source/other/shippart.cpp
++source/other/gup.cpp
++source/other/vbodies.cpp
++source/python/game.cpp
++source/python/python_class.cpp
++source/ships/shpconca.cpp
++source/ships/shpkahbo.cpp
++source/ships/shpzeksh.cpp
++source/ships/shpgarty.cpp
++source/ships/shpbipka.cpp
++source/ships/shpwolmi.cpp
++source/ships/shptausl.cpp
++source/ships/shpstaba.cpp
++source/ships/shprogsq.cpp
++source/ships/shptauto.cpp
++source/ships/shpearc3.cpp
++source/ships/shpilwsp.cpp
++source/ships/shptauda.cpp
++source/ships/shpdragr.cpp
++source/ships/shptaust.cpp
++source/ships/shpalabc.cpp
++source/ships/shpyusra.cpp
++source/ships/shpsamat.cpp
++source/ships/shpconho.cpp
++source/ships/shpchoex.cpp
++source/ships/shpaktgu.cpp
++source/ships/shptaume.cpp
++source/ships/shptauar.cpp
++source/ships/shpbogce.cpp
++source/ships/shpforsh.cpp
++source/ships/shpbahbu.cpp
++source/melee/mitems.cpp
++source/melee/mmain.cpp
++source/melee/manim.cpp
++source/melee/mtarget.cpp
++source/melee/WarpOutTrail.cpp
++source/melee/mhelpers.cpp
++source/melee/mship.cpp
++source/melee/msprite.cpp
++source/melee/mnet1.cpp
++source/melee/mshot.cpp
++source/melee/mshpdata.cpp
++source/melee/mlog.cpp
++source/melee/mmath.cpp
++source/melee/mshppan.cpp
++source/melee/mframe.cpp
++source/melee/moptions.cpp
++source/melee/mfleet.cpp
++source/melee/mcbodies.cpp
++source/melee/mgame.cpp
++source/melee/mview.cpp
++source/melee/mcontrol.cpp
++source/games/gflmelee.cpp
++source/games/ggob.cpp
++source/games/gamehierarchy.cpp
++source/games/gdefender.cpp
++source/tml/gameconfig.cpp
++source/tml/gameaction.cpp
++source/tml/gamedialog.cpp
++source/tml/gameevent.cpp
++source/tml/eventmanager.cpp
++source/sc1ships/shpchebr.cpp
++source/sc1ships/shpspael.cpp
++source/sc1ships/shpmycpo.cpp
++source/sc1ships/shparisk.cpp
++source/sc1ships/shpmmrxf.cpp
++source/sc1ships/shpvuxin.cpp
++source/sc1ships/shpearcr.cpp
++source/sc1ships/shpandgu.cpp
++source/sc1ships/shpumgdr.cpp
++source/sc1ships/shpyehte.cpp
++source/sc1ships/shpkzedr.cpp
++source/sc1ships/shpshosc.cpp
++source/sc1ships/shpilwav.cpp
++source/sc1ships/shpsyrpe.cpp
++source/generated/tml_wrap.cpp
++source/sc2ships/shpmeltr.cpp
++source/sc2ships/shpsupbl.cpp
++source/sc2ships/shpzfpst.cpp
++source/sc2ships/shpdruma.cpp
++source/sc2ships/shpslypr.cpp
++source/sc2ships/shppkufu.cpp
++source/sc2ships/shporzne.cpp
++source/sc2ships/shpchmav.cpp
++source/sc2ships/shputwju.cpp
++source/sc2ships/shpkohma.cpp
++source/sc2ships/shpthrto.cpp
++source/tests/gameconfigtest.cpp
++source/tests/testmain.cpp
++source/tests/testdatapath.cpp
++source/libraries/cppunit/XmlDocument.cpp
++source/libraries/cppunit/TestLeaf.cpp
++source/libraries/cppunit/SynchronizedObject.cpp
++source/libraries/cppunit/SourceLine.cpp
++source/libraries/cppunit/XmlElement.cpp
++source/libraries/cppunit/Asserter.cpp
++source/libraries/cppunit/ShlDynamicLibraryManager.cpp
++source/libraries/cppunit/TestSuccessListener.cpp
++source/libraries/cppunit/TextTestProgressListener.cpp
++source/libraries/cppunit/TestDecorator.cpp
++source/libraries/cppunit/DynamicLibraryManagerException.cpp
++source/libraries/cppunit/TestPlugInDefaultImpl.cpp
++source/libraries/cppunit/TestFailure.cpp
++source/libraries/cppunit/TestComposite.cpp
++source/libraries/cppunit/Exception.cpp
++source/libraries/cppunit/TestSetUp.cpp
++source/libraries/cppunit/Protector.cpp
++source/libraries/cppunit/Test.cpp
++source/libraries/cppunit/BeOsDynamicLibraryManager.cpp
++source/libraries/cppunit/BriefTestProgressListener.cpp
++source/libraries/cppunit/ProtectorChain.cpp
++source/libraries/cppunit/XmlOutputter.cpp
++source/libraries/cppunit/TestFactoryRegistry.cpp
++source/libraries/cppunit/DynamicLibraryManager.cpp
++source/libraries/cppunit/TestSuiteBuilderContext.cpp
++source/libraries/cppunit/TextOutputter.cpp
++source/libraries/cppunit/TestRunner.cpp
++source/libraries/cppunit/TestResult.cpp
++source/libraries/cppunit/AdditionalMessage.cpp
++source/libraries/cppunit/TestCaseDecorator.cpp
++source/libraries/cppunit/StringTools.cpp
++source/libraries/cppunit/Message.cpp
++source/libraries/cppunit/DefaultProtector.cpp
++source/libraries/cppunit/UnixDynamicLibraryManager.cpp
++source/libraries/cppunit/RepeatedTest.cpp
++source/libraries/cppunit/TestSuite.cpp
++source/libraries/cppunit/TestAssert.cpp
++source/libraries/cppunit/TestNamer.cpp
++source/libraries/cppunit/CompilerOutputter.cpp
++source/libraries/cppunit/TestCase.cpp
++source/libraries/cppunit/XmlOutputterHook.cpp
++source/libraries/cppunit/TextTestRunner.cpp
++source/libraries/cppunit/PlugInParameters.cpp
++source/libraries/cppunit/TestResultCollector.cpp
++source/libraries/cppunit/TextTestResult.cpp
++source/libraries/cppunit/Win32DynamicLibraryManager.cpp
++source/libraries/cppunit/PlugInManager.cpp
++source/libraries/cppunit/TestPath.cpp
++source/libraries/cppunit/TypeInfoHelper.cpp
++source/libraries/jpgalleg/decode.c
++source/libraries/jpgalleg/jpgalleg.c
++source/libraries/jpgalleg/io.c
++source/libraries/jpgalleg/encode.c
++source/libraries/agup/aalg.c
++source/libraries/agup/aphoton.c
++source/libraries/agup/aase.c
++source/libraries/agup/awin95.c
++source/libraries/agup/abitmap.c
++source/libraries/agup/ans.c
++source/libraries/agup/agtk.c
++source/libraries/agup/abeos.c
++source/libraries/agup/agup.c
++source/ais/c_input.cpp
++source/ais/c_wussie.cpp
++source/ais/c_other.cpp
++source/util/endian.cpp
++source/util/history.cpp
++source/util/types.cpp
++source/util/aarot.c
++source/util/base.cpp
++source/util/aastr.c
++source/util/pmask.c
++source/util/errors.cpp
++source/util/errors_c.c
++source/util/aautil.c
++source/util/random.cpp
++source/util/vector2.cpp
++source/util/round.c
++source/util/sound.cpp
++source/util/net_tcp.cpp
++source/util/get_time.c
++source/input.cpp
++source/doxygen.cpp
++source/gui.cpp
++source/scp.cpp
++source/frame.cpp
+
+
+

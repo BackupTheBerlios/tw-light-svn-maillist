@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r167 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images/alien web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r167%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/images/alien%20web&In-Reply-To=%3C200505221019.j4MAJNYr002893%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000112.html">
+   <LINK REL="Next"  HREF="000114.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r167 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images/alien web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r167%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/images/alien%20web&In-Reply-To=%3C200505221019.j4MAJNYr002893%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r167 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images/alien web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun May 22 12:19:23 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000112.html">[Tw-light-svn] r166 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/python source/games source/generated source/tml
+</A></li>
+        <LI>Next message: <A HREF="000114.html">[Tw-light-svn] r168 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-22 12:19:21 +0200 (Sun, 22 May 2005)
+New Revision: 167
+
+Modified:
+   trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml
+   trunk/gamedata/games/test_game/scripts/start.py
+   trunk/gamedata/images/alien/human.jpg
+   trunk/web/update.sh
+Log:
+Replacing human picture,
+Replacing Ixis commander dialog
+
+
+Modified: trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml	2005-05-20 21:06:09 UTC (rev 166)
++++ trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml	2005-05-22 10:19:21 UTC (rev 167)
+@@ -1 +1 @@
+-&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Welcome to ixis mining station station&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Welcome to Ixis mining station&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I have some question&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Good bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;Do you know&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;We have located precursor wreck here in the asteroid belt, coordinates (1500,5000). Please try this ULTRA-TIN-CRACKER device to get inside.&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;quests.add_druuge_guardians()&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;tml.GameAction.save_flag('have_dr!
+ ax_open_device',1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
++&lt;DIALOG&gt;&lt;START_NODES&gt;&lt;/START_NODES&gt;&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Welcome to ixis mining station station&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Welcome to the Ixis mining station. How can I help you?&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I have some questions for you.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Never mind, I'll just be on my way.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;QuestionNexus&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Sure, I'm happy to share my knowledge with you.&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;What can you tell me about the Chorali?&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(2)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;What are some points of interest in this system?&quot; appear_!
+ condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(3)&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;quests.add_druuge_guardians()&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;tml.GameAction.save_flag('have_drax_open_device',1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;2&quot; name=&quot;Chorali?&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Hmm... mysterious creatures, they are. I ran into one in a bar planetside- it was made of pure energy. I found it a little wierd at first, but he turned out to be a friendly critter. Even bought me a drink.&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Umm, thanks. Gotta go.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Interesting. I have some more questions.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;3&quot; name=&quot;Wreck?&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_t!
+ ext=&quot;Hmm... A few months ago, a routine scouting mission disco!
+ vered a 
+Precursor wreck not far from here, at coordinates 1500,5000. Every vessel is completely sealed off, except for one. Unfortunately, it seems to be stripped of all its useful parts, as far as I can tell.&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;A Precursor wreck! Excuse me, I must travel there at once!&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Fascinating. I have another question.&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;&lt;/DIALOG&gt;
+\ No newline at end of file
+
+Modified: trunk/gamedata/games/test_game/scripts/start.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/start.py	2005-05-20 21:06:09 UTC (rev 166)
++++ trunk/gamedata/games/test_game/scripts/start.py	2005-05-22 10:19:21 UTC (rev 167)
+@@ -22,3 +22,8 @@
+ 
+ # Start quests
+ start_precursor_wrack_mission()
++
++tml.EventManager.shipDeathByType('earcr', 'loose_game')
++def loose_game():
++    tml.GameAction.end_game()
++
+
+Modified: trunk/gamedata/images/alien/human.jpg
+===================================================================
+(Binary files differ)
+
+Modified: trunk/web/update.sh
+===================================================================
+--- trunk/web/update.sh	2005-05-20 21:06:09 UTC (rev 166)
++++ trunk/web/update.sh	2005-05-22 10:19:21 UTC (rev 167)
+@@ -1,2 +1,2 @@
+ #!/bin/bash
+-scp tw-light-setup-0.3r156M.exe <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
++scp tw-light-setup-0.3r166.exe <A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">yurand at shell.berlios.de</A>:/home/groups/tw-light/htdocs
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000112.html">[Tw-light-svn] r166 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/python source/games source/generated source/tml
+</A></li>
+	<LI>Next message: <A HREF="000114.html">[Tw-light-svn] r168 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images source
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

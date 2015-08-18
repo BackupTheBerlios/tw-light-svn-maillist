@@ -1,0 +1,433 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r169 - in trunk/source: melee other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r169%20-%20in%20trunk/source%3A%20melee%20other&In-Reply-To=%3C200507190434.j6J4Y60Z017432%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000116.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r169 - in trunk/source: melee other</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r169%20-%20in%20trunk/source%3A%20melee%20other&In-Reply-To=%3C200507190434.j6J4Y60Z017432%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r169 - in trunk/source: melee other">youbastrd at berlios.de
+       </A><BR>
+    <I>Tue Jul 19 06:34:06 CEST 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000116.html">[Tw-light-svn] r170 - in trunk: . source source/ais source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#115">[ date ]</a>
+              <a href="thread.html#115">[ thread ]</a>
+              <a href="subject.html#115">[ subject ]</a>
+              <a href="author.html#115">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2005-07-19 06:33:30 +0200 (Tue, 19 Jul 2005)
+New Revision: 169
+
+Modified:
+   trunk/source/melee/mship.h
+   trunk/source/other/nullphas.h
+Log:
+Added some comments to mship.h and nullphas.h
+
+Modified: trunk/source/melee/mship.h
+===================================================================
+--- trunk/source/melee/mship.h	2005-05-22 11:27:04 UTC (rev 168)
++++ trunk/source/melee/mship.h	2005-07-19 04:33:30 UTC (rev 169)
+@@ -35,11 +35,18 @@
+     next       =	(1&lt;&lt;7),
+     prev       =	(1&lt;&lt;8),
+     closest    =	(1&lt;&lt;9),
+-    chat       =        (1&lt;&lt;10),
+-    suicide    =        (1&lt;&lt;11),
++    chat       =	(1&lt;&lt;10),
++    suicide    =	(1&lt;&lt;11),
+   };
+ };
+ 
++/**
++ * This creates a warp-in animated effect that lasts a few milliseconds; after
++ * which, the ship is considered in play.
++ * 
++ * The visual effect is that the ship is warping into Truespace from Hyperspace.
++ * The ship's outline is drawn as a trail in red-ish yellow colour.  
++ */
+ class Phaser : public SpaceObject 
+ {
+  protected:
+@@ -56,11 +63,43 @@
+   int phaser_step_size;
+   
+  public:
++	/**
++	 * Spawns a ship with a warp-in effect.  At the end of the effect, the ship is
++	 * alive and in-game.  Typically, this constructor is called with the method
++	 * Ship::get_ship_phaser()
++	 * 
++	 * @see Ship::get_ship_phaser()
++	 *  
++	 * @param creator 
++	 * @param opos 
++	 * @param _rpos 
++	 * @param ship 
++	 * @param sprite 
++	 * @param osprite_index 
++	 * @param ocolors 
++	 * @param onum_colors 
++	 * @param ofsize 
++	 * @param steps 
++	 * @param step_size 
++	 */
+   Phaser::Phaser(SpaceLocation *creator, Vector2 pos, Vector2 rel_pos, 
+ 		 Ship *ship, SpaceSprite *sprite, int osprite_index, int *ocolors, 
+ 		 int onum_colors, int ofsize, int steps, int step_time) ;
+   
++  /**
++   * Draws the warp-in effect
++   * 
++   */
+   virtual void animate(Frame *space);
++
++  /**
++   * Updates the Phaser's status by:
++   * * Cycling the ship's warp trail colour
++   * * Moving the drawn effect along its vector
++   * * If there are remaining steps to draw, a new Phaser is created to continue
++   *   the remaining steps
++   * * else the ship is added to the game and materialized.
++   */
+   virtual void calculate();
+ };
+ 
+@@ -72,7 +111,12 @@
+     SHIP_ORIGIN_TW_SPECIAL/**&lt; Timewarp &quot;Special&quot;*/
+ };
+ 
+-/// \brief Exactly what is sounds like
++/**
++ * Exactly what it sounds like.
++ * 
++ * Custom ships are made by subclassing Ship and overriding any methods that
++ * you are interested in.
++ */ 
+ class Ship : public SpaceObject 
+ {
+   bool m_fire_weapon_disabled;
+@@ -86,17 +130,59 @@
+   int special_recharge;
+   int special_low;
+   
++  /**
++   * Performs the action of activating the ship's thrust.
++   * Override this method to customize this aspect of the ship's behaviour.
++   */
+   virtual void calculate_thrust();
++  
++  /**
++   * Performs the action of rotating the ship &quot;left&quot;, or counter-clockwise
++   * (anti-clockwise).
++   * Override this method to customize this aspect of the ship's behaviour.
++   */  
+   virtual void calculate_turn_left();
++  
++  /**
++   * Performs the action of rotating the ship &quot;right&quot;, or clockwise
++   * Override this method to customize this aspect of the ship's behaviour.
++   */  
+   virtual void calculate_turn_right();
++  
++  /**
++   * Performs the action of firing the ship's primary weapon.
++   * Override this method to customize this aspect of the ship's behaviour.
++   */  
+   virtual void calculate_fire_weapon();
++  
++  /**
++   * Activates the ship's special/secondary weapon.
++   * 
++   * The special weapon is also called the secondary weapon.
++   */
+   virtual void calculate_fire_special();
++  
++  /**
++   * The maintains &quot;hotspots&quot;, which are the red dots left as a trail when a 
++   * ship thrusts.
++   */ 
+   virtual void calculate_hotspots();
+ 
++  /**
++   * Activates the ship's primary weapon.
++   */
+   virtual int activate_weapon();
++
++  /**
++   * Activates the ship's secondary/special weapon.
++   */
+   virtual int activate_special();
+   
+-  virtual double get_angle_ex() const; ///&lt; stupid helper for camera
++  /**
++   * &quot;stupid helper for camera&quot;
++   * @return ???
++   */
++  virtual double get_angle_ex() const;
+   
+  public:
+   virtual std::string get_ship_name();
+@@ -104,6 +190,11 @@
+   virtual void set_target(SpaceObject* target);
+ 
+   ShipType *type;
++  
++  /**
++   * Returns the ship's type.
++   * @return the ship's type.
++   */
+   virtual ShipType *get_shiptype();
+   
+   ShipClass *code;
+@@ -112,9 +203,17 @@
+   int death_explosion_counter;
+   
+   bool hashotspots;
++  /**
++   * Assigns the specified SpaceObject as this ship's target.
++   * @param otarget the new target.
++   */  
+   virtual void assigntarget(SpaceObject *otarget);
+   
++  /**
++   * Performs any-last minute customization before the ship is instantiated.
++   */ 
+   virtual void materialize();
++  
+   double crew;
+   double crew_max;
+   double batt;
+@@ -158,34 +257,153 @@
+   
+ 
+ 
++  /**
++   * Constructs a ship.
++   * 
++   * @param creator ???
++   * @param opos the position to place the new ship
++   * @param shipAngle the angle of the ship at creation time
++   * @param osprite ???
++   */
+   Ship(SpaceLocation *creator, Vector2 opos, double shipAngle, 
+        SpaceSprite *osprite) ;
++       
++  /**
++   * Constructs a ship.
++   * 
++   * @param opos ???
++   * @param shipAngle the angle of the ship at creation time
++   * @param shipData the binary data required for the ship
++   * @param code ???
++   */
+   Ship(Vector2 opos, double shipAngle, ShipData *shipData, 
+        unsigned int code);
++  /**
++   * Creates a new warp-in effect.  At the conclusion of the effect, the ship is
++   * in-game and alive.  The effect is drawn as a red-ish yellow trail along a 
++   * vector.
++   */
+   virtual SpaceLocation *get_ship_phaser() ;
++  
++  /**
++   * Destructor.
++   * 
++   * To override special behevaiour in a subclass, use death() instead.
++   * @see death()
++   */  
+   virtual ~Ship();
++  
++  /**
++   * Event when the ship is destroyed
++   */ 
+   virtual void death();
+   
+   
++  /**
++   * Returns the current number of crew on the ship.
++   * @return the current number of crew on the ship.
++   */
+   virtual double getCrew();
++  
++  /**
++   * Returns the current amount of battery on the ship.
++   * @return the current amount of battery on the ship.
++   */
+   virtual double getBatt();
+   
++  /**
++   * 
++   */
+   virtual RGB crewPanelColor(int k = 0);
++  
++  /**
++   * 
++   */
+   virtual RGB battPanelColor(int k = 0);
++  
++  /**
++   *
++   */  
+   virtual bool custom_panel_update(BITMAP *panel, int display_type) {return false;};
+   
+   
++  /**
++   * (yB!: ???)
++   */
+   void locate();
+   
++  /**
++   * Contains most default ship logic.  Must be called by subclasses' calculate
++   * method.  
++   * 
++   * Override this method (but call this one) to customize a subclass' 
++   * behaviour. 
++   */
+   void calculate();
++  
++  /**
++   * The event when a ship takes damage.
++   *
++   * If the ship is already dead, there is no further effect.
++   * The total damage dealt is the sum of parameters normal and direct.  Note that
++   * this sum may be negative, in which case crew is added. 
++   * This ship's crew is reduced by the total damage.  If this makes the crew &lt;=0,
++   * the ship is destroyed: a standard death animation is diplayed, the ship's
++   * state is set to 0 (meaning the ship is dead and out of play), and any 
++   * death notifications are sent via a call to game-&gt;ship_died().  
++   * 
++   * 
++   * @param source the source of the damage
++   * @param normal the amount of damage that should potentially be inflicted.
++   * @param direct the amount of 
++   * @return 1 if the damage was inflicted; 0 otherwise.
++   */
+   virtual int handle_damage(SpaceLocation *source, double normal, double direct = 0);
++
++  /**
++   * The event when a ship loses some fuel/battery from an external source, such
++   * as the Chenjesu DOGIs.
++   * 
++   * After this call, the ship's battery will be between 0 and its maximum
++   * battery.
++   * 
++   * Battery is also called fuel.  
++   * 
++   * @source the SpaceLocation causing the change in battery.
++   * @normal the amount of battery to lose (may be negative, in which case the
++   * ship's batter will be increased).
++   * @return 1 if the battery was changed; 0 otherwise
++   */
+   virtual int handle_fuel_sap(SpaceLocation *source, double normal);
++
++	/**
++	 * The event when a ship could potentially lose momentum, for example, if a 
++	 * collision has taken place.
++	 * 
++	 * @param source the source of the collision
++	 * @param normal the momentum of the collision
++	 * @return returns 1 if the momentum was imparted, 0 otherwise
++	 */
+   virtual double handle_speed_loss(SpaceLocation *source, double normal);
+   
++  /**
++   * 
++   * 
++   */
+   virtual void animate(Frame *frame);
+   
++  /**
++   * Starts a conversation screen.  
++   */
+   virtual void chat_with_player();
++  /**
++   * Disable's the ship's weapons. (Why is this here?)
++   */  
+   virtual void disableWeapon();
++
++  /**
++   * Enables the ship's weapons. (Why is this here?)
++   */  
+   virtual void enableWeapon();
+ 
+  protected:
+
+Modified: trunk/source/other/nullphas.h
+===================================================================
+--- trunk/source/other/nullphas.h	2005-05-22 11:27:04 UTC (rev 168)
++++ trunk/source/other/nullphas.h	2005-07-19 04:33:30 UTC (rev 169)
+@@ -20,14 +20,26 @@
+ 
+ #include &quot;melee/mship.h&quot;
+ 
++/**
++ * This spawns a ship immediately, without any graphical effect. 
++ */
+ class NullPhaser : public Phaser {
+-// this phaser instantly calls the materialize function
+ 
+   public:
++  /**
++   * @param oship the ship to spawn in
++   */ 
+   NullPhaser( Ship* oship );
+ 
+-  virtual void animate( Frame* space );  // it does not show
+-  virtual void calculate();  // it instantly dies and adds the ship
++  /**
++   * it does not show
++   */
++  virtual void animate( Frame* space );  
++  
++  /**
++   * it instantly dies and adds the ship
++   */ 
++  virtual void calculate(); 
+ };
+ 
+ #endif // __NULLPHAS_H__
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000116.html">[Tw-light-svn] r170 - in trunk: . source source/ais source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#115">[ date ]</a>
+              <a href="thread.html#115">[ thread ]</a>
+              <a href="subject.html#115">[ subject ]</a>
+              <a href="author.html#115">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

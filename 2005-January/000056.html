@@ -1,0 +1,1093 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r110 - in trunk: . source source/melee source/util web
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-January/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r110%20-%20in%20trunk%3A%20.%20source%20source/melee%20source/util%20web&In-Reply-To=%3C200501091249.j09CndwZ018737%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000057.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r110 - in trunk: . source source/melee source/util web</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r110%20-%20in%20trunk%3A%20.%20source%20source/melee%20source/util%20web&In-Reply-To=%3C200501091249.j09CndwZ018737%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r110 - in trunk: . source source/melee source/util web">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Jan  9 13:49:39 CET 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000057.html">[Tw-light-svn] r111 - in trunk: . source source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-01-09 13:49:37 +0100 (Sun, 09 Jan 2005)
+New Revision: 110
+
+Added:
+   trunk/source/util/net_tcp.cpp
+   trunk/source/util/net_tcp.h
+   trunk/web/siglogo.jpeg
+   trunk/web/siglogo.png
+   trunk/web/tutorial.zip
+Modified:
+   trunk/source/melee/mnet1.cpp
+   trunk/source/melee/mnet1.h
+   trunk/source/scp.cpp
+   trunk/sources.lst
+Log:
+Readding old network code (partly)
+
+
+Modified: trunk/source/melee/mnet1.cpp
+===================================================================
+--- trunk/source/melee/mnet1.cpp	2004-12-19 13:07:20 UTC (rev 109)
++++ trunk/source/melee/mnet1.cpp	2005-01-09 12:49:37 UTC (rev 110)
+@@ -1,28 +1,14 @@
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#include &lt;stdlib.h&gt;
+-#include &lt;stdio.h&gt;
+-#include &lt;string.h&gt;
+ #include &lt;allegro.h&gt;
+ #include &quot;melee.h&quot;
++
+ #include &quot;mnet1.h&quot;
+ #include &quot;mview.h&quot;
+ #include &quot;mcontrol.h&quot;
++#include &quot;mcbodies.h&quot;
+ #include &quot;scp.h&quot;
++#include &lt;stdlib.h&gt;
++#include &lt;stdio.h&gt;
++#include &lt;string.h&gt;
+ 
+ GameEventMessage::GameEventMessage (const char *text)
+ {STACKTRACE
+@@ -32,8 +18,7 @@
+ 	size = sizeof(GameEvent) + l;
+ 	type = Game::event_message;
+ }
+-void GameEventMessage::execute( int source ) {
+-  STACKTRACE;
++void GameEventMessage::execute( int source ) {STACKTRACE
+ 	char buffy[64+max_message_length];
+ 	char *tmp = buffy;
+ 	int c = 15;
+@@ -47,8 +32,7 @@
+ 	::message.out(buffy, 6000, c);
+ }
+ 
+-void GameEventChangeLag::execute( int source ) {
+-  STACKTRACE;
++void GameEventChangeLag::execute( int source ) {STACKTRACE
+ 	if (source != Game::channel_server) return;
+ 	if (old_lag != game-&gt;lag_frames) return;
+ 	int i;
+@@ -112,50 +96,192 @@
+ 		}
+ 	}
+ 
+-void NetLog::init() {
+-  STACKTRACE;
++void NetLog::init() {STACKTRACE
++	remote_time = 0;
++	ping = -1;
++	log_transmitted = NULL;
++	need_to_transmit = false;
++	net.init();
++	Log::init();
+ 	}
+-void NetLog::deinit() {
+-  STACKTRACE;
++void NetLog::deinit() {STACKTRACE
++	net.deinit();
+ 	}
+-
+ NetLog::~NetLog() {STACKTRACE
++	free (log_transmitted);
+ 	}
+ 
+ void NetLog::send_packet() {
+-  STACKTRACE;
++	STACKTRACE;
++	int i, j, k, pos = 8;
++	if (!net.isConnected()) { tw_error(&quot;NetLog::send_packet() - no connection!&quot;); }
++	for (i = 0; i &lt; log_num; i += 1) if (log_dir[i] &amp; direction_write) {
++		j = log_len[i] - log_transmitted[i];
++		if (j &gt; 0) {
++			buffy[pos] = i &amp; 255;
++			if (i &gt; 255) { tw_error (&quot;NetLog::send_packet - channel # exceeds 8 bits&quot;); }
++			pos += 1;
++			write_length_code(12, &amp;k, j, &amp;buffy[pos]);
++			pos += k;
++			memcpy(&amp;buffy[pos], log_data[i] + log_transmitted[i], j);
++			log_transmitted[i] += j;
++			pos += j;
++			}
++		}
++	if (pos &lt;= 8) {
++		tw_error (&quot;NetLog::send_packet -- no data to send&quot;);
++		return;
++		}
++	buffy[0] = (pos &gt;&gt; 0) &amp; 255;
++	buffy[1] = (pos &gt;&gt; 8) &amp; 255;
++	buffy[2] = (pos &gt;&gt; 16) &amp; 255;
++	buffy[3] = (pos &gt;&gt; 24) &amp; 255;
++	int actual_time = get_time();
++	buffy[4] = (actual_time &gt;&gt; 0) &amp; 255;
++	buffy[5] = (actual_time &gt;&gt; 8) &amp; 255;
++	buffy[6] = (remote_time &gt;&gt; 0) &amp; 255;
++	buffy[7] = (remote_time &gt;&gt; 8) &amp; 255;
++	net.send(pos, &amp;buffy);
++	need_to_transmit = false;
++	return;
+ 	}
+ void NetLog::recv_packet() {
+-  STACKTRACE;
++	STACKTRACE;
++	int pos, len;
++	int i, j, k, l;
++	len = net.recv(4, 4, &amp;buffy);
++	if (len != 4) { tw_error (&quot;NetLog::recv_packet -- net.recv error (1)&quot;); }
++	len = buffy[0] + (buffy[1] &lt;&lt; 8) + (buffy[2] &lt;&lt; 16) + (buffy[3] &lt;&lt; 24);
++	if (len &amp; 0x80000000) {
++		handle_code(len);
++		return;
++		}
++	net.recv(4, 4, &amp;buffy[4]);
++	remote_time = buffy[4] + (buffy[5] &lt;&lt; 8);
++	int actual_time = get_time();
++	ping = (actual_time - (buffy[6] + (buffy[7] &lt;&lt; 8))) &amp; 65535 ;
++	len -= 8;
++	if (len != net.recv(len, len, &amp;buffy)) { tw_error( &quot;NetLog::recv_packet -- net.recv error (2)&quot;); }
++	pos = 0;
++	while (pos &lt; len) {
++		i = buffy[pos];
++		if (i &lt; 0) { tw_error(&quot;NegLog::recv_packet - data came in on a negative channel %d&quot;, i); }
++		if (i &gt;= log_num) expand_logs(i+1);
++		if (!(log_dir[i] &amp; direction_read)) { tw_error(&quot;NetLog::recv_packet -- data on wrong channel %d&quot;, i); }
++		pos += 1;
++		l = read_length_code(len-pos, &amp;j, &amp;k, &amp;buffy[pos]);
++		if (l &lt; 0) { tw_error (&quot;NetLog::recv_packet -- read_length_code failed&quot;); }
++		pos += j;
++		if (i &gt;= log_num) expand_logs(i+1);
++		if (!(log_dir[i] &amp; direction_read)) { tw_error( &quot;recieved data on wrong channel&quot;); }
++		Log::_log(i, &amp;buffy[pos], k);
++		pos += k;
++		}
++	if (pos != len) { tw_error (&quot;NetLog::recv_packet -- missaligned packet!!!&quot;); }
++	return;
+ 	}
+ 
+-void NetLog::expand_logs(int num_channels) {
+-  STACKTRACE;
++void NetLog::send_code(unsigned int code) {
++	STACKTRACE;
++	if (!(code &amp; 0x80000000)) { tw_error (&quot;NetLog::send_special -- bade code!&quot;); }
++	net.send(sizeof(unsigned int), &amp;code);
+ 	return;
+ 	}
++void NetLog::send_message(char *string) {STACKTRACE;
++	int i;
++	i = sprintf((char*)&amp;buffy[4], &quot;remote: %s&quot;, string);
++	if (i &gt; 1000) { tw_error (&quot;net1_send_message -- message length exceeds maximum&quot;); }
++	buffy[0] = i &amp; 255;
++	buffy[1] = (i &gt;&gt; 8) &amp; 255;
++	buffy[2] = (NET1_CODE_MESSAGE &gt;&gt; 16) &amp; 255;
++	buffy[3] = (NET1_CODE_MESSAGE &gt;&gt; 24) &amp; 255;
++	net.send(i+4, &amp;buffy);
++	message.out((char*)&amp;buffy[4], 5000, 9);
++	return;
++	}
++void NetLog::handle_code(unsigned int code) {STACKTRACE
++	switch (code &amp; 0xF0000000) {
++		case NET1_CODE_QUIT &amp; 0xF0000000: {
++			switch (code) {
++				case NET1_CODE_QUIT: {
++					message.out(&quot;Quitting&quot;);
++					tw_error (&quot;Quit: recieved quit signal over network&quot;);
++					}
++				break;
++				}
++			}
++		break;
++		case NET1_CODE_MESSAGE: {
++			int len = code - NET1_CODE_MESSAGE;
++			if (len &gt; 1000) { tw_error (&quot;net1_handle_code -- message length exceeds maximum&quot;); }
++			net.recv(len, len, &amp;buffy);
++			buffy[len] = 0;
++			message.out((char*)buffy, 5000, 10);
++			}
++		break;
++		}
++	return;
++	}
+ 
+-void NetLog::_log(int channel, const void *data, int size) {
+-  STACKTRACE;
+-}
++void NetLog::expand_logs(int num_channels) {STACKTRACE
++	int old_log_num = log_num;
++	Log::expand_logs(num_channels);
++	if (log_num) {
++		log_transmitted = (int*)  realloc(log_transmitted, sizeof(int) * log_num);
++		for (int i = old_log_num; i &lt; log_num; i += 1) {
++			log_transmitted[i] = 0;
++			}
++		}
++	else {
++		log_transmitted = NULL;
++		}
++	return;
++	}
++void NetLog::_log(int channel, const void *data, int size) {STACKTRACE
++	if (channel &gt;= log_num) expand_logs(channel+1);
++	Log::_log(channel, data, size);
++	need_to_transmit = true;
++	if (log_dir[channel] &amp;  direction_immediate) send_packet();
++	return;
++	}
+ void NetLog::_unlog(int channel, void *data, int size) {
+-  STACKTRACE;
++	while (ready(channel) &lt; size) {
++		if (game) game-&gt;idle();
++		else idle(1);
++	}
++	Log::_unlog(channel, data, size);
+ 	return;
+ 	}
++void NetLog::log_file(const char *fname) {STACKTRACE
++	if (!(log_dir[channel_file_data] &amp; direction_write)) {
++			while (file_ready(fname, NULL) == -1) {
++			if (game) game-&gt;idle(1);
++			else idle(1);
++		}
++	}
++	Log::log_file(fname);
++	return;
++	}
+ 
+-void NetLog::log_file(const char *fname) {
+-  STACKTRACE;
+-}
++void NetLog::flush() {STACKTRACE
++	if (!need_to_transmit) return;
++	while (!net.ready2send()) {
++		if (game) game-&gt;idle();
++		else idle(1);
++	}
++	send_packet();
++	}
+ 
+-void NetLog::flush() {
+-  STACKTRACE;
+-}
++bool NetLog::listen() {STACKTRACE
++	bool b = false;
++	while (net.ready2recv()) {
++		recv_packet();
++		b = true;
++		}
++	return b;
++	}
+ 
+-bool NetLog::listen() {
+-  STACKTRACE;
+-return false;
+-}
+-
+-int NetLog::ready(int channel) {
+-  STACKTRACE;
+-return 0;
+-}
++int NetLog::ready(int channel) {STACKTRACE
++	if (net.ready2recv()) recv_packet();
++	return Log::ready(channel);
++	}
+
+Modified: trunk/source/melee/mnet1.h
+===================================================================
+--- trunk/source/melee/mnet1.h	2004-12-19 13:07:20 UTC (rev 109)
++++ trunk/source/melee/mnet1.h	2005-01-09 12:49:37 UTC (rev 110)
+@@ -1,27 +1,18 @@
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-#ifndef __MNET1_H__
+-#define __MNET1_H__
+-
++#ifndef _MMAIN_H
+ #include &quot;mmain.h&quot;
++#endif
++#ifndef _NET_TCP_H
++#include &quot;util/net_tcp.h&quot;
++#endif
++#ifndef _MLOG_H
+ #include &quot;mlog.h&quot;
++#endif
++#ifndef _MSHIP_H
+ #include &quot;mship.h&quot;
++#endif
+ 
+ 
++
+ class GameEvent {
+ public:
+ 	short int size;
+@@ -68,8 +59,8 @@
+ 	int *log_transmitted;      //the number of bytes transmitted in each channel
+ 	void expand_logs(int num_channels) ; //intializes these extensions to the logging
+ 	unsigned char buffy[4096]; //a buffer for sending and recieving packets
+-//	void handle_code(unsigned int code) ;
+-//	void send_code(unsigned int code) ;
++	void handle_code(unsigned int code) ;
++	void send_code(unsigned int code) ;
+ 	enum code {
+ 		NET1_CODE_QUIT    = 0x80000001,
+ 		NET1_CODE_PAUSE   = 0x80000002,
+@@ -78,13 +69,14 @@
+ 		NET1_CODE_DECREASE_LAG = 0x80000005,
+ 		NET1_CODE_MESSAGE = 0x90000000
+ 		};
+-//	void send_message(char *string) ;
++	void send_message(char *string) ;
+ 
+ 	void send_packet(); //sends a packet
+ 
+ 	public:
+ 
+ 	bool need_to_transmit;
++	NetTCP net;       // the TCP network connection to the opponent player
+ 
+ 	enum {
+ 		direction_immediate = 16
+@@ -109,4 +101,3 @@
+ 
+ 	};
+ 
+-#endif // __MNET1_H__
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2004-12-19 13:07:20 UTC (rev 109)
++++ trunk/source/scp.cpp	2005-01-09 12:49:37 UTC (rev 110)
+@@ -277,6 +277,86 @@
+   release_screen();
+ }
+ 
++enum {
++	DIALOG_CONNECT_BOX = 0,
++	DIALOG_CONNECT_TITLE,
++	DIALOG_CONNECT_ADDRESS,
++	DIALOG_CONNECT_ADDRESS_BOX,
++	DIALOG_CONNECT_ADDRESS_EDIT,
++	DIALOG_CONNECT_PORT,
++	DIALOG_CONNECT_PORT_BOX,
++	DIALOG_CONNECT_PORT_EDIT,
++//	DIALOG_CONNECT_TWOLOCALS,
++	DIALOG_CONNECT_OK,
++	DIALOG_CONNECT_CANCEL,
++	DIALOG_CONNECT_BLAH
++};
++
++static DIALOG connect_dialog[] = {
++  // (dialog proc)     (x)   (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
++  { d_box_proc,        40,   100,  480,  260,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { d_text_proc,       50,   110,  460,  30,   255,  0,    0,    0,       0,    0,    (void *)&quot;Connect to server:&quot; , NULL, NULL },
++  { d_text_proc,       50,   140,  460,  30,   255,  0,    0,    0,       0,    0,    (void *)&quot;IP Address&quot; , NULL, NULL },
++  { d_box_proc,        48,   168,  464,  34,   255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { d_edit_proc,       50,   170,  460,  30,   255,  0,    0,    0,       75,   0,    dialog_string[0], NULL, NULL },
++  { d_text_proc,       50,   220,  460,  30,   255,  0,    0,    0,       0,    0,    (void *)&quot;Port #&quot; , NULL, NULL },
++  { d_box_proc,        48,   248,  464,  34,   255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { d_edit_proc,       50,   250,  460,  30,   255,  0,    0,    0,       75,   0,    dialog_string[1], NULL, NULL },
++//{ d_check_proc,      50,   290,  160,  20,   255,  0,    0,    0,       0,    0,    (void *)&quot;Two Local Players&quot;, NULL, NULL },
++  { d_button_proc,     50,   320,  160,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Connect&quot;, NULL, NULL },
++  { d_button_proc,     350,  320,  160,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Abort&quot;, NULL, NULL },
++  { d_tw_yield_proc,   0,    0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
++  { NULL,              0,    0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL }
++};
++
++int connect_menu(VideoWindow *window, char **address, int *port) { STACKTRACE
++	int i = 0;
++
++	if (*address)
++		strncpy(dialog_string[0], *address, 70);
++	if (port)
++		sprintf(dialog_string[1], &quot;%d&quot;, *port);
++
++	i = tw_popup_dialog(window, connect_dialog, DIALOG_CONNECT_ADDRESS_EDIT);
++	if (i != DIALOG_CONNECT_OK)
++		return -1;
++	*port = atoi(dialog_string[1]);
++	*address = strdup(dialog_string[0]);
++	return 0;
++}
++
++//#define DIALOG_LISTEN_TWOLOCALS 4
++#define DIALOG_LISTEN_OK        4
++#define DIALOG_LISTEN_CANCEL    5
++
++static DIALOG listen_dialog[] =
++{
++  // (dialog proc)     (x)   (y)   (w)   (h)   (fg)  (bg)  (key) (flags)     (d1)  (d2)  (dp)
++  { d_box_proc,        120,  100,  300,  140,  255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
++  { d_text_proc,       140,  110,  240,  25,   255,  0,    0,    0,          0,    0,    (void*)&quot;Listen on which port?&quot;, NULL, NULL },
++  { d_box_proc,        178,  138,  124,  29,   255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
++  { d_edit_proc,       180,  140,  120,  25,   255,  0,    0,    0,          5,    0,    dialog_string[1], NULL, NULL },
++//{ d_check_proc,      140,  170,  160,  20,   255,  0,    0,    0,          0,    0,    (void *)&quot;Two Local Players&quot;, NULL, NULL },
++  { d_button_proc,     140,  200,  120,  30,   255,  0,    0,    D_EXIT,     0,    0,    (void*) &quot;OK&quot;, NULL, NULL },
++  { d_button_proc,     280,  200,  120,  30,   255,  0,    0,    D_EXIT,     0,    0,    (void*) &quot;Cancel&quot;, NULL, NULL },
++  { d_tw_yield_proc,   0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
++  { NULL,              0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL }
++};
++
++static int listen_menu(VideoWindow *window, int port) { STACKTRACE
++	dialog_string[1][0] = '\0';
++	int p = -1;
++	sprintf(dialog_string[1], &quot;%d&quot;, port);
++	while ((p &lt;= 0) || (p &gt; 65535)) {
++		if (tw_popup_dialog(window, listen_dialog, 2) != DIALOG_LISTEN_OK) {
++			//game-&gt;quit(&quot;Quit - game aborted from network \&quot;listen\&quot; menu&quot;);
++			return -1;
++		}
++		p = atoi(dialog_string[1]);
++	}
++	return p;
++}
++
+ int is_escape_pressed() 
+ {
+   STACKTRACE;
+@@ -368,6 +448,83 @@
+ }
+ 
+ 
++void play_net1client ( const char *_address, int _port ) {STACKTRACE
++	NetLog *log = new NetLog();
++	log-&gt;init();
++	log-&gt;type = Log::log_net1client;
++
++	log-&gt;set_all_directions(Log::direction_read);
++	log-&gt;set_direction(Game::channel_client , Log::direction_write | Log::direction_read | NetLog::direction_immediate);
++	log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_write | Log::direction_read);
++	
++	set_config_file(&quot;client.ini&quot;);
++	char address[128];
++	int port, i;
++	while (!log-&gt;net.isConnected()) {
++		if (!_address) strncpy(address, get_config_string(&quot;Network&quot;, &quot;Address&quot;, &quot;&quot;), 127);
++		else strncpy(address, _address, 127);
++		if (_port == -1) port = get_config_int(&quot;Network&quot;, &quot;Port&quot;, 15515);
++		else port = _port;
++		char *addressaddress = address;
++		if (connect_menu(&amp;videosystem-&gt;window, &amp;addressaddress, &amp;port) == -1) 
++			return;
++		set_config_string(&quot;Network&quot;, &quot;Address&quot;, addressaddress);
++		message.out(&quot;...&quot;);
++		i = ((NetLog*)log)-&gt;net.connect(addressaddress, port, is_escape_pressed);
++		free(addressaddress);
++		if (i) {
++//						while (is_escape_pressed());
++			while (keypressed()) readkey();
++			tw_error(&quot;connection failed&quot;);
++		}
++	}
++
++	log-&gt;net.optimize4latency();
++	message.out(&quot;connection established&quot;);
++	
++	char *gname = detect_gametype(log);
++	log-&gt;reset();
++
++	play_game(gname, log);
++
++	free(gname);
++	return;
++}
++
++void play_net1server(const char *_gametype_name, int _port) {STACKTRACE
++	NetLog *log = new NetLog();
++	log-&gt;init();
++
++	log-&gt;type = Log::log_net1server;
++	log-&gt;set_all_directions(Log::direction_write | Log::direction_read | NetLog::direction_immediate);
++	log-&gt;set_direction(Game::channel_client , Log::direction_read);
++	log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_read);
++	log-&gt;set_direction(Game::channel_server + Game::_channel_buffered, Log::direction_write | Log::direction_read);
++	
++	set_config_file(&quot;client.ini&quot;);
++	int port;
++	while (!log-&gt;net.isConnected()) {
++		if (_port == -1) port = get_config_int(&quot;Network&quot;, &quot;Port&quot;, 15515);
++		else port = _port;
++
++		port = listen_menu( &amp;videosystem-&gt;window, port );
++		if (port == -1) return;
++
++		message.out(&quot;...&quot;);
++		log-&gt;net.listen(port, is_escape_pressed);
++		
++	}
++
++	log-&gt;net.optimize4latency();
++	message.out(&quot;connection established&quot;);
++	
++	play_game(_gametype_name, log);
++
++	return;
++}
++
++
++
+ char dialog_string[20][128];
+ 
+ int MAX_PLAYERS = 1;
+
+Added: trunk/source/util/net_tcp.cpp
+===================================================================
+--- trunk/source/util/net_tcp.cpp	2004-12-19 13:07:20 UTC (rev 109)
++++ trunk/source/util/net_tcp.cpp	2005-01-09 12:49:37 UTC (rev 110)
+@@ -0,0 +1,371 @@
++//#define NETWORK_NONE
++//uncoment previous line to disable networking
++
++
++
++#if defined NETWORK_NONE
++	//networking disabled
++#elif defined _WIN32
++#	define   NETWORK_WINSOCK
++#	include &quot;winsock.h&quot;
++#elif defined __BEOS__                  //networking disabled on BeOS (might work)
++#	define NETWORK_NONE
++//#	define   NETWORK_BSD
++//#	define   NETWORK_NO_DNS
++//#	define   NETWORK_NO_INCLUDE
++//#	include &quot;socket.h&quot;
++//#	define close_socket(a) closesocket(a)
++#elif defined DJGPP                     //networking disabled on DOS at the moment (might work with libsocket)
++#	define   NETWORK_NONE
++//#	define NETWORK_BSD
++//#	include &lt;dos.h&gt;
++//#	include &lt;lsck/lsck.h&gt;
++#elif defined(linux) || defined(LINUX)  //Slackware seems to work normally, but other Linuxes don't quite match BSD sockets (or the Linux man pages, for that matter)
++#	define   NETWORK_BSD
++#	define   NETWORK_WEIRD_SIGNEDNESS
++#elif defined(UNIX) || defined(unix)
++#	define   NETWORK_BSD
++#else
++#	define   NETWORK_NONE
++#endif
++
++
++#include &lt;string.h&gt;
++#include &lt;stdio.h&gt;
++#include &quot;net_tcp.h&quot;
++#if defined(NETWORK_BSD) &amp;&amp; !defined(NETWORK_NO_INCLUDE)
++#	include &lt;unistd.h&gt;
++#	include &lt;sys/time.h&gt;
++#	include &lt;sys/types.h&gt;
++#	include &lt;sys/socket.h&gt;
++#	include &lt;netdb.h&gt;
++#	include &lt;netinet/in.h&gt;
++#	include &lt;arpa/inet.h&gt;
++#	include &lt;arpa/nameser.h&gt;
++#	include &lt;fcntl.h&gt;
++#	include &lt;errno.h&gt;
++#endif
++
++
++#if defined NETWORK_BSD
++#	define SOCKET int
++#	define INVALID_SOCKET -1
++#	define get_error() (errno)
++#	define set_error(a) (errno = a)
++#	if !defined(close_socket)
++#		define close_socket(a) close(a)
++#	endif
++#	define SOCKET_ERROR -1
++#	define s signed_socket
++#elif defined NETWORK_WINSOCK
++#	define get_error() WSAGetLastError()
++#	define set_error(a) WSASetLastError(a)
++#	define close_socket(a) closesocket(a)
++#	define s unsigned_socket
++#endif
++
++
++
++
++const char *NetTCP::network_type() {
++#	if defined NETWORK_WINSOCK
++		return &quot;Winsock 1 TCP&quot;;
++#	elif defined NETWORK_BSD
++		return &quot;BSD sockets TCP&quot;;
++#	elif defined NETWORK_NONE
++		return &quot;TCP support disabled&quot;;
++#	else
++		return &quot;Unknown TCP interface&quot;;
++#	endif	
++	}
++
++
++#ifndef NETWORK_NONE
++
++#ifdef NETWORK_WINSOCK
++static int network_status = 0;
++#endif
++
++#define NETWORK_STATUS_WINSOCK_STARTED 0x01
++
++//msg and message exists for debug purposes.  currently it does nothing.  
++static void msg (char *) {}
++void (* NetTCP::message)(char*) = &msg;
++
++static fd_set read_set, write_set, except_set;
++static timeval tmv = {0, 0};
++int NetTCP::init() {
++#	if defined NETWORK_WINSOCK
++		if (! (network_status &amp; NETWORK_STATUS_WINSOCK_STARTED)) {
++			WSADATA info;
++			if (WSAStartup (MAKEWORD(1,1), &amp;info) != 0) {
++				message(&quot;NetTCP::init: winsock startup failed&quot;);
++				return -1;
++				}
++			message (&quot;NetTCP::init: winsock started&quot;);
++			network_status |= NETWORK_STATUS_WINSOCK_STARTED;
++			}
++		else message (&quot;NetTCP::init: winsock already started&quot;);
++#	endif
++	s = INVALID_SOCKET;
++	FD_ZERO(&amp;read_set);
++	FD_ZERO(&amp;write_set);
++	FD_ZERO(&amp;except_set);
++	return 0;
++	}
++
++void NetTCP::deinit() {
++	message (&quot;NetTCP::deinit: network shut down&quot;);
++	if (isConnected()) disconnect();
++	return;
++	}
++
++
++
++void NetTCP::optimize4bandwidth() {
++#	ifdef NETWORK_WINSOCK
++		BOOL tmp = 0;
++		setsockopt ( s, IPPROTO_TCP, TCP_NODELAY, (const char *)&amp;tmp, sizeof(tmp));
++#	endif
++	//I think this might work on unix systems too, need to check
++	return;
++	}
++
++void NetTCP::optimize4latency() {
++#	ifdef NETWORK_WINSOCK
++		int tmp = 1;
++		setsockopt ( s, IPPROTO_TCP, TCP_NODELAY, (const char *)&amp;tmp, sizeof(tmp));
++#	endif
++	//I think this might work on unix systems too, need to check
++	return;
++	}
++
++int NetTCP::listen(int port, int (*cancel_callback)()) {
++	if (s != INVALID_SOCKET) throw (&quot;NetTCP::listen: socket already active&quot;);
++	if (port &lt;= 0) throw &quot;NetTCP::listen - Bad port number!&quot;;
++	s = socket( AF_INET, SOCK_STREAM, 0);
++	if (s == INVALID_SOCKET) {
++		message(&quot;NetTCP::listen: socket allocation failed&quot;);
++		return -1;
++		}
++	message (&quot;NetTCP::listen: socket allocated&quot;);
++	sockaddr_in self;
++	self.sin_family = AF_INET;
++	self.sin_port = htons(port);
++	self.sin_addr.s_addr = 0;
++	memset(&amp;(self.sin_zero), 0, 8);
++	if (bind (s, (sockaddr *) &amp;self, sizeof(sockaddr_in) ) == -1) {
++		char tmp[80];
++		sprintf (tmp, &quot;NetTCP::listen: bind to port %d failed&quot;, port);
++		message (tmp);
++		close_socket(s);
++		s = INVALID_SOCKET;
++		return -2;
++		}
++	else {
++		char tmp[80];
++		sprintf (tmp, &quot;NetTCP::listen: socket bound to port %d&quot;, port);
++		message (tmp);
++		}
++	if (::listen(s, 1) == -1) {
++		message (&quot;NetTCP::listen: listen failed&quot;);
++		close_socket(s);
++		s = INVALID_SOCKET;
++		return -3;
++		}
++	sockaddr_in other;
++#	ifdef NETWORK_WINSOCK 
++		int tmp;
++#	elif defined NETWORK_BSD
++#		if defined NETWORK_WEIRD_SIGNEDNESS
++			//WTF!?! 
++			size_t tmp; 
++			//some linuxes (but not the version superdave uses (slackware of some 
++			//kind)) require this, even though some linux documentation contradicts 
++			//it and it differs from the BSD standard, and it's incompatible with some 
++			//unices
++#		else
++			int tmp;
++#		endif
++#	endif
++	SOCKET new_socket;
++	while (true) {
++		while (!ready2recv()) if (cancel_callback &amp;&amp; cancel_callback()) {
++			close_socket(s);
++			s = INVALID_SOCKET;
++			return -4;
++			}
++		tmp = sizeof(sockaddr_in);
++		if ((new_socket = accept(s, (sockaddr *) &amp;other, &amp;tmp)) != INVALID_SOCKET) {
++			close_socket(s);
++			s = new_socket;
++			return 0;
++			}
++		}
++	throw(&quot;NetTCP::listen: WTF?&quot;);
++	return 0;
++	}
++
++int NetTCP::connect(const char *address, int port, int (*cancel_callback)()) {
++	if (port &gt; 65535) throw &quot;NetTCP::connect - bad port number&quot;;
++	if (s != INVALID_SOCKET) throw (&quot;NetTCP::connect: already active&quot;);
++	if (!address) throw &quot;NetTCP::connect -- NULL address!&quot;;
++
++	sockaddr_in other;
++	memset(&amp;other,0,sizeof(other));
++	other.sin_family = AF_INET;
++	other.sin_port = htons((unsigned short) port);
++
++#	ifdef NETWORK_NO_DNS
++		if ((other.sin_addr.s_addr = inet_addr(address)) == -1) {
++			message(&quot;NetTCP::connect: inet_addr failed&quot;);
++			return -2;
++			}
++#	else
++		hostent *he = gethostbyname(address);
++		if (!he) {
++			message(&quot;NetTCP::connect: target lookup failed&quot;);
++			return -2;
++			}
++		if (he-&gt;h_addrtype != AF_INET) {
++			message(&quot;NetTCP::connect: target lookup failed strangely&quot;);
++			return -2;
++			}
++		memcpy((char *)&amp;other.sin_addr, he-&gt;h_addr, he-&gt;h_length);
++#	endif
++	message(&quot;NetTCP::connect: target lookup succeeded&quot;);
++
++	s = socket( AF_INET, SOCK_STREAM, 0);
++	if (s == INVALID_SOCKET) {
++		message(&quot;NetTCP::connect: socket allocation failed&quot;);
++		return -3;
++		}
++	message (&quot;NetTCP::connect: socket allocated&quot;);
++
++
++	while (::connect(s, (struct sockaddr *)&amp;other, sizeof(other)) == SOCKET_ERROR) {
++		if (cancel_callback &amp;&amp; cancel_callback()) {
++			close_socket(s);
++			s = INVALID_SOCKET;
++			return -4;
++			}
++		}
++	return 0;
++	}
++
++int NetTCP::disconnect() {
++	close_socket(s);
++	s = INVALID_SOCKET;
++	return 0;
++	}
++
++int NetTCP::ready2send() {
++	int r;
++	tmv.tv_sec = 0;
++	tmv.tv_usec = 0;
++	FD_SET ( s, &amp;write_set);
++	r = select (s+1, &amp;read_set, &amp;write_set, &amp;except_set, &amp;tmv);
++	FD_CLR ( s, &amp;write_set);
++	return r;
++	}
++int NetTCP::ready2recv() {
++	int r;
++	tmv.tv_sec = 0;
++	tmv.tv_usec = 0;
++	FD_SET ( s, &amp;read_set);
++	r = select (s+1, &amp;read_set, &amp;write_set, &amp;except_set, &amp;tmv);
++	FD_CLR ( s, &amp;read_set);
++	return r;
++	}
++int NetTCP::send(int size, const void *data) {
++	int sofar = 0;
++	while (sofar &lt; size) {
++		int tmp = ::send(s, ((char*) data) + sofar, size - sofar, 0);
++		if (tmp &gt; 0) sofar += tmp;
++		}
++	return sofar;
++	}
++int NetTCP::recv(int min, int max, void *data) {
++	int sofar = 0;
++	while (1) {
++		int tmp = ::recv(s, ((char*) data) + sofar, max - sofar, 0);
++		if (tmp &gt; 0) sofar += tmp;
++		if (sofar &gt;= min) return sofar;
++		if (tmp == -1) { // debuging, remove  //update: maybe don't remove?
++			int i = get_error();
++			static char buffy[256];
++			if ((i == 10054) || (i == 10053)) {
++				s = INVALID_SOCKET;
++				sprintf(buffy, &quot;The other side disconnected&quot;);
++				}
++			else sprintf(buffy, &quot;NetTCP::recv - error %d&quot;, i);
++			throw buffy;
++			}
++		//change
++/*		else if (tmp == 0) {
++			s = INVALID_SOCKET;
++			throw &quot;NetTCP::recv: Remote Disconnect&quot;;
++			}*/
++		}
++	}
++bool NetTCP::isConnected() {
++	if (s == INVALID_SOCKET) return false;
++	return true;
++	}
++
++
++#else
++
++int NetTCP::init() {
++	return 0;
++	}
++void NetTCP::deinit() {
++	}
++int NetTCP::listen(int port, int (*cancel_callback)()) {
++	throw(&quot;Networking is disabled in this program.\nProbably you should try a windows or unix version instead.&quot;);
++	return -1;
++	}
++int NetTCP::connect(const char *address, int port, int (*cancel_callback)()) {
++	throw(&quot;Networking is disabled in this program.\nProbably you should try a windows or unix version instead.&quot;);
++	return -1;
++	}
++int NetTCP::disconnect() {
++	return 0;
++	}
++int NetTCP::ready2send() {
++	return 0;
++	}
++int NetTCP::ready2recv() {
++	return 0;
++	}
++int NetTCP::send(int size, const void *data) {
++	return 0;
++	}
++int NetTCP::recv(int min, int max, void *data) {
++	return 0;
++	}
++void NetTCP::optimize4bandwidth() {
++	return;
++	}
++void NetTCP::optimize4latency() {
++	return;
++	}
++bool NetTCP::isConnected() {
++	return true;
++	}
++
++
++#endif
++
++#ifdef get_error
++#undef get_error
++#endif
++#ifdef set_error
++#undef set_error
++#endif
++#ifdef close_socket
++#undef close_socket
++#endif
++#ifdef s
++#undef s
++#endif
+
+Added: trunk/source/util/net_tcp.h
+===================================================================
+--- trunk/source/util/net_tcp.h	2004-12-19 13:07:20 UTC (rev 109)
++++ trunk/source/util/net_tcp.h	2005-01-09 12:49:37 UTC (rev 110)
+@@ -0,0 +1,41 @@
++
++#ifndef _NET_TCP_H
++#define _NET_TCP_H
++
++class NetTCP {
++	public:
++		//init() is called once on each NetTCP before it is used
++		int init();
++		void deinit();
++		//listen listens on a port for a connection.  used by servers.  if cancel_callback returns true then it will abort
++		int listen(int port, int (*cancel_callback)() = NULL);
++		//connect connects to a remote computer which is listening.  used by clients.  if cancel_callback returns true then it will abort
++		int connect(const char *address, int port, int (*cancel_callback)() = NULL);
++		//disconnect hangs up a connection
++		int disconnect();
++		//ready2send returns true if send() can return quickly
++		int ready2send();
++		//ready2recv returns true if recv() can return quickly
++		int ready2recv();
++		//send (size, data) sends size bytes of data
++		int send(int size, const void *data);
++		//recv (min, max, data) recieves at least min bytes, and at most max bytes, storing them in data
++		int recv(int min, int max, void *data);
++		//optimizes for bandwidth (good for file transfers)
++		void optimize4bandwidth();
++		//optimizes for latency (good for games)
++		void optimize4latency();
++		//returns true if connected
++		bool isConnected();
++		//describes the network type
++		static const char *network_type();
++	private:
++		union {
++			int signed_socket;
++			unsigned int unsigned_socket;
++			};
++		static void (*message)(char *txt);
++	};
++
++
++#endif
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2004-12-19 13:07:20 UTC (rev 109)
++++ trunk/sources.lst	2005-01-09 12:49:37 UTC (rev 110)
+@@ -2,6 +2,7 @@
+ source/ais/c_other.cpp
+ source/ais/c_input.cpp
+ source/frame.cpp
++source/util/net_tcp.cpp
+ source/util/random.cpp
+ source/util/vector2.cpp
+ source/util/round.c
+@@ -17,6 +18,7 @@
+ source/util/endian.cpp
+ source/util/pmask.c
+ source/util/base.cpp
++source/games/gtwmultiplayer.cpp
+ source/games/ggob.cpp
+ source/games/gflmelee.cpp
+ source/games/gdefender.cpp
+@@ -78,6 +80,8 @@
+ source/ships/shpwolmi.cpp
+ source/ships/shpearc3.cpp
+ source/ships/shpkahbo.cpp
++source/ships/shpkorsi.cpp
++source/ships/shpkorsn.cpp
+ source/ships/shpstaba.cpp
+ source/tests/testmain.cpp
+ source/tests/testdatapath.cpp
+
+Added: trunk/web/siglogo.jpeg
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/web/siglogo.jpeg
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/web/siglogo.png
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/web/siglogo.png
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Added: trunk/web/tutorial.zip
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/web/tutorial.zip
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000057.html">[Tw-light-svn] r111 - in trunk: . source source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

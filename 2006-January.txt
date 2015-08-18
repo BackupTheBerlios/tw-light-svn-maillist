@@ -1,0 +1,119 @@
+From youbastrd at berlios.de  Wed Jan  4 03:14:44 2006
+From: youbastrd at berlios.de (youbastrd at BerliOS)
+Date: Wed, 4 Jan 2006 03:14:44 +0100
+Subject: [Tw-light-svn] r206 - in trunk/gamedata: default_ini/ships images/ships/shpdragr music/ditty
+Message-ID: <200601040214.k042EiTL010862@sheep.berlios.de>
+
+Author: youbastrd
+Date: 2006-01-04 03:14:11 +0100 (Wed, 04 Jan 2006)
+New Revision: 206
+
+Added:
+   trunk/gamedata/music/ditty/Ditty08.it
+Modified:
+   trunk/gamedata/default_ini/ships/shpdragr.ini
+   trunk/gamedata/images/ships/shpdragr/SHIP_P01_PCX.bmp
+   trunk/gamedata/images/ships/shpdragr/SHIP_P02_PCX.bmp
+   trunk/gamedata/images/ships/shpdragr/SHIP_P03_PCX.bmp
+   trunk/gamedata/images/ships/shpdragr/SHIP_P04_PCX.bmp
+   trunk/gamedata/images/ships/shpdragr/SHIP_P05_PCX.bmp
+   trunk/gamedata/images/ships/shpdragr/SHIP_P06_PCX.bmp
+Log:
+adding new captain's portrait and victory ditty for Drax Griffon.  On behalf of Deeko (Captain's portrait) and Richard (ditty).  Thanks!
+
+Modified: trunk/gamedata/default_ini/ships/shpdragr.ini
+===================================================================
+--- trunk/gamedata/default_ini/ships/shpdragr.ini	2005-12-28 00:19:07 UTC (rev 205)
++++ trunk/gamedata/default_ini/ships/shpdragr.ini	2006-01-04 02:14:11 UTC (rev 206)
+@@ -55,7 +55,7 @@
+ CaptName2 = Quiszin
+ 
+ [Music]
+-Victory = music/ditty/cheditty.mod
++Victory = music/ditty/Ditty08.it
+ 
+ [Sound]
+ WeaponSample0 = sound/ships/shpdragr/WAVE_A01_WAV.wav
+
+Modified: trunk/gamedata/images/ships/shpdragr/SHIP_P01_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpdragr/SHIP_P02_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpdragr/SHIP_P03_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpdragr/SHIP_P04_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpdragr/SHIP_P05_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Modified: trunk/gamedata/images/ships/shpdragr/SHIP_P06_PCX.bmp
+===================================================================
+(Binary files differ)
+
+Added: trunk/gamedata/music/ditty/Ditty08.it
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/gamedata/music/ditty/Ditty08.it
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+
+
+From youbastrd at berlios.de  Wed Jan 18 06:04:03 2006
+From: youbastrd at berlios.de (youbastrd at BerliOS)
+Date: Wed, 18 Jan 2006 06:04:03 +0100
+Subject: [Tw-light-svn] r207 - trunk/source
+Message-ID: <200601180504.k0I543nc006869@sheep.berlios.de>
+
+Author: youbastrd
+Date: 2006-01-18 06:03:58 +0100 (Wed, 18 Jan 2006)
+New Revision: 207
+
+Modified:
+   trunk/source/doxygen.cpp
+Log:
+Updating doxygen.cpp to include documentation about units used in ship ini files
+
+Modified: trunk/source/doxygen.cpp
+===================================================================
+--- trunk/source/doxygen.cpp	2006-01-04 02:14:11 UTC (rev 206)
++++ trunk/source/doxygen.cpp	2006-01-18 05:03:58 UTC (rev 207)
+@@ -29,7 +29,7 @@
+  *       - F2 save game
+  *       - F3 load game
+  *       - F4 brings up the options menu
+- *       - F5 is fast-forward (speeds up in-game time greatly)
++ *       - F5 is fast-forward (hold to speed up in-game time greatly)
+  *       - F6 displays fleet status
+  *       - F7 changes game tic rate (physics quality)
+  *       - F8 changes camera mode
+@@ -347,7 +347,13 @@
+  * Turning-rate: internally radians / millisecond, externally
+  * SC2-turning-units.
+  * double turning = scale_turning(sc2_turning);
+- * Warning: the conversion is non-linear and rather weird.
++ * The lower this value, the faster the ship turns.  0 is the fastest turning speed (example Pkunk)
++ * and of the UMQ ships, the Mmrnmhrm's missiles have the slowest turning speed with a TurnRate of 15.
++ * The formula to determine the degrees per second given a TurnRate is:
++ *   deg/sec = 450 / (TurnRate + 1)
++ * Note that this formula is an inverse relationship, so it never actually reaches zero.  If you wish
++ * to create a Ship subclass that does not turn, instead alter its calculate_turn_left() and 
++ * calculate_turn_right() methods.  
+  * 
+  * Distance: internally game-pixels, externally range-units.
+  * double game_pixels = scale_range(range_units);
+
+
+

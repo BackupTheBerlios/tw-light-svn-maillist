@@ -1,0 +1,527 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r201 - trunk/source/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-October/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r201%20-%20trunk/source/util&In-Reply-To=%3C200510270309.j9R39BOl008245%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000146.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r201 - trunk/source/util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r201%20-%20trunk/source/util&In-Reply-To=%3C200510270309.j9R39BOl008245%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r201 - trunk/source/util">yurand at berlios.de
+       </A><BR>
+    <I>Thu Oct 27 05:09:11 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000146.html">[Tw-light-svn] r200 - trunk/gamedata/music
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#147">[ date ]</a>
+              <a href="thread.html#147">[ thread ]</a>
+              <a href="subject.html#147">[ subject ]</a>
+              <a href="author.html#147">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-10-27 05:09:08 +0200 (Thu, 27 Oct 2005)
+New Revision: 201
+
+Modified:
+   trunk/source/util/get_time.c
+   trunk/source/util/types.h
+Log:
+Returned SDL time management from TimeWarp
+TW-Light now uses SDL for time rutines
+
+Modified: trunk/source/util/get_time.c
+===================================================================
+--- trunk/source/util/get_time.c	2005-10-27 02:32:15 UTC (rev 200)
++++ trunk/source/util/get_time.c	2005-10-27 03:09:08 UTC (rev 201)
+@@ -1,22 +1,74 @@
+-#include &lt;allegro.h&gt;
+-#ifdef WIN32
+-#include &lt;winalleg.h&gt;
++/*
++This file is part of &quot;TW-Light&quot; 
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++Copyright (C) 2001-2004  TimeWarp development team
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++*/
++
++//#define NO_WINMM
++//#define NO_WINMM_TGT
++//#define NO_WINMM_QPC
++//#define NO_RDTSC
++//#define NO_LIBC
++//#define NO_ALLEGRO_TIME
++//#define NO_SDL_TIME
++
++
++
++//#define PLATFORM_IS_ALLEGRO
++#define PLATFORM_IS_SDL
++
++
++
++#ifndef _DEBUG
++//# define NO_RDTSC
+ #endif
+ 
++#ifdef NO_ALLEGRO_TIME
++#   undef PLATFORM_IS_ALLEGRO
++#endif
++#ifdef NO_SDL_TIME
++#   undef PLATFORM_IS_SDL
++#endif
++
++
+ /*
+ ------------------------------
+-		Timers &amp; Stuff
++        Timers &amp; Stuff
+ ------------------------------
+ 
+ Three sections:
+-1.  idle() functions for Allegro 
++1.  idle() functions for Allegro / SDL / unrecognized platform
+ 2.  Platform-specific time functions:
+-		Allegro interrupts (stupid allegro...)
++        LibC time
++        Allegro interrupts (stupid allegro...)
++        SDL ticks
++        Windows Multi-Media timeGetTime
++        Windows Multi-Media Performance Counter
++        Intel RDTSC
++3.  Wrappers to pick which time functions to use
+ */
+ 
+ 
+-#include &lt;time.h&gt;
+-#include &lt;math.h&gt;
++
++#ifndef NO_LIBC
++#   include &lt;time.h&gt;
++#   include &lt;math.h&gt;
++#endif
++#ifdef PLATFORM_IS_SDL
++#   include &lt;SDL.h&gt;
++#else
++#   include &quot;types.h&quot;
++#endif
+ #include &quot;get_time.h&quot;
+ #include &quot;base.h&quot;
+ #include &quot;errors.h&quot;
+@@ -24,71 +76,290 @@
+ 
+ 
+ 
+-//1.  idle() functions for Allegro 
++//1.  idle() functions for Allegro / SDL / unknown platform
+ 
+ int _no_idle = 0;
+ 
+-int idle ( int time ) {
+-	if (_no_idle) return 0;
+-	rest(time);
+-	return time;
+-}
+ 
++#if defined(PLATFORM_IS_ALLEGRO) &amp;&amp; !defined(NO_ALLEGRO_TIME)
++#   include &lt;allegro.h&gt;
++#   if defined WIN32
++#       include &lt;winalleg.h&gt;
++#   endif
++    int idle ( int time ) {
++        if (_no_idle) return 0;
++        rest(time);
++        return time;
++    }
++#elif defined(PLATFORM_IS_SDL) &amp;&amp; !defined(NO_SDL_TIME)
++#   include &lt;SDL.h&gt;
++    int idle ( int time ) {
++        if (_no_idle) return 0;
++        SDL_Delay ( time );
++        return time;
++    }
++#else
++    int idle ( int time ) {
++        if (_no_idle) return 0;
++        return 0;
++        /*int i = get_time() + time;
++        while (i &gt; get_time()) {
++            //do nothing real fast
++        }
++        return time;*/
++    }
++#endif
++
++
++
++
+ //2.  Platform specific time functions:
+ 
+-#define allegro_period 5
+ 
+-static volatile int allegro_time = 0;
+-static int allegro_base = 0;
+-static volatile int allegro_get_time() {
+-	return allegro_time - allegro_base;
+-}
+-END_OF_STATIC_FUNCTION(allegro_get_time);
+ 
+-static void global_timer(void) {
+-	allegro_time += allegro_period;
+-}
+-END_OF_STATIC_FUNCTION(global_timer);
++//RDTSC:
++//RDTSC is only valid on pentiums &amp; later, right?
++//so how do we detect this at run-time? (without crashing)
++#if !defined NO_RDTSC
++#   if defined _MSC_VER
++#       define RDTSC_TIMER
++        static double rdtsc_period_f = 0;
++        static int rdtsc_period_i = 0;
++        static Uint64 rdtsc_base;
++        static volatile Uint64 rdtsc_get_time() {
++            unsigned int a, b;
++            __asm RDTSC
++            __asm mov a, eax
++            __asm mov b, edx
++            return (a + ((Sint64)b &lt;&lt; 32)) - rdtsc_base;
++        }
++#   elif defined(__GNUC__) &amp;&amp; defined(__i386__)
++//#     define RDTSC_TIMER
++        //need to double-check the inline asm here
++        //static double rdtsc_period_f = 0;
++        //static int rdtsc_period_i = 0;
++        static Uint64 rdtsc_base;
++        __volatile__ Uint64 rdtsc_get_time() {
++            unsigned int a, b;
++            asm (&quot;RDTSC&quot; : &quot;=a&quot; (a), &quot;=d&quot; (b) : );
++            //__asm__ volatile (&quot;.byte 0x0f, 0x31&quot; : &quot;=A&quot; (x));
++            return (a + ((Sint64)b &lt;&lt; 32)) - rdtsc_base;
++        }
++#   endif
++#endif
+ 
+-void init_allegro_time() {
+-	LOCK_FUNCTION(global_timer);
+-	LOCK_FUNCTION(allegro_get_time);
+-	LOCK_VARIABLE(allegro_time);
+-	if (install_timer() &lt; 0) tw_error(&quot;Allegro timer installation failed&quot;);
+-	install_int(&amp;global_timer, allegro_period);
+-}
++#if defined WIN32 &amp;&amp; !defined NO_WINMM
++#   include &lt;windows.h&gt;
++#   include &lt;Mmsystem.h&gt;
++#   include &lt;winbase.h&gt;
+ 
+-void deinit_allegro_time() {
+-	remove_int(&amp;global_timer);
+-}
++#   if !defined NO_WIMM_TGT
++#       define WINMM_TGT
++#       define winmm_tgt_period_i 1
++        static int winmm_tgt_base = 0;
++        static int winmm_tgt_get_time() {
++            return timeGetTime() - winmm_tgt_base;
++        }
++#   endif
+ 
++#   if !defined NO_WIMM_QPC
++#       define WINMM_QPC
++        static double winmm_qpc_period_f = 1;
++        static Uint64 winmm_qpc_base = 0;
++        static volatile Uint64 winmm_qpc_get_time() {
++            LARGE_INTEGER bob;
++            if (QueryPerformanceCounter(&amp;bob)) {
++                return bob.QuadPart - winmm_qpc_base;
++            }
++            tw_error(&quot;QueryPerformanceCounter return 0&quot;);
++            return 0;
++        }
++        static double winmm_qpc_get_freq() {
++            LARGE_INTEGER fred;
++            if (QueryPerformanceFrequency(&amp;fred)) {
++                return (double)fred.QuadPart;
++            }
++            else return 0;
++        }
++#   endif
++#endif
++
++#if defined PLATFORM_IS_ALLEGRO
++#   include &lt;allegro.h&gt;
++#   define allegro_period 5
++    static volatile int allegro_time = 0;
++    static int allegro_base = 0;
++    static volatile int allegro_get_time() {
++        return allegro_time - allegro_base;
++    }
++    END_OF_STATIC_FUNCTION(allegro_get_time);
++    static void global_timer(void) {
++        allegro_time += allegro_period;
++    }
++    END_OF_STATIC_FUNCTION(global_timer);
++    void init_allegro_time() {
++        LOCK_FUNCTION(global_timer);
++        LOCK_FUNCTION(allegro_get_time);
++        LOCK_VARIABLE(allegro_time);
++        if (install_timer() &lt; 0) tw_error(&quot;Allegro timer installation failed&quot;);
++        install_int(&amp;global_timer, allegro_period);
++    }
++    void deinit_allegro_time() {
++        remove_int(&amp;global_timer);
++    }
++#elif defined PLATFORM_IS_SDL
++#   include &lt;SDL.h&gt;
++    static int sdl_base;
++    static int sdl_get_time() {
++        return SDL_GetTicks() - sdl_base;
++    }
++    static void init_sdl_time() {
++        SDL_InitSubSystem(SDL_INIT_TIMER);
++    }
++    static void deinit_sdl_time() {
++        SDL_QuitSubSystem(SDL_INIT_TIMER);
++    }
++#else
++//# error unknown platform
++#endif
++
++#if !defined NO_LIBC
++#   define LIBC_TIME
++    int libc_base = 0;
++    int libc_get_time() {
++        return (clock() * 1000) / CLOCKS_PER_SEC - libc_base;
++    }
++#endif
++
++
++
++
++
+ //3.  The exported wrappers for time functions
+ 
++
++
++
+ volatile int get_time() {
+-	return allegro_get_time();
++#if 0
++#elif defined WINMM_TGT
++    return winmm_tgt_get_time();
++#elif defined PLATFORM_IS_SDL
++    return sdl_get_time();
++#elif defined PLATFORM_IS_ALLEGRO
++    return allegro_get_time();
++#elif defined LIBC_TIME
++    return libc_get_time();
++#else
++#   error No integer time function specified!
++#endif
+ }
+-END_OF_FUNCTION(get_time);
++#ifdef USE_ALLEGRO
++    END_OF_FUNCTION(get_time);
++#endif
+ 
++volatile double get_time2() {
++#   if 0
++#   elif defined WINMM_QPC
++        return (Sint64)winmm_qpc_get_time() * winmm_qpc_period_f;
++#   elif defined RDTSC_TIMER
++        //require debuging mode, since we don't have run-time check
++        return (Sint64)rdtsc_get_time() * rdtsc_period_f;
++#   else
++        return get_time();
++#   endif
++}
++
++volatile Sint64 get_time3() {
++#   if 0
++#   elif defined RDTSC_TIMER
++        //ought to require debuging mode, since we don't have run-time check that RDTSC is a valid instruction
++        return rdtsc_get_time();
++#   elif defined WINMM_QPC
++        return winmm_qpc_get_time();
++#   else
++        return get_time();
++#   endif
++}
++
+ static unsigned char timer_attributes = 0;
+ 
+ int is_time_initialized() {
+-	return (timer_attributes &amp; 1);
++    return (timer_attributes &amp; 1);
+ }
+ 
+ void init_time() {
+-	int ms;
+-	if (timer_attributes &amp; 1) return;
+-	timer_attributes |= 1;
+-		LOCK_FUNCTION(get_time);
+-		init_allegro_time();
+-		allegro_base = allegro_get_time() - 1;
+-	ms = get_time();
++    int ms;
++    if (timer_attributes &amp; 1) return;
++    timer_attributes |= 1;
++#   if defined WINMM_TGT
++    {
++        int tmp = winmm_tgt_get_time();
++        int i;
++        for (i = 0; i &lt; 1000000; i += 1) 
++            if (winmm_tgt_get_time() != tmp) break;
++        winmm_tgt_base = winmm_tgt_get_time() - 1;
++    }
++#   endif
++#   if defined PLATFORM_IS_SDL
++        init_sdl_time();
++        sdl_base = sdl_get_time() - 1;
++#   endif
++#   if defined PLATFORM_IS_ALLEGRO
++        LOCK_FUNCTION(get_time);
++        init_allegro_time();
++        allegro_base = allegro_get_time() - 1;
++#   endif
++#   if defined LIBC_TIME
++        libc_base = libc_get_time() - 1;
++#   endif
++
++    ms = get_time();
++//finished initializing get_time()
++//now we do get_time2() / get_time3()
++
++#   if defined RDTSC_TIMER
++        //require debuging mode, since we don't have a run-time check
++        rdtsc_base = rdtsc_get_time();
++#   endif
++#   if defined WINMM_QPC
++        winmm_qpc_base = winmm_qpc_get_time();
++        winmm_qpc_period_f = 1000.0 / winmm_qpc_get_freq();
++#   endif
++
++#   if defined RDTSC_TIMER
++    {
++        Sint64 tmpl;
++        double tmpd;
++        while (get_time() - ms &lt; 100) ;
++        tmpl = rdtsc_get_time();
++        tmpd = tmpl * (1.0 / (get_time() - ms));
++#       if !defined NO_LIBC
++        {
++            double tmpd2, tmpd3;
++            //most clock speeds are multiples of nice numbers
++            //like 25.0 or 33.333 Mega-Hertz.  
++            tmpd2 = floor(0.5 + tmpd / (100000/4.0)) * (100000/4.0);
++            tmpd3 = floor(0.5 + tmpd / (100000/3.0)) * (100000/3.0);
++            if (fabs(tmpd2-tmpd) &lt; fabs(tmpd3-tmpd)) tmpd = tmpd2;
++            else tmpd = tmpd3;
++        }
++#       endif
++        rdtsc_period_f = 1 / tmpd;
++    }
++#   endif
+ }
+ 
++
+ //not tested, not even a little bit...
+ void deinit_time() {
+-	if (!(timer_attributes &amp; 1)) return;
+-	timer_attributes &amp;=~1;
+-		deinit_allegro_time();
+-	return;
++    if (!(timer_attributes &amp; 1)) return;
++    timer_attributes &amp;=~1;
++#   if defined PLATFORM_IS_SDL
++        deinit_sdl_time();
++#   endif
++#   if defined PLATFORM_IS_ALLEGRO
++        deinit_allegro_time();
++#   endif
++    return;
+ }
+
+Modified: trunk/source/util/types.h
+===================================================================
+--- trunk/source/util/types.h	2005-10-27 02:32:15 UTC (rev 200)
++++ trunk/source/util/types.h	2005-10-27 03:09:08 UTC (rev 201)
+@@ -1,19 +1,16 @@
+ #ifndef __TYPES_H__
+ #define __TYPES_H__
+ 
+-#if 0
++
++
++#ifdef PLATFORM_IS_SDL
++#include &lt;SDL_types.h&gt;
+ #elif defined __GNUC__
+ 
+ //GNU C++
+ 
+-/*typedef uint64_t Uint64;
+-typedef uint32_t Uint32;
+-typedef uint16_t Uint16;
+-typedef uint8_t  Uint8;
+-typedef int64_t Sint64;
+-typedef int32_t Sint32;
+-typedef int16_t Sint16;
+-typedef int8_t  Sint8;*/
++
++
+ typedef unsigned long long int Uint64;
+ typedef unsigned int           Uint32;
+ typedef unsigned short int     Uint16;
+@@ -55,4 +52,5 @@
+ 
+ #endif
+ 
++
+ #endif // __TYPES_H__
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000146.html">[Tw-light-svn] r200 - trunk/gamedata/music
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#147">[ date ]</a>
+              <a href="thread.html#147">[ thread ]</a>
+              <a href="subject.html#147">[ subject ]</a>
+              <a href="author.html#147">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

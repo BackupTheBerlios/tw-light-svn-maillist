@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r70 - trunk/Util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2004-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r70%20-%20trunk/Util&In-Reply-To=%3C200409281944.i8SJiPcS000432%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000017.html">
+   <LINK REL="Next"  HREF="000019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r70 - trunk/Util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r70%20-%20trunk/Util&In-Reply-To=%3C200409281944.i8SJiPcS000432%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r70 - trunk/Util">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Tue Sep 28 21:44:25 CEST 2004</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000017.html">[Tw-light-svn] r69 - in trunk: . Util doc gamedata rawgraphic
+</A></li>
+        <LI>Next message: <A HREF="000019.html">[Tw-light-svn] r71 - in branches/multiplayer-branch: . Util Util/deditor doc gamedata gamedata/default_ini gamedata/default_ini/ships gamedata/images gamedata/images/ships/shpalabc gamedata/images/ships/shpandgu gamedata/images/ships/shparisk gamedata/images/ships/shpbahbu gamedata/images/ships/shpbipka gamedata/images/ships/shpchebr gamedata/images/ships/shpchmav gamedata/images/ships/shpchoex gamedata/images/ships/shpconca gamedata/images/ships/shpconho gamedata/images/ships/shpdragr gamedata/images/ships/shpdruma gamedata/images/ships/shpearc3 gamedata/images/ships/shpearcr gamedata/images/ships/shpforsh gamedata/images/ships/shpgarty gamedata/images/ships/shpilwav gamedata/images/ships/shpilwsp gamedata/images/ships/shpkahbo gamedata/images/ships/shpkohma gamedata/images/ships/shpkzedr gamedata/images/ships/shpmeltr gamedata/images/ships/shpmmrxf gamedata/images/ships/shpmycpo gamedata/images/ships/shporzne gamedata/images/ships/shppkufu gamedata/images/ships/shprogsq gamedata! /images/ships/shpshosc gamedata/images/ships/shpslypr gamedata/images/ships/shpspael gamedata/images/ships/shpstaba gamedata/images/ships/shpsupbl gamedata/images/ships/shpsyrpe gamedata/images/ships/shptauar gamedata/images/ships/shptauda gamedata/images/ships/shptausl gamedata/images/ships/shptauto gamedata/images/ships/shpthrto gamedata/images/ships/shpumgdr gamedata/images/ships/shputwju gamedata/images/ships/shpvuxin gamedata/images/ships/shpyehte gamedata/images/ships/shpzeksh gamedata/images/ships/shpzfpst gamedata/music gamedata/music/ditty gamedata/ships gamedata/sound gamedata/sound/ships/shpalabc gamedata/sound/ships/shpandgu gamedata/sound/ships/shparisk gamedata/sound/ships/shpbahbu gamedata/sound/ships/shpbipka gamedata/sound/ships/shpchebr gamedata/sound/ships/shpchmav gamedata/sound/ships/shpchoex gamedata/sound/ships/shpconca gamedata/sound/ships/shpconho gamedata/sound/ships/shpdragr gamedata/sound/ships/shpdruma gamedata/sound/ships/shpearc3 gamedata/soun! d/ships/shpearcr gamedata/sound/ships/shpforsh gamedata/sound/! ships/sh
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2004-09-28 21:44:24 +0200 (Tue, 28 Sep 2004)
+New Revision: 70
+
+Modified:
+   trunk/Util/timewarp.nsi
+Log:
+Fixed readme link
+
+
+Modified: trunk/Util/timewarp.nsi
+===================================================================
+--- trunk/Util/timewarp.nsi	2004-09-27 23:31:29 UTC (rev 69)
++++ trunk/Util/timewarp.nsi	2004-09-28 19:44:24 UTC (rev 70)
+@@ -119,7 +119,7 @@
+ !insertmacro MUI_INSTALLOPTIONS_READ $INI_VALUE &quot;timewarp.ini&quot; &quot;Field 2&quot; &quot;State&quot;
+  StrCmp $INI_VALUE &quot;1&quot; &quot;&quot; +5
+   CreateDirectory &quot;$SMPROGRAMS\TW-Light&quot;
+-  CreateShortCut &quot;$SMPROGRAMS\TW-Light\readme.lnk&quot; &quot;$INSTDIR\readme.html&quot; &quot;Readme.html&quot;
++  CreateShortCut &quot;$SMPROGRAMS\TW-Light\readme.lnk&quot; &quot;$INSTDIR\gamedata\readme.html&quot; &quot;Readme.html&quot;
+   CreateShortCut &quot;$SMPROGRAMS\TW-Light\tw-light.lnk&quot; &quot;$INSTDIR\tw-light.exe&quot; &quot;${PRODUCT_NAME}&quot;
+ 
+ SectionEnd
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000017.html">[Tw-light-svn] r69 - in trunk: . Util doc gamedata rawgraphic
+</A></li>
+	<LI>Next message: <A HREF="000019.html">[Tw-light-svn] r71 - in branches/multiplayer-branch: . Util Util/deditor doc gamedata gamedata/default_ini gamedata/default_ini/ships gamedata/images gamedata/images/ships/shpalabc gamedata/images/ships/shpandgu gamedata/images/ships/shparisk gamedata/images/ships/shpbahbu gamedata/images/ships/shpbipka gamedata/images/ships/shpchebr gamedata/images/ships/shpchmav gamedata/images/ships/shpchoex gamedata/images/ships/shpconca gamedata/images/ships/shpconho gamedata/images/ships/shpdragr gamedata/images/ships/shpdruma gamedata/images/ships/shpearc3 gamedata/images/ships/shpearcr gamedata/images/ships/shpforsh gamedata/images/ships/shpgarty gamedata/images/ships/shpilwav gamedata/images/ships/shpilwsp gamedata/images/ships/shpkahbo gamedata/images/ships/shpkohma gamedata/images/ships/shpkzedr gamedata/images/ships/shpmeltr gamedata/images/ships/shpmmrxf gamedata/images/ships/shpmycpo gamedata/images/ships/shporzne gamedata/images/ships/shppkufu gamedata/images/ships/shprogsq gamedata! /images/ships/shpshosc gamedata/images/ships/shpslypr gamedata/images/ships/shpspael gamedata/images/ships/shpstaba gamedata/images/ships/shpsupbl gamedata/images/ships/shpsyrpe gamedata/images/ships/shptauar gamedata/images/ships/shptauda gamedata/images/ships/shptausl gamedata/images/ships/shptauto gamedata/images/ships/shpthrto gamedata/images/ships/shpumgdr gamedata/images/ships/shputwju gamedata/images/ships/shpvuxin gamedata/images/ships/shpyehte gamedata/images/ships/shpzeksh gamedata/images/ships/shpzfpst gamedata/music gamedata/music/ditty gamedata/ships gamedata/sound gamedata/sound/ships/shpalabc gamedata/sound/ships/shpandgu gamedata/sound/ships/shparisk gamedata/sound/ships/shpbahbu gamedata/sound/ships/shpbipka gamedata/sound/ships/shpchebr gamedata/sound/ships/shpchmav gamedata/sound/ships/shpchoex gamedata/sound/ships/shpconca gamedata/sound/ships/shpconho gamedata/sound/ships/shpdragr gamedata/sound/ships/shpdruma gamedata/sound/ships/shpearc3 gamedata/soun! d/ships/shpearcr gamedata/sound/ships/shpforsh gamedata/sound/! ships/sh
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

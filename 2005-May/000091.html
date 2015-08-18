@@ -1,0 +1,2039 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r145 - in trunk: gamedata/python source/games source/generated
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r145%20-%20in%20trunk%3A%20gamedata/python%20source/games%20source/generated&In-Reply-To=%3C200505011853.j41IrmwV021848%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000090.html">
+   <LINK REL="Next"  HREF="000092.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r145 - in trunk: gamedata/python source/games source/generated</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r145%20-%20in%20trunk%3A%20gamedata/python%20source/games%20source/generated&In-Reply-To=%3C200505011853.j41IrmwV021848%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r145 - in trunk: gamedata/python source/games source/generated">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun May  1 20:53:48 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000090.html">[Tw-light-svn] r144 - in trunk: gamedata/python source/games source/melee
+</A></li>
+        <LI>Next message: <A HREF="000092.html">[Tw-light-svn] r146 - in trunk: . Util doc gamedata gamedata/python gamedata/python/lib mingw-libs/include/SDL rawgraphic source source/games source/generated source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#91">[ date ]</a>
+              <a href="thread.html#91">[ thread ]</a>
+              <a href="subject.html#91">[ subject ]</a>
+              <a href="author.html#91">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-01 20:53:47 +0200 (Sun, 01 May 2005)
+New Revision: 145
+
+Modified:
+   trunk/gamedata/python/ggob.py
+   trunk/gamedata/python/twsaveload.py
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/games/ggob.i
+   trunk/source/generated/ggob.py
+   trunk/source/generated/ggob_wrap.cpp
+Log:
+Ship position is saved now
+
+
+Modified: trunk/gamedata/python/ggob.py
+===================================================================
+--- trunk/gamedata/python/ggob.py	2005-05-01 14:23:55 UTC (rev 144)
++++ trunk/gamedata/python/ggob.py	2005-05-01 18:53:47 UTC (rev 145)
+@@ -58,6 +58,82 @@
+         _swig_setattr(self, pair,self.__class__,pair)
+ _ggob.pair_swigregister(pairPtr)
+ 
++class EnemySaveData(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, EnemySaveData, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, EnemySaveData, name)
++    def __repr__(self):
++        return &quot;&lt;C EnemySaveData instance at %s&gt;&quot; % (self.this,)
++    __swig_setmethods__[&quot;pos_x&quot;] = _ggob.EnemySaveData_pos_x_set
++    __swig_getmethods__[&quot;pos_x&quot;] = _ggob.EnemySaveData_pos_x_get
++    if _newclass:pos_x = property(_ggob.EnemySaveData_pos_x_get, _ggob.EnemySaveData_pos_x_set)
++    __swig_setmethods__[&quot;pos_y&quot;] = _ggob.EnemySaveData_pos_y_set
++    __swig_getmethods__[&quot;pos_y&quot;] = _ggob.EnemySaveData_pos_y_get
++    if _newclass:pos_y = property(_ggob.EnemySaveData_pos_y_get, _ggob.EnemySaveData_pos_y_set)
++    def __init__(self, *args):
++        _swig_setattr(self, EnemySaveData, 'this', _ggob.new_EnemySaveData(*args))
++        _swig_setattr(self, EnemySaveData, 'thisown', 1)
++    def __del__(self, destroy=_ggob.delete_EnemySaveData):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++
++class EnemySaveDataPtr(EnemySaveData):
++    def __init__(self, this):
++        _swig_setattr(self, EnemySaveData, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, EnemySaveData, 'thisown', 0)
++        _swig_setattr(self, EnemySaveData,self.__class__,EnemySaveData)
++_ggob.EnemySaveData_swigregister(EnemySaveDataPtr)
++
++class SaveGobGameInfo(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, SaveGobGameInfo, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, SaveGobGameInfo, name)
++    def __repr__(self):
++        return &quot;&lt;C SaveGobGameInfo instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;getInstance&quot;] = lambda x: _ggob.SaveGobGameInfo_getInstance
++    if _newclass:getInstance = staticmethod(_ggob.SaveGobGameInfo_getInstance)
++    def updateSave(*args): return _ggob.SaveGobGameInfo_updateSave(*args)
++    def updateGame(*args): return _ggob.SaveGobGameInfo_updateGame(*args)
++    __swig_setmethods__[&quot;starbucks&quot;] = _ggob.SaveGobGameInfo_starbucks_set
++    __swig_getmethods__[&quot;starbucks&quot;] = _ggob.SaveGobGameInfo_starbucks_get
++    if _newclass:starbucks = property(_ggob.SaveGobGameInfo_starbucks_get, _ggob.SaveGobGameInfo_starbucks_set)
++    __swig_setmethods__[&quot;buckazoids&quot;] = _ggob.SaveGobGameInfo_buckazoids_set
++    __swig_getmethods__[&quot;buckazoids&quot;] = _ggob.SaveGobGameInfo_buckazoids_get
++    if _newclass:buckazoids = property(_ggob.SaveGobGameInfo_buckazoids_get, _ggob.SaveGobGameInfo_buckazoids_set)
++    __swig_setmethods__[&quot;kills&quot;] = _ggob.SaveGobGameInfo_kills_set
++    __swig_getmethods__[&quot;kills&quot;] = _ggob.SaveGobGameInfo_kills_get
++    if _newclass:kills = property(_ggob.SaveGobGameInfo_kills_get, _ggob.SaveGobGameInfo_kills_set)
++    __swig_setmethods__[&quot;pos_x&quot;] = _ggob.SaveGobGameInfo_pos_x_set
++    __swig_getmethods__[&quot;pos_x&quot;] = _ggob.SaveGobGameInfo_pos_x_get
++    if _newclass:pos_x = property(_ggob.SaveGobGameInfo_pos_x_get, _ggob.SaveGobGameInfo_pos_x_set)
++    __swig_setmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_set
++    __swig_getmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_get
++    if _newclass:pos_y = property(_ggob.SaveGobGameInfo_pos_y_get, _ggob.SaveGobGameInfo_pos_y_set)
++    __swig_setmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_set
++    __swig_getmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_get
++    if _newclass:tst = property(_ggob.SaveGobGameInfo_tst_get, _ggob.SaveGobGameInfo_tst_set)
++    def getTst(*args): return _ggob.SaveGobGameInfo_getTst(*args)
++    def setTst(*args): return _ggob.SaveGobGameInfo_setTst(*args)
++    def __init__(self, *args):
++        _swig_setattr(self, SaveGobGameInfo, 'this', _ggob.new_SaveGobGameInfo(*args))
++        _swig_setattr(self, SaveGobGameInfo, 'thisown', 1)
++    def __del__(self, destroy=_ggob.delete_SaveGobGameInfo):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++
++class SaveGobGameInfoPtr(SaveGobGameInfo):
++    def __init__(self, this):
++        _swig_setattr(self, SaveGobGameInfo, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, SaveGobGameInfo, 'thisown', 0)
++        _swig_setattr(self, SaveGobGameInfo,self.__class__,SaveGobGameInfo)
++_ggob.SaveGobGameInfo_swigregister(SaveGobGameInfoPtr)
++
++SaveGobGameInfo_getInstance = _ggob.SaveGobGameInfo_getInstance
++
+ class GobPlayer(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, GobPlayer, name, value)
+@@ -81,10 +157,6 @@
+     __swig_setmethods__[&quot;num_pairs&quot;] = _ggob.GobPlayer_num_pairs_set
+     __swig_getmethods__[&quot;num_pairs&quot;] = _ggob.GobPlayer_num_pairs_get
+     if _newclass:num_pairs = property(_ggob.GobPlayer_num_pairs_get, _ggob.GobPlayer_num_pairs_set)
+-    def _add_pair(*args): return _ggob.GobPlayer__add_pair(*args)
+-    def _get_pair(*args): return _ggob.GobPlayer__get_pair(*args)
+-    def write_pair(*args): return _ggob.GobPlayer_write_pair(*args)
+-    def read_pair(*args): return _ggob.GobPlayer_read_pair(*args)
+     __swig_setmethods__[&quot;total&quot;] = _ggob.GobPlayer_total_set
+     __swig_getmethods__[&quot;total&quot;] = _ggob.GobPlayer_total_get
+     if _newclass:total = property(_ggob.GobPlayer_total_get, _ggob.GobPlayer_total_set)
+@@ -110,6 +182,10 @@
+     def died(*args): return _ggob.GobPlayer_died(*args)
+     def new_ship(*args): return _ggob.GobPlayer_new_ship(*args)
+     def charge(*args): return _ggob.GobPlayer_charge(*args)
++    def _add_pair(*args): return _ggob.GobPlayer__add_pair(*args)
++    def _get_pair(*args): return _ggob.GobPlayer__get_pair(*args)
++    def write_pair(*args): return _ggob.GobPlayer_write_pair(*args)
++    def read_pair(*args): return _ggob.GobPlayer_read_pair(*args)
+     __swig_setmethods__[&quot;upgrade_list&quot;] = _ggob.GobPlayer_upgrade_list_set
+     __swig_getmethods__[&quot;upgrade_list&quot;] = _ggob.GobPlayer_upgrade_list_get
+     if _newclass:upgrade_list = property(_ggob.GobPlayer_upgrade_list_get, _ggob.GobPlayer_upgrade_list_set)
+@@ -377,4 +453,37 @@
+         _swig_setattr(self, RainbowRift,self.__class__,RainbowRift)
+ _ggob.RainbowRift_swigregister(RainbowRiftPtr)
+ 
++class vectorEnemySaveData(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, vectorEnemySaveData, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, vectorEnemySaveData, name)
++    def __repr__(self):
++        return &quot;&lt;C std::vector&lt;(EnemySaveData)&gt; instance at %s&gt;&quot; % (self.this,)
++    def __init__(self, *args):
++        _swig_setattr(self, vectorEnemySaveData, 'this', _ggob.new_vectorEnemySaveData(*args))
++        _swig_setattr(self, vectorEnemySaveData, 'thisown', 1)
++    def __len__(*args): return _ggob.vectorEnemySaveData___len__(*args)
++    def clear(*args): return _ggob.vectorEnemySaveData_clear(*args)
++    def append(*args): return _ggob.vectorEnemySaveData_append(*args)
++    def __nonzero__(*args): return _ggob.vectorEnemySaveData___nonzero__(*args)
++    def pop(*args): return _ggob.vectorEnemySaveData_pop(*args)
++    def __getitem__(*args): return _ggob.vectorEnemySaveData___getitem__(*args)
++    def __getslice__(*args): return _ggob.vectorEnemySaveData___getslice__(*args)
++    def __setitem__(*args): return _ggob.vectorEnemySaveData___setitem__(*args)
++    def __setslice__(*args): return _ggob.vectorEnemySaveData___setslice__(*args)
++    def __delitem__(*args): return _ggob.vectorEnemySaveData___delitem__(*args)
++    def __delslice__(*args): return _ggob.vectorEnemySaveData___delslice__(*args)
++    def __del__(self, destroy=_ggob.delete_vectorEnemySaveData):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
+ 
++class vectorEnemySaveDataPtr(vectorEnemySaveData):
++    def __init__(self, this):
++        _swig_setattr(self, vectorEnemySaveData, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, vectorEnemySaveData, 'thisown', 0)
++        _swig_setattr(self, vectorEnemySaveData,self.__class__,vectorEnemySaveData)
++_ggob.vectorEnemySaveData_swigregister(vectorEnemySaveDataPtr)
++
++
+
+Modified: trunk/gamedata/python/twsaveload.py
+===================================================================
+--- trunk/gamedata/python/twsaveload.py	2005-05-01 14:23:55 UTC (rev 144)
++++ trunk/gamedata/python/twsaveload.py	2005-05-01 18:53:47 UTC (rev 145)
+@@ -1,44 +1,51 @@
+ #!/usr/bin/python
+ import pickle,os,sys,ggob,copy
+ 
+-tr = &quot;Happy days&quot;
+-game = ggob.GobGame.get_this()
+ 
+-class Vector2:
+-    x = 0
+-    y = 0
++gamedata = ggob.SaveGobGameInfo.getInstance()
+ 
+-class Player:
+-    starbucks        = 0
+-    buckazoids       = 0
+-    value_starbucks  = 0
+-    value_buckazoids = 0
+-    kills            = 0
++class Enemy:
++    def __init__(self):
++        pos_x = 0
++        pos_y = 0
+ 
+ class GameData:
+     def __init__(self):
+-        self.player = Player()
++        pass
+     def getData(self):
+         # get player possession
+-        self.player.starbucks        = copy.deepcopy(game.gobplayer.starbucks)
+-        self.player.buckazoids       = copy.deepcopy(game.gobplayer.buckazoids)
+-        self.player.value_starbucks  = copy.deepcopy(game.gobplayer.value_starbucks)
+-        self.player.value_buckazoids = copy.deepcopy(game.gobplayer.value_buckazoids)
+-        self.player.kills            = copy.deepcopy(game.gobplayer.kills)
+-    
++        self.starbucks        = copy.deepcopy(gamedata.starbucks)
++        self.buckazoids       = copy.deepcopy(gamedata.buckazoids)
++        self.kills            = copy.deepcopy(gamedata.kills)
++        # ship
++        self.pos_x            = copy.deepcopy(gamedata.pos_x)
++        self.pos_y            = copy.deepcopy(gamedata.pos_y)
++        # enemy
++        self.enemy            = []
++        for i in gamedata.getTst():
++            e = Enemy()
++            e.pos_x = i.pos_x
++            e.pos_y = i.pos_y
++            self.enemy.append(e)
+     def commitData(self):
+         # commit player possession
+-        game.gobplayer.starbucks          = self.player.starbucks
+-        game.gobplayer.buckazoids         = self.player.buckazoids
+-        game.gobplayer.value_starbucks    = self.player.value_starbucks
+-        game.gobplayer.value_buckazoids   = self.player.value_buckazoids
+-        game.gobplayer.kills              = self.player.kills
+-
++        gamedata.starbucks          = self.starbucks
++        gamedata.buckazoids         = self.buckazoids
++        gamedata.kills              = self.kills
++        # ship
++        gamedata.pos_x              = self.pos_x
++        gamedata.pos_y              = self.pos_y
++        # enemy
++        e = ggob.vectorEnemySaveData(len(self.enemy))
++        for i in range(0, len(self.enemy)):
++            e[i].pos_x = self.enemy[i].pos_x
++            e[i].pos_y = self.enemy[i].pos_y
++        gamedata.setTst(e)
++        
+ class SaveManager:
+     def __init__(self, file):
+ 	self.file = file
+ 	self.data = GameData()
+-	pass
+     def saveSelf(self):
+ 	f = open(self.file, &quot;w&quot;, pickle.HIGHEST_PROTOCOL)
+ 	pickle.dump(self.data,f)
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-05-01 14:23:55 UTC (rev 144)
++++ trunk/source/games/ggob.cpp	2005-05-01 18:53:47 UTC (rev 145)
+@@ -51,6 +51,39 @@
+ 
+ #define gobgame ((GobGame*)game)
+ 
++///////////////////////////////////////////////////////////////////////
++// Save Game stuff
++///////////////////////////////////////////////////////////////////////
++SaveGobGameInfo* SaveGobGameInfo::getInstance()
++{
++  static SaveGobGameInfo svg;
++  return &svg;
++}
++
++
++void SaveGobGameInfo::updateGame()
++{
++  gobgame-&gt;gobplayer.starbucks    = starbucks;
++  gobgame-&gt;gobplayer.buckazoids   = buckazoids;
++  gobgame-&gt;gobplayer.kills        = kills;
++  gobgame-&gt;gobplayer.ship-&gt;pos.x = pos_x;
++  gobgame-&gt;gobplayer.ship-&gt;pos.y = pos_y;
++}
++
++void SaveGobGameInfo::updateSave()
++{
++  starbucks   = gobgame-&gt;gobplayer.starbucks;
++  buckazoids  = gobgame-&gt;gobplayer.buckazoids;
++  kills       = gobgame-&gt;gobplayer.kills;
++  pos_x       = gobgame-&gt;gobplayer.ship-&gt;pos.x;
++  pos_y       = gobgame-&gt;gobplayer.ship-&gt;pos.y;
++
++  EnemySaveData abc;
++  abc.pos_x = 1;
++  abc.pos_y = 2;
++  tst.push_back(abc);
++}
++
+ ////////////////////////////////////////////////////////////////////////
+ //				Gob stuff
+ ////////////////////////////////////////////////////////////////////////
+@@ -1105,6 +1138,7 @@
+ /// @param file path to saved data
+ std::string GobGame::Save(const std::string&amp; file)
+ {
++  SaveGobGameInfo::getInstance()-&gt;updateSave();
+   std::string save_script;
+   save_script  = &quot;import twsaveload\n&quot;;
+   save_script += &quot;data = twsaveload.SaveManager(\&quot;\&quot;\&quot;&quot; + file +&quot;\&quot;\&quot;\&quot;)\n&quot;;
+@@ -1123,6 +1157,7 @@
+   load_script += &quot;data = twsaveload.SaveManager(\&quot;\&quot;\&quot;&quot; + file +&quot;\&quot;\&quot;\&quot;)\n&quot;;
+   load_script += &quot;data.loadSelf()\n&quot;;
+   python::exec_string(load_script);
++    SaveGobGameInfo::getInstance()-&gt;updateGame();
+   return 0;
+ }
+ 
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-05-01 14:23:55 UTC (rev 144)
++++ trunk/source/games/ggob.h	2005-05-01 18:53:47 UTC (rev 145)
+@@ -35,6 +35,39 @@
+   int value;
+ };
+ 
++class EnemySaveData
++{
++ public:
++  int pos_x;
++  int pos_y;
++};
++
++class SaveGobGameInfo
++{
++ public:
++  static SaveGobGameInfo* getInstance();
++  void updateSave();
++  void updateGame();
++  
++  // player possession
++  int starbucks;
++  int buckazoids;
++  int kills;
++   
++  // ship
++  int pos_x;
++  int pos_y;
++
++  std::string system;
++  std::string getSystem(){return system;}
++  void setSystem(const std::string&amp; s){system = sys ;}
++
++  // 
++  std::vector&lt;EnemySaveData&gt; tst;
++  std::vector&lt;EnemySaveData&gt; getTst(){return tst;}
++  void setTst(std::vector&lt;EnemySaveData&gt;&amp; v){tst = v;}
++};
++
+ /// Player possession (ship, money, upgrades)
+ class GobPlayer 
+ {
+
+Modified: trunk/source/games/ggob.i
+===================================================================
+--- trunk/source/games/ggob.i	2005-05-01 14:23:55 UTC (rev 144)
++++ trunk/source/games/ggob.i	2005-05-01 18:53:47 UTC (rev 145)
+@@ -6,3 +6,8 @@
+ %include &quot;std_pair.i&quot;
+ %include ggob.h
+ 
++%include &quot;std_vector.i&quot;
++
++namespace std {
++   %template(vectorEnemySaveData) vector&lt;EnemySaveData&gt;;
++};
+\ No newline at end of file
+
+Modified: trunk/source/generated/ggob.py
+===================================================================
+--- trunk/source/generated/ggob.py	2005-05-01 14:23:55 UTC (rev 144)
++++ trunk/source/generated/ggob.py	2005-05-01 18:53:47 UTC (rev 145)
+@@ -58,6 +58,82 @@
+         _swig_setattr(self, pair,self.__class__,pair)
+ _ggob.pair_swigregister(pairPtr)
+ 
++class EnemySaveData(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, EnemySaveData, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, EnemySaveData, name)
++    def __repr__(self):
++        return &quot;&lt;C EnemySaveData instance at %s&gt;&quot; % (self.this,)
++    __swig_setmethods__[&quot;pos_x&quot;] = _ggob.EnemySaveData_pos_x_set
++    __swig_getmethods__[&quot;pos_x&quot;] = _ggob.EnemySaveData_pos_x_get
++    if _newclass:pos_x = property(_ggob.EnemySaveData_pos_x_get, _ggob.EnemySaveData_pos_x_set)
++    __swig_setmethods__[&quot;pos_y&quot;] = _ggob.EnemySaveData_pos_y_set
++    __swig_getmethods__[&quot;pos_y&quot;] = _ggob.EnemySaveData_pos_y_get
++    if _newclass:pos_y = property(_ggob.EnemySaveData_pos_y_get, _ggob.EnemySaveData_pos_y_set)
++    def __init__(self, *args):
++        _swig_setattr(self, EnemySaveData, 'this', _ggob.new_EnemySaveData(*args))
++        _swig_setattr(self, EnemySaveData, 'thisown', 1)
++    def __del__(self, destroy=_ggob.delete_EnemySaveData):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++
++class EnemySaveDataPtr(EnemySaveData):
++    def __init__(self, this):
++        _swig_setattr(self, EnemySaveData, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, EnemySaveData, 'thisown', 0)
++        _swig_setattr(self, EnemySaveData,self.__class__,EnemySaveData)
++_ggob.EnemySaveData_swigregister(EnemySaveDataPtr)
++
++class SaveGobGameInfo(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, SaveGobGameInfo, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, SaveGobGameInfo, name)
++    def __repr__(self):
++        return &quot;&lt;C SaveGobGameInfo instance at %s&gt;&quot; % (self.this,)
++    __swig_getmethods__[&quot;getInstance&quot;] = lambda x: _ggob.SaveGobGameInfo_getInstance
++    if _newclass:getInstance = staticmethod(_ggob.SaveGobGameInfo_getInstance)
++    def updateSave(*args): return _ggob.SaveGobGameInfo_updateSave(*args)
++    def updateGame(*args): return _ggob.SaveGobGameInfo_updateGame(*args)
++    __swig_setmethods__[&quot;starbucks&quot;] = _ggob.SaveGobGameInfo_starbucks_set
++    __swig_getmethods__[&quot;starbucks&quot;] = _ggob.SaveGobGameInfo_starbucks_get
++    if _newclass:starbucks = property(_ggob.SaveGobGameInfo_starbucks_get, _ggob.SaveGobGameInfo_starbucks_set)
++    __swig_setmethods__[&quot;buckazoids&quot;] = _ggob.SaveGobGameInfo_buckazoids_set
++    __swig_getmethods__[&quot;buckazoids&quot;] = _ggob.SaveGobGameInfo_buckazoids_get
++    if _newclass:buckazoids = property(_ggob.SaveGobGameInfo_buckazoids_get, _ggob.SaveGobGameInfo_buckazoids_set)
++    __swig_setmethods__[&quot;kills&quot;] = _ggob.SaveGobGameInfo_kills_set
++    __swig_getmethods__[&quot;kills&quot;] = _ggob.SaveGobGameInfo_kills_get
++    if _newclass:kills = property(_ggob.SaveGobGameInfo_kills_get, _ggob.SaveGobGameInfo_kills_set)
++    __swig_setmethods__[&quot;pos_x&quot;] = _ggob.SaveGobGameInfo_pos_x_set
++    __swig_getmethods__[&quot;pos_x&quot;] = _ggob.SaveGobGameInfo_pos_x_get
++    if _newclass:pos_x = property(_ggob.SaveGobGameInfo_pos_x_get, _ggob.SaveGobGameInfo_pos_x_set)
++    __swig_setmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_set
++    __swig_getmethods__[&quot;pos_y&quot;] = _ggob.SaveGobGameInfo_pos_y_get
++    if _newclass:pos_y = property(_ggob.SaveGobGameInfo_pos_y_get, _ggob.SaveGobGameInfo_pos_y_set)
++    __swig_setmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_set
++    __swig_getmethods__[&quot;tst&quot;] = _ggob.SaveGobGameInfo_tst_get
++    if _newclass:tst = property(_ggob.SaveGobGameInfo_tst_get, _ggob.SaveGobGameInfo_tst_set)
++    def getTst(*args): return _ggob.SaveGobGameInfo_getTst(*args)
++    def setTst(*args): return _ggob.SaveGobGameInfo_setTst(*args)
++    def __init__(self, *args):
++        _swig_setattr(self, SaveGobGameInfo, 'this', _ggob.new_SaveGobGameInfo(*args))
++        _swig_setattr(self, SaveGobGameInfo, 'thisown', 1)
++    def __del__(self, destroy=_ggob.delete_SaveGobGameInfo):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
++
++class SaveGobGameInfoPtr(SaveGobGameInfo):
++    def __init__(self, this):
++        _swig_setattr(self, SaveGobGameInfo, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, SaveGobGameInfo, 'thisown', 0)
++        _swig_setattr(self, SaveGobGameInfo,self.__class__,SaveGobGameInfo)
++_ggob.SaveGobGameInfo_swigregister(SaveGobGameInfoPtr)
++
++SaveGobGameInfo_getInstance = _ggob.SaveGobGameInfo_getInstance
++
+ class GobPlayer(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, GobPlayer, name, value)
+@@ -81,10 +157,6 @@
+     __swig_setmethods__[&quot;num_pairs&quot;] = _ggob.GobPlayer_num_pairs_set
+     __swig_getmethods__[&quot;num_pairs&quot;] = _ggob.GobPlayer_num_pairs_get
+     if _newclass:num_pairs = property(_ggob.GobPlayer_num_pairs_get, _ggob.GobPlayer_num_pairs_set)
+-    def _add_pair(*args): return _ggob.GobPlayer__add_pair(*args)
+-    def _get_pair(*args): return _ggob.GobPlayer__get_pair(*args)
+-    def write_pair(*args): return _ggob.GobPlayer_write_pair(*args)
+-    def read_pair(*args): return _ggob.GobPlayer_read_pair(*args)
+     __swig_setmethods__[&quot;total&quot;] = _ggob.GobPlayer_total_set
+     __swig_getmethods__[&quot;total&quot;] = _ggob.GobPlayer_total_get
+     if _newclass:total = property(_ggob.GobPlayer_total_get, _ggob.GobPlayer_total_set)
+@@ -110,6 +182,10 @@
+     def died(*args): return _ggob.GobPlayer_died(*args)
+     def new_ship(*args): return _ggob.GobPlayer_new_ship(*args)
+     def charge(*args): return _ggob.GobPlayer_charge(*args)
++    def _add_pair(*args): return _ggob.GobPlayer__add_pair(*args)
++    def _get_pair(*args): return _ggob.GobPlayer__get_pair(*args)
++    def write_pair(*args): return _ggob.GobPlayer_write_pair(*args)
++    def read_pair(*args): return _ggob.GobPlayer_read_pair(*args)
+     __swig_setmethods__[&quot;upgrade_list&quot;] = _ggob.GobPlayer_upgrade_list_set
+     __swig_getmethods__[&quot;upgrade_list&quot;] = _ggob.GobPlayer_upgrade_list_get
+     if _newclass:upgrade_list = property(_ggob.GobPlayer_upgrade_list_get, _ggob.GobPlayer_upgrade_list_set)
+@@ -377,4 +453,37 @@
+         _swig_setattr(self, RainbowRift,self.__class__,RainbowRift)
+ _ggob.RainbowRift_swigregister(RainbowRiftPtr)
+ 
++class vectorEnemySaveData(_object):
++    __swig_setmethods__ = {}
++    __setattr__ = lambda self, name, value: _swig_setattr(self, vectorEnemySaveData, name, value)
++    __swig_getmethods__ = {}
++    __getattr__ = lambda self, name: _swig_getattr(self, vectorEnemySaveData, name)
++    def __repr__(self):
++        return &quot;&lt;C std::vector&lt;(EnemySaveData)&gt; instance at %s&gt;&quot; % (self.this,)
++    def __init__(self, *args):
++        _swig_setattr(self, vectorEnemySaveData, 'this', _ggob.new_vectorEnemySaveData(*args))
++        _swig_setattr(self, vectorEnemySaveData, 'thisown', 1)
++    def __len__(*args): return _ggob.vectorEnemySaveData___len__(*args)
++    def clear(*args): return _ggob.vectorEnemySaveData_clear(*args)
++    def append(*args): return _ggob.vectorEnemySaveData_append(*args)
++    def __nonzero__(*args): return _ggob.vectorEnemySaveData___nonzero__(*args)
++    def pop(*args): return _ggob.vectorEnemySaveData_pop(*args)
++    def __getitem__(*args): return _ggob.vectorEnemySaveData___getitem__(*args)
++    def __getslice__(*args): return _ggob.vectorEnemySaveData___getslice__(*args)
++    def __setitem__(*args): return _ggob.vectorEnemySaveData___setitem__(*args)
++    def __setslice__(*args): return _ggob.vectorEnemySaveData___setslice__(*args)
++    def __delitem__(*args): return _ggob.vectorEnemySaveData___delitem__(*args)
++    def __delslice__(*args): return _ggob.vectorEnemySaveData___delslice__(*args)
++    def __del__(self, destroy=_ggob.delete_vectorEnemySaveData):
++        try:
++            if self.thisown: destroy(self)
++        except: pass
+ 
++class vectorEnemySaveDataPtr(vectorEnemySaveData):
++    def __init__(self, this):
++        _swig_setattr(self, vectorEnemySaveData, 'this', this)
++        if not hasattr(self,&quot;thisown&quot;): _swig_setattr(self, vectorEnemySaveData, 'thisown', 0)
++        _swig_setattr(self, vectorEnemySaveData,self.__class__,vectorEnemySaveData)
++_ggob.vectorEnemySaveData_swigregister(vectorEnemySaveDataPtr)
++
++
+
+Modified: trunk/source/generated/ggob_wrap.cpp
+===================================================================
+--- trunk/source/generated/ggob_wrap.cpp	2005-05-01 14:23:55 UTC (rev 144)
++++ trunk/source/generated/ggob_wrap.cpp	2005-05-01 18:53:47 UTC (rev 145)
+@@ -710,25 +710,28 @@
+ #define  SWIGTYPE_p_Log swig_types[7] 
+ #define  SWIGTYPE_p_StarMap swig_types[8] 
+ #define  SWIGTYPE_p_float swig_types[9] 
+-#define  SWIGTYPE_p_GobAsteroid swig_types[10] 
+-#define  SWIGTYPE_p_TeamCode swig_types[11] 
+-#define  SWIGTYPE_p_GobEnemy swig_types[12] 
+-#define  SWIGTYPE_p_p_GobEnemy swig_types[13] 
+-#define  SWIGTYPE_p_p_Planet swig_types[14] 
+-#define  SWIGTYPE_p_RainbowRift swig_types[15] 
+-#define  SWIGTYPE_p_GobGame swig_types[16] 
+-#define  SWIGTYPE_p_Vector2 swig_types[17] 
+-#define  SWIGTYPE_p_std__string swig_types[18] 
+-#define  SWIGTYPE_p_pair swig_types[19] 
+-#define  SWIGTYPE_p_SpaceSprite swig_types[20] 
+-#define  SWIGTYPE_p_Control swig_types[21] 
+-#define  SWIGTYPE_p_SpaceObject swig_types[22] 
+-#define  SWIGTYPE_p_Frame swig_types[23] 
+-#define  SWIGTYPE_p_ShipPanel swig_types[24] 
+-#define  SWIGTYPE_p_SAMPLE swig_types[25] 
+-#define  SWIGTYPE_p_ShipType swig_types[26] 
+-#define  SWIGTYPE_p_Ship swig_types[27] 
+-static swig_type_info *swig_types[29];
++#define  SWIGTYPE_p_std__vectorTEnemySaveData_t swig_types[10] 
++#define  SWIGTYPE_p_GobAsteroid swig_types[11] 
++#define  SWIGTYPE_p_TeamCode swig_types[12] 
++#define  SWIGTYPE_p_GobEnemy swig_types[13] 
++#define  SWIGTYPE_p_p_GobEnemy swig_types[14] 
++#define  SWIGTYPE_p_p_Planet swig_types[15] 
++#define  SWIGTYPE_p_RainbowRift swig_types[16] 
++#define  SWIGTYPE_p_GobGame swig_types[17] 
++#define  SWIGTYPE_p_EnemySaveData swig_types[18] 
++#define  SWIGTYPE_p_Vector2 swig_types[19] 
++#define  SWIGTYPE_p_std__string swig_types[20] 
++#define  SWIGTYPE_p_SaveGobGameInfo swig_types[21] 
++#define  SWIGTYPE_p_pair swig_types[22] 
++#define  SWIGTYPE_p_SpaceSprite swig_types[23] 
++#define  SWIGTYPE_p_Control swig_types[24] 
++#define  SWIGTYPE_p_SpaceObject swig_types[25] 
++#define  SWIGTYPE_p_Frame swig_types[26] 
++#define  SWIGTYPE_p_ShipPanel swig_types[27] 
++#define  SWIGTYPE_p_SAMPLE swig_types[28] 
++#define  SWIGTYPE_p_ShipType swig_types[29] 
++#define  SWIGTYPE_p_Ship swig_types[30] 
++static swig_type_info *swig_types[32];
+ 
+ /* -------- TYPES TABLE (END) -------- */
+ 
+@@ -823,6 +826,81 @@
+ 
+ #include &lt;utility&gt;
+ 
++
++#include &lt;vector&gt;
++#include &lt;algorithm&gt;
++#include &lt;stdexcept&gt;
++
++bool std_vectorlEnemySaveData_g___nonzero_____(std::vector&lt;EnemySaveData &gt; *self){
++                return !(self-&gt;empty());
++            }
++EnemySaveData std_vectorlEnemySaveData_g_pop___(std::vector&lt;EnemySaveData &gt; *self){
++                if (self-&gt;size() == 0)
++                    throw std::out_of_range(&quot;pop from empty vector&quot;);
++                EnemySaveData x = self-&gt;back();
++                self-&gt;pop_back();
++                return x;
++            }
++EnemySaveData &amp;std_vectorlEnemySaveData_g___getitem_____(std::vector&lt;EnemySaveData &gt; *self,int i){
++                int size = int(self-&gt;size());
++                if (i&lt;0) i += size;
++                if (i&gt;=0 &amp;&amp; i&lt;size)
++                    return (*self)[i];
++                else
++                    throw std::out_of_range(&quot;vector index out of range&quot;);
++            }
++std::vector&lt;EnemySaveData &gt; std_vectorlEnemySaveData_g___getslice_____(std::vector&lt;EnemySaveData &gt; *self,int i,int j){
++                int size = int(self-&gt;size());
++                if (i&lt;0) i = size+i;
++                if (j&lt;0) j = size+j;
++                if (i&lt;0) i = 0;
++                if (j&gt;size) j = size;
++                std::vector&lt;EnemySaveData &gt; tmp;
++                tmp.reserve(j-i);
++                tmp.insert(tmp.begin(),self-&gt;begin()+i,self-&gt;begin()+j);
++                return tmp;
++            }
++void std_vectorlEnemySaveData_g___setitem_____(std::vector&lt;EnemySaveData &gt; *self,int i,EnemySaveData const &amp;x){
++                int size = int(self-&gt;size());
++                if (i&lt;0) i+= size;
++                if (i&gt;=0 &amp;&amp; i&lt;size)
++                    (*self)[i] = x;
++                else
++                    throw std::out_of_range(&quot;vector index out of range&quot;);
++            }
++void std_vectorlEnemySaveData_g___setslice_____(std::vector&lt;EnemySaveData &gt; *self,int i,int j,std::vector&lt;EnemySaveData &gt; const &amp;v){
++                int size = int(self-&gt;size());
++                if (i&lt;0) i = size+i;
++                if (j&lt;0) j = size+j;
++                if (i&lt;0) i = 0;
++                if (j&gt;size) j = size;
++                if (int(v.size()) == j-i) {
++                    std::copy(v.begin(),v.end(),self-&gt;begin()+i);
++                } else {
++                    self-&gt;erase(self-&gt;begin()+i,self-&gt;begin()+j);
++                    if (i+1 &lt;= int(self-&gt;size())) {
++                        self-&gt;insert(self-&gt;begin()+i,v.begin(),v.end());
++                    } else {
++                        self-&gt;insert(self-&gt;end(),v.begin(),v.end());
++                    }
++                }
++            }
++void std_vectorlEnemySaveData_g___delitem_____(std::vector&lt;EnemySaveData &gt; *self,int i){
++                int size = int(self-&gt;size());
++                if (i&lt;0) i+= size;
++                if (i&gt;=0 &amp;&amp; i&lt;size)
++                    self-&gt;erase(self-&gt;begin()+i);
++                else
++                    throw std::out_of_range(&quot;vector index out of range&quot;);
++            }
++void std_vectorlEnemySaveData_g___delslice_____(std::vector&lt;EnemySaveData &gt; *self,int i,int j){
++                int size = int(self-&gt;size());
++                if (i&lt;0) i = size+i;
++                if (j&lt;0) j = size+j;
++                if (i&lt;0) i = 0;
++                if (j&gt;size) j = size;
++                self-&gt;erase(self-&gt;begin()+i,self-&gt;begin()+j);
++            }
+ #ifdef __cplusplus
+ extern &quot;C&quot; {
+ #endif
+@@ -938,27 +1016,95 @@
+     Py_INCREF(obj);
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
+-static PyObject *_wrap_new_GobPlayer(PyObject *self, PyObject *args) {
++static PyObject *_wrap_EnemySaveData_pos_x_set(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    GobPlayer *result;
++    EnemySaveData *arg1 = (EnemySaveData *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;:new_GobPlayer&quot;)) goto fail;
+-    result = (GobPlayer *)new GobPlayer();
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:EnemySaveData_pos_x_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;pos_x = arg2;
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_GobPlayer, 1);
++    Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+     fail:
+     return NULL;
+ }
+ 
+ 
+-static PyObject *_wrap_delete_GobPlayer(PyObject *self, PyObject *args) {
++static PyObject *_wrap_EnemySaveData_pos_x_get(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    GobPlayer *arg1 = (GobPlayer *) 0 ;
++    EnemySaveData *arg1 = (EnemySaveData *) 0 ;
++    int result;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_GobPlayer&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:EnemySaveData_pos_x_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int) ((arg1)-&gt;pos_x);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EnemySaveData_pos_y_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    EnemySaveData *arg1 = (EnemySaveData *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:EnemySaveData_pos_y_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;pos_y = arg2;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_EnemySaveData_pos_y_get(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    EnemySaveData *arg1 = (EnemySaveData *) 0 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:EnemySaveData_pos_y_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int) ((arg1)-&gt;pos_y);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_new_EnemySaveData(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    EnemySaveData *result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:new_EnemySaveData&quot;)) goto fail;
++    result = (EnemySaveData *)new EnemySaveData();
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_EnemySaveData, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_delete_EnemySaveData(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    EnemySaveData *arg1 = (EnemySaveData *) 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_EnemySaveData&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+     delete arg1;
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+@@ -968,17 +1114,240 @@
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_ship_set(PyObject *self, PyObject *args) {
++static PyObject * EnemySaveData_swigregister(PyObject *self, PyObject *args) {
++    PyObject *obj;
++    if (!PyArg_ParseTuple(args,(char*)&quot;O&quot;, &amp;obj)) return NULL;
++    SWIG_TypeClientData(SWIGTYPE_p_EnemySaveData, obj);
++    Py_INCREF(obj);
++    return Py_BuildValue((char *)&quot;&quot;);
++}
++static PyObject *_wrap_SaveGobGameInfo_getInstance(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    Ship *arg2 = (Ship *) 0 ;
++    SaveGobGameInfo *result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:SaveGobGameInfo_getInstance&quot;)) goto fail;
++    result = (SaveGobGameInfo *)SaveGobGameInfo::getInstance();
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_SaveGobGameInfo, 0);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_updateSave(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
+     PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_updateSave&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;updateSave();
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_updateGame(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_updateGame&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;updateGame();
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_starbucks_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:SaveGobGameInfo_starbucks_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;starbucks = arg2;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_starbucks_get(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_starbucks_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int) ((arg1)-&gt;starbucks);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_buckazoids_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:SaveGobGameInfo_buckazoids_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;buckazoids = arg2;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_buckazoids_get(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_buckazoids_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int) ((arg1)-&gt;buckazoids);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_kills_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:SaveGobGameInfo_kills_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;kills = arg2;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_kills_get(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_kills_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int) ((arg1)-&gt;kills);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_pos_x_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:SaveGobGameInfo_pos_x_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;pos_x = arg2;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_pos_x_get(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_pos_x_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int) ((arg1)-&gt;pos_x);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_pos_y_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:SaveGobGameInfo_pos_y_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;pos_y = arg2;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_pos_y_get(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_pos_y_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int) ((arg1)-&gt;pos_y);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_tst_set(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::vector&lt;EnemySaveData &gt; *arg2 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    PyObject * obj0 = 0 ;
+     PyObject * obj1 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;OO:GobPlayer_ship_set&quot;,&amp;obj0,&amp;obj1)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_Ship,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
+-    if (arg1) (arg1)-&gt;ship = arg2;
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:SaveGobGameInfo_tst_set&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;tst = *arg2;
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -987,34 +1356,58 @@
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_ship_get(PyObject *self, PyObject *args) {
++static PyObject *_wrap_SaveGobGameInfo_tst_get(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    Ship *result;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::vector&lt;EnemySaveData &gt; *result;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:GobPlayer_ship_get&quot;,&amp;obj0)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = (Ship *) ((arg1)-&gt;ship);
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_tst_get&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (std::vector&lt;EnemySaveData &gt; *)&amp; ((arg1)-&gt;tst);
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Ship, 0);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTEnemySaveData_t, 0);
+     return resultobj;
+     fail:
+     return NULL;
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_pair_list_set(PyObject *self, PyObject *args) {
++static PyObject *_wrap_SaveGobGameInfo_getTst(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+-    GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    pair *arg2 = (pair *) 0 ;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::vector&lt;EnemySaveData &gt; result;
+     PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:SaveGobGameInfo_getTst&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (arg1)-&gt;getTst();
++    
++    {
++        std::vector&lt;EnemySaveData &gt; * resultptr;
++        resultptr = new std::vector&lt;EnemySaveData &gt;((std::vector&lt;EnemySaveData &gt; &amp;) result);
++        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_std__vectorTEnemySaveData_t, 1);
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_SaveGobGameInfo_setTst(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    std::vector&lt;EnemySaveData &gt; *arg2 = 0 ;
++    PyObject * obj0 = 0 ;
+     PyObject * obj1 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;OO:GobPlayer_pair_list_set&quot;,&amp;obj0,&amp;obj1)) goto fail;
+-    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_pair,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
+-    if (arg1) (arg1)-&gt;pair_list = arg2;
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:SaveGobGameInfo_setTst&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg2 == NULL) {
++        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
++    }
++    (arg1)-&gt;setTst(*arg2);
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -1023,32 +1416,84 @@
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_pair_list_get(PyObject *self, PyObject *args) {
++static PyObject *_wrap_new_SaveGobGameInfo(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
++    SaveGobGameInfo *result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:new_SaveGobGameInfo&quot;)) goto fail;
++    result = (SaveGobGameInfo *)new SaveGobGameInfo();
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_SaveGobGameInfo, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_delete_SaveGobGameInfo(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    SaveGobGameInfo *arg1 = (SaveGobGameInfo *) 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_SaveGobGameInfo&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_SaveGobGameInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    delete arg1;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject * SaveGobGameInfo_swigregister(PyObject *self, PyObject *args) {
++    PyObject *obj;
++    if (!PyArg_ParseTuple(args,(char*)&quot;O&quot;, &amp;obj)) return NULL;
++    SWIG_TypeClientData(SWIGTYPE_p_SaveGobGameInfo, obj);
++    Py_INCREF(obj);
++    return Py_BuildValue((char *)&quot;&quot;);
++}
++static PyObject *_wrap_new_GobPlayer(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    GobPlayer *result;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;:new_GobPlayer&quot;)) goto fail;
++    result = (GobPlayer *)new GobPlayer();
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_GobPlayer, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_delete_GobPlayer(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    pair *result;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:GobPlayer_pair_list_get&quot;,&amp;obj0)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_GobPlayer&quot;,&amp;obj0)) goto fail;
+     if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = (pair *) ((arg1)-&gt;pair_list);
++    delete arg1;
+     
+-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pair, 0);
++    Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+     fail:
+     return NULL;
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_num_pairs_set(PyObject *self, PyObject *args) {
++static PyObject *_wrap_GobPlayer_ship_set(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    int arg2 ;
++    Ship *arg2 = (Ship *) 0 ;
+     PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:GobPlayer_num_pairs_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:GobPlayer_ship_set&quot;,&amp;obj0,&amp;obj1)) goto fail;
+     if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    if (arg1) (arg1)-&gt;num_pairs = arg2;
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_Ship,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;ship = arg2;
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -1057,33 +1502,34 @@
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_num_pairs_get(PyObject *self, PyObject *args) {
++static PyObject *_wrap_GobPlayer_ship_get(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    int result;
++    Ship *result;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;O:GobPlayer_num_pairs_get&quot;,&amp;obj0)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GobPlayer_ship_get&quot;,&amp;obj0)) goto fail;
+     if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = (int) ((arg1)-&gt;num_pairs);
++    result = (Ship *) ((arg1)-&gt;ship);
+     
+-    resultobj = PyInt_FromLong((long)result);
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Ship, 0);
+     return resultobj;
+     fail:
+     return NULL;
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer__add_pair(PyObject *self, PyObject *args) {
++static PyObject *_wrap_GobPlayer_pair_list_set(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    char *arg2 ;
+-    int arg3 ;
++    pair *arg2 = (pair *) 0 ;
+     PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;Osi:GobPlayer__add_pair&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:GobPlayer_pair_list_set&quot;,&amp;obj0,&amp;obj1)) goto fail;
+     if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    (arg1)-&gt;_add_pair((char const *)arg2,arg3);
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_pair,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
++    if (arg1) (arg1)-&gt;pair_list = arg2;
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -1092,16 +1538,15 @@
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer__get_pair(PyObject *self, PyObject *args) {
++static PyObject *_wrap_GobPlayer_pair_list_get(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    char *arg2 ;
+     pair *result;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;Os:GobPlayer__get_pair&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GobPlayer_pair_list_get&quot;,&amp;obj0)) goto fail;
+     if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = (pair *)(arg1)-&gt;_get_pair((char const *)arg2);
++    result = (pair *) ((arg1)-&gt;pair_list);
+     
+     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pair, 0);
+     return resultobj;
+@@ -1110,16 +1555,15 @@
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_write_pair(PyObject *self, PyObject *args) {
++static PyObject *_wrap_GobPlayer_num_pairs_set(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    char *arg2 ;
+-    int arg3 ;
++    int arg2 ;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;Osi:GobPlayer_write_pair&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:GobPlayer_num_pairs_set&quot;,&amp;obj0,&amp;arg2)) goto fail;
+     if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    (arg1)-&gt;write_pair((char const *)arg2,arg3);
++    if (arg1) (arg1)-&gt;num_pairs = arg2;
+     
+     Py_INCREF(Py_None); resultobj = Py_None;
+     return resultobj;
+@@ -1128,16 +1572,15 @@
+ }
+ 
+ 
+-static PyObject *_wrap_GobPlayer_read_pair(PyObject *self, PyObject *args) {
++static PyObject *_wrap_GobPlayer_num_pairs_get(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+-    char *arg2 ;
+     int result;
+     PyObject * obj0 = 0 ;
+     
+-    if(!PyArg_ParseTuple(args,(char *)&quot;Os:GobPlayer_read_pair&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:GobPlayer_num_pairs_get&quot;,&amp;obj0)) goto fail;
+     if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+-    result = (int)(arg1)-&gt;read_pair((char const *)arg2);
++    result = (int) ((arg1)-&gt;num_pairs);
+     
+     resultobj = PyInt_FromLong((long)result);
+     return resultobj;
+@@ -1471,6 +1914,78 @@
+ }
+ 
+ 
++static PyObject *_wrap_GobPlayer__add_pair(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    GobPlayer *arg1 = (GobPlayer *) 0 ;
++    char *arg2 ;
++    int arg3 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Osi:GobPlayer__add_pair&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;_add_pair((char const *)arg2,arg3);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GobPlayer__get_pair(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    GobPlayer *arg1 = (GobPlayer *) 0 ;
++    char *arg2 ;
++    pair *result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Os:GobPlayer__get_pair&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (pair *)(arg1)-&gt;_get_pair((char const *)arg2);
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pair, 0);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GobPlayer_write_pair(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    GobPlayer *arg1 = (GobPlayer *) 0 ;
++    char *arg2 ;
++    int arg3 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Osi:GobPlayer_write_pair&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;write_pair((char const *)arg2,arg3);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_GobPlayer_read_pair(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    GobPlayer *arg1 = (GobPlayer *) 0 ;
++    char *arg2 ;
++    int result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Os:GobPlayer_read_pair&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_GobPlayer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (int)(arg1)-&gt;read_pair((char const *)arg2);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_GobPlayer_upgrade_list_set(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GobPlayer *arg1 = (GobPlayer *) 0 ;
+@@ -3618,6 +4133,507 @@
+     Py_INCREF(obj);
+     return Py_BuildValue((char *)&quot;&quot;);
+ }
++static PyObject *_wrap_new_vectorEnemySaveData__SWIG_0(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    unsigned int arg1 = (unsigned int) 0 ;
++    std::vector&lt;EnemySaveData &gt; *result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;|O:new_vectorEnemySaveData&quot;,&amp;obj0)) goto fail;
++    if (obj0) {
++        arg1 = (unsigned int) PyInt_AsLong(obj0);
++        if (PyErr_Occurred()) SWIG_fail;
++    }
++    result = (std::vector&lt;EnemySaveData &gt; *)new std::vector&lt;EnemySaveData &gt;(arg1);
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTEnemySaveData_t, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_new_vectorEnemySaveData__SWIG_1(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    unsigned int arg1 ;
++    EnemySaveData *arg2 = 0 ;
++    std::vector&lt;EnemySaveData &gt; *result;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:new_vectorEnemySaveData&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    arg1 = (unsigned int) PyInt_AsLong(obj0);
++    if (PyErr_Occurred()) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg2 == NULL) {
++        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
++    }
++    result = (std::vector&lt;EnemySaveData &gt; *)new std::vector&lt;EnemySaveData &gt;(arg1,(EnemySaveData const &amp;)*arg2);
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTEnemySaveData_t, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_new_vectorEnemySaveData__SWIG_2(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = 0 ;
++    std::vector&lt;EnemySaveData &gt; *result;
++    std::vector&lt;EnemySaveData &gt; temp1 ;
++    std::vector&lt;EnemySaveData &gt; *v1 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:new_vectorEnemySaveData&quot;,&amp;obj0)) goto fail;
++    {
++        if (PyTuple_Check(obj0) || PyList_Check(obj0)) {
++            unsigned int size = (PyTuple_Check(obj0) ?
++            PyTuple_Size(obj0) :
++            PyList_Size(obj0));
++            temp1.reserve(size);
++            arg1 = &amp;temp1;
++            for (unsigned int i=0; i&lt;size; i++) {
++                EnemySaveData* x;
++                PyObject* o = PySequence_GetItem(obj0,i);
++                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                SWIGTYPE_p_EnemySaveData,0)) != -1) {
++                    temp1.push_back(*x);
++                    Py_DECREF(o);
++                } else {
++                    Py_DECREF(o);
++                    PyErr_SetString(PyExc_TypeError,
++                    &quot;vector&lt;&quot; &quot;EnemySaveData&quot; &quot;&gt; expected&quot;);
++                    SWIG_fail;
++                }
++            }
++        } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
++        SWIGTYPE_p_std__vectorTEnemySaveData_t,0) != -1) {
++            arg1 = v1;
++        } else {
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;EnemySaveData&quot; &quot;&gt; expected&quot;);
++            SWIG_fail;
++        }
++    }
++    result = (std::vector&lt;EnemySaveData &gt; *)new std::vector&lt;EnemySaveData &gt;((std::vector&lt;EnemySaveData &gt; const &amp;)*arg1);
++    
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_std__vectorTEnemySaveData_t, 1);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_new_vectorEnemySaveData(PyObject *self, PyObject *args) {
++    int argc;
++    PyObject *argv[3];
++    int ii;
++    
++    argc = PyObject_Length(args);
++    for (ii = 0; (ii &lt; argc) &amp;&amp; (ii &lt; 2); ii++) {
++        argv[ii] = PyTuple_GetItem(args,ii);
++    }
++    if ((argc &gt;= 0) &amp;&amp; (argc &lt;= 1)) {
++        int _v;
++        if (argc &lt;= 0) {
++            return _wrap_new_vectorEnemySaveData__SWIG_0(self,args);
++        }
++        {
++            _v = (PyInt_Check(argv[0]) || PyLong_Check(argv[0])) ? 1 : 0;
++        }
++        if (_v) {
++            return _wrap_new_vectorEnemySaveData__SWIG_0(self,args);
++        }
++    }
++    if (argc == 1) {
++        int _v;
++        {
++            /* native sequence? */
++            if (PyTuple_Check(argv[0]) || PyList_Check(argv[0])) {
++                unsigned int size = (PyTuple_Check(argv[0]) ?
++                PyTuple_Size(argv[0]) :
++                PyList_Size(argv[0]));
++                if (size == 0) {
++                    /* an empty sequence can be of any type */
++                    _v = 1;
++                } else {
++                    /* check the first element only */
++                    EnemySaveData* x;
++                    PyObject* o = PySequence_GetItem(argv[0],0);
++                    if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                    SWIGTYPE_p_EnemySaveData,0)) != -1)
++                    _v = 1;
++                    else
++                    _v = 0;
++                    Py_DECREF(o);
++                }
++            } else {
++                /* wrapped vector? */
++                std::vector&lt;EnemySaveData &gt;* v;
++                if (SWIG_ConvertPtr(argv[0],(void **) &amp;v, 
++                SWIGTYPE_p_std__vectorTEnemySaveData_t,0) != -1)
++                _v = 1;
++                else
++                _v = 0;
++            }
++        }
++        if (_v) {
++            return _wrap_new_vectorEnemySaveData__SWIG_2(self,args);
++        }
++    }
++    if (argc == 2) {
++        int _v;
++        {
++            _v = (PyInt_Check(argv[0]) || PyLong_Check(argv[0])) ? 1 : 0;
++        }
++        if (_v) {
++            {
++                void *ptr;
++                if (SWIG_ConvertPtr(argv[1], (void **) &amp;ptr, SWIGTYPE_p_EnemySaveData, 0) == -1) {
++                    _v = 0;
++                    PyErr_Clear();
++                } else {
++                    _v = 1;
++                }
++            }
++            if (_v) {
++                return _wrap_new_vectorEnemySaveData__SWIG_1(self,args);
++            }
++        }
++    }
++    
++    PyErr_SetString(PyExc_TypeError,&quot;No matching function for overloaded 'new_vectorEnemySaveData'&quot;);
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___len__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    unsigned int result;
++    std::vector&lt;EnemySaveData &gt; temp1 ;
++    std::vector&lt;EnemySaveData &gt; *v1 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorEnemySaveData___len__&quot;,&amp;obj0)) goto fail;
++    {
++        if (PyTuple_Check(obj0) || PyList_Check(obj0)) {
++            unsigned int size = (PyTuple_Check(obj0) ?
++            PyTuple_Size(obj0) :
++            PyList_Size(obj0));
++            temp1.reserve(size);
++            arg1 = &amp;temp1;
++            for (unsigned int i=0; i&lt;size; i++) {
++                EnemySaveData* x;
++                PyObject* o = PySequence_GetItem(obj0,i);
++                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                SWIGTYPE_p_EnemySaveData,0)) != -1) {
++                    temp1.push_back(*x);
++                    Py_DECREF(o);
++                } else {
++                    Py_DECREF(o);
++                    PyErr_SetString(PyExc_TypeError,
++                    &quot;vector&lt;&quot; &quot;EnemySaveData&quot; &quot;&gt; expected&quot;);
++                    SWIG_fail;
++                }
++            }
++        } else if (SWIG_ConvertPtr(obj0,(void **) &amp;v1, 
++        SWIGTYPE_p_std__vectorTEnemySaveData_t,0) != -1) {
++            arg1 = v1;
++        } else {
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;EnemySaveData&quot; &quot;&gt; expected&quot;);
++            SWIG_fail;
++        }
++    }
++    result = (unsigned int)((std::vector&lt;EnemySaveData &gt; const *)arg1)-&gt;size();
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData_clear(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorEnemySaveData_clear&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    (arg1)-&gt;clear();
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData_append(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    EnemySaveData *arg2 = 0 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj1 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OO:vectorEnemySaveData_append&quot;,&amp;obj0,&amp;obj1)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj1,(void **) &amp;arg2, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg2 == NULL) {
++        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
++    }
++    (arg1)-&gt;push_back((EnemySaveData const &amp;)*arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___nonzero__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    bool result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorEnemySaveData___nonzero__&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = (bool)std_vectorlEnemySaveData_g___nonzero_____(arg1);
++    
++    resultobj = PyInt_FromLong((long)result);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData_pop(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    EnemySaveData result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:vectorEnemySaveData_pop&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        try {
++            result = std_vectorlEnemySaveData_g_pop___(arg1);
++            
++        } catch (std::out_of_range&amp; e) {
++            SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
++        }
++    }
++    {
++        EnemySaveData * resultptr;
++        resultptr = new EnemySaveData((EnemySaveData &amp;) result);
++        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_EnemySaveData, 1);
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___getitem__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    int arg2 ;
++    EnemySaveData *result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:vectorEnemySaveData___getitem__&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        try {
++            {
++                EnemySaveData &amp;_result_ref = std_vectorlEnemySaveData_g___getitem_____(arg1,arg2);
++                result = (EnemySaveData *) &amp;_result_ref;
++            }
++            
++        } catch (std::out_of_range&amp; e) {
++            SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
++        }
++    }
++    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_EnemySaveData, 0);
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___getslice__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    int arg2 ;
++    int arg3 ;
++    std::vector&lt;EnemySaveData &gt; result;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oii:vectorEnemySaveData___getslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    result = std_vectorlEnemySaveData_g___getslice_____(arg1,arg2,arg3);
++    
++    {
++        resultobj = PyTuple_New((&amp;result)-&gt;size());
++        for (unsigned int i=0; i&lt;(&amp;result)-&gt;size(); i++) {
++            EnemySaveData* ptr = new EnemySaveData(((std::vector&lt;EnemySaveData &gt; &amp;)result)[i]);
++            PyTuple_SetItem(resultobj,i,
++            SWIG_NewPointerObj((void *) ptr, 
++            SWIGTYPE_p_EnemySaveData, 1));
++        }
++    }
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___setitem__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    int arg2 ;
++    EnemySaveData *arg3 = 0 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj2 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OiO:vectorEnemySaveData___setitem__&quot;,&amp;obj0,&amp;arg2,&amp;obj2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if ((SWIG_ConvertPtr(obj2,(void **) &amp;arg3, SWIGTYPE_p_EnemySaveData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    if (arg3 == NULL) {
++        PyErr_SetString(PyExc_TypeError,&quot;null reference&quot;); SWIG_fail; 
++    }
++    {
++        try {
++            std_vectorlEnemySaveData_g___setitem_____(arg1,arg2,(EnemySaveData const &amp;)*arg3);
++            
++        } catch (std::out_of_range&amp; e) {
++            SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
++        }
++    }
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___setslice__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    int arg2 ;
++    int arg3 ;
++    std::vector&lt;EnemySaveData &gt; *arg4 = 0 ;
++    std::vector&lt;EnemySaveData &gt; temp4 ;
++    std::vector&lt;EnemySaveData &gt; *v4 ;
++    PyObject * obj0 = 0 ;
++    PyObject * obj3 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;OiiO:vectorEnemySaveData___setslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3,&amp;obj3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        if (PyTuple_Check(obj3) || PyList_Check(obj3)) {
++            unsigned int size = (PyTuple_Check(obj3) ?
++            PyTuple_Size(obj3) :
++            PyList_Size(obj3));
++            temp4.reserve(size);
++            arg4 = &amp;temp4;
++            for (unsigned int i=0; i&lt;size; i++) {
++                EnemySaveData* x;
++                PyObject* o = PySequence_GetItem(obj3,i);
++                if ((SWIG_ConvertPtr(o,(void **) &amp;x, 
++                SWIGTYPE_p_EnemySaveData,0)) != -1) {
++                    temp4.push_back(*x);
++                    Py_DECREF(o);
++                } else {
++                    Py_DECREF(o);
++                    PyErr_SetString(PyExc_TypeError,
++                    &quot;vector&lt;&quot; &quot;EnemySaveData&quot; &quot;&gt; expected&quot;);
++                    SWIG_fail;
++                }
++            }
++        } else if (SWIG_ConvertPtr(obj3,(void **) &amp;v4, 
++        SWIGTYPE_p_std__vectorTEnemySaveData_t,0) != -1) {
++            arg4 = v4;
++        } else {
++            PyErr_SetString(PyExc_TypeError,&quot;vector&lt;&quot; &quot;EnemySaveData&quot; &quot;&gt; expected&quot;);
++            SWIG_fail;
++        }
++    }
++    std_vectorlEnemySaveData_g___setslice_____(arg1,arg2,arg3,(std::vector&lt;EnemySaveData &gt; const &amp;)*arg4);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___delitem__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    int arg2 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:vectorEnemySaveData___delitem__&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    {
++        try {
++            std_vectorlEnemySaveData_g___delitem_____(arg1,arg2);
++            
++        } catch (std::out_of_range&amp; e) {
++            SWIG_exception(SWIG_IndexError,const_cast&lt;char*&gt;(e.what()));
++        }
++    }
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_vectorEnemySaveData___delslice__(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    int arg2 ;
++    int arg3 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oii:vectorEnemySaveData___delslice__&quot;,&amp;obj0,&amp;arg2,&amp;arg3)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    std_vectorlEnemySaveData_g___delslice_____(arg1,arg2,arg3);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject *_wrap_delete_vectorEnemySaveData(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::vector&lt;EnemySaveData &gt; *arg1 = (std::vector&lt;EnemySaveData &gt; *) 0 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;O:delete_vectorEnemySaveData&quot;,&amp;obj0)) goto fail;
++    if ((SWIG_ConvertPtr(obj0,(void **) &amp;arg1, SWIGTYPE_p_std__vectorTEnemySaveData_t,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
++    delete arg1;
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
++static PyObject * vectorEnemySaveData_swigregister(PyObject *self, PyObject *args) {
++    PyObject *obj;
++    if (!PyArg_ParseTuple(args,(char*)&quot;O&quot;, &amp;obj)) return NULL;
++    SWIG_TypeClientData(SWIGTYPE_p_std__vectorTEnemySaveData_t, obj);
++    Py_INCREF(obj);
++    return Py_BuildValue((char *)&quot;&quot;);
++}
+ static PyMethodDef SwigMethods[] = {
+ 	 { (char *)&quot;pair_id_set&quot;, _wrap_pair_id_set, METH_VARARGS },
+ 	 { (char *)&quot;pair_id_get&quot;, _wrap_pair_id_get, METH_VARARGS },
+@@ -3626,6 +4642,33 @@
+ 	 { (char *)&quot;new_pair&quot;, _wrap_new_pair, METH_VARARGS },
+ 	 { (char *)&quot;delete_pair&quot;, _wrap_delete_pair, METH_VARARGS },
+ 	 { (char *)&quot;pair_swigregister&quot;, pair_swigregister, METH_VARARGS },
++	 { (char *)&quot;EnemySaveData_pos_x_set&quot;, _wrap_EnemySaveData_pos_x_set, METH_VARARGS },
++	 { (char *)&quot;EnemySaveData_pos_x_get&quot;, _wrap_EnemySaveData_pos_x_get, METH_VARARGS },
++	 { (char *)&quot;EnemySaveData_pos_y_set&quot;, _wrap_EnemySaveData_pos_y_set, METH_VARARGS },
++	 { (char *)&quot;EnemySaveData_pos_y_get&quot;, _wrap_EnemySaveData_pos_y_get, METH_VARARGS },
++	 { (char *)&quot;new_EnemySaveData&quot;, _wrap_new_EnemySaveData, METH_VARARGS },
++	 { (char *)&quot;delete_EnemySaveData&quot;, _wrap_delete_EnemySaveData, METH_VARARGS },
++	 { (char *)&quot;EnemySaveData_swigregister&quot;, EnemySaveData_swigregister, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_getInstance&quot;, _wrap_SaveGobGameInfo_getInstance, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_updateSave&quot;, _wrap_SaveGobGameInfo_updateSave, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_updateGame&quot;, _wrap_SaveGobGameInfo_updateGame, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_starbucks_set&quot;, _wrap_SaveGobGameInfo_starbucks_set, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_starbucks_get&quot;, _wrap_SaveGobGameInfo_starbucks_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_buckazoids_set&quot;, _wrap_SaveGobGameInfo_buckazoids_set, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_buckazoids_get&quot;, _wrap_SaveGobGameInfo_buckazoids_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_kills_set&quot;, _wrap_SaveGobGameInfo_kills_set, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_kills_get&quot;, _wrap_SaveGobGameInfo_kills_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_pos_x_set&quot;, _wrap_SaveGobGameInfo_pos_x_set, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_pos_x_get&quot;, _wrap_SaveGobGameInfo_pos_x_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_pos_y_set&quot;, _wrap_SaveGobGameInfo_pos_y_set, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_pos_y_get&quot;, _wrap_SaveGobGameInfo_pos_y_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_tst_set&quot;, _wrap_SaveGobGameInfo_tst_set, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_tst_get&quot;, _wrap_SaveGobGameInfo_tst_get, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_getTst&quot;, _wrap_SaveGobGameInfo_getTst, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_setTst&quot;, _wrap_SaveGobGameInfo_setTst, METH_VARARGS },
++	 { (char *)&quot;new_SaveGobGameInfo&quot;, _wrap_new_SaveGobGameInfo, METH_VARARGS },
++	 { (char *)&quot;delete_SaveGobGameInfo&quot;, _wrap_delete_SaveGobGameInfo, METH_VARARGS },
++	 { (char *)&quot;SaveGobGameInfo_swigregister&quot;, SaveGobGameInfo_swigregister, METH_VARARGS },
+ 	 { (char *)&quot;new_GobPlayer&quot;, _wrap_new_GobPlayer, METH_VARARGS },
+ 	 { (char *)&quot;delete_GobPlayer&quot;, _wrap_delete_GobPlayer, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_ship_set&quot;, _wrap_GobPlayer_ship_set, METH_VARARGS },
+@@ -3634,10 +4677,6 @@
+ 	 { (char *)&quot;GobPlayer_pair_list_get&quot;, _wrap_GobPlayer_pair_list_get, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_num_pairs_set&quot;, _wrap_GobPlayer_num_pairs_set, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_num_pairs_get&quot;, _wrap_GobPlayer_num_pairs_get, METH_VARARGS },
+-	 { (char *)&quot;GobPlayer__add_pair&quot;, _wrap_GobPlayer__add_pair, METH_VARARGS },
+-	 { (char *)&quot;GobPlayer__get_pair&quot;, _wrap_GobPlayer__get_pair, METH_VARARGS },
+-	 { (char *)&quot;GobPlayer_write_pair&quot;, _wrap_GobPlayer_write_pair, METH_VARARGS },
+-	 { (char *)&quot;GobPlayer_read_pair&quot;, _wrap_GobPlayer_read_pair, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_total_set&quot;, _wrap_GobPlayer_total_set, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_total_get&quot;, _wrap_GobPlayer_total_get, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_starbucks_set&quot;, _wrap_GobPlayer_starbucks_set, METH_VARARGS },
+@@ -3656,6 +4695,10 @@
+ 	 { (char *)&quot;GobPlayer_died&quot;, _wrap_GobPlayer_died, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_new_ship&quot;, _wrap_GobPlayer_new_ship, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_charge&quot;, _wrap_GobPlayer_charge, METH_VARARGS },
++	 { (char *)&quot;GobPlayer__add_pair&quot;, _wrap_GobPlayer__add_pair, METH_VARARGS },
++	 { (char *)&quot;GobPlayer__get_pair&quot;, _wrap_GobPlayer__get_pair, METH_VARARGS },
++	 { (char *)&quot;GobPlayer_write_pair&quot;, _wrap_GobPlayer_write_pair, METH_VARARGS },
++	 { (char *)&quot;GobPlayer_read_pair&quot;, _wrap_GobPlayer_read_pair, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_upgrade_list_set&quot;, _wrap_GobPlayer_upgrade_list_set, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_upgrade_list_get&quot;, _wrap_GobPlayer_upgrade_list_get, METH_VARARGS },
+ 	 { (char *)&quot;GobPlayer_swigregister&quot;, GobPlayer_swigregister, METH_VARARGS },
+@@ -3768,6 +4811,20 @@
+ 	 { (char *)&quot;RainbowRift_squiggle&quot;, _wrap_RainbowRift_squiggle, METH_VARARGS },
+ 	 { (char *)&quot;delete_RainbowRift&quot;, _wrap_delete_RainbowRift, METH_VARARGS },
+ 	 { (char *)&quot;RainbowRift_swigregister&quot;, RainbowRift_swigregister, METH_VARARGS },
++	 { (char *)&quot;new_vectorEnemySaveData&quot;, _wrap_new_vectorEnemySaveData, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___len__&quot;, _wrap_vectorEnemySaveData___len__, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData_clear&quot;, _wrap_vectorEnemySaveData_clear, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData_append&quot;, _wrap_vectorEnemySaveData_append, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___nonzero__&quot;, _wrap_vectorEnemySaveData___nonzero__, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData_pop&quot;, _wrap_vectorEnemySaveData_pop, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___getitem__&quot;, _wrap_vectorEnemySaveData___getitem__, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___getslice__&quot;, _wrap_vectorEnemySaveData___getslice__, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___setitem__&quot;, _wrap_vectorEnemySaveData___setitem__, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___setslice__&quot;, _wrap_vectorEnemySaveData___setslice__, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___delitem__&quot;, _wrap_vectorEnemySaveData___delitem__, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData___delslice__&quot;, _wrap_vectorEnemySaveData___delslice__, METH_VARARGS },
++	 { (char *)&quot;delete_vectorEnemySaveData&quot;, _wrap_delete_vectorEnemySaveData, METH_VARARGS },
++	 { (char *)&quot;vectorEnemySaveData_swigregister&quot;, vectorEnemySaveData_swigregister, METH_VARARGS },
+ 	 { NULL, NULL }
+ };
+ 
+@@ -3787,6 +4844,7 @@
+ static swig_type_info _swigt__p_Log[] = {{&quot;_p_Log&quot;, 0, &quot;Log *&quot;, 0},{&quot;_p_Log&quot;},{0}};
+ static swig_type_info _swigt__p_StarMap[] = {{&quot;_p_StarMap&quot;, 0, &quot;StarMap *&quot;, 0},{&quot;_p_StarMap&quot;},{0}};
+ static swig_type_info _swigt__p_float[] = {{&quot;_p_float&quot;, 0, &quot;float *&quot;, 0},{&quot;_p_float&quot;},{0}};
++static swig_type_info _swigt__p_std__vectorTEnemySaveData_t[] = {{&quot;_p_std__vectorTEnemySaveData_t&quot;, 0, &quot;std::vector&lt;EnemySaveData &gt; *&quot;, 0},{&quot;_p_std__vectorTEnemySaveData_t&quot;},{0}};
+ static swig_type_info _swigt__p_GobAsteroid[] = {{&quot;_p_GobAsteroid&quot;, 0, &quot;GobAsteroid *&quot;, 0},{&quot;_p_GobAsteroid&quot;},{0}};
+ static swig_type_info _swigt__p_TeamCode[] = {{&quot;_p_TeamCode&quot;, 0, &quot;TeamCode *&quot;, 0},{&quot;_p_TeamCode&quot;},{0}};
+ static swig_type_info _swigt__p_GobEnemy[] = {{&quot;_p_GobEnemy&quot;, 0, &quot;GobEnemy *&quot;, 0},{&quot;_p_GobEnemy&quot;},{0}};
+@@ -3794,8 +4852,10 @@
+ static swig_type_info _swigt__p_p_Planet[] = {{&quot;_p_p_Planet&quot;, 0, &quot;Planet **&quot;, 0},{&quot;_p_p_Planet&quot;},{0}};
+ static swig_type_info _swigt__p_RainbowRift[] = {{&quot;_p_RainbowRift&quot;, 0, &quot;RainbowRift *&quot;, 0},{&quot;_p_RainbowRift&quot;},{0}};
+ static swig_type_info _swigt__p_GobGame[] = {{&quot;_p_GobGame&quot;, 0, &quot;GobGame *&quot;, 0},{&quot;_p_GobGame&quot;},{0}};
++static swig_type_info _swigt__p_EnemySaveData[] = {{&quot;_p_EnemySaveData&quot;, 0, &quot;EnemySaveData *&quot;, 0},{&quot;_p_EnemySaveData&quot;},{0}};
+ static swig_type_info _swigt__p_Vector2[] = {{&quot;_p_Vector2&quot;, 0, &quot;Vector2 *&quot;, 0},{&quot;_p_Vector2&quot;},{0}};
+ static swig_type_info _swigt__p_std__string[] = {{&quot;_p_std__string&quot;, 0, &quot;std::string *&quot;, 0},{&quot;_p_std__string&quot;},{0}};
++static swig_type_info _swigt__p_SaveGobGameInfo[] = {{&quot;_p_SaveGobGameInfo&quot;, 0, &quot;SaveGobGameInfo *&quot;, 0},{&quot;_p_SaveGobGameInfo&quot;},{0}};
+ static swig_type_info _swigt__p_pair[] = {{&quot;_p_pair&quot;, 0, &quot;pair *&quot;, 0},{&quot;_p_pair&quot;},{0}};
+ static swig_type_info _swigt__p_SpaceSprite[] = {{&quot;_p_SpaceSprite&quot;, 0, &quot;SpaceSprite *&quot;, 0},{&quot;_p_SpaceSprite&quot;},{0}};
+ static swig_type_info _swigt__p_Control[] = {{&quot;_p_Control&quot;, 0, &quot;Control *&quot;, 0},{&quot;_p_Control&quot;},{0}};
+@@ -3817,6 +4877,7 @@
+ _swigt__p_Log, 
+ _swigt__p_StarMap, 
+ _swigt__p_float, 
++_swigt__p_std__vectorTEnemySaveData_t, 
+ _swigt__p_GobAsteroid, 
+ _swigt__p_TeamCode, 
+ _swigt__p_GobEnemy, 
+@@ -3824,8 +4885,10 @@
+ _swigt__p_p_Planet, 
+ _swigt__p_RainbowRift, 
+ _swigt__p_GobGame, 
++_swigt__p_EnemySaveData, 
+ _swigt__p_Vector2, 
+ _swigt__p_std__string, 
++_swigt__p_SaveGobGameInfo, 
+ _swigt__p_pair, 
+ _swigt__p_SpaceSprite, 
+ _swigt__p_Control, 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000090.html">[Tw-light-svn] r144 - in trunk: gamedata/python source/games source/melee
+</A></li>
+	<LI>Next message: <A HREF="000092.html">[Tw-light-svn] r146 - in trunk: . Util doc gamedata gamedata/python gamedata/python/lib mingw-libs/include/SDL rawgraphic source source/games source/generated source/python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#91">[ date ]</a>
+              <a href="thread.html#91">[ thread ]</a>
+              <a href="subject.html#91">[ subject ]</a>
+              <a href="author.html#91">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

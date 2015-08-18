@@ -1,0 +1,1998 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r121 - in trunk: . source source/games source/melee source/other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r121%20-%20in%20trunk%3A%20.%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200502201321.j1KDL0gR004135%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000066.html">
+   <LINK REL="Next"  HREF="000068.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r121 - in trunk: . source source/games source/melee source/other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r121%20-%20in%20trunk%3A%20.%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200502201321.j1KDL0gR004135%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r121 - in trunk: . source source/games source/melee source/other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Feb 20 14:21:00 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000066.html">[Tw-light-svn] r120 - in trunk: . source/games
+</A></li>
+        <LI>Next message: <A HREF="000068.html">[Tw-light-svn] r122 - in trunk: . gamedata gamedata/xml gamedata/xml/GOB gamedata/xslt source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#67">[ date ]</a>
+              <a href="thread.html#67">[ thread ]</a>
+              <a href="subject.html#67">[ subject ]</a>
+              <a href="author.html#67">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-20 14:20:59 +0100 (Sun, 20 Feb 2005)
+New Revision: 121
+
+Removed:
+   trunk/source/games/gadventure.h
+   trunk/source/games/glegacies.cpp
+Modified:
+   trunk/source/games/gamehierarchy.cpp
+   trunk/source/games/gamehierarchy.h
+   trunk/source/games/gdefender.cpp
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/mframe.cpp
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mmain.cpp
+   trunk/source/melee/mmain.h
+   trunk/source/other/dialogs.cpp
+   trunk/source/scp.cpp
+   trunk/sources.lst
+Log:
+1) Gob game is subclass of SubGame now, you can switch two gob game by 
+pressing F6
+
+2) Network game is available only for melee now
+
+
+
+Deleted: trunk/source/games/gadventure.h
+===================================================================
+--- trunk/source/games/gadventure.h	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/games/gadventure.h	2005-02-20 13:20:59 UTC (rev 121)
+@@ -1,51 +0,0 @@
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-
+-#include &lt;stdio.h&gt;   //standard io libary (needed for sprintf)
+-#include &lt;allegro.h&gt; //allegro library header
+-
+-#include &quot;melee.h&quot;          //used by all TW source files.  well, mostly. 
+-#include &quot;melee/mgame.h&quot;    //Game stuff
+-#include &quot;melee/mcbodies.h&quot; //asteroids &amp; planets
+-#include &quot;melee/mship.h&quot;    //ships
+-#include &quot;melee/mshot.h&quot;   //shots, missiles, lasers
+-#include &quot;melee/mlog.h&quot;     //networking / demo recording / demo playback
+-#include &quot;melee/mcontrol.h&quot; //controllers &amp; AIs
+-#include &quot;melee/mview.h&quot;    //Views &amp; messages
+-#include &quot;melee/mshppan.h&quot;  //ship panels...
+-
+-#include &quot;melee/mitems.h&quot;  //ship panels...
+-#include &quot;melee/manim.h&quot;  //ship panels...
+-#include &quot;scp.h&quot;
+-#include &quot;other/dialogs.h&quot;
+-
+-
+-/// TW Legacies Adventure Game 
+-///
+-
+-class LegaciesGame : public Game 
+-{
+-public:
+-  /// save game in XML format;
+-  std::string Save();
+-  /// load game
+-  int Load(std::string);
+-  /// exit game
+-  void quit(const char *message);
+-};
+-
+-
+
+Modified: trunk/source/games/gamehierarchy.cpp
+===================================================================
+--- trunk/source/games/gamehierarchy.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/games/gamehierarchy.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -34,17 +34,6 @@
+ #include &quot;gamehierarchy.h&quot;
+ 
+ 
+-void SubGame::play()
+-{
+-  prepare();
+-  Game::play();
+-};
+-
+-void SubGame::stop()
+-{
+-};
+-
+-
+ SubGame::SubGame()
+ {
+  
+@@ -59,7 +48,6 @@
+ {
+   STACKTRACE;
+ 
+-  game_done = false;
+   log = _log;
+   if (!log) {
+     log = new Log();
+@@ -100,12 +88,12 @@
+ 	
+   msecs_per_fps		= maingame-&gt;msecs_per_fps;
+   msecs_per_render	= maingame-&gt;msecs_per_render;
+-  frame_time				= maingame-&gt;frame_time;
+-  normal_turbo			= maingame-&gt;normal_turbo;
+-  f4_turbo				= maingame-&gt;f4_turbo;
+-  turbo = normal_turbo;
+-  friendly_fire			= maingame-&gt;friendly_fire;
+-  shot_relativity			= maingame-&gt;shot_relativity;
++  frame_time		= maingame-&gt;frame_time;
++  normal_turbo		= maingame-&gt;normal_turbo;
++  f4_turbo		= maingame-&gt;f4_turbo;
++  turbo                 = normal_turbo;
++  friendly_fire		= maingame-&gt;friendly_fire;
++  shot_relativity	= maingame-&gt;shot_relativity;
+ 
+   
+   lag_frames = maingame-&gt;lag_frames;
+@@ -150,74 +138,47 @@
+ }
+ 
+ 
+-void MainGame::play()
++int MainGame::isGameDone()
+ {
+-  STACKTRACE;
++  for (std::set&lt;SubGame*&gt;::iterator i = subgame.begin();
++       i!= subgame.end(); i++)
++    {
++      if ((*i)-&gt;isGameDone() != GAME_STATE_FINISHED)
++	{
++	  return GAME_STATE_PLAYING;
++	}
++    }
++  return GAME_STATE_FINISHED;
++}
+ 
++int MainGame::play()
++{
++  STACKTRACE;
++  
+   set_resolution(window-&gt;w, window-&gt;h);
+-
++  
+   prepare();
+   if (is_paused()) unpause();
+-
+-
+-  while(!isGameDone())
++  
++  
++  while(isGameDone() == GAME_STATE_PLAYING)
+     {
+       //unsigned int time = get_time();
+       poll_input();
+       
+       videosystem-&gt;poll_redraw();
+-
++      
+       for (std::set&lt;SubGame*&gt;::iterator i = subgame.begin();
+ 	   i!= subgame.end(); i++)
+ 	{
++	  if ((*i)-&gt;isGameDone() != GAME_STATE_FINISHED)
++	    {
++	      (*i)-&gt;setGameDone(GAME_STATE_PLAYING);
++	    }
+ 	  (*i)-&gt;play();
+ 	}
+-      break;
+     }
+-	
++  return isGameDone();
+ }
+ 
+ 
+-
+-
+-#include &quot;melee/mgame.h&quot;    //Game stuff
+-#include &quot;melee/mcbodies.h&quot; //asteroids &amp; planets
+-#include &quot;melee/mship.h&quot;    //ships
+-#include &quot;melee/mlog.h&quot;     //networking / demo recording / demo playback
+-#include &quot;melee/mcontrol.h&quot; //controllers &amp; AIs
+-#include &quot;melee/mview.h&quot;    //Views &amp; text messages
+-#include &quot;melee/mshppan.h&quot;  //ship panels...
+-#include &quot;melee/mitems.h&quot;   //indicators...
+-#include &quot;melee/mfleet.h&quot;   //fleets...
+-
+-class TestGame1 : public SubGame
+-{
+-public:
+-  virtual void 	init (Log *log, const std::string&amp; save);
+-};
+-
+-void TestGame1::init (Log *log, const std::string&amp; save)
+-{
+-  //you need to call Game::init very early on, to set stuff up... rarely do you want to do anything before that
+-  SubGame::init(log, save);
+-
+-  //add the starscape background
+-  add(new Stars());
+-  add(new Asteroid()); //this adds an asteroid to the game
+-}
+-
+-REGISTER_GAME(TestGame1, &quot;TestGame1&quot;);
+-
+-class TestGame : public MainGame
+-{
+-public:
+-  virtual void 	init (Log *log, const std::string&amp; save)
+-  {
+-    MainGame::init(log,save);
+-    addsubgame(new TestGame1);
+-    addsubgame(new TestGame1);
+-  }	
+-};
+-
+-REGISTER_GAME(TestGame,&quot;TestGame&quot;);
+-
+
+Modified: trunk/source/games/gamehierarchy.h
+===================================================================
+--- trunk/source/games/gamehierarchy.h	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/games/gamehierarchy.h	2005-02-20 13:20:59 UTC (rev 121)
+@@ -36,9 +36,6 @@
+   ~SubGame();
+ 
+   virtual void init(Log *_log, const std::string&amp; save);
+-  virtual void play();
+-  /// Suspend game (return to maingame)
+-  virtual void stop();
+ };
+ 
+ 
+@@ -55,8 +52,8 @@
+ 
+   virtual void addsubgame(SubGame *asubgame);
+   virtual void removesubgame(SubGame* g);
+-
+-  virtual void play();
++  virtual int isGameDone();
++  virtual int play();
+ };
+ 
+ 
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/games/gdefender.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -1,17 +1,17 @@
+ /*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
+ 
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
+ 
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
+ */
+ 
+ 
+@@ -82,7 +82,7 @@
+   /// here we check to see if the player lost the game and we add new enemies if it's time for that
+   virtual void calculate ( ) ;
+   
+-  virtual bool isGameDone();
++  virtual int isGameDone();
+   
+   /// this is used to display the starbases current health
+   virtual void fps();
+@@ -99,7 +99,7 @@
+   int time_between_attacks;
+   
+ protected:
+-	bool lostGame;
++  bool lostGame;
+ 
+ };
+ 
+@@ -120,7 +120,7 @@
+ }
+ 
+ DefenderStation::DefenderStation( SpaceSprite *sprite, SpaceLocation *orbit)
+-: Orbiter ( sprite, orbit, 600 ) 
++  : Orbiter ( sprite, orbit, 600 ) 
+ {
+   health = maxhealth = 30;
+   regentime = 6000;
+@@ -179,17 +179,18 @@
+   return;
+ }
+ 
+-bool DefenderGame::isGameDone() {
+-	if (lostGame || 
+-	    defendergame-&gt;player-&gt;ship == NULL || 
+-	    !defendergame-&gt;player-&gt;ship-&gt;exists()) 
+-	{
+-		game_done = true;
+-		char buffy[500] = &quot;&quot;;
+-		sprintf(buffy, &quot;Game Over!\n\nYou Defended the base for %d seconds.&quot;, game_time/1000);
+-		tw_alert(buffy, &quot;Ok!&quot;);
+-	}
+-	return Game::isGameDone();
++int DefenderGame::isGameDone() 
++{
++  if (lostGame || 
++      defendergame-&gt;player-&gt;ship == NULL || 
++      !defendergame-&gt;player-&gt;ship-&gt;exists()) 
++    {
++      setGameDone(GAME_STATE_FINISHED);
++      char buffy[500] = &quot;&quot;;
++      sprintf(buffy, &quot;Game Over!\n\nYou Defended the base for %d seconds.&quot;, game_time/1000);
++      tw_alert(buffy, &quot;Ok!&quot;);
++    }
++  return Game::isGameDone();
+ }
+ 
+ void DefenderGame::preinit() 
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/games/ggob.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -83,7 +83,7 @@
+ void GobGame::preinit() 
+ {
+   STACKTRACE;
+-  Game::preinit();
++  GobGameBase::preinit();
+ 
+   gobplayers = 0;
+   gobplayer = NULL;
+@@ -101,7 +101,7 @@
+   defenderSprite = NULL;
+ }
+ 
+-bool GobGame::isGameDone() 
++int GobGame::isGameDone() 
+ {
+   bool done = true;
+   for (int i = 0; i &lt; gobplayers; i += 1) 
+@@ -111,10 +111,10 @@
+     }
+   if (done) 
+     {
+-      game_done = true;
++      setGameDone(GAME_STATE_FINISHED );
+       tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
+     }
+-  return Game::isGameDone();
++  return GobGameBase::isGameDone();
+ }
+ 
+ void GobGame::add_gobplayer(Control *control) 
+@@ -164,7 +164,7 @@
+ {
+   STACKTRACE;
+   int i;
+-  Game::init(_log, save);
++  GobGameBase::init(_log, save);
+   
+   log_file(&quot;server.ini&quot;);
+   max_enemies = get_config_int(&quot;Gob&quot;, &quot;MaxEnemies&quot;, 32);
+@@ -319,7 +319,7 @@
+ void GobGame::fps() 
+ {
+   STACKTRACE;
+-  Game::fps();
++  GobGameBase::fps();
+   
+   message.print((int)msecs_per_fps, 15, &quot;enemies: %d&quot;, (int)gobenemies);
+   message.print((int)msecs_per_fps, 15, &quot;time: %d&quot;, (int)(game_time / 1000));
+@@ -405,7 +405,7 @@
+       p = get_player(source);
+     }
+ 
+-  Game::ship_died(who, source);
++  GobGameBase::ship_died(who, source);
+   return;
+ }
+ 
+@@ -421,6 +421,35 @@
+   return NULL;
+ }
+ 
++bool GobGame::handle_key(int k)
++{
++  STACKTRACE;
++  switch (k &gt;&gt; 8) 
++    {
++    case KEY_F6: 
++      {
++	setGameDone(GAME_STATE_SUSPENDED);
++	return true;
++      }
++      break;
++    //don't use hardwired normal keys
++      /*
++    case KEY_H:
++      if ((k &amp; 255) == 'H'-'A'+1) indhealthtoggle = ~indhealthtoggle;
++      break;
++    case KEY_T:
++      if ((k &amp; 255) == 'T'-'A'+1) indteamtoggle = ~indteamtoggle;
++      break;
++      */
++    default: 
++      {
++	return GobGameBase::handle_key(k);
++      }
++      break;
++    }
++  return false;
++}
++
+ void GobGame::add_new_enemy() 
+ {
+   STACKTRACE;
+@@ -1062,7 +1091,8 @@
+ }
+ 
+ 
+-REGISTER_GAME(GobGame, &quot;GOB&quot;)
++//REGISTER_GAME(GobGame, &quot;GOB&quot;)
++REGISTER_GAME(MainGobGame, &quot;GOB&quot;)
+ 
+ 
+ 
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/games/ggob.h	2005-02-20 13:20:59 UTC (rev 121)
+@@ -22,6 +22,8 @@
+ #include &quot;melee/mgame.h&quot;
+ #include &quot;melee/mitems.h&quot;
+ 
++#include &quot;gamehierarchy.h&quot;
++
+ class Upgrade;
+ class GobStation;
+ 
+@@ -78,8 +80,9 @@
+   virtual void death();
+ };
+ 
+-/// Full future adventure game
+-class GobGame : public Game 
++typedef SubGame GobGameBase;
++/// GOB class adventure game
++class GobGame : public  GobGameBase
+ {
+  public:
+   virtual ~GobGame();
+@@ -87,7 +90,7 @@
+   TeamCode enemy_team;
+ 
+   virtual void calculate();
+-  virtual bool isGameDone();
++  virtual int isGameDone();
+   virtual void ship_died(Ship *who, SpaceLocation *source);
+   virtual void preinit();
+   virtual void init (Log *log, const std::string&amp; save);
+@@ -113,7 +116,10 @@
+   char *station_pic_name[3];
+   char *station_build_name[3];
+   SpaceSprite *defenderSprite;
+-  
++
++ protected:
++  virtual bool handle_key(int k);
++
+  public:
+   int num_planets;
+   Planet *planet[16];
+@@ -168,5 +174,17 @@
+   void squiggle();
+ };
+ 
++class MainGobGame : public MainGame
++{
++ public:
++  virtual void 	init (Log *log, const std::string&amp; save)
++    {
++      MainGame::init(log,save);
++      addsubgame(new GobGame);
++      addsubgame(new GobGame);
++      //      addsubgame(new GobGame);
++    }	
++};
++
+ #endif // TW_GOB_H_INCLUDES
+ 
+
+Deleted: trunk/source/games/glegacies.cpp
+===================================================================
+--- trunk/source/games/glegacies.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/games/glegacies.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -1,61 +0,0 @@
+-/*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
+-
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-*/
+-
+-
+-#include &lt;stdio.h&gt;   //standard io libary (needed for sprintf)
+-#include &lt;allegro.h&gt; //allegro library header
+-
+-#include &quot;melee.h&quot;          //used by all TW source files.  well, mostly. 
+-#include &quot;melee/mgame.h&quot;    //Game stuff
+-#include &quot;melee/mcbodies.h&quot; //asteroids &amp; planets
+-#include &quot;melee/mship.h&quot;    //ships
+-#include &quot;melee/mshot.h&quot;   //shots, missiles, lasers
+-#include &quot;melee/mlog.h&quot;     //networking / demo recording / demo playback
+-#include &quot;melee/mcontrol.h&quot; //controllers &amp; AIs
+-#include &quot;melee/mview.h&quot;    //Views &amp; messages
+-#include &quot;melee/mshppan.h&quot;  //ship panels...
+-
+-#include &quot;melee/mitems.h&quot;  //ship panels...
+-#include &quot;melee/manim.h&quot;  //ship panels...
+-#include &quot;scp.h&quot;
+-#include &quot;other/dialogs.h&quot;
+-
+-#include &quot;gadventure.h&quot;
+-
+-/// TW Legacies Adventure Game 
+-///
+-
+-
+-std::string LegaciesGame::Save()
+-{
+-  tw_error(&quot;Save called&quot;);
+-  return &quot;&quot;;
+-}
+-
+-int LegaciesGame::Load(std::string)
+-{
+-  return 0;
+-};
+-
+-void LegaciesGame::quit(const char *message)
+-{
+-  STACKTRACE;
+-  Save();
+-  Game::quit(message);
+-}
+-
+-REGISTER_GAME ( LegaciesGame, &quot;TW:Legacies&quot; )
+-
+
+Modified: trunk/source/melee/mframe.cpp
+===================================================================
+--- trunk/source/melee/mframe.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/melee/mframe.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -1348,9 +1348,12 @@
+ 	::MAX_SPEED  = this-&gt;max_speed;
+ 	return;
+ }
+-int Physics::checksum() {
++int Physics::checksum() 
++{
+   STACKTRACE;
+   Uint32 g = 0;
++  return g;
++
+   for(std::list&lt;SpaceLocation*&gt;::iterator i=item.begin();i!=item.end();i++)
+     {
+       //if (!item[i]-&gt;detectable()) continue;
+@@ -1363,6 +1366,7 @@
+     }
+   return g;// + (tw_random_state_checksum()) &amp; 255));
+ }
++
+ void Physics::dump_state ( const char *file_name ) 
+ {
+ }
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/melee/mgame.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -126,7 +126,6 @@
+ #define HIST_POWER 4.0
+ 
+ #define CHECKSUM_CHANNEL Game::_channel_buffered
+-//#define CHECKSUM_CHANNEL 0
+ 
+ #ifdef _MSC_VER
+ #	pragma warning( disable : 4800 ) //int -&gt; bool, performance warning
+@@ -411,12 +410,14 @@
+   return;
+ }
+ 
++
+ void Game::animate(Frame *frame) 
+ {
+   STACKTRACE;
+   Physics::animate(frame);
+ }
+ 
++
+ void Game::animate() 
+ {
+   STACKTRACE;
+@@ -637,8 +638,6 @@
+   if (active_focus_destroyed &amp;&amp; (focus_index &gt;= 0))
+     focus[focus_index]-&gt;attributes |= ATTRIB_ACTIVE_FOCUS;
+ 
+-
+-
+   Physics::calculate();
+ 
+   gametargets.calculate();
+@@ -651,7 +650,7 @@
+   return;
+ }
+ 
+-void Game::play() 
++int Game::play() 
+ {
+   STACKTRACE;
+   set_resolution(window-&gt;w, window-&gt;h);
+@@ -661,38 +660,51 @@
+   try 
+     {
+       play_music();
+-      while(!isGameDone()) 
++      while(isGameDone() == GAME_STATE_PLAYING) 
+ 	{
+ 	  if(!tw_sound-&gt;playing_music())
+-	    play_music();
++	    {
++	      play_music();
++	    }
+ 	  
+ 	  unsigned int time = get_time();
+ 	  poll_input();
+ 	  videosystem-&gt;poll_redraw();
+ 	  if ((next_tic_time &lt;= time) &amp;&amp; (next_render_time &gt; game_time) &amp;&amp; game_ready()) 
+ 	    {
+-	      _STACKTRACE(&quot;Game::play - Game physics&quot;)
+-		calculate();
++	      _STACKTRACE(&quot;Game::play - Game physics&quot;);
++	      calculate();
+ 	      log-&gt;flush();
+ 	      log-&gt;listen();
+ 	      if (key[KEY_F5])
+-		turbo = f4_turbo;
++		{
++		  turbo = f4_turbo;
++		}
+ 	      else
+-		turbo = normal_turbo;
++		{
++		  turbo = normal_turbo;
++		}
+ 	      next_tic_time += (frame_time / turbo);
+ 	      if ((hiccup_margin &gt;= 0) &amp;&amp; (next_tic_time + hiccup_margin &lt; get_time()))
+-		next_tic_time = get_time();
+-	      if (next_fps_time &lt;= game_time) {
+-		next_fps_time += msecs_per_fps;
+-		fps();
+-	      }
++		{
++		  next_tic_time = get_time();
++		}
++	      if (next_fps_time &lt;= game_time) 
++		{
++		  next_fps_time += msecs_per_fps;
++		  fps();
++		}
+ 	    }
+-	  else if (interpolate_frames || (game_time &gt; next_render_time - msecs_per_render)) {
+-	    _STACKTRACE(&quot;Game::play - Game rendering&quot;)
+-	      animate();
+-	    next_render_time = game_time + msecs_per_render;
+-	  }
+-	  else idle();
++	  else if (interpolate_frames || (game_time &gt; next_render_time - msecs_per_render)) 
++	    {
++	      _STACKTRACE(&quot;Game::play - Game rendering&quot;)
++		animate();
++	      next_render_time = game_time + msecs_per_render;
++	    }
++	  else 
++	    {
++	      idle();
++	    }
+ 	  while (keypressed())
+ 	    handle_key(readkey());
+ 	}
+@@ -726,7 +738,7 @@
+       caught_error(&quot;Ack(1)!!!\nAn error occured in the game!\nBut I don't know what error (check error log)!&quot;);
+       if (__error_flag &amp; 1) throw;
+     }
+-  return;
++  return isGameDone();
+ }
+ 
+ 
+@@ -837,7 +849,6 @@
+   STACKTRACE;
+   int i;
+ 
+-  game_done = false;
+   log = _log;
+   if (!log) {
+     log = new Log();
+@@ -1035,27 +1046,34 @@
+   return;
+ }
+ 
+-Game::~Game() {STACKTRACE
+-		 message.out(&quot;deleteing GameEvents&quot;);
+- int i;
+- for (i = 0; i &lt; events_waiting; i += 1) free(waiting_events[i]);
+- delete[] waiting_events;
++Game::Game()
++{
++  _game_state = GAME_STATE_PLAYING;
++}
+ 
+- message.out(&quot;deleteing histographs&quot;);
+- delete tic_history; tic_history = NULL;
+- delete render_history; render_history = NULL;
+-
+- tw_sound-&gt;play_music(std::string(&quot;&quot;));
+-
+- message.out(&quot;deleteing game objects&quot;);
+- destroy_all();
+-
+- message.out(&quot;other shit&quot;);
+- message.flush();
+-
+- delete view;
+- window-&gt;remove_callback(this);
+- delete window;
++Game::~Game() {
++  STACKTRACE;
++  message.out(&quot;deleteing GameEvents&quot;);
++  int i;
++  for (i = 0; i &lt; events_waiting; i += 1) 
++    free(waiting_events[i]);
++  delete[] waiting_events;
++  
++  message.out(&quot;deleteing histographs&quot;);
++  delete tic_history; tic_history = NULL;
++  delete render_history; render_history = NULL;
++  
++  tw_sound-&gt;play_music(std::string(&quot;&quot;));
++  
++  message.out(&quot;deleteing game objects&quot;);
++  destroy_all();
++  
++  message.out(&quot;other shit&quot;);
++  message.flush();
++  
++  delete view;
++  window-&gt;remove_callback(this);
++  delete window;
+ }
+ 
+ bool Game::is_paused() 
+@@ -1258,16 +1276,17 @@
+ void Game::quit(const char *message) 
+ {
+   STACKTRACE; 
+-  game_done = true;
++  setGameDone(GAME_STATE_FINISHED);
+ }
+ 
+-bool Game::isGameDone() { 
+-  return game_done;
++int Game::isGameDone() 
++{ 
++  return _game_state;
+ }
+ 
+-void Game::setGameDone(const bool done)
++void Game::setGameDone(const int done)
+ { 
+-  game_done = done; 
++  _game_state = done; 
+ }
+ 
+ 
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/melee/mgame.h	2005-02-20 13:20:59 UTC (rev 121)
+@@ -63,6 +63,13 @@
+   
+ };
+ 
++enum GameStateCode
++  {
++    GAME_STATE_PLAYING = 0,
++    GAME_STATE_FINISHED,
++    GAME_STATE_SUSPENDED,
++  };
++
+ /// All games types should inher from this class
+ class Game : public Physics 
+ {
+@@ -120,6 +127,7 @@
+ 
+   virtual void preinit();	///&lt; pre-initialization (enough so that the destructor won't crash) 
+   virtual void init(Log *log, const std::string&amp; save);  ///&lt; initialization (loading data, creating a few game objects, whatever)
++  Game::Game();
+   virtual ~Game();              ///&lt; deallocating memory etc.
+   
+   virtual void init_lag();
+@@ -137,10 +145,10 @@
+   virtual void prepare();   
+ 
+   virtual void calculate();
+-  virtual void play();
+-  virtual void animate(Frame *frame); // stupid C++
++  /// \return game state
++  virtual int play();
++  virtual void animate(Frame *frame);
+   virtual void animate();
+-  //	using Physics::animate;
+   
+   virtual void object_died(SpaceObject *who, SpaceLocation *source);
+   virtual void ship_died(Ship *who, SpaceLocation *source);
+@@ -154,7 +162,8 @@
+   virtual void redraw();
+ 
+  protected:  
+-  bool game_done;
++  int _game_state;
++
+   /// Show ingame menu (save/load/option/quit/exit)
+   virtual void GameMenu();
+ 
+@@ -164,10 +173,10 @@
+  public:
+   /// sets whether the game is done, according to the rules for the
+   /// gametype.
+-  virtual void setGameDone(const bool done);
++  virtual void setGameDone(const int done);
+ 
+   /// gets if the game is done.  Will wait a few seconds for dramatic effect.
+-  virtual bool isGameDone();
++  virtual int isGameDone();
+   
+   virtual void quit(const char *message);
+     
+
+Modified: trunk/source/melee/mmain.cpp
+===================================================================
+--- trunk/source/melee/mmain.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/melee/mmain.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -1,17 +1,17 @@
+ /*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
+ 
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
+ 
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
+ */
+ 
+ #include &lt;stdlib.h&gt;
+@@ -42,393 +42,395 @@
+ 	
+ #include &quot;ais.h&quot;
+ 
+-int NormalGame::add_player (Control *c, int team_index, const char *name, const char *fleet_section, const char *fleet_file) {STACKTRACE
+-	int i = num_players;
+-	num_players += 1;
+-	player_control = (Control**) realloc(player_control,   sizeof(Control*)   * num_players);
+-	player_name    =    (char**) realloc(player_name,      sizeof(char*)      * num_players);
+-//	player_panel = (ShipPanel**) realloc(player_panel,     sizeof(ShipPanel*) * num_players);
+-	player_fleet =     (Fleet**) realloc(player_fleet,     sizeof(Fleet *)    * num_players);
+-	player_team =    (TeamCode*) realloc(player_team,      sizeof(TeamCode)   * num_players);
+-	player_control[i] = c;
+-	add_focus(c, c-&gt;channel);
+-//	player_panel[i] = NULL;
+-	player_fleet[i] = new Fleet();
+-	player_fleet[i]-&gt;reset();
+-	player_name[i] = strdup(name);
+-	if (team_index &gt;= team_table_size) {
+-		int i = team_table_size;
+-		team_table_size = team_index + 1;
+-		team_table = (TeamCode*) realloc(team_table, sizeof(TeamCode) * team_table_size);
+-		for (; i &lt; team_table_size; i += 1) {
+-			if (i) team_table[i] = new_team();
+-			else team_table[i] = 0;
+-		}
+-	}
+-	if (team_index) player_team[i] = team_table[team_index];
+-	else player_team[i] = new_team();
+-	char sect[40];
+-	sprintf(sect, &quot;Player%d&quot;, i+1);
+-	if (c-&gt;channel == channel_none) {
+-		tw_error(&quot;channel_none not allowed here&quot;);
+-		//log_file(fleet_file);
+-		//::fleet-&gt;load(NULL, fleet_section);
+-		}
+-	else if (log-&gt;get_direction(c-&gt;channel) &amp; Log::direction_write) {
+-		player_fleet[i]-&gt;load(fleet_file, fleet_section);
+-		log_fleet(c-&gt;channel, player_fleet[i]);
+-		c-&gt;target_sign_color = ((3+i) % 7) + 1;
+-		}
+-	else {
+-		log_fleet(c-&gt;channel, player_fleet[i]);
+-		}
+-	tw_set_config_file(&quot;tmp.ini&quot;);
+-	set_config_string(sect, &quot;Name&quot;, name);
+-	set_config_string(sect, &quot;Type&quot;, c-&gt;getTypeName());
+-	set_config_int(sect, &quot;Team&quot;, team_index);
+-	set_config_int(sect, &quot;Channel&quot;, c-&gt;channel);
+-	set_config_int(sect, &quot;StartingFleetCost&quot;, player_fleet[i]-&gt;getCost());
+-	set_config_int(sect, &quot;StartingFleetSize&quot;, player_fleet[i]-&gt;getSize());
+-	player_fleet[i]-&gt;save(NULL, sect);
+-	player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, sect);
+-	return i;
+-	}
++int NormalGame::add_player (Control *c, int team_index, const char *name, const char *fleet_section, const char *fleet_file) 
++{
++  STACKTRACE;
++  int i = num_players;
++  num_players += 1;
++  player_control = (Control**) realloc(player_control,   sizeof(Control*)   * num_players);
++  player_name    =    (char**) realloc(player_name,      sizeof(char*)      * num_players);
++  //	player_panel = (ShipPanel**) realloc(player_panel,     sizeof(ShipPanel*) * num_players);
++  player_fleet =     (Fleet**) realloc(player_fleet,     sizeof(Fleet *)    * num_players);
++  player_team =    (TeamCode*) realloc(player_team,      sizeof(TeamCode)   * num_players);
++  player_control[i] = c;
++  add_focus(c, c-&gt;channel);
++  //	player_panel[i] = NULL;
++  player_fleet[i] = new Fleet();
++  player_fleet[i]-&gt;reset();
++  player_name[i] = strdup(name);
++  if (team_index &gt;= team_table_size) {
++    int i = team_table_size;
++    team_table_size = team_index + 1;
++    team_table = (TeamCode*) realloc(team_table, sizeof(TeamCode) * team_table_size);
++    for (; i &lt; team_table_size; i += 1) {
++      if (i) team_table[i] = new_team();
++      else team_table[i] = 0;
++    }
++  }
++  if (team_index) player_team[i] = team_table[team_index];
++  else player_team[i] = new_team();
++  char sect[40];
++  sprintf(sect, &quot;Player%d&quot;, i+1);
++  if (c-&gt;channel == channel_none) {
++    tw_error(&quot;channel_none not allowed here&quot;);
++    //log_file(fleet_file);
++    //::fleet-&gt;load(NULL, fleet_section);
++  }
++  else if (log-&gt;get_direction(c-&gt;channel) &amp; Log::direction_write) {
++    player_fleet[i]-&gt;load(fleet_file, fleet_section);
++    log_fleet(c-&gt;channel, player_fleet[i]);
++    c-&gt;target_sign_color = ((3+i) % 7) + 1;
++  }
++  else {
++    log_fleet(c-&gt;channel, player_fleet[i]);
++  }
++  tw_set_config_file(&quot;tmp.ini&quot;);
++  set_config_string(sect, &quot;Name&quot;, name);
++  set_config_string(sect, &quot;Type&quot;, c-&gt;getTypeName());
++  set_config_int(sect, &quot;Team&quot;, team_index);
++  set_config_int(sect, &quot;Channel&quot;, c-&gt;channel);
++  set_config_int(sect, &quot;StartingFleetCost&quot;, player_fleet[i]-&gt;getCost());
++  set_config_int(sect, &quot;StartingFleetSize&quot;, player_fleet[i]-&gt;getSize());
++  player_fleet[i]-&gt;save(NULL, sect);
++  player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, sect);
++  return i;
++}
+ 
+ void NormalGame::init_objects() {
+   STACKTRACE;
+-	int i;
+-	add(new Stars());
+-	Planet *planet = create_planet();
+-	//Planet *planet = new Planet (size/2, planetSprite, random(planetSprite-&gt;frames()));
+-	//add (planet);
+-	if (view) view-&gt;camera.pos = size/2;
+-	add(new WedgeIndicator(planet, 75, 4));
+-	for (i = 0; i &lt; num_asteroids; i += 1) add(new Asteroid());
+-	}
++  int i;
++  add(new Stars());
++  Planet *planet = create_planet();
++  //Planet *planet = new Planet (size/2, planetSprite, random(planetSprite-&gt;frames()));
++  //add (planet);
++  if (view) view-&gt;camera.pos = size/2;
++  add(new WedgeIndicator(planet, 75, 4));
++  for (i = 0; i &lt; num_asteroids; i += 1) add(new Asteroid());
++}
+ 
+ void NormalGame::init_players() {
+   STACKTRACE;
+-	switch (log-&gt;type) {
+-		case Log::log_normal: {
+-			for (int i = 0; true; i += 1) {
+-				char buffy[64];
+-				sprintf(buffy, &quot;Player%d&quot;, i + 1);
+-				tw_set_config_file(&quot;scp.ini&quot;);
+-				const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
+-				if (!type) break;
+-				if (strcmp(type, &quot;none&quot;) == 0) continue;
+-				const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
+-				char config[64];
+-				sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
+-				//int channel = channel_server;
+-				//if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
+-				//if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
+-				int ti = get_config_int(buffy, &quot;Team&quot;, 0);
+-				add_player(create_control(channel_server, type, config), ti, name, buffy);
+-			}
+-		}
+-		break;
+-		case Log::log_net1client:
+-		case Log::log_net1server: {
+-			log_file(&quot;server.ini&quot;);
+-			//int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
+-			//if (use_teams_menu) {
+-			if (1) {
+-				int j;
+-				for (j = 0; j &lt; 2; j += 1) {
+-					int ch;
+-					if (j == 0) ch = channel_server;
+-					else ch = channel_client;
+-					if (is_local(ch)) {
+-						tw_set_config_file(&quot;client.ini&quot;);//each side determines whether they are using manually specified teams
+-						int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
+-						const char *simple_config = 
+-							&quot;[Player1]\nType=Human\nConfig=0\nTeam=0\n&quot;;
+-						for (int i = 0; true; i += 1) {
+-							char buffy[64];
+-							sprintf(buffy, &quot;Player%d&quot;, i + 1);
+-							if (use_teams_menu) tw_set_config_file(&quot;scp.ini&quot;);
+-							else set_config_data(simple_config, strlen(simple_config));
+-							const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
+-							if (!type) {
+-								int tmp = 0;
+-								log_int(ch, tmp);
+-								break;
+-							}
+-							if (strcmp(type, &quot;none&quot;) == 0) continue;
+-							const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
+-							char config[64];
+-							sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
+-							//int channel = channel_server;
+-							//if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
+-							//if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
+-							int ti = get_config_int(buffy, &quot;Team&quot;, 0);
+-							{int tmp = 1; log_int(ch, tmp);}
+-							log_int(ch, ti);
+-							int name_length = strlen(name);
+-							log_int(ch, name_length);
+-							log_data(ch, (char*)name, name_length);
+-							add_player(create_control(ch, type, config), ti, name, buffy);
+-						}
+-					}
+-					else {
+-						for (int i = 0; true; i += 1) {
+-							int tmp;
+-							log_int(ch, tmp);
+-							if (tmp == 0) break;
+-							int team;
+-							char *name;
+-							log_int(ch, team);
+-							int name_length;
+-							log_int(ch, name_length);
+-							name = (char*)malloc((name_length+1)*sizeof(char));
+-							log_data(ch, name, name_length);
+-							name[name_length] = 0;
+-							add_player(create_control(ch, &quot;Whatever&quot;), team, name, NULL);
+-						}
+-					}
+-				}
+-			}
+-		}
+-		break;
++  switch (log-&gt;type) {
++  case Log::log_normal: {
++    for (int i = 0; true; i += 1) {
++      char buffy[64];
++      sprintf(buffy, &quot;Player%d&quot;, i + 1);
++      tw_set_config_file(&quot;scp.ini&quot;);
++      const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
++      if (!type) break;
++      if (strcmp(type, &quot;none&quot;) == 0) continue;
++      const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
++      char config[64];
++      sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
++      //int channel = channel_server;
++      //if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
++      //if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
++      int ti = get_config_int(buffy, &quot;Team&quot;, 0);
++      add_player(create_control(channel_server, type, config), ti, name, buffy);
++    }
++  }
++    break;
++  case Log::log_net1client:
++  case Log::log_net1server: {
++    log_file(&quot;server.ini&quot;);
++    //int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
++    //if (use_teams_menu) {
++    if (1) {
++      int j;
++      for (j = 0; j &lt; 2; j += 1) {
++	int ch;
++	if (j == 0) ch = channel_server;
++	else ch = channel_client;
++	if (is_local(ch)) {
++	  tw_set_config_file(&quot;client.ini&quot;);//each side determines whether they are using manually specified teams
++	  int use_teams_menu = get_config_int(&quot;Network&quot;, &quot;NetworkMeleeUseTeams&quot;, 0);
++	  const char *simple_config = 
++	    &quot;[Player1]\nType=Human\nConfig=0\nTeam=0\n&quot;;
++	  for (int i = 0; true; i += 1) {
++	    char buffy[64];
++	    sprintf(buffy, &quot;Player%d&quot;, i + 1);
++	    if (use_teams_menu) tw_set_config_file(&quot;scp.ini&quot;);
++	    else set_config_data(simple_config, strlen(simple_config));
++	    const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
++	    if (!type) {
++	      int tmp = 0;
++	      log_int(ch, tmp);
++	      break;
++	    }
++	    if (strcmp(type, &quot;none&quot;) == 0) continue;
++	    const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
++	    char config[64];
++	    sprintf(config, &quot;Config%d&quot;, get_config_int(buffy, &quot;Config&quot;, 0));
++	    //int channel = channel_server;
++	    //if (strcmp(type, &quot;WussieBot&quot;) == 0) channel = channel_none;
++	    //if (strcmp(type, &quot;MoronBot&quot;) == 0) channel = channel_none;
++	    int ti = get_config_int(buffy, &quot;Team&quot;, 0);
++	    {int tmp = 1; log_int(ch, tmp);}
++	    log_int(ch, ti);
++	    int name_length = strlen(name);
++	    log_int(ch, name_length);
++	    log_data(ch, (char*)name, name_length);
++	    add_player(create_control(ch, type, config), ti, name, buffy);
++	  }
+ 	}
+-	return;
++	else {
++	  for (int i = 0; true; i += 1) {
++	    int tmp;
++	    log_int(ch, tmp);
++	    if (tmp == 0) break;
++	    int team;
++	    char *name;
++	    log_int(ch, team);
++	    int name_length;
++	    log_int(ch, name_length);
++	    name = (char*)malloc((name_length+1)*sizeof(char));
++	    log_data(ch, name, name_length);
++	    name[name_length] = 0;
++	    add_player(create_control(ch, &quot;Whatever&quot;), team, name, NULL);
++	  }
++	}
++      }
++    }
++  }
++    break;
++  }
++  return;
+ }
+ 
+ void NormalGame::set_resolution(int screen_x, int screen_y) {
+   STACKTRACE;
+-	int view_x, view_y;
+-	view_x = screen_x;
+-	view_y = screen_y;
+-	int n, m;
+-	n = 99;//int(ceil(double(num_players) / int(view_y / PANEL_HEIGHT)));
+-	if (n) m = int(ceil(num_players / (double)n));
+-	else m = 0;
+-	//view-&gt;set_window(screen, 0, 0, view_x - PANEL_WIDTH * m, view_y);
+-	redraw();
+-	return;
+-	}
++  int view_x, view_y;
++  view_x = screen_x;
++  view_y = screen_y;
++  int n, m;
++  n = 99;//int(ceil(double(num_players) / int(view_y / PANEL_HEIGHT)));
++  if (n) m = int(ceil(num_players / (double)n));
++  else m = 0;
++  //view-&gt;set_window(screen, 0, 0, view_x - PANEL_WIDTH * m, view_y);
++  redraw();
++  return;
++}
+ 
+ void NormalGame::preinit() {
+   STACKTRACE;
+-	Game::preinit();
+-	player_control = NULL;
+-	player_name = NULL;
+-//	player_panel = NULL;
+-	player_fleet = NULL;
++  Game::preinit();
++  player_control = NULL;
++  player_name = NULL;
++  //	player_panel = NULL;
++  player_fleet = NULL;
+ 
+-	player_team = NULL;
+-	team_table = NULL;
+-	num_kills = 0;
+-	kills = NULL;
+-	num_players = 0;
+-	}
++  player_team = NULL;
++  team_table = NULL;
++  num_kills = 0;
++  kills = NULL;
++  num_players = 0;
++}
+ void NormalGame::init(Log *_log, const std::string&amp; save) {
+   STACKTRACE;
+-	Game::init(_log, save);
++  Game::init(_log, save);
+ 
+-	team_table_size = 0;
++  team_table_size = 0;
+ 
+-	view-&gt;window-&gt;locate(0,0,0,0,0,0.9,0,1);
++  view-&gt;window-&gt;locate(0,0,0,0,0,0.9,0,1);
+ 
+-	tw_delete_file(&quot;tmp.ini&quot;);
+-	tw_delete_file(&quot;fleets.tmp&quot;);
+-	tw_set_config_file (&quot;tmp.ini&quot;);
+-	set_config_string (NULL, &quot;Ignorethis&quot;, &quot;&quot;);
+-	if (!log-&gt;playback) init_players();
+-	log_file(&quot;tmp.ini&quot;);
+-	if (log-&gt;playback) {
+-		for (int i = 0; true; i += 1) {
+-			char buffy[64];
+-			sprintf(buffy, &quot;Player%d&quot;, i + 1);
+-			log_file(&quot;tmp.ini&quot;);
+-			const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
+-			if (!type) break;
+-			const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
+-			int channel = get_config_int(buffy, &quot;Channel&quot;, -2);
+-			int ti = get_config_int(buffy, &quot;Team&quot;, 0);
+-			add_player(create_control(channel, type), ti, name, buffy);
+-			player_fleet[i]-&gt;load(NULL, buffy);
+-			player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, buffy);
+-			}
+-		}
++  tw_delete_file(&quot;tmp.ini&quot;);
++  tw_delete_file(&quot;fleets.tmp&quot;);
++  tw_set_config_file (&quot;tmp.ini&quot;);
++  set_config_string (NULL, &quot;Ignorethis&quot;, &quot;&quot;);
++  if (!log-&gt;playback) init_players();
++  log_file(&quot;tmp.ini&quot;);
++  if (log-&gt;playback) {
++    for (int i = 0; true; i += 1) {
++      char buffy[64];
++      sprintf(buffy, &quot;Player%d&quot;, i + 1);
++      log_file(&quot;tmp.ini&quot;);
++      const char *type = get_config_string(buffy, &quot;Type&quot;, NULL);
++      if (!type) break;
++      const char *name = get_config_string(buffy, &quot;Name&quot;, buffy);
++      int channel = get_config_int(buffy, &quot;Channel&quot;, -2);
++      int ti = get_config_int(buffy, &quot;Team&quot;, 0);
++      add_player(create_control(channel, type), ti, name, buffy);
++      player_fleet[i]-&gt;load(NULL, buffy);
++      player_fleet[i]-&gt;save(&quot;fleets.tmp&quot;, buffy);
++    }
++  }
+ 
+ 
+-	prepare();
+-	init_objects();
++  prepare();
++  init_objects();
+ 
+-	next_choose_new_ships_time = game_time + 200;
++  next_choose_new_ships_time = game_time + 200;
+ 
+-	// team and health indicators.
+-	indteamtoggle = 0;
+-	indhealthtoggle = 0;
++  // team and health indicators.
++  indteamtoggle = 0;
++  indhealthtoggle = 0;
+ 
+-	return;
+-	}
++  return;
++}
+ 
+ NormalGame::~NormalGame() {STACKTRACE
+-	if (player_control) free (player_control);
+-	int i;
+-	if (player_name) {
+-		for (i = 0; i &lt; num_players; i += 1) {
+-			free(player_name[i]);
+-			}
+-		free(player_name);
+-		}
+-//	if (player_panel) free (player_panel);
++			     if (player_control) free (player_control);
++ int i;
++ if (player_name) {
++   for (i = 0; i &lt; num_players; i += 1) {
++     free(player_name[i]);
++   }
++   free(player_name);
++ }
++ //	if (player_panel) free (player_panel);
+ 
+-	if (player_team) free(player_team);
+-	if (kills) free(kills);
+-	}
++ if (player_team) free(player_team);
++ if (kills) free(kills);
++}
+ 
+ static int kill_all_delay_counter = 0;
+ void NormalGame::calculate() {
+   STACKTRACE;
+-	Game::calculate();
+-	if (next_choose_new_ships_time &lt;= game_time) {
+-		choose_new_ships();
+-		next_choose_new_ships_time = game_time + 24*60*60*1000;
+-	}
++  Game::calculate();
++  if (next_choose_new_ships_time &lt;= game_time) {
++    choose_new_ships();
++    next_choose_new_ships_time = game_time + 24*60*60*1000;
++  }
+ 
+-	// specially for play-testers:
+-	// kill all ships and ship-objects in the melee-game
+-	if (kill_all_delay_counter &gt; 0)
++  // specially for play-testers:
++  // kill all ships and ship-objects in the melee-game
++  if (kill_all_delay_counter &gt; 0)
++    {
++      kill_all_delay_counter -= frame_time;
++    } else {
++
++      if (key[KEY_LCONTROL] &amp;&amp; key[KEY_ALT] &amp;&amp; key[KEY_K])
+ 	{
+-		kill_all_delay_counter -= frame_time;
+-	} else {
++	  kill_all_delay_counter += 1000;	// 1 second delay
+ 
+-		if (key[KEY_LCONTROL] &amp;&amp; key[KEY_ALT] &amp;&amp; key[KEY_K])
+-		{
+-			kill_all_delay_counter += 1000;	// 1 second delay
+-
+ 			
+-			for(std::list&lt;SpaceLocation*&gt;::iterator i=physics-&gt;item.begin();i!=physics-&gt;item.end();i++)
+-			  {
+-			    SpaceLocation *o;
+-			    o = *i;
+-			    if (!(o &amp;&amp; o-&gt;exists()))
+-			      continue;
+-			    if (o-&gt;isPlanet() || o-&gt;isAsteroid())
+-			      continue;
+-			    o-&gt;die();
+-			  }
+-		}
++	  for(std::list&lt;SpaceLocation*&gt;::iterator i=physics-&gt;item.begin();i!=physics-&gt;item.end();i++)
++	    {
++	      SpaceLocation *o;
++	      o = *i;
++	      if (!(o &amp;&amp; o-&gt;exists()))
++		continue;
++	      if (o-&gt;isPlanet() || o-&gt;isAsteroid())
++		continue;
++	      o-&gt;die();
++	    }
+ 	}
++    }
+ 
+ 
+-	return;
+-	}
++  return;
++}
+ 
+ void NormalGame::ship_died(Ship *who, SpaceLocation *source) {
+   STACKTRACE;
+-	char victimName[80] = &quot;&quot;;
+-	char killerName[80] = &quot;&quot;;
+-	int victimID = -1;
+-	int killerID = -1;
++  char victimName[80] = &quot;&quot;;
++  char killerName[80] = &quot;&quot;;
++  int victimID = -1;
++  int killerID = -1;
+ 
+-	// determine who died.
+-	if (who &amp;&amp; who-&gt;control) {
+-		for (int i=0; i&lt;num_players; i++) {
+-			if (player_control[i] == who-&gt;control) {
+-				victimID = i;
+-				break;
+-			}
+-		}
+-		strcpy(victimName, player_name[victimID]);
+-	}
++  // determine who died.
++  if (who &amp;&amp; who-&gt;control) {
++    for (int i=0; i&lt;num_players; i++) {
++      if (player_control[i] == who-&gt;control) {
++	victimID = i;
++	break;
++      }
++    }
++    strcpy(victimName, player_name[victimID]);
++  }
+ 	
+-	// determine who killed, but skip it if nobody died.
+-	if (strlen(victimName)&gt;0 &amp;&amp; source) {
++  // determine who killed, but skip it if nobody died.
++  if (strlen(victimName)&gt;0 &amp;&amp; source) {
+ 		
+-		if ( ! source-&gt;isPlanet())
+-		{
+-			if (source-&gt;ship &amp;&amp; source-&gt;ship-&gt;control) {
+-				for (int i=0; i&lt;num_players; i++) {
+-					if (player_control[i] == source-&gt;ship-&gt;control) {
+-						killerID = i;
+-						break;
+-					}
+-				}
+-				strcpy(killerName, player_name[killerID]);
+-			}
+-		}
++    if ( ! source-&gt;isPlanet())
++      {
++	if (source-&gt;ship &amp;&amp; source-&gt;ship-&gt;control) {
++	  for (int i=0; i&lt;num_players; i++) {
++	    if (player_control[i] == source-&gt;ship-&gt;control) {
++	      killerID = i;
++	      break;
++	    }
++	  }
++	  strcpy(killerName, player_name[killerID]);
+ 	}
++      }
++  }
+ 	
+-	if (killerID == victimID) {
+-		message.print(5000,15,&quot;%s killed itself.&quot;, victimName);
+-	}
+-	else { 
+-		if (source &amp;&amp; source-&gt;isPlanet())
+-			message.print(5000,15,&quot;%s dove into a planet.&quot;, victimName);
+-		else {
+-			if (strlen(killerName) &gt; 0) {
+-				message.print(5000,15,&quot;%s killed %s.&quot;, killerName, victimName);
+-			}
+-			else {
+-				message.print(5000,15,&quot;%s died.&quot;, victimName);
+-			}
+-		}
+-	}
++  if (killerID == victimID) {
++    message.print(5000,15,&quot;%s killed itself.&quot;, victimName);
++  }
++  else { 
++    if (source &amp;&amp; source-&gt;isPlanet())
++      message.print(5000,15,&quot;%s dove into a planet.&quot;, victimName);
++    else {
++      if (strlen(killerName) &gt; 0) {
++	message.print(5000,15,&quot;%s killed %s.&quot;, killerName, victimName);
++      }
++      else {
++	message.print(5000,15,&quot;%s died.&quot;, victimName);
++      }
++    }
++  }
+ 	
+-	if ( (victimID != -1) &amp;&amp;  
+-		 (player_fleet[victimID]-&gt;getSize() &lt;= 0) )
+-	{
+-		message.print(8000,15,&quot;%s has been eliminated!&quot;, victimName);
+-	}
++  if ( (victimID != -1) &amp;&amp;  
++       (player_fleet[victimID]-&gt;getSize() &lt;= 0) )
++    {
++      message.print(8000,15,&quot;%s has been eliminated!&quot;, victimName);
++    }
+ 	
+-	int n = game_time + 4000;
+-	if (next_choose_new_ships_time &gt; n) next_choose_new_ships_time = n;
+-	Game::ship_died(who, source);
+-	return;
+-	}
++  int n = game_time + 4000;
++  if (next_choose_new_ships_time &gt; n) next_choose_new_ships_time = n;
++  Game::ship_died(who, source);
++  return;
++}
+ 
+ void NormalGame::display_stats() {
+   STACKTRACE;
+-	pause();
+-	int i;
+-	for (i = 0; i &lt; num_players; i += 1) {
+-		Fleet *fleet = player_fleet[i];
+-		switch (log-&gt;type) {
+-			case Log::log_net1client:
+-			case Log::log_net1server: {
+-//				if (log-&gt;get_direction(player_control[i]-&gt;channel) &amp; Log::direction_write) 
+-					message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
+-//				else
+-//					message.print(6000, 15, &quot;%s status: : %d / %d points&quot;, buffy, fleet-&gt;cost, player_total_fleet[i]);
+-			}
+-			break;
+-			default: {
+-				message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
+-			}
+-			break;
+-		}
+-	}
+-	unpause();
+-	return;
++  pause();
++  int i;
++  for (i = 0; i &lt; num_players; i += 1) {
++    Fleet *fleet = player_fleet[i];
++    switch (log-&gt;type) {
++    case Log::log_net1client:
++    case Log::log_net1server: {
++      //				if (log-&gt;get_direction(player_control[i]-&gt;channel) &amp; Log::direction_write) 
++      message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
++      //				else
++      //					message.print(6000, 15, &quot;%s status: : %d / %d points&quot;, buffy, fleet-&gt;cost, player_total_fleet[i]);
++    }
++      break;
++    default: {
++      message.print(6000, 15, &quot;%s status: : %d / ?? Ships, %d / ??? points&quot;, player_name[i], fleet-&gt;getSize(), fleet-&gt;getCost());
++    }
++      break;
++    }
++  }
++  unpause();
++  return;
+ }
+ bool NormalGame::handle_key(int k)
+ {
+   STACKTRACE;
+-	switch (k &gt;&gt; 8) {
+-		default: {
+-			return Game::handle_key(k);
+-			}
+-		break;
+-		case KEY_F6: {
+-			display_stats();
+-			return true;
+-			}
+-		break;
+-		//don't use hardwired normal keys
+-		case KEY_H:
+-			if ((k &amp; 255) == 'H'-'A'+1) indhealthtoggle = ~indhealthtoggle;
+-			break;
+-		case KEY_T:
+-			if ((k &amp; 255) == 'T'-'A'+1) indteamtoggle = ~indteamtoggle;
+-			break;
+-		}
+-	return false;
+-	}
++  switch (k &gt;&gt; 8) {
++  default: {
++    return Game::handle_key(k);
++  }
++    break;
++  case KEY_F6: {
++    display_stats();
++    return true;
++  }
++    break;
++    //don't use hardwired normal keys
++  case KEY_H:
++    if ((k &amp; 255) == 'H'-'A'+1) indhealthtoggle = ~indhealthtoggle;
++    break;
++  case KEY_T:
++    if ((k &amp; 255) == 'T'-'A'+1) indteamtoggle = ~indteamtoggle;
++    break;
++  }
++  return false;
++}
+ 
+ 
+ 
+@@ -436,12 +438,12 @@
+ class TeamIndicator : public Presence
+ {
+ public:
+-	int		*indtoggle;
+-	Ship	*mother;
+-	TeamIndicator(Ship *creator, int *toggle);
++  int		*indtoggle;
++  Ship	*mother;
++  TeamIndicator(Ship *creator, int *toggle);
+ 
+-	virtual void calculate();
+-	virtual void animate(Frame *space);
++  virtual void calculate();
++  virtual void animate(Frame *space);
+ };
+ 
+ 
+@@ -548,7 +550,7 @@
+   return;
+ }
+ 
+-bool NormalGame::isGameDone() 
++int NormalGame::isGameDone() 
+ {
+   STACKTRACE;
+   enum {MAX_VICTORY_MESSAGE=500};
+@@ -588,7 +590,7 @@
+     //either there's one team left standing, or none. :)
+     // either way, the game is over.
+     if (numAliveTeams &lt;= 1) {
+-      game_done = true;
++      setGameDone( GAME_STATE_FINISHED);
+       if (numAliveTeams==1) {
+ 	for (int i=0; i&lt;num_players; i++) {
+ 	  if ( ( player_fleet[i] &amp;&amp; 
+@@ -598,21 +600,21 @@
+ 		player_control[i]-&gt;ship) )
+ 	    {
+ 	      if (player_control[i]-&gt;isHuman()) {
+-			message.print(8000,15,&quot;%s won the match!&quot;, player_name[i]);
+-			sprintf(victoryMessage, &quot;%s won the match!&quot;, player_name[i]);
+-			sprintf(victoryAcknowledgeText, &quot;Woohoo!&quot;);
++		message.print(8000,15,&quot;%s won the match!&quot;, player_name[i]);
++		sprintf(victoryMessage, &quot;%s won the match!&quot;, player_name[i]);
++		sprintf(victoryAcknowledgeText, &quot;Woohoo!&quot;);
+ 	      } else {
+-			message.print(8000,15,&quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
+-			sprintf(victoryMessage, &quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
+-			sprintf(victoryAcknowledgeText, &quot;Awww...&quot;);
+-		  }
++		message.print(8000,15,&quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
++		sprintf(victoryMessage, &quot;%s won the match!&quot;, control_name[ player_control[i]-&gt;getControlType() ]);
++		sprintf(victoryAcknowledgeText, &quot;Awww...&quot;);
++	      }
+ 	      break;
+ 	    }
+ 	}
+       } else {
+-	     message.print(8000,15,&quot;Match ends in a draw!&quot;);
+-	     sprintf(victoryMessage, &quot;Match ends in a draw!&quot;);
+-	     sprintf(victoryAcknowledgeText, &quot;Darn, maybe next time!&quot;);
++	message.print(8000,15,&quot;Match ends in a draw!&quot;);
++	sprintf(victoryMessage, &quot;Match ends in a draw!&quot;);
++	sprintf(victoryAcknowledgeText, &quot;Darn, maybe next time!&quot;);
+       }
+     }
+     free(teams);
+@@ -621,7 +623,7 @@
+   bool done = Game::isGameDone();
+   
+   if (done &amp;&amp; strlen(victoryMessage)&gt;0) {
+-  	  tw_alert(victoryMessage, victoryAcknowledgeText);
++    tw_alert(victoryMessage, victoryAcknowledgeText);
+   }
+ 
+   return done;
+@@ -631,19 +633,19 @@
+ TeamIndicator::TeamIndicator(Ship *s, int *atoggle)
+ {
+   STACKTRACE;
+-	indtoggle = atoggle;
+-	mother = s;
++  indtoggle = atoggle;
++  mother = s;
+ }
+ 
+ void TeamIndicator::calculate()
+ {
+   STACKTRACE;
+-	if ( !(mother &amp;&amp; mother-&gt;exists()) )
+-	{
+-		mother = 0;
+-		state = 0;
+-		return;
+-	}
++  if ( !(mother &amp;&amp; mother-&gt;exists()) )
++    {
++      mother = 0;
++      state = 0;
++      return;
++    }
+ }
+ 
+ void TeamIndicator::animate(Frame *space) {
+@@ -673,41 +675,41 @@
+ }
+ void NormalGame::showHelpText() {
+   STACKTRACE;
+-	const char * file = data_full_path(&quot;ingame.txt&quot;).c_str();
+-	char text[10000] = &quot;&quot;;
+-	char controlHelp[3000] = &quot;&quot;;
++  const char * file = data_full_path(&quot;ingame.txt&quot;).c_str();
++  char text[10000] = &quot;&quot;;
++  char controlHelp[3000] = &quot;&quot;;
+ 	
+-	sprintf(text, &quot;In-Game Keys:\n&quot;);
+-	for (int i=0; i&lt;num_players; i++) {
+-		if (player_control[i])// &amp;&amp; player_control[i]-&gt;isHuman() ) {
+-		{
+-			strcpy(controlHelp, &quot;&quot;);
+-			player_control[i]-&gt;getHelpText(controlHelp);
+-			strcat(controlHelp, &quot;\n&quot;);
++  sprintf(text, &quot;In-Game Keys:\n&quot;);
++  for (int i=0; i&lt;num_players; i++) {
++    if (player_control[i])// &amp;&amp; player_control[i]-&gt;isHuman() ) {
++      {
++	strcpy(controlHelp, &quot;&quot;);
++	player_control[i]-&gt;getHelpText(controlHelp);
++	strcat(controlHelp, &quot;\n&quot;);
+ 			
+-			strcat(text, controlHelp);
+-		}
+-	}
++	strcat(text, controlHelp);
++      }
++  }
+ 	
+-	int i;
+-	PACKFILE *f;
+-	char * willy = NULL;
+-	f = pack_fopen (file, F_READ);
+-	if (!f) {
+-		willy = (char*) malloc(strlen(file)+strlen(&quot;Failed to load file \&quot;\&quot;&quot;)+1);
+-		sprintf(text, &quot;Failed to load file \&quot;%s\&quot;&quot;,file);
+-	}
+-	else {
+-		i = file_size(file);
+-		willy = (char*)malloc(i+1);
+-		i = pack_fread (willy, i, f);
+-		pack_fclose(f);
+-		willy[i] = 0;
+-	}
+-	strcat(text, willy);
+-	show_text(text);
+-	free(willy); // now this is funny :)
+-	return;
++  int i;
++  PACKFILE *f;
++  char * willy = NULL;
++  f = pack_fopen (file, F_READ);
++  if (!f) {
++    willy = (char*) malloc(strlen(file)+strlen(&quot;Failed to load file \&quot;\&quot;&quot;)+1);
++    sprintf(text, &quot;Failed to load file \&quot;%s\&quot;&quot;,file);
++  }
++  else {
++    i = file_size(file);
++    willy = (char*)malloc(i+1);
++    i = pack_fread (willy, i, f);
++    pack_fclose(f);
++    willy[i] = 0;
++  }
++  strcat(text, willy);
++  show_text(text);
++  free(willy); // now this is funny :)
++  return;
+ }
+ 
+ 
+
+Modified: trunk/source/melee/mmain.h
+===================================================================
+--- trunk/source/melee/mmain.h	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/melee/mmain.h	2005-02-20 13:20:59 UTC (rev 121)
+@@ -53,7 +53,7 @@
+   void display_stats();
+ 
+   virtual int add_player (Control *c, int team_index, const char *name, const char *fleet, const char *fleet_file = &quot;fleets.ini&quot;) ;
+-  virtual bool isGameDone();
++  virtual int isGameDone();
+   int num_players;
+   Control **player_control;
+   //	ShipPanel **player_panel;
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/other/dialogs.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -289,6 +289,7 @@
+ };
+ 
+ // MELEE_EX - dialog structure
++
+ DIALOG melee_ex_dialog[] = {
+   // (dialog proc)     (x)  (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
+   { d_shadow_box_proc, 40,  40,   240,  185,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/source/scp.cpp	2005-02-20 13:20:59 UTC (rev 121)
+@@ -160,7 +160,7 @@
+ void play_demo(const char *file_name = &quot;demo.dmo&quot;) ;
+ void play_game(const char *_gametype_name, const std::string&amp; save, Log *_log = NULL) ;
+ void play_net1client ( const char * address = NULL, int port = -1 ) ;
+-void play_net1server ( const char *_gametype_name, int port = -1 ) ;
++void play_net1server ( int port = -1 ) ;
+ 
+ int getKey();
+ 
+@@ -453,8 +453,8 @@
+   log-&gt;set_all_directions(Log::direction_read);
+   log-&gt;set_direction(Game::channel_client , Log::direction_write | Log::direction_read | NetLog::direction_immediate);
+   log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_write | Log::direction_read);
+-  
+-  set_config_file(&quot;client.ini&quot;);
++
++  tw_set_config_file(&quot;client.ini&quot;);
+   char address[128];
+   int port, i;
+   while (!log-&gt;net.isConnected()) {
+@@ -489,7 +489,7 @@
+   return;
+ }
+ 
+-void play_net1server(const char *_gametype_name, int _port) 
++void play_net1server( int _port) 
+ {
+   STACKTRACE;
+   NetLog *log = new NetLog();
+@@ -501,7 +501,7 @@
+   log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_read);
+   log-&gt;set_direction(Game::channel_server + Game::_channel_buffered, Log::direction_write | Log::direction_read);
+   
+-  set_config_file(&quot;client.ini&quot;);
++  tw_set_config_file(&quot;client.ini&quot;);
+   int port;
+   while (!log-&gt;net.isConnected()) 
+     {
+@@ -519,7 +519,7 @@
+   log-&gt;net.optimize4latency();
+   message.out(&quot;connection established&quot;);
+   
+-  play_game(_gametype_name, &quot;&quot;, log);
++  play_game(&quot;Melee&quot;, &quot;&quot;, log);
+   
+   return;
+ }
+@@ -1037,8 +1037,7 @@
+     }
+     break;
+   case MELEE_EX_DIALOG_PLAY_NET1SERVER: {
+-    const char *gname = select_game_menu();
+-    if (gname) play_net1server(gname);
++    play_net1server();
+   }
+     break;
+   case MELEE_EX_DIALOG_PLAY_NET1CLIENT: {
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-02-19 12:14:45 UTC (rev 120)
++++ trunk/sources.lst	2005-02-20 13:20:59 UTC (rev 121)
+@@ -22,7 +22,6 @@
+ source/games/ggob.cpp
+ source/games/gflmelee.cpp
+ source/games/gdefender.cpp
+-source/games/glegacies.cpp
+ source/melee/mlog.cpp
+ source/melee/mitems.cpp
+ source/melee/mnet1.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000066.html">[Tw-light-svn] r120 - in trunk: . source/games
+</A></li>
+	<LI>Next message: <A HREF="000068.html">[Tw-light-svn] r122 - in trunk: . gamedata gamedata/xml gamedata/xml/GOB gamedata/xslt source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#67">[ date ]</a>
+              <a href="thread.html#67">[ thread ]</a>
+              <a href="subject.html#67">[ subject ]</a>
+              <a href="author.html#67">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

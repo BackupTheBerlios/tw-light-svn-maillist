@@ -1,0 +1,341 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r134 - trunk/source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-March/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r134%20-%20trunk/source/games&In-Reply-To=%3C200503072323.j27NN2x6008091%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000079.html">
+   <LINK REL="Next"  HREF="000081.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r134 - trunk/source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r134%20-%20trunk/source/games&In-Reply-To=%3C200503072323.j27NN2x6008091%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r134 - trunk/source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Tue Mar  8 00:23:02 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000079.html">[Tw-light-svn] r133 - in trunk/source: . games melee other
+</A></li>
+        <LI>Next message: <A HREF="000081.html">[Tw-light-svn] r135 - in trunk: . gamedata/xml/GOB source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#80">[ date ]</a>
+              <a href="thread.html#80">[ thread ]</a>
+              <a href="subject.html#80">[ subject ]</a>
+              <a href="author.html#80">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-03-08 00:23:00 +0100 (Tue, 08 Mar 2005)
+New Revision: 134
+
+Modified:
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+Log:
+Reimplementing system jump using item vector
+
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-03-07 22:10:58 UTC (rev 133)
++++ trunk/source/games/ggob.cpp	2005-03-07 23:23:00 UTC (rev 134)
+@@ -96,29 +96,12 @@
+ void GobGame::prepare()
+ {
+   GobGameBase::prepare();
+-  if(maingame-&gt;gobplayer._teleport)
+-    {
+-      message.flush();
+-      ShipType* type = maingame-&gt;gobplayer.ship-&gt;type;
+-      double crew = maingame-&gt;gobplayer.ship-&gt;crew;
+-      maingame-&gt;gobplayer.ship = NULL;
+-      maingame-&gt;gobplayer.new_ship(type);
+-      add_focus(_player_control, _player_control-&gt;channel);
+-
+-      maingame-&gt;gobplayer.ship-&gt;crew = crew;
+-      maingame-&gt;gobplayer.ship-&gt;batt = 0;
+-
+-      maingame-&gt;gobplayer._teleport = 0;
+-    }
+ }
+ 
+ 
+ void GobGame::setGameDone(int done)
+ {
+-  if(done == GAME_STATE_FINISHED)
+-    {
+-      maingame-&gt;setGameDone(done);
+-    }
++
+     return GobGameBase::setGameDone(done);
+ }
+ 
+@@ -126,24 +109,32 @@
+ void GobGame::switch_system(const std::string&amp; name)
+ {
+   // remove ship from current system
+-  item.remove(maingame-&gt;gobplayer.ship);
++  item.remove(gobplayer.ship);
+ 
+   // Save current game
+-  _galaxy[_name] = std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt;(item,presence);
++  _galaxy[_name] = item;
+   
+   // Load 
+-  item = _galaxy[name].first;
+-  presence = _galaxy[name].second;
++  if(_galaxy.find(name)!=_galaxy.end())
++    {
++      item = _galaxy[name];
++    }
++  else
++    {
++      item.clear();
++    }
+   
++  _name = name;
+   // add player ship
+-  item.remove(maingame-&gt;gobplayer.ship);
+-  item.push_back(maingame-&gt;gobplayer.ship);
++  item.remove(gobplayer.ship);
++  if(gobplayer.ship)
++    item.push_back(gobplayer.ship);
+ }
+ 
+ void GobGame::add_gobplayer(Control *control) 
+ {
+   STACKTRACE;
+-  maingame-&gt;gobplayer.init( new_team());
++  gobplayer.init( new_team());
+   add_focus(_player_control, _player_control-&gt;channel);
+   return;
+ }
+@@ -153,7 +144,7 @@
+   if (_player_panel) 
+     _player_panel-&gt;die();
+   _player_panel = NULL;
+-  _player_panel = new ShipPanel(maingame-&gt;gobplayer.ship);
++  _player_panel = new ShipPanel(gobplayer.ship);
+   _player_panel-&gt;always_redraw = true;
+   _player_panel-&gt;window-&gt;init(window);
+   
+@@ -228,17 +219,22 @@
+   enemy_team = new_team();
+ 	       
+ 
++
+   int server_players;
+   tw_set_config_file(&quot;client.ini&quot;);
+   server_players = 1;
+   log_int(channel_server, server_players);
+   _player_control = create_control(channel_server, &quot;Human&quot;, &quot;Config0&quot;);
+ 
++  if(Load(data_full_path(&quot;xml/GOB/start.xml&quot;)) == 1)
++    {
++      tw_error(&quot;unable to locate start.xml&quot;);
++    };  
++
+   add ( new RainbowRift() );
+   
+   next_add_new_enemy_time = 1000;
+ 
+-       //  add_new_enemy();
+ 
+   this-&gt;change_view(&quot;Hero&quot;);
+   view-&gt;window-&gt;locate(
+@@ -247,10 +243,6 @@
+ 		       0,0.9,
+ 		       0,1
+ 		       );
+-
+-  _galaxy[&quot;Arix&quot;] = std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt;(item,presence);
+-  _galaxy[&quot;Beta&quot;] = std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt;(item,presence);
+-
+   return;
+ }
+ 
+@@ -318,15 +310,15 @@
+ 
+   int i = 0;
+       
+-  if (maingame-&gt;gobplayer.ship) 
++  if (gobplayer.ship) 
+     {
+       message.print((int)msecs_per_fps, 15-i, &quot;coordinates: %d x %d&quot;, 
+-		    iround(maingame-&gt;gobplayer.ship-&gt;normal_pos().x), 
+-		    iround(maingame-&gt;gobplayer.ship-&gt;normal_pos().y));
++		    iround(gobplayer.ship-&gt;normal_pos().x), 
++		    iround(gobplayer.ship-&gt;normal_pos().y));
+     }
+-  message.print((int)msecs_per_fps, 15-i, &quot;starbucks: %d&quot;, maingame-&gt;gobplayer.starbucks);
+-  message.print((int)msecs_per_fps, 15-i, &quot;buckazoids: %d&quot;, maingame-&gt;gobplayer.buckazoids);
+-  message.print((int)msecs_per_fps, 15-i, &quot;kills: %d&quot;, maingame-&gt;gobplayer.kills);
++  message.print((int)msecs_per_fps, 15-i, &quot;starbucks: %d&quot;, gobplayer.starbucks);
++  message.print((int)msecs_per_fps, 15-i, &quot;buckazoids: %d&quot;,gobplayer.buckazoids);
++  message.print((int)msecs_per_fps, 15-i, &quot;kills: %d&quot;, gobplayer.kills);
+   
+   return;
+ }
+@@ -400,8 +392,8 @@
+ GobPlayer *GobGame::get_player(SpaceLocation *what) 
+ {
+   STACKTRACE;
+-  if (what-&gt;get_team() == maingame-&gt;gobplayer.team) 
+-    return &amp;(maingame-&gt;gobplayer);
++  if (what-&gt;get_team() == gobplayer.team) 
++    return &amp;(gobplayer);
+   return NULL;
+ }
+ 
+@@ -415,13 +407,10 @@
+ 	if(_name==&quot;Arix&quot;)
+ 	  {
+ 	    switch_system(&quot;Beta&quot;);
+-	    _name = &quot;Beta&quot;;
+ 	  }
+ 	else
+ 	  {
+ 	    switch_system(&quot;Arix&quot;);
+-	    _name = &quot;Arix&quot;;
+-
+ 	  }
+ 	/*
+ 	setGameDone(GAME_STATE_SUSPENDED);
+@@ -543,9 +532,7 @@
+ 
+ GobPlayer::GobPlayer()
+ {
+-  _teleport = 0;
+-  _teleport_to = &quot;&quot;;
+-
++  ship = NULL;
+ }
+ 
+ GobPlayer::~GobPlayer() 
+@@ -1051,6 +1038,18 @@
+ 	return;
+ }
+ 
++
++void GobGame::add_gobplayer(const std::string&amp; system, Vector2 pos)
++{
++  STACKTRACE;
++  switch_system(system);
++  gobplayer.init(game-&gt;new_team());
++  add_focus(_player_control, _player_control-&gt;channel);
++  gobplayer.new_ship(shiptype(&quot;supbl&quot;));
++  gobplayer.ship-&gt;translate(pos);
++}
++
++/*
+ void MainGobGame::init (Log *log, const std::string&amp; save)
+ {
+   MainGame::init(log,save);
+@@ -1061,17 +1060,9 @@
+     };  
+ }	
+ 
+-void MainGobGame::add_gobplayer(const std::string&amp; system, Vector2 pos)
+-{
+-  STACKTRACE;
+-   switch_to(system);
+-   gobplayer.init(game-&gt;new_team());
+-   game-&gt;add_focus(gobgame-&gt;_player_control, gobgame-&gt;_player_control-&gt;channel);
+-   gobplayer.new_ship(shiptype(&quot;supbl&quot;));
+-   gobplayer.ship-&gt;translate(pos);
+-}
++*/
+ 
+-REGISTER_GAME(MainGobGame, &quot;GOB&quot;)
++REGISTER_GAME(GobGame, &quot;GOB&quot;)
+ 
+ 
+ 
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-03-07 22:10:58 UTC (rev 133)
++++ trunk/source/games/ggob.h	2005-03-07 23:23:00 UTC (rev 134)
+@@ -60,9 +60,6 @@
+   void new_ship(ShipType *type);
+   int charge (char *name, int price_starbucks, int price_buckazoids) ;
+   Upgrade **upgrade_list;
+-
+-  int _teleport;
+-  std::string _teleport_to;
+ } ;
+ 
+ /// Enemy starship, reward for it
+@@ -86,25 +83,33 @@
+ 
+ /////////////////////////////////////////////////////////////////////////////////
+ 
++/*
+ class MainGobGame : public MainGame
+ {
+  public:
+-  GobPlayer gobplayer;
+   virtual void 	init (Log *log, const std::string&amp; save);
+   void add_gobplayer(const std::string&amp; system, Vector2 pos);
+  protected:
+ };
++*/
+ 
+-typedef SubGame&lt;MainGobGame&gt; GobGameBase;
++//typedef SubGame&lt;MainGame&gt; GobGameBase;
++//typedef SubGame&lt;MainGobGame&gt; GobGameBase;
++typedef Game GobGameBase;
+ 
+ /// GOB class adventure game
+ class GobGame : public  GobGameBase
+ {
+ 
+-  std::map&lt;std::string, std::pair&lt;std::list&lt;SpaceLocation*&gt;, std::list&lt;Presence*&gt; &gt; &gt; _galaxy;
++  std::map&lt;std::string, std::list&lt;SpaceLocation*&gt; &gt; _galaxy;
+ 
+  public:
++  GobPlayer gobplayer;
++
++  /// move player to system
+   virtual void switch_system(const std::string&amp; name);
++  /// Add new player to the game
++  void add_gobplayer(const std::string&amp; system, Vector2 pos);
+ 
+   GobGame();
+   virtual ~GobGame();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000079.html">[Tw-light-svn] r133 - in trunk/source: . games melee other
+</A></li>
+	<LI>Next message: <A HREF="000081.html">[Tw-light-svn] r135 - in trunk: . gamedata/xml/GOB source source/games source/melee source/other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#80">[ date ]</a>
+              <a href="thread.html#80">[ thread ]</a>
+              <a href="subject.html#80">[ subject ]</a>
+              <a href="author.html#80">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

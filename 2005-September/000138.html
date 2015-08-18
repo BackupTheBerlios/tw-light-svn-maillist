@@ -1,0 +1,2051 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r192 - in trunk: . gamedata/default_ini source source/libraries/jpgalleg source/other source/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-September/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r192%20-%20in%20trunk%3A%20.%20gamedata/default_ini%20source%20source/libraries/jpgalleg%20source/other%20source/util&In-Reply-To=%3C200509181957.j8IJvEpQ028577%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000137.html">
+   <LINK REL="Next"  HREF="000139.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r192 - in trunk: . gamedata/default_ini source source/libraries/jpgalleg source/other source/util</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r192%20-%20in%20trunk%3A%20.%20gamedata/default_ini%20source%20source/libraries/jpgalleg%20source/other%20source/util&In-Reply-To=%3C200509181957.j8IJvEpQ028577%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r192 - in trunk: . gamedata/default_ini source source/libraries/jpgalleg source/other source/util">yurand at berlios.de
+       </A><BR>
+    <I>Sun Sep 18 21:57:14 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000137.html">[Tw-light-svn] r191 - trunk/source/melee
+</A></li>
+        <LI>Next message: <A HREF="000139.html">[Tw-light-svn] r193 - in trunk: . mingw-libs/include msvc-libs/include source/libraries source/libraries/boost source/libraries/boost/config source/libraries/boost/config/abi source/libraries/boost/config/compiler source/libraries/boost/config/platform source/libraries/boost/config/stdlib source/libraries/boost/detail
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#138">[ date ]</a>
+              <a href="thread.html#138">[ thread ]</a>
+              <a href="subject.html#138">[ subject ]</a>
+              <a href="author.html#138">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-09-18 21:57:13 +0200 (Sun, 18 Sep 2005)
+New Revision: 192
+
+Modified:
+   trunk/gamedata/default_ini/client.ini
+   trunk/gamedata/default_ini/fleets.ini
+   trunk/gamedata/default_ini/server.ini
+   trunk/makefile
+   trunk/source/libraries/jpgalleg/decode.c
+   trunk/source/libraries/jpgalleg/encode.c
+   trunk/source/other/gup.cpp
+   trunk/source/scp.cpp
+   trunk/source/util/aastr.h
+   trunk/source/util/aautil.c
+   trunk/source/util/base.cpp
+   trunk/source/util/net_tcp.cpp
+   trunk/source/util/pmask.h
+Log:
+Applying Corona688 64-bit path with minor changes
+
+Modified: trunk/gamedata/default_ini/client.ini
+===================================================================
+--- trunk/gamedata/default_ini/client.ini	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/gamedata/default_ini/client.ini	2005-09-18 19:57:13 UTC (rev 192)
+@@ -31,7 +31,7 @@
+ PlanetUsespec = 1
+ 
+ [View]
+-View = Enemy
++View = Dynamic
+ ;determines = where the camera goes
+ InterpolateFrames = 1
+ ;0 = low quality, 1 = high quality
+
+Modified: trunk/gamedata/default_ini/fleets.ini
+===================================================================
+--- trunk/gamedata/default_ini/fleets.ini	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/gamedata/default_ini/fleets.ini	2005-09-18 19:57:13 UTC (rev 192)
+@@ -1,30 +1,30 @@
+ [Player1]
+ Slot0 = earcr
+-Slot1 = thrto
+-Slot2 = chebr
++Slot1 = kohma
++Slot2 = syrpe
+ Slot3 = orzne
+-Slot4 = druma
+-Slot5 = meltr
+-Slot6 = chmav
+-Slot7 = kohma
+-Slot8 = utwju
+-Slot9 = andgu
+-Slot10 = ilwav
+-Slot11 = kzedr
+-Slot12 = yehte
+-Slot13 = syrpe
+-Slot14 = spael
+-Slot15 = vuxin
+-Slot16 = umgdr
+-Slot17 = supbl
+-Slot18 = pkufu
+-Slot19 = slypr
+-Slot20 = arisk
+-Slot21 = zfpst
+-Slot22 = mycpo
+-Slot23 = mmrxf
+-Slot24 = shosc
+-Size = 25
++Slot4 = zfpst
++Slot5 = chmav
++Slot6 = kzedr
++Slot7 = andgu
++Slot8 = tauda
++Slot9 = thrto
++Slot10 = spael
++Slot11 = conho
++Slot12 = druma
++Slot13 = vuxin
++Slot14 = slypr
++Slot15 = arisk
++Slot16 = yehte
++Slot17 = utwju
++Slot18 = umgdr
++Slot19 = shosc
++Slot20 = ilwav
++Slot21 = chebr
++Slot22 = meltr
++Slot23 = supbl
++Slot24 = mycpo
++Size = 27
+ MaxFleetCost = 500
+ Name = Player1
+ Type = Keyboard/Joystick
+@@ -32,6 +32,8 @@
+ Channel = 12
+ StartingFleetCost = 633
+ StartingFleetSize = 24
++Slot25 = mmrxf
++Slot26 = pkufu
+ 
+ [Player2]
+ Slot0 = tauar
+
+Modified: trunk/gamedata/default_ini/server.ini
+===================================================================
+--- trunk/gamedata/default_ini/server.ini	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/gamedata/default_ini/server.ini	2005-09-18 19:57:13 UTC (rev 192)
+@@ -1,69 +1,69 @@
+-[Network]
+-Lag = 5
+-
+-[Game]
+-SC2FrameRate = 20
+-;used = in the conversion of all SC2 quantities except mass
+-SC2TotalDistance = 8000
+-;used = in the conversion of SC2 velocities &amp; accelerations
+-TicRate = 40
+-; = the rate at which TimeWarps physics are done (units are cycles / second)
+-Turbo = 1.0
+-;1.0 = is normal, 0.5 is half-speed, 2.0 is double-speed, etc.
+-F4Turbo = 4.0
+-; = the value of turbo used when f4 is pressed
+-FriendlyFire = 1
+-; = 0 is no friendly fire, 1 is friendly fire
+-ShotRelativity = 0.490000
+-; = fraction of shooter velocity inherited by a shot, 0.5 recomended
+-MapWidth = 3840
+-MapHeight = 3840
+-; = map size (3840x3840 is the norm)
+-
+-[View]
+-; = value of 1 is not sc2-ish .. change it to 0 for sc2 mode
+-CameraHidesCloakers = 1
+-;ServerSideStars = 1 //not yet implemented
+-
+-[Stars]
+-Width = 3000
+-Height = 3000
+-Number = 200
+-;Number = of stars; should be between 100 and 500
+-Layers = 15
+-;Number = of layers the stars are in; should be between 3 and 15
+-Depth = 127
+-;3d = depth of starfield, should be between 0 and 255
+-;TwinkleAmplitude = 1.0
+-;TwinkleFrequency = 1.0
+-
+-
+-[Planet]
+-GravityForce = 1.5    ;strength of gravity
+-GravityWhip = 0.5    ;increase in maxspeed in gravity well
+-GravityWhip2 = 0.25   ;increase in maxspeed in gravity well
+-GravityPower = 1     ;falloff: 2 = square, 1 = linear, 0 = flat, -1 = inverse, -2 = inverse square
+-;note = that real gravity is inverse square, with 0 gravitywhip, 0 gravitywhip2, 0 mindist, and large range
+-;however, = linear falloff seems to feel better for game purposes
+-;I've = heard that SC1/2 used flat gravity
+-GravityMinDist = 6      ;weakens strength of gravity at short range
+-GravityRange = 18     ;cut-off range beyond which gravity stops
+-
+-[Sun]
+-; = Sun follows the same format as Planet
+-GravityForce = 6
+-GravityWhip = 2.0
+-GravityWhip = 2.0
+-GravityPower = -1
+-GravityMinDist = 6
+-GravityRange = 20
+-
+-[Hyperspace]
+-Friction = 0.0006
+-Pholes = 0
+-Nholes = 16
+-hole_speed = 0.2
+-
+-[Gob]
+-MaxEnemies = 64
+-
++[Network]
++Lag = 5
++
++[Game]
++SC2FrameRate = 20
++;used = in the conversion of all SC2 quantities except mass
++SC2TotalDistance = 8000
++;used = in the conversion of SC2 velocities &amp; accelerations
++TicRate = 40
++; = the rate at which TimeWarps physics are done (units are cycles / second)
++Turbo = 1.0
++;1.0 = is normal, 0.5 is half-speed, 2.0 is double-speed, etc.
++F4Turbo = 4.0
++; = the value of turbo used when f4 is pressed
++FriendlyFire = 1
++; = 0 is no friendly fire, 1 is friendly fire
++ShotRelativity = 0.490000
++; = fraction of shooter velocity inherited by a shot, 0.5 recomended
++MapWidth = 3840
++MapHeight = 3840
++; = map size (3840x3840 is the norm)
++
++[View]
++; = value of 1 is not sc2-ish .. change it to 0 for sc2 mode
++CameraHidesCloakers = 1
++;ServerSideStars = 1 //not yet implemented
++
++[Stars]
++Width = 3000
++Height = 3000
++Number = 200
++;Number = of stars; should be between 100 and 500
++Layers = 15
++;Number = of layers the stars are in; should be between 3 and 15
++Depth = 127
++;3d = depth of starfield, should be between 0 and 255
++;TwinkleAmplitude = 1.0
++;TwinkleFrequency = 1.0
++
++
++[Planet]
++GravityForce = 1.5    ;strength of gravity
++GravityWhip = 0.5    ;increase in maxspeed in gravity well
++GravityWhip2 = 0.25   ;increase in maxspeed in gravity well
++GravityPower = 1     ;falloff: 2 = square, 1 = linear, 0 = flat, -1 = inverse, -2 = inverse square
++;note = that real gravity is inverse square, with 0 gravitywhip, 0 gravitywhip2, 0 mindist, and large range
++;however, = linear falloff seems to feel better for game purposes
++;I've = heard that SC1/2 used flat gravity
++GravityMinDist = 6      ;weakens strength of gravity at short range
++GravityRange = 18     ;cut-off range beyond which gravity stops
++
++[Sun]
++; = Sun follows the same format as Planet
++GravityForce = 6
++GravityWhip = 2.0
++GravityWhip = 2.0
++GravityPower = -1
++GravityMinDist = 6
++GravityRange = 20
++
++[Hyperspace]
++Friction = 0.0006
++Pholes = 0
++Nholes = 16
++hole_speed = 0.2
++
++[Gob]
++MaxEnemies = 64
++
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/makefile	2005-09-18 19:57:13 UTC (rev 192)
+@@ -101,7 +101,10 @@
+ 	ARCH := $(shell echo `arch`)
+ 	ifeq ($(ARCH),ppc)
+ 		ARCH    = powerpc
+-endif
++	endif
++	ifeq ($(ARCH),x86_64)
++		ARCH	= k8
++	endif
+ else
+ 	ARCH := i586
+ endif
+@@ -112,7 +115,7 @@
+ 	NAME   := ${addsuffix -debug,$(NAME)}
+ 	TEST=1
+ else
+-	CFLAGS += -Os -mcpu=$(ARCH) -s
++	CFLAGS += -Os -march=$(ARCH) -s
+ endif
+ 
+ ifdef win32
+
+Modified: trunk/source/libraries/jpgalleg/decode.c
+===================================================================
+--- trunk/source/libraries/jpgalleg/decode.c	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/libraries/jpgalleg/decode.c	2005-09-18 19:57:13 UTC (rev 192)
+@@ -33,8 +33,8 @@
+ static int sampling, restart_interval, skip_count;
+ static int spectrum_start, spectrum_end, successive_high, successive_low;
+ static int scan_components, component[3];
+-static void (*ycbcr2rgb)(int address, int y1, int cb1, int cr1, int y2, int cb2, int cr2);
+-static void (*plot)(int addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr);
++static void (*ycbcr2rgb)(long address, int y1, int cb1, int cr1, int y2, int cb2, int cr2);
++static void (*plot)(long addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr);
+ 
+ 
+ 
+@@ -548,7 +548,7 @@
+  *  progressive mode decoding.
+  */
+ static int
+-decode_progressive_block(int addr, int type, int *old_dc)
++decode_progressive_block(long addr, int type, int *old_dc)
+ {
+ 	HUFFMAN_TABLE *dc_table, *ac_table;
+ 	short *block = (short *)addr;
+@@ -716,7 +716,7 @@
+  *  at a time.
+  */
+ static void
+-_jpeg_c_ycbcr2rgb(int addr, int y1, int cb1, int cr1, int y2, int cb2, int cr2)
++_jpeg_c_ycbcr2rgb(long addr, int y1, int cb1, int cr1, int y2, int cb2, int cr2)
+ {
+ 	int r, g, b;
+ 	unsigned int *ptr = (unsigned int *)addr;
+@@ -737,7 +737,7 @@
+  *  Plots an 8x8 MCU block for 444 mode. Also used to plot greyscale MUCs.
+  */
+ static void
+-plot_444(int addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr)
++plot_444(long addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr)
+ {
+ 	int x, y;
+ 	short *y1_ptr = y1, *cb_ptr = cb, *cr_ptr = cr;
+@@ -775,7 +775,7 @@
+  *  Plots a 16x8 MCU block for 422 mode.
+  */
+ static void
+-plot_422(int addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr)
++plot_422(long addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr)
+ {
+ 	int x, y;
+ 	short *y1_ptr = y1, *y2_ptr = y2, *cb_ptr = cb, *cr_ptr = cr;
+@@ -804,7 +804,7 @@
+  *  Plots a 16x16 MCU block for 411 mode.
+  */
+ static void
+-plot_411(int addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr)
++plot_411(long addr, int pitch, short *y1, short *y2, short *y3, short *y4, short *cb, short *cr)
+ {
+ 	int x, y;
+ 	short *y1_ptr = y1, *y2_ptr = y2, *y3_ptr = y3, *y4_ptr = y4, *cb_ptr = cb, *cr_ptr = cr;
+@@ -846,7 +846,7 @@
+ 	short coefs_buffer[384], coefs[64], *coefs_ptr, *temp_ptr;
+ 	short *y1, *y2, *y3, *y4, *cb, *cr;
+ 	int workspace[64];
+-	int addr, pitch, i, j;
++	long addr, pitch, i, j;
+ 	int block_x, block_y, block_max_x, block_max_y;
+ 	int blocks_per_row[3];
+ 	int blocks_in_mcu, block_component[6];
+@@ -860,7 +860,7 @@
+ 	int depth;
+ 	PALETTE tmppal;
+ 	int want_palette = 1;
+-	
++
+ 	if (!pal) {
+ 		want_palette = 0;
+ 		pal = tmppal;
+@@ -889,12 +889,12 @@
+ 	y4 = coefs_buffer + 192;
+ 	cb = coefs_buffer + 256;
+ 	cr = coefs_buffer + 320;
+-	
++
+ 	if (_jpeg_getw() != CHUNK_SOI) {
+ 		jpgalleg_error = JPG_ERROR_NOT_JFIF;
+ 		return NULL;
+ 	}
+-	
++
+ 	/* Examine header */
+ 	do {
+ 		data = _jpeg_getc();
+@@ -973,12 +973,12 @@
+ 			}
+ 		}
+ 	} while ((flags &amp; JFIF_OK) != JFIF_OK);
+-	
++
+ 	bmp = create_bitmap_ex(32, (jpeg_w + 15) &amp; ~0xf, (jpeg_h + 15) &amp; ~0xf);
+ 	if (!bmp)
+ 		return NULL;
+ 	pitch = (int)(bmp-&gt;line[1] - bmp-&gt;line[0]);
+-	
++
+ 	block_x = block_y = 0;
+ 	restart_count = 0;
+ 	memset(data_buffer, 0, 3 * sizeof(DATA_BUFFER *));
+@@ -1018,7 +1018,7 @@
+ 				if (decode_baseline_block(block_ptr[i], (block_component[i] == 0) ? LUMINANCE : CHROMINANCE, &amp;old_dc[block_component[i]]))
+ 					goto exit_error;
+ 			}
+-			addr = (int)bmp-&gt;line[block_y] + (block_x * 4);
++			addr = (long)bmp-&gt;line[block_y] + (block_x * 4);
+ 			plot(addr, pitch, y1, y2, y3, y4, cb, cr);
+ 			block_x += mcu_w;
+ 			if (block_x &gt;= jpeg_w) {
+@@ -1113,7 +1113,7 @@
+ 				}
+ 				for (i = 0; i &lt; blocks_in_mcu; i++) {
+ 					c = block_component[i];
+-					addr = (int)(data_buffer[c][((block_y * component_h[c]) * blocks_per_row[c]) + (block_y_ofs[i] * blocks_per_row[c]) + (block_x * component_w[c]) + block_x_ofs[i]].data);
++					addr = (long)(data_buffer[c][((block_y * component_h[c]) * blocks_per_row[c]) + (block_y_ofs[i] * blocks_per_row[c]) + (block_x * component_w[c]) + block_x_ofs[i]].data);
+ 					if (decode_progressive_block(addr, (c == 0) ? LUMINANCE : CHROMINANCE, &amp;old_dc[c]))
+ 						goto exit_error;
+ 				}
+@@ -1194,7 +1194,7 @@
+ 					apply_idct(coefs, coefs_ptr, (c == 0) ? luminance_quantization_table : chrominance_quantization_table, workspace);
+ 					coefs_ptr += 64;
+ 				}
+-				addr = (int)bmp-&gt;line[block_y * mcu_h] + (block_x * mcu_w * 4);
++				addr = (long)bmp-&gt;line[block_y * mcu_h] + (block_x * mcu_w * 4);
+ 				plot(addr, pitch, y1, y2, y3, y4, cb, cr);
+ 			}
+ 		}
+
+Modified: trunk/source/libraries/jpgalleg/encode.c
+===================================================================
+--- trunk/source/libraries/jpgalleg/encode.c	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/libraries/jpgalleg/encode.c	2005-09-18 19:57:13 UTC (rev 192)
+@@ -118,7 +118,7 @@
+ static HUFFMAN_TABLE huffman_dc_table[2];
+ static int luminance_quant_table[64];
+ static int chrominance_quant_table[64];
+-static void (*rgb2ycbcr)(int address, short *y1, short *cb1, short *cr1, short *y2, short *cb2, short *cr2);
++static void (*rgb2ycbcr)(long address, short *y1, short *cb1, short *cr1, short *y2, short *cb2, short *cr2);
+ 
+ 
+ 
+@@ -542,7 +542,7 @@
+  *  at a time.
+  */
+ static void
+-_jpeg_c_rgb2ycbcr(int addr, short *y1, short *cb1, short *cr1, short *y2, short *cb2, short *cr2)
++_jpeg_c_rgb2ycbcr(long addr, short *y1, short *cb1, short *cr1, short *y2, short *cb2, short *cr2)
+ {
+ 	int r, g, b;
+ 	unsigned int *ptr = (unsigned int *)addr;
+@@ -574,7 +574,7 @@
+ 	int dc_y, dc_cb, dc_cr;
+ 	int sampling, greyscale;
+ 	int block_x, block_y, x, y, i;
+-	int addr, pitch;
++	long addr, pitch;
+ 	int error = 0;
+ 	BITMAP *fixed_bmp;
+ 	
+@@ -625,7 +625,7 @@
+ 			case JPG_SAMPLING_411:
+ 				for (block_y = 0; block_y &lt; bmp-&gt;h; block_y += 16) {
+ 					for (block_x = 0; block_x &lt; bmp-&gt;w; block_x += 16) {
+-						addr = (int)fixed_bmp-&gt;line[block_y] + (block_x * 4);
++						addr = (long)fixed_bmp-&gt;line[block_y] + (block_x * 4);
+ 						y1_ptr = y1;
+ 						y2_ptr = y2;
+ 						y3_ptr = y3;
+@@ -689,7 +689,7 @@
+ 			case JPG_SAMPLING_422:
+ 				for (block_y = 0; block_y &lt; bmp-&gt;h; block_y += 8) {
+ 					for (block_x = 0; block_x &lt; bmp-&gt;w; block_x += 16) {
+-						addr = (int)fixed_bmp-&gt;line[block_y] + (block_x * 4);
++						addr = (long)fixed_bmp-&gt;line[block_y] + (block_x * 4);
+ 						y1_ptr = y1;
+ 						y2_ptr = y2;
+ 						cb_ptr = cb;
+@@ -725,7 +725,7 @@
+ 			case JPG_SAMPLING_444:
+ 				for (block_y = 0; block_y &lt; bmp-&gt;h; block_y += 8) {
+ 					for (block_x = 0; block_x &lt; bmp-&gt;w; block_x += 8) {
+-						addr = (int)fixed_bmp-&gt;line[block_y] + (block_x * 4);
++						addr = (long)fixed_bmp-&gt;line[block_y] + (block_x * 4);
+ 						y1_ptr = y1;
+ 						cb_ptr = cb;
+ 						cr_ptr = cr;
+@@ -752,7 +752,7 @@
+ 	else {
+ 		for (block_y = 0; block_y &lt; bmp-&gt;h; block_y += 8) {
+ 			for (block_x = 0; block_x &lt; bmp-&gt;w; block_x += 8) {
+-				addr = (int)fixed_bmp-&gt;line[block_y] + (block_x * 4);
++				addr = (long)fixed_bmp-&gt;line[block_y] + (block_x * 4);
+ 				y1_ptr = y1;
+ 				for (y = 0; y &lt; 8; y++) {
+ 					for (x = 0; x &lt; 8; x += 2) {
+
+Modified: trunk/source/other/gup.cpp
+===================================================================
+--- trunk/source/other/gup.cpp	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/other/gup.cpp	2005-09-18 19:57:13 UTC (rev 192)
+@@ -2,6 +2,7 @@
+ #include &lt;allegro.h&gt;
+ #include &quot;melee.h&quot;
+ 
++#include &quot;melee/mlog.h&quot;
+ #include &quot;melee/mframe.h&quot;
+ #include &quot;melee/mship.h&quot;
+ #include &quot;melee/mcbodies.h&quot;
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/scp.cpp	2005-09-18 19:57:13 UTC (rev 192)
+@@ -198,20 +198,20 @@
+     {
+     case Log::log_normal: 
+       {
+-	log = new Log();
+-	log-&gt;init();
+-	return log;
++    log = new Log();
++    log-&gt;init();
++    return log;
+       }
+     case Log::log_net1server: 
+       {
+-	netlog = new NetLog();
+-	netlog-&gt;init();
+-	netlog-&gt;type = Log::log_net1server;
+-	return netlog;
++    netlog = new NetLog();
++    netlog-&gt;init();
++    netlog-&gt;type = Log::log_net1server;
++    return netlog;
+       }
+     default: 
+       {
+-	tw_error(&quot;that is not a valid log type&quot;);
++    tw_error(&quot;that is not a valid log type&quot;);
+       }
+     }
+   return NULL;
+@@ -298,7 +298,7 @@
+   DIALOG_CONNECT_PORT,
+   DIALOG_CONNECT_PORT_BOX,
+   DIALOG_CONNECT_PORT_EDIT,
+-  //	DIALOG_CONNECT_TWOLOCALS,
++  //    DIALOG_CONNECT_TWOLOCALS,
+   DIALOG_CONNECT_OK,
+   DIALOG_CONNECT_CANCEL,
+   DIALOG_CONNECT_BLAH
+@@ -322,7 +322,7 @@
+ };
+ 
+ int connect_menu(VideoWindow *window, char **address, int *port) { STACKTRACE
+-								     int i = 0;
++                                     int i = 0;
+ 
+  if (*address)
+    strncpy(dialog_string[0], *address, 70);
+@@ -363,10 +363,10 @@
+   while ((p &lt;= 0) || (p &gt; 65535)) 
+     {
+       if (tw_popup_dialog(window, listen_dialog, 2) != DIALOG_LISTEN_OK) 
+-	{
+-	  //game-&gt;quit(&quot;Quit - game aborted from network \&quot;listen\&quot; menu&quot;);
+-	  return -1;
+-	}
++    {
++      //game-&gt;quit(&quot;Quit - game aborted from network \&quot;listen\&quot; menu&quot;);
++      return -1;
++    }
+       p = atoi(dialog_string[1]);
+     }
+   return p;
+@@ -395,22 +395,22 @@
+   try 
+     {
+       if (game) 
+-	{
+-	  delete game;
+-	  game = NULL;
+-	}
++    {
++      delete game;
++      game = NULL;
++    }
+     
+       if (!_log) 
+-	{
+-	  _log = new Log();
+-	  _log-&gt;init();
+-	}
++    {
++      _log = new Log();
++      _log-&gt;init();
++    }
+       
+       GameType *type = gametype(gametype_name);
+       if (type)
+-		new_game = type-&gt;new_game();
++        new_game = type-&gt;new_game();
+       else
+-		tw_error(&quot;wait a sec... I can't find that game type&quot;);
++        tw_error(&quot;wait a sec... I can't find that game type&quot;);
+     
+       new_game-&gt;preinit();
+       new_game-&gt;window = new VideoWindow;
+@@ -431,29 +431,29 @@
+   catch (int i) 
+     {
+       if (i == -1) 
+-	throw;
++    throw;
+       if (__error_flag &amp; 1) 
+-	throw;
++    throw;
+       if (i != 0) 
+-	caught_error (&quot;%s %s caught int %d&quot;, __FILE__, __LINE__, i);
++    caught_error (&quot;%s %s caught int %d&quot;, __FILE__, __LINE__, i);
+       if (__error_flag &amp; 1) 
+-	throw;
++    throw;
+     }
+   catch (const char *str) 
+     {
+       if (__error_flag &amp; 1) 
+-	throw;
++    throw;
+       caught_error(&quot;message: \&quot;%s\&quot;&quot;, str);
+       if (__error_flag &amp; 1) 
+-	throw;
++    throw;
+     }
+   catch (...) 
+     {
+       if (__error_flag &amp; 1) 
+-	throw;
++    throw;
+       caught_error(&quot;Ack(2)!!!\nAn error occured!\nBut I don't know what error!&quot;);
+       if (__error_flag &amp; 1) 
+-	throw;
++    throw;
+     }
+ 
+   prepareTitleScreenAssets();
+@@ -490,9 +490,9 @@
+     free(addressaddress);
+     if (i) 
+       {
+-	//						while (is_escape_pressed());
+-	while (keypressed()) readkey();
+-	tw_error(&quot;connection failed&quot;);
++    //                      while (is_escape_pressed());
++    while (keypressed()) readkey();
++    tw_error(&quot;connection failed&quot;);
+       }
+   }
+   
+@@ -606,7 +606,7 @@
+ void MainMenu::enable() 
+ {
+   STACKTRACE;
+-		   
++           
+   if (!(state &amp; 2)) 
+     window-&gt;add_callback(this);
+   state |= 3;
+@@ -614,7 +614,7 @@
+ 
+ void MainMenu::disable() 
+ {
+-  STACKTRACE;	   
++  STACKTRACE;      
+   state &amp;=~ 1;
+ }
+ 
+@@ -641,7 +641,7 @@
+ void MainMenu::deinit() 
+ {
+   STACKTRACE;   
+-		   
++           
+   if (state &amp; 2) 
+     {
+       window-&gt;remove_callback(this);
+@@ -654,13 +654,13 @@
+ void MainMenu::doit() 
+ {
+   STACKTRACE;
+-		   
++           
+   int i;
+   char tmp[32];
+   
+   tw_set_config_file(&quot;scp.ini&quot;);
+   if (!player_type) 
+-    {		
++    {       
+       MAX_PLAYERS        = get_config_int(&quot;Limits&quot;, &quot;MaxPlayers&quot;, 12);
+       MAX_CONFIGURATIONS = get_config_int(&quot;Limits&quot;, &quot;MaxConfigurations&quot;, 4);
+       MAX_TEAMS          = get_config_int(&quot;Limits&quot;, &quot;MaxTeams&quot;, 6);
+@@ -686,83 +686,84 @@
+       mainRet = tw_do_dialog(window, mainDialog, MAIN_DIALOG_NEW_GAME);
+       switch (mainRet) {
+       case MAIN_DIALOG_MELEE:
+-	disable();
+-	play_game(&quot;Melee&quot;, &quot;&quot;, NULL);
+-	enable();
+-	break;
++    disable();
++    play_game(&quot;Melee&quot;, &quot;&quot;, NULL);
++    enable();
++    break;
+       case MAIN_DIALOG_MULTIPLAYER:
+-	disable();
+-	multiplayer_menu();
+-	enable();
+-	break;
++    disable();
++    multiplayer_menu();
++    enable();
++    break;
+       case MAIN_DIALOG_MELEE_EXTENDED:
+-	disable();
+-	extended_menu();
+-	enable();
+-	break;
++    disable();
++    extended_menu();
++    enable();
++    break;
+       case MAIN_DIALOG_PREFERENCES:
+-	showTitle();
+-	options_menu(NULL);
+-	break;
++    showTitle();
++    options_menu(NULL);
++    break;
+       case MAIN_DIALOG_HELP:
+-	show_file(data_full_path(&quot;ingame.txt&quot;).c_str());
+-	break;
++    show_file(data_full_path(&quot;ingame.txt&quot;).c_str());
++    break;
+       case MAIN_DIALOG_NEW_GAME:
+-	{
+-		disable();
+-		std::auto_ptr&lt;MainGame&gt; maingame(new MainGame(&quot;&quot;));
+-		maingame-&gt;play();
+-		enable();
+-	  break;
+-	}
+-	case MAIN_DIALOG_ABOUT:
+-	{
+-	  // Show Intro
+-	  RGB tmpPal[256];
+-	  memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
+-	  set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
++    {
++        disable();
++        std::auto_ptr&lt;MainGame&gt; maingame(new MainGame(&quot;&quot;));
++        maingame-&gt;play();
++        enable();
++      break;
++    }
++    case MAIN_DIALOG_ABOUT:
++    {
++      // Show Intro
++      RGB tmpPal[256];
++      memcpy(tmpPal, palette_color, sizeof(RGB) * 256);
++      set_palette((const RGB*)g_game_data[TW_FONT_PALETTE].dat);
+ 
+-	  std::vector&lt;std::string&gt; about;
+-	  about.push_back(&quot;Team&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;Programmers:&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;  * Yura Semashko (Yurand)&quot;);
+-	  about.push_back(&quot;  * Paul Forest (youBastrd)&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;Content and Plot manager:&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;  * Asaf Hamtzany (UAF)&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;Dialog Writers&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;  * Pelorki&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;Graphic Designers&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;  * Rick Bushie (Firehazurd)&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;Music&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;  * Robeter Productions (www.robeterproductions.com)&quot;);
+-	  about.push_back(&quot;  * Mark Forest (Abe Froman)&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;Special Thanks:&quot;);
+-	  about.push_back(&quot;&quot;);
+-	  about.push_back(&quot;  * Orz&quot;);
+-	  about.push_back(&quot;  * Tau&quot;);
+-	  about.push_back(&quot;  * GeomanNL&quot;);
+-	  about.push_back(&quot;  * Officer Flubbo&quot;);
+-	  about.push_back(&quot;  * Captain Maim&quot;);
+-	  about.push_back(&quot;  * Jumping Peppers&quot;);
+-	  about.push_back(&quot;  * Robeter Productions&quot;);
++      std::vector&lt;std::string&gt; about;
++      about.push_back(&quot;Team&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;Programmers:&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;  * Yura Semashko (Yurand)&quot;);
++      about.push_back(&quot;  * Paul Forest (youBastrd)&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;Content and Plot manager:&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;  * Asaf Hamtzany (UAF)&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;Dialog Writers&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;  * Pelorki&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;Graphic Designers&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;  * Rick Bushie (Firehazurd)&quot;);
++      about.push_back(&quot;  * Darryl Koster&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;Music&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;  * Robeter Productions (www.robeterproductions.com)&quot;);
++      about.push_back(&quot;  * Mark Forest (Abe Froman)&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;Special Thanks:&quot;);
++      about.push_back(&quot;&quot;);
++      about.push_back(&quot;  * Orz&quot;);
++      about.push_back(&quot;  * Tau&quot;);
++      about.push_back(&quot;  * GeomanNL&quot;);
++      about.push_back(&quot;  * Officer Flubbo&quot;);
++      about.push_back(&quot;  * Captain Maim&quot;);
++      about.push_back(&quot;  * Jumping Peppers&quot;);
++      about.push_back(&quot;  * Robeter Productions&quot;);
+ 
+-	  ScrollText(about,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;, &quot;l&quot;, 3);
++      ScrollText(about,  D_FONT_ENGLISH, -1, &quot;images/background.jpg&quot;, &quot;l&quot;, 3);
+ 
+-	  videosystem-&gt;set_palette(tmpPal);
+-	  videosystem-&gt;redraw();
+-	  break;
+-	}
++      videosystem-&gt;set_palette(tmpPal);
++      videosystem-&gt;redraw();
++      break;
++    }
+       }
+     } while((mainRet != MAIN_DIALOG_EXIT) &amp;&amp; (mainRet != -1));
+   
+@@ -830,7 +831,7 @@
+       int fullscreen = 0;
+       
+       auto_unload = get_config_int(&quot;System&quot;, &quot;AutoUnload&quot;, 0);
+-		
++        
+       const AGUP_THEME *theme = agup_theme_by_name(get_config_string(&quot;Video&quot;, &quot;GuiTheme&quot;, &quot;Photon&quot;));
+       
+       screen_bpp       = get_config_int(&quot;Video&quot;, &quot;BitsPerPixel&quot;, 16);
+@@ -852,125 +853,125 @@
+       
+       // parse command-line arguments
+       for (i = 1; i &lt; argc; i += 1) 
+-	{
+-	  if (!strcmp(argv[i], &quot;-res&quot;) &amp;&amp; (argc &gt; i + 2)) 
+-	    {
+-	      log_debug(&quot;command-line argument -res\n&quot;);
+-	      screen_width = atoi(argv[i+1]);
+-	      screen_height = atoi(argv[i+2]);
+-	      i += 2;
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-bpp&quot;) &amp;&amp; (argc &gt; i + 1)) 
+-	    {
+-	      log_debug(&quot;command-line argument -bpp\n&quot;);
+-	      screen_bpp = atoi(argv[i+1]);
+-	      i += 1;
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-fullscreen&quot;)) 
+-	    {
+-	      log_debug(&quot;command-line argument -fullscreen\n&quot;);
+-	      fullscreen = true;
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-window&quot;)) 
+-	    {
+-	      log_debug(&quot;command-line argument -window\n&quot;);
+-	      fullscreen = false;
+-	    }
+-	  else if(!strcmp(argv[i], &quot;-nosound&quot;)) 
+-	    {
+-	      sound_enabled = false;
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-nokeyboard&quot;)) 
+-	    {
+-	      log_debug(&quot;command-line argument -nokeyboard\n&quot;);
+-	      inputs &amp;= ~1;
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-nomouse&quot;)) 
+-	    {
+-	      log_debug(&quot;command-line argument -nomouse\n&quot;);
+-	      inputs &amp;= ~2;
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-nojoystick&quot;)) 
+-	    {
+-	      log_debug(&quot;command-line argument -nojoystick\n&quot;);
+-	      inputs &amp;= ~4;
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-noidle&quot;)) 
+-	    {
+-	      log_debug(&quot;command-line argument -noidle\n&quot;);
+-	      _no_idle = 1;
+-	    }
+-	  else if (strstr(argv[i], COMMAND_LINE_SERVER_LONG)) 
+-	    {
+-	      if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_SERVER_LONG)) 
+-		{
+-		  // users can use two formats for the address: an alphanumeric name, like
+-		  // &quot;localhost&quot;, or a dotted ip address, like a.b.c.d .  Further, users
+-		  // can specify the port here as well, by adding a colon and the number to 
+-		  // the end of the address.  
+-		  const char * addressStart = strstr(argv[i], COMMAND_LINE_SERVER_LONG) + strlen(COMMAND_LINE_SERVER_LONG);
+-		  const char * addressEnd = strstr(addressStart, &quot;:&quot;);
+-		  
+-		  // user has added a colon, indicating the port.  The port starts at addressEnd
+-		  // and goes to the end of argv[i]
+-		  if (addressEnd &amp;&amp; strlen(addressEnd) &gt; 1) 
+-		    { 
+-		      // this is +1 to skip the &quot;:&quot;
+-		      serverPort = atoi(addressEnd+1);
+-		    }
+-		  serverAddress.clear();
+-		  serverAddress.append(addressStart, addressEnd-addressStart);
+-		  
+-		  log_debug(&quot;commandline specified server as : host=[%s], port=[%u]\n&quot;, serverAddress.c_str(), serverPort);
+-		}
+-	    }
+-	  else if (strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG)) 
+-	    {
+-	      // this is the maximum number of computers that can connect to this program instance. 
+-	      // Used in server mode only, no effect otherwise.
+-	      if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_MAX_CLIENTS_LONG)) 
+-		{
+-		  const char * portStart = strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG) + strlen(COMMAND_LINE_MAX_CLIENTS_LONG);
+-		  if (strlen(portStart) &gt; 1) 
+-		    {
+-		      serverMaxClients = atoi(portStart);
+-		    }
+-		  log_debug(&quot;commandline specified max clients as: serverMaxClients=[%u]\n&quot;, serverMaxClients);
+-		}
+-	    }
+-	  else if (strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) &amp;&amp; (argc &gt; i + 0)) 
+-	    {
+-	      // this specifies the port this client will listen on.
+-	      // Used in client mode only, no effect otherwise.
+-	      if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_CLIENT_PORT_LONG)) 
+-		{
+-		  const char * clientportStart = strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) + strlen(COMMAND_LINE_CLIENT_PORT_LONG);
+-		  if (strlen(clientportStart) &gt; 1) 
+-		    {
+-		      clientPort = atoi(clientportStart);
+-		    }
+-		  log_debug(&quot;commandline specified client port as : port=[%u]\n&quot;, clientPort);
+-		}
+-	    }
+-	  else if (!strcmp(argv[i], &quot;-play&quot;) &amp;&amp; (argc &gt; i + 2)) 
+-	    {
+-	      log_debug(&quot;command-line argument -play\n&quot;);
+-	      auto_play = argv[i+1];
+-	      auto_param = argv[i+2];
+-	      i += 2;
+-	      if ((argc &gt; i + 0) &amp;&amp; (argv[i][0] != '-')) 
+-		{
+-		  auto_port = atoi(argv[i]);
+-		  i += 1;
+-		}
+-	    }
+-	  else 
+-	    {
+-	      log_debug(&quot;unrecognized command-line argument:&quot;);
+-	      log_debug(argv[i]);
+-	      log_debug(&quot;\n&quot;);
+-	    }
+-	}
++    {
++      if (!strcmp(argv[i], &quot;-res&quot;) &amp;&amp; (argc &gt; i + 2)) 
++        {
++          log_debug(&quot;command-line argument -res\n&quot;);
++          screen_width = atoi(argv[i+1]);
++          screen_height = atoi(argv[i+2]);
++          i += 2;
++        }
++      else if (!strcmp(argv[i], &quot;-bpp&quot;) &amp;&amp; (argc &gt; i + 1)) 
++        {
++          log_debug(&quot;command-line argument -bpp\n&quot;);
++          screen_bpp = atoi(argv[i+1]);
++          i += 1;
++        }
++      else if (!strcmp(argv[i], &quot;-fullscreen&quot;)) 
++        {
++          log_debug(&quot;command-line argument -fullscreen\n&quot;);
++          fullscreen = true;
++        }
++      else if (!strcmp(argv[i], &quot;-window&quot;)) 
++        {
++          log_debug(&quot;command-line argument -window\n&quot;);
++          fullscreen = false;
++        }
++      else if(!strcmp(argv[i], &quot;-nosound&quot;)) 
++        {
++          sound_enabled = false;
++        }
++      else if (!strcmp(argv[i], &quot;-nokeyboard&quot;)) 
++        {
++          log_debug(&quot;command-line argument -nokeyboard\n&quot;);
++          inputs &amp;= ~1;
++        }
++      else if (!strcmp(argv[i], &quot;-nomouse&quot;)) 
++        {
++          log_debug(&quot;command-line argument -nomouse\n&quot;);
++          inputs &amp;= ~2;
++        }
++      else if (!strcmp(argv[i], &quot;-nojoystick&quot;)) 
++        {
++          log_debug(&quot;command-line argument -nojoystick\n&quot;);
++          inputs &amp;= ~4;
++        }
++      else if (!strcmp(argv[i], &quot;-noidle&quot;)) 
++        {
++          log_debug(&quot;command-line argument -noidle\n&quot;);
++          _no_idle = 1;
++        }
++      else if (strstr(argv[i], COMMAND_LINE_SERVER_LONG)) 
++        {
++          if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_SERVER_LONG)) 
++        {
++          // users can use two formats for the address: an alphanumeric name, like
++          // &quot;localhost&quot;, or a dotted ip address, like a.b.c.d .  Further, users
++          // can specify the port here as well, by adding a colon and the number to 
++          // the end of the address.  
++          const char * addressStart = strstr(argv[i], COMMAND_LINE_SERVER_LONG) + strlen(COMMAND_LINE_SERVER_LONG);
++          const char * addressEnd = strstr(addressStart, &quot;:&quot;);
++          
++          // user has added a colon, indicating the port.  The port starts at addressEnd
++          // and goes to the end of argv[i]
++          if (addressEnd &amp;&amp; strlen(addressEnd) &gt; 1) 
++            { 
++              // this is +1 to skip the &quot;:&quot;
++              serverPort = atoi(addressEnd+1);
++            }
++          serverAddress.clear();
++          serverAddress.append(addressStart, addressEnd-addressStart);
++          
++          log_debug(&quot;commandline specified server as : host=[%s], port=[%u]\n&quot;, serverAddress.c_str(), serverPort);
++        }
++        }
++      else if (strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG)) 
++        {
++          // this is the maximum number of computers that can connect to this program instance. 
++          // Used in server mode only, no effect otherwise.
++          if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_MAX_CLIENTS_LONG)) 
++        {
++          const char * portStart = strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG) + strlen(COMMAND_LINE_MAX_CLIENTS_LONG);
++          if (strlen(portStart) &gt; 1) 
++            {
++              serverMaxClients = atoi(portStart);
++            }
++          log_debug(&quot;commandline specified max clients as: serverMaxClients=[%u]\n&quot;, serverMaxClients);
++        }
++        }
++      else if (strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) &amp;&amp; (argc &gt; i + 0)) 
++        {
++          // this specifies the port this client will listen on.
++          // Used in client mode only, no effect otherwise.
++          if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_CLIENT_PORT_LONG)) 
++        {
++          const char * clientportStart = strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) + strlen(COMMAND_LINE_CLIENT_PORT_LONG);
++          if (strlen(clientportStart) &gt; 1) 
++            {
++              clientPort = atoi(clientportStart);
++            }
++          log_debug(&quot;commandline specified client port as : port=[%u]\n&quot;, clientPort);
++        }
++        }
++      else if (!strcmp(argv[i], &quot;-play&quot;) &amp;&amp; (argc &gt; i + 2)) 
++        {
++          log_debug(&quot;command-line argument -play\n&quot;);
++          auto_play = argv[i+1];
++          auto_param = argv[i+2];
++          i += 2;
++          if ((argc &gt; i + 0) &amp;&amp; (argv[i][0] != '-')) 
++        {
++          auto_port = atoi(argv[i]);
++          i += 1;
++        }
++        }
++      else 
++        {
++          log_debug(&quot;unrecognized command-line argument:&quot;);
++          log_debug(argv[i]);
++          log_debug(&quot;\n&quot;);
++        }
++    }
+     
+       log_debug(&quot;command-line arguments parsed\n&quot;);
+     
+@@ -981,7 +982,7 @@
+       register_bitmap_file_type(&quot;jpg&quot;, load_jpg, NULL);
+     
+       if(!theme)
+-	theme = agup_theme_by_name(&quot;Photon&quot;);
++    theme = agup_theme_by_name(&quot;Photon&quot;);
+       agup_init(theme);    
+       gui_shadow_box_proc = d_agup_shadow_box_proc;
+       gui_ctext_proc = d_agup_ctext_proc;
+@@ -1006,20 +1007,20 @@
+       init_fleet();
+     
+       if (auto_play) {// FIX ME
+-	if (!strcmp(auto_play, &quot;game&quot;)) play_game(auto_param, NULL);
++    if (!strcmp(auto_play, &quot;game&quot;)) play_game(auto_param, NULL);
+       }
+       else {
+-	mainmenu.preinit();
+-	mainmenu.init(&amp;videosystem-&gt;window);
+-	mainmenu.doit();
+-	mainmenu.deinit();
++    mainmenu.preinit();
++    mainmenu.init(&amp;videosystem-&gt;window);
++    mainmenu.doit();
++    mainmenu.deinit();
+       }
+ 
+       if(game)
+-	{
+-	  delete game;
+-	  game = NULL;
+-	}
++    {
++      delete game;
++      game = NULL;
++    }
+       disable_input(); 
+     }
+   catch (int i) {
+@@ -1029,9 +1030,9 @@
+       throw;
+     if (i != 0) 
+       {
+-	char t[256];
+-	sprintf(t, &quot;caught int %d&quot;, i);
+-	tw_error(t);
++    char t[256];
++    sprintf(t, &quot;caught int %d&quot;, i);
++    tw_error(t);
+       }
+     if (__error_flag &amp; 1) 
+       throw;
+@@ -1073,12 +1074,12 @@
+     return;
+   window-&gt;lock();
+   stretch_blit(src, window-&gt;surface, 
+-	       0,0,src-&gt;w,src-&gt;h,
+-	       window-&gt;x, window-&gt;y, window-&gt;w, window-&gt;h);
++           0,0,src-&gt;w,src-&gt;h,
++           window-&gt;x, window-&gt;y, window-&gt;w, window-&gt;h);
+ 
+   textout_right(screen, font, tw_version().c_str(), 
+-		screen-&gt;w - 0*text_length(font, tw_version().c_str()), screen-&gt;h - 1*text_height(font), 
+-		palette_color[15]);
++        screen-&gt;w - 0*text_length(font, tw_version().c_str()), screen-&gt;h - 1*text_height(font), 
++        palette_color[15]);
+   window-&gt;unlock();
+   return;
+ }
+@@ -1112,17 +1113,17 @@
+     case -1:
+     case MELEE_MULTIPLAYER_DIALOG_EXIT: 
+       {
+-	return;
++    return;
+       }
+       break;
+     case MELEE_MULTIPLAYER_DIALOG_PLAY_NET1SERVER: 
+       {
+-	play_net1server();
++    play_net1server();
+       }
+       break;
+     case MELEE_MULTIPLAYER_DIALOG_PLAY_NET1CLIENT: 
+       {
+-	play_net1client();
++    play_net1client();
+       }
+       break;
+     }
+@@ -1148,7 +1149,7 @@
+     {
+       const char *gname = select_game_menu();
+       if (gname)
+-	play_game(gname, &quot;&quot;, NULL);
++    play_game(gname, &quot;&quot;, NULL);
+     }
+     break;
+   case MELEE_EX_DIALOG_DIAGNOSTICS: {
+@@ -1188,37 +1189,37 @@
+       
+       a = tw_do_dialog(NULL, teamsDialog, 0);
+       if((a == TEAMS_DIALOG_SELECTCONTROL) || (a == TEAMS_DIALOG_CONTROLLIST)) 
+-	{
+-	  player_type[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] =
+-	    control_name[teamsDialog[TEAMS_DIALOG_CONTROLLIST].d1];
+-	  teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1 += 1;
+-	}
++    {
++      player_type[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] =
++        control_name[teamsDialog[TEAMS_DIALOG_CONTROLLIST].d1];
++      teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1 += 1;
++    }
+       else if ((a == TEAMS_DIALOG_SETUP) || (a == TEAMS_DIALOG_PLAYERLIST)) 
+-	{
+-	  Control *tmpc = load_player(teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1);
+-	  if (tmpc) 
+-	    {
+-	      showTitle();
+-	      tmpc-&gt;setup();
+-	      delete tmpc;
+-	      showTitle();
+-	    }
+-	}
++    {
++      Control *tmpc = load_player(teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1);
++      if (tmpc) 
++        {
++          showTitle();
++          tmpc-&gt;setup();
++          delete tmpc;
++          showTitle();
++        }
++    }
+       else if (a == TEAMS_DIALOG_TEAM_NUM) 
+-	{
+-	  player_team[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] += 1;
+-	  player_team[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] %= MAX_TEAMS;
+-	}
++    {
++      player_team[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] += 1;
++      player_team[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] %= MAX_TEAMS;
++    }
+       else if (a == TEAMS_DIALOG_CONFIG_NUM) 
+-	{
+-	  player_config[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] += 1;
+-	  player_config[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] %= MAX_CONFIGURATIONS;
+-	}
++    {
++      player_config[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] += 1;
++      player_config[teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1] %= MAX_CONFIGURATIONS;
++    }
+       else if (a == TEAMS_DIALOG_FLEET) 
+-	{
+-	  edit_fleet(teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1);
+-	  showTitle();
+-	}
++    {
++      edit_fleet(teamsDialog[TEAMS_DIALOG_PLAYERLIST].d1);
++      showTitle();
++    }
+       else break;
+     }
+   
+@@ -1247,8 +1248,8 @@
+ 
+ 
+ char *numeric_string[] = {&quot;Zero&quot;, &quot;One&quot;, &quot;Two&quot;, &quot;Three&quot;, &quot;Four&quot;, 
+-			  &quot;Five&quot;, &quot;Six&quot;, &quot;Seven&quot;, &quot;Eight&quot;, &quot;Nine&quot;, &quot;Ten&quot;, &quot;Eleven&quot;, 
+-			  &quot;Twelve&quot;};
++              &quot;Five&quot;, &quot;Six&quot;, &quot;Seven&quot;, &quot;Eight&quot;, &quot;Nine&quot;, &quot;Ten&quot;, &quot;Eleven&quot;, 
++              &quot;Twelve&quot;};
+ 
+ char fleetPlayer[18];
+ char fleetTitleString[100];
+@@ -1262,31 +1263,31 @@
+ {
+   if (msg == MSG_CLICK)
+     {
+-		
++        
+       /* track the mouse until it is released */
+       while (gui_mouse_b()) {
+-	//			state2 = ((gui_mouse_x() &gt;= d-&gt;x) &amp;&amp; (gui_mouse_y() &gt;= d-&gt;y) &amp;&amp;
+-	//				(gui_mouse_x() &lt; d-&gt;x + d-&gt;w) &amp;&amp; (gui_mouse_y() &lt; d-&gt;y + d-&gt;h));
+-			
+-	/* let other objects continue to animate */
+-	broadcast_dialog_message(MSG_IDLE, 0);
++    //          state2 = ((gui_mouse_x() &gt;= d-&gt;x) &amp;&amp; (gui_mouse_y() &gt;= d-&gt;y) &amp;&amp;
++    //              (gui_mouse_x() &lt; d-&gt;x + d-&gt;w) &amp;&amp; (gui_mouse_y() &lt; d-&gt;y + d-&gt;h));
++            
++    /* let other objects continue to animate */
++    broadcast_dialog_message(MSG_IDLE, 0);
+       }
+-		
++        
+       /* should we close the dialog? */
+       // imo the following mucho better/ simplere than that messy stuff in the allegro routine
+       // ... check d_button_proc in guiproc.c in the allegro sources...
+ 
+       if (d-&gt;flags &amp; D_SELECTED)
+-	d-&gt;flags &amp;= ~D_SELECTED;
++    d-&gt;flags &amp;= ~D_SELECTED;
+       else
+-	d-&gt;flags |= D_SELECTED;
++    d-&gt;flags |= D_SELECTED;
+ 
+       if ( d-&gt;flags &amp; D_EXIT)
+-	return D_CLOSE;
++    return D_CLOSE;
+ 
+       return D_O_K; 
+     }
+-	
++    
+   return d_agup_check_proc(msg, d, 0);
+ }
+ 
+@@ -1296,7 +1297,7 @@
+ 
+ // FLEET - dialog function
+ void edit_fleet(int player) {STACKTRACE
+-			       char tmp[40];
++                   char tmp[40];
+  char path[80];
+  char fleetCostString[80] = &quot;&quot;;
+  char maxFleetCostString[80] = &quot;&quot;;
+@@ -1323,7 +1324,7 @@
+  fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].dp = fleetCostString;
+  fleetDialog[FLEET_DIALOG_POINT_LIMIT_BUTTON].dp = maxFleetCostString;
+     
+- //	// the reference_fleet is used in the list in a hardcoded way, so over&quot;load&quot; it
++ // // the reference_fleet is used in the list in a hardcoded way, so over&quot;load&quot; it
+  //    Fleet *old_reference_fleet = reference_fleet;
+ 
+  do {
+@@ -1341,7 +1342,7 @@
+      fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].bg = 0;
+ 
+    sprintf(maxFleetCostString,&quot;%d %s&quot;, fleet-&gt;getMaxCost(), 
+-	   Fleet::getFleetCostName(fleet-&gt;getMaxCost()));
++       Fleet::getFleetCostName(fleet-&gt;getMaxCost()));
+ 
+    if (sortAscending1)
+      fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;^&quot;;
+@@ -1364,19 +1365,19 @@
+      for (int c=0; c&lt;num_shiptypes; c++) {
+        switch (shiptypes[c].origin) { 
+        case SHIP_ORIGIN_TW:
+-	 if (fleetDialog[FLEET_DIALOG_TW_OFFICIAL_TOGGLE].flags &amp; D_SELECTED)
+-	   reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
+-	 break;
++     if (fleetDialog[FLEET_DIALOG_TW_OFFICIAL_TOGGLE].flags &amp; D_SELECTED)
++       reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
++     break;
+                 
+        case SHIP_ORIGIN_UQM:
+-	 if (fleetDialog[FLEET_DIALOG_TW_EXP_TOGGLE].flags &amp; D_SELECTED)
+-	   reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
+-	 break;
++     if (fleetDialog[FLEET_DIALOG_TW_EXP_TOGGLE].flags &amp; D_SELECTED)
++       reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
++     break;
+ 
+        case SHIP_ORIGIN_TW_SPECIAL:
+-	 if (fleetDialog[FLEET_DIALOG_TW_SPECIAL_TOGGLE].flags &amp; D_SELECTED)
+-	   reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
+-	 break;
++     if (fleetDialog[FLEET_DIALOG_TW_SPECIAL_TOGGLE].flags &amp; D_SELECTED)
++       reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
++     break;
+        }
+      }
+      reference_fleet-&gt;Sort( sortMethod1, sortAscending1 );
+@@ -1524,33 +1525,33 @@
+       d-&gt;d1 = reference_fleet-&gt;getNextFleetEntryByCharacter( d-&gt;d1, typed);
+       shouldConsumeChar = true;
+       if (d-&gt;d1 != old_d1) {
+-	
+-	int size = reference_fleet-&gt;getSize();
+-	int height = (d-&gt;h-4) / text_height(font);
+-	
+-	ret = D_USED_CHAR; 
+-	d-&gt;flags |= D_DIRTY;
+-	
+-	//scroll such that the selection is shown.
+-	//only change the scroll if the selection is not already shown,
+-	//and the number of ships in the list is greater than the number
+-	//of slots that can be shown simultaneously.
+-	if ( (size &gt; height) &amp;&amp;
+-	     ( (d-&gt;d1 &lt; d-&gt;d2) ||
+-	       (d-&gt;d1 &gt;= d-&gt;d2 + height))) 
+-	  {
+-	    if (d-&gt;d1 &lt;= (height/2))
+-	      d-&gt;d2 = 0;
+-	    else {
+-	      
+-	      if (d-&gt;d1 &gt;= (size - height))
+-		d-&gt;d2 = (size - height);
+-	      else {
+-		d-&gt;d2 = d-&gt;d1 - height/2;
+-	      }
+-	    }
+-	  }
++    
++    int size = reference_fleet-&gt;getSize();
++    int height = (d-&gt;h-4) / text_height(font);
++    
++    ret = D_USED_CHAR; 
++    d-&gt;flags |= D_DIRTY;
++    
++    //scroll such that the selection is shown.
++    //only change the scroll if the selection is not already shown,
++    //and the number of ships in the list is greater than the number
++    //of slots that can be shown simultaneously.
++    if ( (size &gt; height) &amp;&amp;
++         ( (d-&gt;d1 &lt; d-&gt;d2) ||
++           (d-&gt;d1 &gt;= d-&gt;d2 + height))) 
++      {
++        if (d-&gt;d1 &lt;= (height/2))
++          d-&gt;d2 = 0;
++        else {
++          
++          if (d-&gt;d1 &gt;= (size - height))
++        d-&gt;d2 = (size - height);
++          else {
++        d-&gt;d2 = d-&gt;d1 - height/2;
++          }
++        }
+       }
++      }
+     }
+   }
+   ret = d_agup_text_list_proc( msg, d, c );
+@@ -1559,11 +1560,11 @@
+     ret = D_USED_CHAR;
+   
+   static BITMAP* panel = create_bitmap(fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].w,
+-				       fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].h);
++                       fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].h);
+   fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].dp = panel;
+   
+   static BITMAP * sprite = create_bitmap(fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].w,
+-					 fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].h);
++                     fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].h);
+   static int rotationFrame = 0;
+   
+   //selection has changed
+@@ -1575,8 +1576,8 @@
+     
+     if (type &amp;&amp; type-&gt;data) {
+       if (type-&gt;data-&gt;spriteShip) {
+-	
+-	fractionRotated = (float)((float)rotationFrame / (float)(type-&gt;data-&gt;spriteShip-&gt;frames()));
++    
++    fractionRotated = (float)((float)rotationFrame / (float)(type-&gt;data-&gt;spriteShip-&gt;frames()));
+       }
+       type-&gt;data-&gt;unlock();
+     }}
+@@ -1587,7 +1588,7 @@
+     if (type &amp;&amp; type-&gt;data) {
+       type-&gt;data-&gt;lock();
+       if (type-&gt;data-&gt;spriteShip)
+-	rotationFrame = (int)(fractionRotated * type-&gt;data-&gt;spriteShip-&gt;frames());
++    rotationFrame = (int)(fractionRotated * type-&gt;data-&gt;spriteShip-&gt;frames());
+     }}
+   }
+   
+@@ -1605,15 +1606,15 @@
+     if (type &amp;&amp; type-&gt;data &amp;&amp; type-&gt;data-&gt;spriteShip) {
+       
+       type-&gt;data-&gt;spriteShip-&gt;draw(
+-				   Vector2(fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].w/2,
+-					   fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].h/2) - type-&gt;data-&gt;spriteShip-&gt;size()/2, 
+-				   type-&gt;data-&gt;spriteShip-&gt;size(), 
+-				   rotationFrame, sprite 
+-				   );
++                   Vector2(fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].w/2,
++                       fleetDialog[FLEET_DIALOG_SHIP_PICTURE_BITMAP].h/2) - type-&gt;data-&gt;spriteShip-&gt;size()/2, 
++                   type-&gt;data-&gt;spriteShip-&gt;size(), 
++                   rotationFrame, sprite 
++                   );
+       
+       rotationFrame++;
+       if (rotationFrame &gt;= type-&gt;data-&gt;spriteShip-&gt;frames())
+-	rotationFrame = 0;
++    rotationFrame = 0;
+     }
+     stretch_blit(sprite, panel, 0, 0, sprite-&gt;w, sprite-&gt;h, 0, 0, panel-&gt;w, panel-&gt;h);
+     safeToDrawPreview = true;
+@@ -1679,101 +1680,101 @@
+     
+       // update ship selection - begin
+       if ((r == 0) || (r == SHIPVIEW_DIALOG_LIST)) 
+-	{
+-	  si = shipviewDialog[SHIPVIEW_DIALOG_LIST].d1;
+-	  sname = shipListboxGetter(si, NULL);
+-	  if (!sname) 
+-	    {
+-	      sprintf(dialog_string[0], &quot;(Null)&quot;);
+-	      sprintf(dialog_string[1], &quot;(Null)&quot;);
+-	    }
+-	  else 
+-	    {
+-	      ShipType *type = fleet-&gt;getShipType(si);
++    {
++      si = shipviewDialog[SHIPVIEW_DIALOG_LIST].d1;
++      sname = shipListboxGetter(si, NULL);
++      if (!sname) 
++        {
++          sprintf(dialog_string[0], &quot;(Null)&quot;);
++          sprintf(dialog_string[1], &quot;(Null)&quot;);
++        }
++      else 
++        {
++          ShipType *type = fleet-&gt;getShipType(si);
+ 
+-	      if (sprite)
+-		destroy_bitmap(sprite);
+-	      sprite = NULL;
+-	      type-&gt;data-&gt;lock();
+-	      if (type-&gt;data-&gt;spriteShip) 
+-		{
+-		  sprite = create_bitmap(180, 180);
+-		  clear_to_color(sprite, 0);
+-		  type-&gt;data-&gt;spriteShip-&gt;draw( 
+-					       Vector2(90,90) - type-&gt;data-&gt;spriteShip-&gt;size()/2, 
+-					       type-&gt;data-&gt;spriteShip-&gt;size(), 
+-					       0, sprite 
+-					       );
+-		}
+-	      type-&gt;data-&gt;unlock();
+-	      
+-	      // read ship text file contents
+-	      shipviewDialog[SHIPVIEW_DIALOG_TXTFILE].dp = (char*)textFile;
+-	      {
+-		PACKFILE * f = pack_fopen(type-&gt;text, F_READ);
+-		if (!f) {
+-		  sprintf(textFile, &quot;Failed to load file \&quot;%s\&quot;&quot;, type-&gt;text);
+-		}
+-		else {
+-		  unsigned long textFileSize = file_size(type-&gt;text);
+-		  if (textFileSize &gt; MAX_SHIP_TEXT_FILE_SIZE)
+-		    textFileSize = MAX_SHIP_TEXT_FILE_SIZE;
+-		  i = pack_fread(textFile, textFileSize, f);
+-		  pack_fclose(f);
+-		  textFile[i] = '\0';
+-		}
+-	      }
+-	      
+-	      // read ship ini file contents
+-	      char * inifile = &quot;&quot;;     // ship ini file contents
+-	      {
+-		PACKFILE * f = pack_fopen(type-&gt;file, F_READ);
+-		if (!f) {
+-		  inifile = (char*) malloc(strlen(&quot;Failed to load file \&quot;\&quot;&quot;) + strlen(type-&gt;file) + 1);
+-		  sprintf(inifile, &quot;Failed to load file \&quot;%s\&quot;&quot;, type-&gt;file);
+-		}
+-		else {
+-		  unsigned long iniFileSize = file_size(type-&gt;file);
+-		  inifile = (char*) malloc(iniFileSize +1 );
+-		  i = pack_fread(inifile, iniFileSize, f);
+-		  pack_fclose(f);
+-		  inifile[i] = '\0';
+-		}
+-	      }
+-	      
+-	      // display ship description contents
+-	      char *c = (char*)malloc( strlen(&quot;Name: \n&quot;) + strlen(type-&gt;name) +
+-				       strlen(&quot;ID: \n&quot;)+strlen(type-&gt;id) +
+-				       strlen(&quot;Cost: \n&quot;)+3+
+-				       strlen(&quot;\n\n\n\nINI file: ()\n&quot;)+strlen(type-&gt;file) +
+-				       strlen(&quot;-------------------------\n&quot;)+strlen(inifile) );
+-	      char * description = c;
+-	      
+-	      c += sprintf(c, &quot;Name: %s\n&quot;, type-&gt;name);
+-	      c += sprintf(c, &quot;ID: %s\n&quot;, type-&gt;id);
+-	      c += sprintf(c, &quot;Cost: %d\n&quot;, type-&gt;cost);
+-	      c += sprintf(c, &quot;\n\n\n\nINI file: (%s)\n&quot;, type-&gt;file);
+-	      c += sprintf(c, &quot;-------------------------\n%s&quot;, inifile);
+-				
+-	      if (shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp &amp;&amp;
+-		  strlen((char*)(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp))&gt;0 )
+-		{
+-		  free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
+-		  shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = (char*)&quot;&quot;;
+-		}
+-	      shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = description;
+-				
+-	      if (strlen(inifile) &gt;0)
+-		free(inifile);
+-	    }
+-	  shipviewDialog[SHIPVIEW_DIALOG_PICTURES+0].dp = sprite;
+-	}
++          if (sprite)
++        destroy_bitmap(sprite);
++          sprite = NULL;
++          type-&gt;data-&gt;lock();
++          if (type-&gt;data-&gt;spriteShip) 
++        {
++          sprite = create_bitmap(180, 180);
++          clear_to_color(sprite, 0);
++          type-&gt;data-&gt;spriteShip-&gt;draw( 
++                           Vector2(90,90) - type-&gt;data-&gt;spriteShip-&gt;size()/2, 
++                           type-&gt;data-&gt;spriteShip-&gt;size(), 
++                           0, sprite 
++                           );
++        }
++          type-&gt;data-&gt;unlock();
++          
++          // read ship text file contents
++          shipviewDialog[SHIPVIEW_DIALOG_TXTFILE].dp = (char*)textFile;
++          {
++        PACKFILE * f = pack_fopen(type-&gt;text, F_READ);
++        if (!f) {
++          sprintf(textFile, &quot;Failed to load file \&quot;%s\&quot;&quot;, type-&gt;text);
++        }
++        else {
++          unsigned long textFileSize = file_size(type-&gt;text);
++          if (textFileSize &gt; MAX_SHIP_TEXT_FILE_SIZE)
++            textFileSize = MAX_SHIP_TEXT_FILE_SIZE;
++          i = pack_fread(textFile, textFileSize, f);
++          pack_fclose(f);
++          textFile[i] = '\0';
++        }
++          }
++          
++          // read ship ini file contents
++          char * inifile = &quot;&quot;;     // ship ini file contents
++          {
++        PACKFILE * f = pack_fopen(type-&gt;file, F_READ);
++        if (!f) {
++          inifile = (char*) malloc(strlen(&quot;Failed to load file \&quot;\&quot;&quot;) + strlen(type-&gt;file) + 1);
++          sprintf(inifile, &quot;Failed to load file \&quot;%s\&quot;&quot;, type-&gt;file);
++        }
++        else {
++          unsigned long iniFileSize = file_size(type-&gt;file);
++          inifile = (char*) malloc(iniFileSize +1 );
++          i = pack_fread(inifile, iniFileSize, f);
++          pack_fclose(f);
++          inifile[i] = '\0';
++        }
++          }
++          
++          // display ship description contents
++          char *c = (char*)malloc( strlen(&quot;Name: \n&quot;) + strlen(type-&gt;name) +
++                       strlen(&quot;ID: \n&quot;)+strlen(type-&gt;id) +
++                       strlen(&quot;Cost: \n&quot;)+3+
++                       strlen(&quot;\n\n\n\nINI file: ()\n&quot;)+strlen(type-&gt;file) +
++                       strlen(&quot;-------------------------\n&quot;)+strlen(inifile) );
++          char * description = c;
++          
++          c += sprintf(c, &quot;Name: %s\n&quot;, type-&gt;name);
++          c += sprintf(c, &quot;ID: %s\n&quot;, type-&gt;id);
++          c += sprintf(c, &quot;Cost: %d\n&quot;, type-&gt;cost);
++          c += sprintf(c, &quot;\n\n\n\nINI file: (%s)\n&quot;, type-&gt;file);
++          c += sprintf(c, &quot;-------------------------\n%s&quot;, inifile);
++                
++          if (shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp &amp;&amp;
++          strlen((char*)(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp))&gt;0 )
++        {
++          free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
++          shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = (char*)&quot;&quot;;
++        }
++          shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = description;
++                
++          if (strlen(inifile) &gt;0)
++        free(inifile);
++        }
++      shipviewDialog[SHIPVIEW_DIALOG_PICTURES+0].dp = sprite;
++    }
+ 
+       // change font size - begin
+       if (r == SHIPVIEW_DIALOG_FONT) {
+-	i = shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1;
+-	i = (((i/2) + 2) % 3) - 1;
+-	shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1 = i*2;
++    i = shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1;
++    i = (((i/2) + 2) % 3) - 1;
++    shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1 = i*2;
+       }
+       // change font size - end
+ 
+@@ -1789,7 +1790,7 @@
+       shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = NULL;
+       free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
+     }
+-	
++    
+   videosystem-&gt;redraw();
+   return;
+ }
+@@ -1802,26 +1803,26 @@
+ int get_diagnostics_string ( char *dest ) {//returns length of string
+   char * tmp = dest;
+ 
+-#	if defined _DEBUG
++#   if defined _DEBUG
+   tmp += sprintf(tmp, &quot;DEBUGGING BUILD!\n&quot;);
+-#	endif
++#   endif
+   tmp += sprintf(tmp, &quot;ALLEGRO (.h) version   = Allegro %s, %s\n&quot;, 
+-		 ALLEGRO_VERSION_STR, ALLEGRO_PLATFORM_STR);
++         ALLEGRO_VERSION_STR, ALLEGRO_PLATFORM_STR);
+   tmp += sprintf(tmp, &quot;ALLEGRO (.dll) version = %s\n&quot;, allegro_id);
+   tmp += sprintf(tmp, &quot;Compiler = &quot;);
+-#	if defined __MINGW32__
++#   if defined __MINGW32__
+   tmp += sprintf(tmp, &quot;MINGW (gcc)\n&quot;);
+-#	elif defined __BORLANDC__
++#   elif defined __BORLANDC__
+   tmp += sprintf(tmp, &quot;Borland\n&quot;);
+-#	elif defined _MSC_VER
++#   elif defined _MSC_VER
+   tmp += sprintf(tmp, &quot;Microsoft Visual C++\n&quot;);
+-#	elif defined DJGPP
++#   elif defined DJGPP
+   tmp += sprintf(tmp, &quot;DJGPP (gcc)\n&quot;);
+-#	elif defined __GNUC__
++#   elif defined __GNUC__
+   tmp += sprintf(tmp, &quot;gcc\n&quot;);
+-#	else
++#   else
+   tmp += sprintf(tmp, &quot;???\n&quot;);
+-#	endif
++#   endif
+   tmp += sprintf(tmp, &quot;Version = %s\n&quot;, tw_version().c_str());
+   return tmp - dest;
+ }
+@@ -1879,30 +1880,30 @@
+   while (!key[KEY_F10] &amp;&amp; !key[KEY_ESC]) 
+     {
+       if (videosystem-&gt;poll_redraw()) 
+-	{
+-	  scare_mouse();
+-	  videosystem-&gt;window.lock();
+-	  clear_to_color(videosystem-&gt;window.surface, 0);
+-	  textprintf(screen, font, 40, 20, palette_color[15], &quot;Press the keys combinations you wish to test&quot;);
+-	  textprintf(screen, font, 40, 40, palette_color[15], &quot;When you're finished, press ESCAPE or F10&quot;);
+-	  videosystem-&gt;window.unlock();
+-	  unscare_mouse();
+-	}
++    {
++      scare_mouse();
++      videosystem-&gt;window.lock();
++      clear_to_color(videosystem-&gt;window.surface, 0);
++      textprintf(screen, font, 40, 20, palette_color[15], &quot;Press the keys combinations you wish to test&quot;);
++      textprintf(screen, font, 40, 40, palette_color[15], &quot;When you're finished, press ESCAPE or F10&quot;);
++      videosystem-&gt;window.unlock();
++      unscare_mouse();
++    }
+       rectfill(screen, 50, 60, 500, 60 + 20 * j, palette_color[0]);
+       j = 0;
+       poll_input();
+       for (i = 0; (i &lt; 32767) &amp;&amp; (j &lt; 16); i += 1) {
+-	if (key_pressed(i)) 
+-	  {
+-	    key_to_description(i, blah);
+-	    scare_mouse();
+-	    acquire_screen();
+-	    textprintf(screen, font, 50, 60+j*20, palette_color[15], &quot;%s&quot;, blah);
+-	    release_screen();
+-	    unscare_mouse();
+-	    j += 1;
+-	  }
++    if (key_pressed(i)) 
++      {
++        key_to_description(i, blah);
++        scare_mouse();
++        acquire_screen();
++        textprintf(screen, font, 50, 60+j*20, palette_color[15], &quot;%s&quot;, blah);
++        release_screen();
++        unscare_mouse();
++        j += 1;
+       }
++      }
+       idle(20);
+     }
+   showTitle();
+@@ -1965,7 +1966,7 @@
+   if(home == NULL)
+     {
+       if(strstr(path.c_str(), datafile_path.c_str()))
+-	return path;
++    return path;
+       std::string pth = append_filename(dest, datafile_path.c_str(), &quot;default_ini&quot;, 2039);
+       append_filename(dest, pth.c_str(), path.c_str(), 2039);
+       return std::string(dest);
+@@ -1973,7 +1974,7 @@
+   else
+     {
+       if(strstr(path.c_str(), home))
+-	return path;
++    return path;
+       return std::string(home) + std::string(&quot;/.tw-light/&quot;) + path;
+     }
+ }
+@@ -2008,7 +2009,7 @@
+       readed = fread(buffer, 1, 1024, fsrc);
+       int written = fwrite(buffer, 1, readed,ftrg);
+       if(readed != written)
+-	tw_error(&quot;ACK!!! copy file failed&quot;);
++    tw_error(&quot;ACK!!! copy file failed&quot;);
+     }
+   fclose(fsrc);
+   fclose(ftrg);
+@@ -2046,27 +2047,27 @@
+   curFile = home_ini_full_path(&quot;client.ini&quot;); 
+   if(!exists(curFile.c_str()))
+     CopyFile(data_full_path(&quot;default_ini/client.ini&quot;).c_str(),
+-	     curFile.c_str());
++         curFile.c_str());
+   
+   curFile = home_ini_full_path(&quot;fleets.ini&quot;); 
+   if(!exists(curFile.c_str()))
+     CopyFile(data_full_path(&quot;default_ini/fleets.ini&quot;).c_str(),
+-	     curFile.c_str());
++         curFile.c_str());
+   
+   curFile = home_ini_full_path(&quot;scp.ini&quot;); 
+   if(!exists(curFile.c_str()))
+     CopyFile(data_full_path(&quot;default_ini/scp.ini&quot;).c_str(),
+-	     curFile.c_str());
++         curFile.c_str());
+   
+   curFile = home_ini_full_path(&quot;server.ini&quot;); 
+   if(!exists(curFile.c_str()))
+     CopyFile(data_full_path(&quot;default_ini/server.ini&quot;).c_str(),
+-	     curFile.c_str());
++         curFile.c_str());
+ 
+   curFile = home_ini_full_path(&quot;vobject.ini&quot;); 
+   if(!exists(curFile.c_str()))
+     CopyFile(data_full_path(&quot;default_ini/vobject.ini&quot;).c_str(),
+-	     curFile.c_str());
++         curFile.c_str());
+   
+   curFile = home_ini_full_path(&quot;ships&quot;);
+   if(!file_exists(curFile.c_str(), 0, NULL))
+@@ -2074,8 +2075,8 @@
+   
+   std::string path = data_full_path(&quot;&quot;)+std::string(&quot;default_ini/ships/shp*.ini&quot;);
+   for_each_file( path.c_str(), 
+-		 FA_ARCH|FA_RDONLY, 
+-		 _copy_ship_ini, 0);
++         FA_ARCH|FA_RDONLY, 
++         _copy_ship_ini, 0);
+   return 0;
+ }
+ 
+
+Modified: trunk/source/util/aastr.h
+===================================================================
+--- trunk/source/util/aastr.h	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/util/aastr.h	2005-09-18 19:57:13 UTC (rev 192)
+@@ -200,15 +200,15 @@
+ 
+   // Rotation.  
+ void aa_rotate_scaled_bitmap (BITMAP* src, BITMAP* dst,
+-		int x, int y, long angle,
+-		long scalex, long scaley);
++		int x, int y, fixed angle,
++		fixed scalex, fixed scaley);
+ void aa_rotate_scaled_sprite (BITMAP* dst, BITMAP* src,
+-		int x, int y, long angle,
+-		long scalex, long scaley);
++		int x, int y, fixed angle,
++		fixed scalex, fixed scaley);
+ void aa_rotate_bitmap (BITMAP* src, BITMAP* dst,
+-		int x, int y, long angle);
++		int x, int y, fixed angle);
+ void aa_rotate_sprite (BITMAP* dst, BITMAP* src,
+-		int x, int y, long angle);
++		int x, int y, fixed angle);
+ 
+ 
+ 
+@@ -222,8 +222,8 @@
+ //parameters are long point (32-aa_BITS.aa_BITS) numbers
+ 
+ void _aa_rotate_bitmap (BITMAP *_src, BITMAP *_dst, 
+-		int _x, int _y, long _angle,
+-		long _scalex, long _scaley, 
++		int _x, int _y, fixed _angle,
++		fixed _scalex, fixed _scaley, 
+ 		int _mode);
+ //destination is in integer format
+ //rotation does not yet support the following new features:
+
+Modified: trunk/source/util/aautil.c
+===================================================================
+--- trunk/source/util/aautil.c	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/util/aautil.c	2005-09-18 19:57:13 UTC (rev 192)
+@@ -17,6 +17,9 @@
+  * Copyright (C) 1998, 1999  Michael Bukin
+  */
+ 
++#include &lt;stdio.h&gt;
++#include &lt;stdlib.h&gt;
++
+ #include &quot;types.h&quot;
+ #include &quot;aautil.h&quot;
+ #include &quot;aastr.h&quot;
+@@ -92,6 +95,7 @@
+ #define BLENDER32_WITH_N(bpp,bpp2)    {int c2;c=makecol24(r,g,b);c2=bmp_read##bpp(_addr+_x*((bpp+7)/8));c=_blender_func_24(makecol24(getr##bpp2(c2),getg##bpp2(c2),getb##bpp2(c2)), c, (_aa.trans * _aa.blender_n) &gt;&gt; 8);r=getr24(c);g=getg24(c);b=getb32(c);
+ #define BLENDER32_WITH_A(bpp,bpp2)    {int c2;c=makecol24(r,g,b);c2=bmp_read##bpp(_addr+_x*((bpp+7)/8));c=_blender_func_24(makecol24(getr##bpp2(c2),getg##bpp2(c2),getb##bpp2(c2)), c, (_aa.trans * _aa.trans) &gt;&gt; 8);r=getr24(c);g=getg24(c);b=getb32(c);
+ 
++
+ //these macros output the color to the screen
+ #define PUT(bpp,bpp2)             bmp_write##bpp(_addr+_x*((bpp+7)/8), c);
+ #define PUT_8X(bpp,bpp2)          outportw(0x3C4, (0x100&lt;&lt;(_x&amp;3))|2); bmp_write8(_addr + (_x&gt;&gt;2), c);
+@@ -183,20 +187,8 @@
+ //no dither-notrans
+ //no alpha-dither-notrans
+ 
+-#ifdef GFX_MODEX
+-//macro       name                         bpp/2 ALPHA  DITHER     NOTRANS PUT
+-MAKE_PUTFUNC( _aa_put_modex_8              ,8,8, NONE,  NO_DITHER, NONE,   PUT_8X)
+-MAKE_PUTFUNC( _aa_put_modex_dither_8       ,8,8, NONE,  DITHER,    NONE,   PUT_8X)
+-MAKE_PUTFUNC( _aa_put_modex_alpha_8        ,8,8, ALPHA, NO_DITHER, NONE,   PUT_8X)
+-MAKE_PUTFUNC( _aa_put_modex_alpha_dither_8 ,8,8, ALPHA, DITHER,    NONE,   PUT_8X)
+-PUT_TYPE *put_array_modex[4] = {
+-	_aa_put_modex_8,
+-	_aa_put_modex_dither_8,
+-	_aa_put_modex_alpha_8,
+-	_aa_put_modex_alpha_dither_8
+-};
+-#endif
+ 
++
+ #ifdef ALLEGRO_COLOR16
+ MAKE_PUTFUNC( _aa_put_15                       ,16,15, NONE   ,NO_DITHER ,NONE   ,PUT)
+ MAKE_PUTFUNC( _aa_put_alpha_15                 ,16,15, ALPHA  ,NO_DITHER ,NONE   ,PUT)
+
+Modified: trunk/source/util/base.cpp
+===================================================================
+--- trunk/source/util/base.cpp	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/util/base.cpp	2005-09-18 19:57:13 UTC (rev 192)
+@@ -7,8 +7,8 @@
+ COMPILE_TIME_ASSERT(sizeof(char)==1);
+ COMPILE_TIME_ASSERT(sizeof(short)==2);
+ COMPILE_TIME_ASSERT(sizeof(int)==4);
+-COMPILE_TIME_ASSERT(sizeof(long)==4);
+ 
++
+ __call_before_main::__call_before_main ( void (*func)() ) {
+ 	func();
+ }
+
+Modified: trunk/source/util/net_tcp.cpp
+===================================================================
+--- trunk/source/util/net_tcp.cpp	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/util/net_tcp.cpp	2005-09-18 19:57:13 UTC (rev 192)
+@@ -185,7 +185,8 @@
+ #	elif defined NETWORK_BSD
+ #		if defined NETWORK_WEIRD_SIGNEDNESS
+ 			//WTF!?! 
+-			size_t tmp; 
++//			size_t tmp; 
++			socklen_t tmp;
+ 			//some linuxes (but not the version superdave uses (slackware of some 
+ 			//kind)) require this, even though some linux documentation contradicts 
+ 			//it and it differs from the BSD standard, and it's incompatible with some 
+
+Modified: trunk/source/util/pmask.h
+===================================================================
+--- trunk/source/util/pmask.h	2005-09-18 19:23:58 UTC (rev 191)
++++ trunk/source/util/pmask.h	2005-09-18 19:57:13 UTC (rev 192)
+@@ -1,6 +1,7 @@
+ #ifndef __PMASK_H__
+ #define __PMASK_H__
+ 
++#include &lt;limits.h&gt;
+ /*
+ This is the Pixel MASK library, which does pixel-perfect collisions using
+ bit masks.
+@@ -48,9 +49,20 @@
+ //e.g. 4 for 16-bit ints, 5 for 32-bit ints, 6 for 64-bit ints
+ //don't worry about setting it incorrectly
+ //you'll get a compile error if you do, not a run-time error
++
++#if ULONG_MAX == 0xFFFFFFFFUL
+ #define MASK_WORD_BITBITS 5
++#else
++#define MASK_WORD_BITBITS 6
++#endif
+ 
++//#ifdef NATIVE_64
++//#define MASK_WORD_BITBITS 6
++//#else
++//#define MASK_WORD_BITBITS 5
++//#endif
+ 
++
+ //if SINGLE_MEMORY_BLOCK is defined
+ //then each mask will be allocated as
+ //only a single memory block.  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000137.html">[Tw-light-svn] r191 - trunk/source/melee
+</A></li>
+	<LI>Next message: <A HREF="000139.html">[Tw-light-svn] r193 - in trunk: . mingw-libs/include msvc-libs/include source/libraries source/libraries/boost source/libraries/boost/config source/libraries/boost/config/abi source/libraries/boost/config/compiler source/libraries/boost/config/platform source/libraries/boost/config/stdlib source/libraries/boost/detail
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#138">[ date ]</a>
+              <a href="thread.html#138">[ thread ]</a>
+              <a href="subject.html#138">[ subject ]</a>
+              <a href="author.html#138">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

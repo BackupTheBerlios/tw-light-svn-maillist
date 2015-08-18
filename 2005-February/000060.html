@@ -1,0 +1,2851 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r114 - in trunk: gamedata source source/games source/melee source/other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r114%20-%20in%20trunk%3A%20gamedata%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200502132223.j1DMNkax001763%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000059.html">
+   <LINK REL="Next"  HREF="000061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r114 - in trunk: gamedata source source/games source/melee source/other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r114%20-%20in%20trunk%3A%20gamedata%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200502132223.j1DMNkax001763%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r114 - in trunk: gamedata source source/games source/melee source/other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Feb 13 23:23:46 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000059.html">[Tw-light-svn] r113 - in trunk: doc source source/melee
+</A></li>
+        <LI>Next message: <A HREF="000061.html">[Tw-light-svn] r115 - trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-13 23:23:45 +0100 (Sun, 13 Feb 2005)
+New Revision: 114
+
+Modified:
+   trunk/gamedata/ingame.txt
+   trunk/source/games/gadventure.h
+   trunk/source/games/glegacies.cpp
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mlog.cpp
+   trunk/source/melee/mmain.cpp
+   trunk/source/other/dialogs.cpp
+   trunk/source/other/dialogs.h
+   trunk/source/scp.cpp
+Log:
+Adding menu for melee
+
+
+Modified: trunk/gamedata/ingame.txt
+===================================================================
+--- trunk/gamedata/ingame.txt	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/gamedata/ingame.txt	2005-02-13 22:23:45 UTC (rev 114)
+@@ -1,20 +1,21 @@
+ Global keys:
+-  F1 brings up the help screen
+-  F2 brings up the options menu
+-  F3 switches camera focus
+-  F4 is fast-forward (speeds up in-game time greatly)
+-  F5 displays fleet status
++  F1 brings up this help screen
++  F2 save game
++  F3 load game
++  F4 brings up the options menu
++  F5 is fast-forward (speeds up in-game time greatly)
++  F6 displays fleet status
+   F7 changes game tic rate (physics quality)
+   F8 changes camera mode
+-  F10 quits (so does ESCAPE)
+-  F11 saves screenshots
++  F9 switches camera focus
++  F10 menu
+   F12 displays framerates / performance data
+   - zooms out on some viewing modes.
+   + (or =) zooms in on some viewing modes.
+   0 and 9 also effect the camera in some viewing modes.
+   ctrl+T = toggle team indicators on/off
+   ctrl+H = toggle healthbar indicators on/off
+-
++  ctrl+Alt+k = kill all ships and ship-objects in the melee-game
+ Melee:  
+   Starts a battle with the current team settings.
+ 
+
+Modified: trunk/source/games/gadventure.h
+===================================================================
+--- trunk/source/games/gadventure.h	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/games/gadventure.h	2005-02-13 22:23:45 UTC (rev 114)
+@@ -44,6 +44,8 @@
+   std::string Save();
+   /// load game
+   int Load(std::string);
++  /// exit game
++  void quit(const char *message);
+ };
+ 
+ 
+
+Modified: trunk/source/games/glegacies.cpp
+===================================================================
+--- trunk/source/games/glegacies.cpp	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/games/glegacies.cpp	2005-02-13 22:23:45 UTC (rev 114)
+@@ -33,10 +33,29 @@
+ #include &quot;scp.h&quot;
+ #include &quot;other/dialogs.h&quot;
+ 
+-//#include &quot;gadventure.h&quot;
++#include &quot;gadventure.h&quot;
+ 
+ /// TW Legacies Adventure Game 
+ ///
+ 
+-//REGISTER_GAME ( LegaciesGame, &quot;TW:Legacies&quot; )
+ 
++std::string LegaciesGame::Save()
++{
++  tw_error(&quot;Save called&quot;);
++  return &quot;&quot;;
++}
++
++int LegaciesGame::Load(std::string)
++{
++  return 0;
++};
++
++void LegaciesGame::quit(const char *message)
++{
++  STACKTRACE;
++  Save();
++  Game::quit(message);
++}
++
++REGISTER_GAME ( LegaciesGame, &quot;TW:Legacies&quot; )
++
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/melee/mgame.cpp	2005-02-13 22:23:45 UTC (rev 114)
+@@ -44,11 +44,8 @@
+ #include &lt;stdarg.h&gt;
+ 
+ #include &quot;other/twconfig.h&quot;
++#include &quot;other/dialogs.h&quot;
+ 
+-static char chat_buf[256];
+-static int chat_len = 0;
+-static int chat_on = 0;
+-
+ int random_seed[2];
+ 
+ 
+@@ -430,40 +427,39 @@
+   return;
+ }
+ 
+-bool Game::game_ready() {
++bool Game::game_ready() 
++{
+   STACKTRACE;
+-	if (CHECKSUM_CHANNEL == 0) return 1;
+-	if (log-&gt;playback) {
+-		return (log-&gt;ready(channel_server + Game::_channel_buffered) != 0);
+-	}
+-	else switch (log-&gt;type) {
+-		case Log::log_normal: {
+-			return true;
+-		}
+-		break;
+-		case Log::log_net1server:
+-		case Log::log_net1client: {
+-			if (!log-&gt;ready(channel_client + Game::_channel_buffered)) return false;
+-			if (!log-&gt;ready(channel_server + Game::_channel_buffered)) return false;
+-			return true;
+-		}
+-	}
++  if (CHECKSUM_CHANNEL == 0) 
++    return 1;
++  if (log-&gt;playback) 
++    {
++      return (log-&gt;ready(channel_server + Game::_channel_buffered) != 0);
++    }
++  else switch (log-&gt;type) 
++    {
++    case Log::log_normal: {
++      return true;
++    }
++      break;
++    case Log::log_net1server:
++    case Log::log_net1client: 
++      {
++	if (!log-&gt;ready(channel_client + Game::_channel_buffered)) return false;
++	if (!log-&gt;ready(channel_server + Game::_channel_buffered)) return false;
+ 	return true;
++      }
++    }
++  return true;
+ }
+ 
+ void Game::handle_desynch(int local_checksum, int server_checksum, int client_checksum) 
+ {
+   STACKTRACE;
+-  //  tw_error(&quot;Game Desynchronized\nTime=%d Frame=%d\nClient=%d Server=%d Local=%d&quot;, game_time, frame_number, (int)client_checksum, (int)server_checksum, (int)local_checksum);
+   tw_error(&quot;Game Desynchronized&quot;);
+ }
+ 
+-//static int old_num_items;
+-//static int old_rng;
+-//static int old_frame;
+-//static char old_checksum_buf[200][200];
+ 
+-
+ //if a game is killed due to an error, this may be executed
+ void handle_game_error ( Game *game )
+ {
+@@ -678,7 +674,7 @@
+ 		calculate();
+ 	      log-&gt;flush();
+ 	      log-&gt;listen();
+-	      if (key[KEY_F4])
++	      if (key[KEY_F5])
+ 		turbo = f4_turbo;
+ 	      else
+ 		turbo = normal_turbo;
+@@ -812,9 +808,6 @@
+ 		message.print((int)msecs_per_fps, 12, &quot;render time: %.3fms (that's %s)&quot;, rt, tmp);
+ 		message.print((int)msecs_per_fps, 12, &quot;debug: %d&quot;, debug_value);
+ 	}
+-
+-	if (chat_on)
+-		message.print((int)msecs_per_fps, 15, &quot;say: %s&quot;, chat_buf);
+ }
+ 
+ void Game::preinit() 
+@@ -1076,7 +1069,10 @@
+ {
+   STACKTRACE;
+   if (time_paused != -1) 
+-    tw_error (&quot;can't pause -- already paused&quot;);
++    {
++      return;
++      tw_error (&quot;can't pause -- already paused&quot;);
++    }
+   time_paused = get_time();
+ }
+ 
+@@ -1084,7 +1080,10 @@
+ {
+   STACKTRACE;
+   if (time_paused == -1) 
+-    tw_error (&quot;can't unpause -- not paused&quot;);
++    {
++      return;
++      tw_error (&quot;can't unpause -- not paused&quot;);
++    }
+   redraw();
+   paused_time += get_time() - time_paused;
+   time_paused = -1;
+@@ -1126,53 +1125,38 @@
+   STACKTRACE;
+   switch (k &gt;&gt; 8) 
+     {
+-#if !defined _DEBUG
+-    case KEY_F11: 
+-      {
++    case KEY_F1: 
++      {// help
+ 	pause();
+-	save_screenshot();
++	showHelpText();
+ 	unpause();
+-      return true;
++	return true;
+       }
+       break;
+-    case KEY_F10: 
+-#endif
+-    case KEY_ESC: 
++    case KEY_F2:
+       {
+-	//(*((int*)NULL)) = 0;
+ 	pause();
+-	if (tw_alert(&quot;Game is paused&quot;, &quot;&amp;Abort game&quot;, &quot;&amp;Resume playing&quot;) == 1) 
+-	  {
+-	    game-&gt;quit(&quot;quit - Game aborted from keyboard&quot;);
+-	  }
++	Save();
+ 	unpause();
+ 	return true;
+       }
+       break;
+-    case KEY_F1: 
+-      {// help
++    case KEY_F3:
++      {
+ 	pause();
+-	showHelpText();
+-	//show_file(data_full_path(&quot;ingame.txt&quot;));
++	Load(&quot;&quot;);
+ 	unpause();
+ 	return true;
+       }
+       break;
+-    case KEY_F3: 
+-      {// switch hero
+-	if (num_focuses) focus_index = (focus_index + 1) % num_focuses;
+-	message.print(1000, 15, &quot;Camera focus %d (of %d)&quot;, focus_index+1, num_focuses);
++    case KEY_F4: 
++      {
++	pause();
++	options_menu(this);
++	unpause();
+ 	return true;
+       }
+       break;
+-    case KEY_F6: 
+-      {// send message
+-	chat_len = 0;
+-	chat_buf[0] = '\0';
+-	chat_on = 1;
+-	return true;
+-      }
+-      break;
+     case KEY_F7: 
+       {
+ 	if (physics_locked) return false;
+@@ -1195,63 +1179,49 @@
+ 	return true;
+       }
+       break;
+-    case KEY_F8: {
+-      if (view_locked) return false;
+-      if (!view || !view-&gt;type) return false;
+-      if (!strcmp(view-&gt;type-&gt;name, &quot;Hero&quot;)) {
+-	game-&gt;change_view(&quot;Enemy&quot;);
+-	message.print(2500, 15, &quot;View mode changed to 'Enemy'&quot;);
++    case KEY_F8: 
++      {
++	if (view_locked) 
++	  return false;
++	if (!view || !view-&gt;type) 
++	  return false;
++	if (!strcmp(view-&gt;type-&gt;name, &quot;Hero&quot;)) 
++	  {
++	    game-&gt;change_view(&quot;Enemy&quot;);
++	    message.print(2500, 15, &quot;View mode changed to 'Enemy'&quot;);
++	    return true;
++	  }
++	if (!strcmp(view-&gt;type-&gt;name, &quot;Enemy&quot;)) 
++	  {
++	    game-&gt;change_view(&quot;Hero&quot;);
++	    message.print(2500, 15, &quot;View mode changed to 'Hero'&quot;);
++	    return true;
++	  }
+ 	return true;
+       }
+-      if (!strcmp(view-&gt;type-&gt;name, &quot;Enemy&quot;)) {
+-	game-&gt;change_view(&quot;Hero&quot;);
+-	message.print(2500, 15, &quot;View mode changed to 'Hero'&quot;);
++      break;
++    case KEY_F9: 
++      {// switch hero
++	if (num_focuses) focus_index = (focus_index + 1) % num_focuses;
++	message.print(1000, 15, &quot;Camera focus %d (of %d)&quot;, focus_index+1, num_focuses);
+ 	return true;
+       }
+-      //redraw();
+-      return true;
+-    }
+       break;
+-    default: {
+-      if (chat_on) {
+-	if ((k &gt;&gt; 8) == KEY_ENTER) {
+-	  send_game_event(new GameEventMessage(chat_buf));
+-	  //					player_said(0, chat_buf);
+-	  chat_on = 0;
+-	}
+-	else if (k &amp; 255) {
+-	  if ((k &amp; 255) == 8) {
+-	    if (chat_len &gt; 0) {
+-	      chat_len -= 1;
+-	      chat_buf[chat_len] = 0;
+-	    }
+-	  }
+-	  else {
+-	    chat_buf[chat_len] = k &amp; 255;
+-	    if (chat_len &lt; 255) chat_len += 1;
+-	    chat_buf[chat_len] = 0;
+-	  }
+-	}
++    case KEY_ESC: 
++    case KEY_F10:
++      {
++	pause();
++	GameMenu();
++	unpause();
+ 	return true;
+       }
+-    }
++    case KEY_F12: 
++      {
++	show_fps = !show_fps;
++	return true;
++      }
+       break;
+-    case KEY_F2: {
+-      pause();
+-      options_menu(this);
+-      unpause();
+-      return true;
+     }
+-      break;
+-#		ifdef _DEBUG
+-			case KEY_<A HREF="B://supposed">B://supposed</A> to be F12, but the debugger isn't fond of that
+-#		endif
+-    case KEY_F12: {
+-      show_fps = !show_fps;
+-      return true;
+-    }
+-      break;
+-    }
+   return false;
+ }
+ 
+@@ -1299,4 +1269,56 @@
+ }
+ 
+ 
++void Game::GameMenu()
++{
++  int mainRet = tw_do_dialog(NULL, ingameMenuDialog, INGAME_MENU_HELP);
++  switch (mainRet) 
++    {
++    case INGAME_MENU_HELP:
++      handle_key(KEY_F1&lt;&lt;8);
++      break;
++    case INGAME_MENU_SAVE:
++      handle_key(KEY_F2&lt;&lt;8);
++      break;
++    case INGAME_MENU_LOAD:
++      handle_key(KEY_F3&lt;&lt;8);
++      break;
++    case INGAME_MENU_OPTIONS:
++      handle_key(KEY_F4&lt;&lt;8);
++      break;
++    case INGAME_MENU_FAST_FORWARD:
++      handle_key(KEY_F5&lt;&lt;8);
++      break;
++    case INGAME_MENU_FLET_STATUS:
++      handle_key(KEY_F6&lt;&lt;8);
++      break;
++    case INGAME_MENU_CHANGE_TIC_RATE:
++      handle_key(KEY_F7&lt;&lt;8);
++      pause();
++      break;
++    case INGAME_MENU_CHANGE_CAMERA_MODE:
++      handle_key(KEY_F8&lt;&lt;8);
++      break;
++    case INGAME_MENU_SWITCH_CAMERA_FOCUS:
++      handle_key(KEY_F9&lt;&lt;8);
++      break;
++    case INGAME_MENU_DISPLAY_FRAMERATES:
++      handle_key(KEY_F12&lt;&lt;8);
++      break;
++    case INGAME_MENU_QUIT_GAME:
++      quit(&quot;quit - Game aborted from keyboard&quot;);
++    case INGAME_MENU_EXIT:
++      break;
++    }
++}
+ 
++std::string Game::Save()
++{
++  return &quot;&quot;;
++}
++
++int Game::Load(std::string xml)
++{
++  return 0;
++}
++
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/melee/mgame.h	2005-02-13 22:23:45 UTC (rev 114)
+@@ -154,7 +154,12 @@
+ 
+ protected:  
+   bool game_done;
++  /// Show ingame menu (save/load/option/quit/exit)
++  virtual void GameMenu();
+ 
++  virtual std::string Save();
++  virtual int Load(std::string xml);
++
+ public:
+   /// sets whether the game is done, according to the rules for the
+   /// gametype.
+
+Modified: trunk/source/melee/mlog.cpp
+===================================================================
+--- trunk/source/melee/mlog.cpp	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/melee/mlog.cpp	2005-02-13 22:23:45 UTC (rev 114)
+@@ -29,58 +29,68 @@
+ //				Logging stuff
+ ////////////////////////////////////////////////////////////////////////
+ 
+-void Log::init() {
++void Log::init() 
++{
+   STACKTRACE;
+-	log_len  = NULL;
+-	log_size = NULL;
+-	log_pos  = NULL;
+-	log_data = NULL;
+-	log_dir = NULL;
+-	default_direction = direction_write | direction_read;
+-	log_num = 0;
+-	playback = false;
+-	type = Log::log_normal;
+-	return;
++  log_len  = NULL;
++  log_size = NULL;
++  log_pos  = NULL;
++  log_data = NULL;
++  log_dir = NULL;
++  default_direction = direction_write | direction_read;
++  log_num = 0;
++  playback = false;
++  type = Log::log_normal;
++  return;
+ }
+ 
+-void Log::set_direction ( int channel, char direction ) {
+-	STACKTRACE;
+-	if (channel &lt; 0) { tw_error(&quot;set_direction - channel &lt; 0&quot;); }
+-	if (channel &gt;= log_num) {
+-		expand_logs(channel+1);
+-	}
+-	log_dir[channel] = direction;
+-	return;
++void Log::set_direction ( int channel, char direction ) 
++{
++  STACKTRACE;
++  if (channel &lt; 0) { tw_error(&quot;set_direction - channel &lt; 0&quot;); }
++  if (channel &gt;= log_num) {
++    expand_logs(channel+1);
++  }
++  log_dir[channel] = direction;
++  return;
+ }
+ 
+-char Log::get_direction ( int channel ) {
+-	STACKTRACE;
+-	if (channel &lt; 0) {tw_error(&quot;get_direction - channel &lt; 0&quot;);}
+-	if (channel &gt;= log_num) {
+-		expand_logs(channel+1);
+-	}
+-	return (log_dir[channel]);
++char Log::get_direction ( int channel ) 
++{
++  STACKTRACE;
++  if (channel &lt; 0) {tw_error(&quot;get_direction - channel &lt; 0&quot;);}
++  if (channel &gt;= log_num) 
++    {
++      expand_logs(channel+1);
++    }
++  return (log_dir[channel]);
+ }
+ 
+-void Log::set_all_directions ( char direction ) {STACKTRACE
+-	default_direction = direction;
+-	int i;
+-	for (i = 0; i &lt; log_num; i += 1) {
+-		log_dir[i] = direction;
+-	}
+-	return;
++void Log::set_all_directions ( char direction ) 
++{
++  STACKTRACE;
++  default_direction = direction;
++  int i;
++  for (i = 0; i &lt; log_num; i += 1) 
++    {
++      log_dir[i] = direction;
++    }
++  return;
+ }
+ 
+-Log::~Log() {STACKTRACE
+-	if (log_data) for (int i = 0; i &lt; log_num; i += 1) {
+-		free(log_data[i]);
+-	}
+-	free(log_len);
+-	free(log_size);
+-	free(log_pos);
+-	free(log_data);
+-	free(log_dir);
+-	log_num = 0;
++Log::~Log() 
++{
++  STACKTRACE;
++  if (log_data) for (int i = 0; i &lt; log_num; i += 1) 
++    {
++      free(log_data[i]);
++    }
++  free(log_len);
++  free(log_size);
++  free(log_pos);
++  free(log_data);
++  free(log_dir);
++  log_num = 0;
+ }
+ 
+ void Log::log ( int channel, void *data, int size) {STACKTRACE
+
+Modified: trunk/source/melee/mmain.cpp
+===================================================================
+--- trunk/source/melee/mmain.cpp	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/melee/mmain.cpp	2005-02-13 22:23:45 UTC (rev 114)
+@@ -414,23 +414,11 @@
+ 			return Game::handle_key(k);
+ 			}
+ 		break;
+-		case KEY_F5: {
++		case KEY_F6: {
+ 			display_stats();
+ 			return true;
+ 			}
+ 		break;
+-		case KEY_F7: {
+-			if (log-&gt;type == Log::log_normal) Game::handle_key(k);
+-			return true;
+-			}
+-		break;
+-		case KEY_F9: {
+-			if (log-&gt;type != Log::log_normal) return false;
+-			message.out(&quot;MUHAHAHAHAHA!!!!&quot;, 5000, 12);
+-			add(new Planet(random(size), meleedata.planetSprite, random(meleedata.planetSprite-&gt;frames())));
+-			return true;
+-			}
+-		break;
+ 		//don't use hardwired normal keys
+ 		case KEY_H:
+ 			if ((k &amp; 255) == 'H'-'A'+1) indhealthtoggle = ~indhealthtoggle;
+
+Modified: trunk/source/other/dialogs.cpp
+===================================================================
+--- trunk/source/other/dialogs.cpp	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/other/dialogs.cpp	2005-02-13 22:23:45 UTC (rev 114)
+@@ -28,6 +28,25 @@
+ #include &quot;melee/moptions.h&quot;
+ #include &quot;melee/mgame.h&quot;
+ 
++
++DIALOG ingameMenuDialog[] =  {
++  // (dialog proc)          (x)   (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
++  { d_agup_box_proc,        140,   40,   250,  430 ,  255,  0,     0,    0,       0,    0,    NULL, NULL, NULL },
++  { my_d_button_proc,       150,   50,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Help                  (F1) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,   85,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Save Game             (F2) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,  120,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Load Game             (F3) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,  155,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Options               (F4) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,  190,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Fast Forward          (F5) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,  225,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Fleet Status          (F6) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,  260,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Change Tic Rate       (F7) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,  295,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Change Camera Mode    (F8) &quot;, NULL, NULL },
++  { my_d_button_proc,       150,  330,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Switches Camera Focus (F11)&quot;, NULL, NULL },
++  { my_d_button_proc,       150,  365,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Displays Framerates   (F12)&quot;, NULL, NULL },
++  { my_d_button_proc,       150,  400,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Quit game&quot;, NULL, NULL },
++  { my_d_button_proc,       150,  435,   230,   30,   255,  0,    0,    D_EXIT,  0,    0,    (char*)&quot;Exit Menu&quot;, NULL, NULL },
++  { NULL,                    0,    0,     0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL }
++};
++
+ DIALOG joyDialog[] = {
+   // (dialog proc)     (x)   (y)   (w)   (h)   (fg)  (bg)  (key) (flags)  (d1)  (d2)  (dp)
+   { d_agup_box_proc,        40,   40,   200,  250,  255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+
+Modified: trunk/source/other/dialogs.h
+===================================================================
+--- trunk/source/other/dialogs.h	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/other/dialogs.h	2005-02-13 22:23:45 UTC (rev 114)
+@@ -1,7 +1,7 @@
+ /* $Id: dialogs.h,v 1.1 2004/08/03 12:02:26 Yura Exp $ */ 
+ /*
+ This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://timewarp.sourceforge.net/">http://timewarp.sourceforge.net/</A>
++                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+ Copyright (C) 2001-2004  TimeWarp development team
+ 
+ This program is free software; you can redistribute it and/or modify
+@@ -22,6 +22,7 @@
+ #ifdef WIN32
+ #include &lt;winalleg.h&gt;
+ #endif
++
+ extern &quot;C&quot; {
+ #include &quot;libraries/agup/agup.h&quot;
+ }
+@@ -47,6 +48,24 @@
+ 
+ 
+ enum
++  {
++    INGAME_MENU_HELP = 1,
++    INGAME_MENU_SAVE,
++    INGAME_MENU_LOAD,
++    INGAME_MENU_OPTIONS,
++    INGAME_MENU_FAST_FORWARD,
++    INGAME_MENU_FLET_STATUS,
++    INGAME_MENU_CHANGE_TIC_RATE,
++    INGAME_MENU_CHANGE_CAMERA_MODE,
++    INGAME_MENU_SWITCH_CAMERA_FOCUS,
++    INGAME_MENU_DISPLAY_FRAMERATES,
++    INGAME_MENU_QUIT_GAME,
++    INGAME_MENU_EXIT,
++  };
++
++extern DIALOG ingameMenuDialog[];
++
++enum
+ {
+   JOY_DIALOG_BOX = 0,
+   JOY_DIALOG_TITLE,
+@@ -74,102 +93,108 @@
+ extern DIALOG tw_alert_dialog4[];
+ extern DIALOG tw_alert_dialog5[];
+ 
+-enum {
+-	SELECT_DIALOG_LIST = 0,
+-	SELECT_DIALOG_TITLE,
+-	SELECT_DIALOG_SHIP,
+-	SELECT_DIALOG_RANDOM,
+-	SELECT_DIALOG_ARANDOM,
+-	SELECT_DIALOG_INFO,
+-	SELECT_DIALOG_PIC
+-};
++enum 
++  {
++    SELECT_DIALOG_LIST = 0,
++    SELECT_DIALOG_TITLE,
++    SELECT_DIALOG_SHIP,
++    SELECT_DIALOG_RANDOM,
++    SELECT_DIALOG_ARANDOM,
++    SELECT_DIALOG_INFO,
++    SELECT_DIALOG_PIC
++  };
+ 
+ extern DIALOG selectDialog[];
+ extern DIALOG help_dialog[];
+ 
+-enum {
+-	DIALOG_OPTIONS_BOX = 0,
+-	DIALOG_OPTIONS_DONE,
+-	DIALOG_OPTIONS_VIDEO,
+-	DIALOG_OPTIONS_AUDIO,
+-	DIALOG_OPTIONS_CONFIG,
+-	DIALOG_OPTIONS_PHYSICS,
+-	DIALOG_OPTIONS_DEFAULT
+-	};
++enum 
++  {
++    DIALOG_OPTIONS_BOX = 0,
++    DIALOG_OPTIONS_DONE,
++    DIALOG_OPTIONS_VIDEO,
++    DIALOG_OPTIONS_AUDIO,
++    DIALOG_OPTIONS_CONFIG,
++    DIALOG_OPTIONS_PHYSICS,
++    DIALOG_OPTIONS_DEFAULT
++  };
+ 
+ extern DIALOG options_dialog[];
+ 
+-    enum { 
++    enum 
++      { 
+         DIALOG_CONFIRM_VIDEO_BOX = 0,
+         DIALOG_CONFIRM_VIDEO_TEXT,
+         DIALOG_CONFIRM_VIDEO_YES,
+         DIALOG_CONFIRM_VIDEO_NO
+-    };
++      };
+ 
+ extern DIALOG confirmVideoDialog[];
+ 
+-enum {
+-	DIALOG_VIDEO_BOX = 0,
+-	DIALOG_VIDEO_FULLSCREEN,
+-	DIALOG_VIDEO_CUSTOM_TEXT,
+-	DIALOG_VIDEO_CUSTOM_BOX,
+-	DIALOG_VIDEO_CUSTOM_EDIT,
+-	DIALOG_VIDEO_RESTEXT,
+-	DIALOG_VIDEO_RESLIST,
+-	DIALOG_VIDEO_BPPTEXT,
+-	DIALOG_VIDEO_BPPLIST,
+-	DIALOG_VIDEO_EXIT,
+-	DIALOG_VIDEO_GET_DEFAULT,
+-	DIALOG_VIDEO_SET_DEFAULT,
+-	DIALOG_VIDEO_GAMMA_TEXT,
+-	DIALOG_VIDEO_GAMMA_SLIDER,
+-	};
++enum 
++  {
++    DIALOG_VIDEO_BOX = 0,
++    DIALOG_VIDEO_FULLSCREEN,
++    DIALOG_VIDEO_CUSTOM_TEXT,
++    DIALOG_VIDEO_CUSTOM_BOX,
++    DIALOG_VIDEO_CUSTOM_EDIT,
++    DIALOG_VIDEO_RESTEXT,
++    DIALOG_VIDEO_RESLIST,
++    DIALOG_VIDEO_BPPTEXT,
++    DIALOG_VIDEO_BPPLIST,
++    DIALOG_VIDEO_EXIT,
++    DIALOG_VIDEO_GET_DEFAULT,
++    DIALOG_VIDEO_SET_DEFAULT,
++    DIALOG_VIDEO_GAMMA_TEXT,
++    DIALOG_VIDEO_GAMMA_SLIDER,
++  };
+ extern DIALOG video_dialog[];
+ 
+-enum {
+-	DIALOG_AUDIO_BOX = 0,
+-	DIALOG_AUDIO_OK,
+-	DIALOG_AUDIO_CANCEL,
+-	DIALOG_AUDIO_SOUND_VOL,
+-	DIALOG_AUDIO_MUSIC_VOL
+-	};
++enum 
++  {
++    DIALOG_AUDIO_BOX = 0,
++    DIALOG_AUDIO_OK,
++    DIALOG_AUDIO_CANCEL,
++    DIALOG_AUDIO_SOUND_VOL,
++    DIALOG_AUDIO_MUSIC_VOL
++  };
+ 
+ extern DIALOG audio_dialog[];
+ enum {
+-OPTIONS_DIALOG_BOX = 0,
+-OPTIONS_DIALOG_STARS_TEXT,
+-OPTIONS_DIALOG_STARS_SLIDER,
+-OPTIONS_DIALOG_RELATIVITY_TEXT,
+-OPTIONS_DIALOG_RELATIVITY_SLIDER,
+-OPTIONS_DIALOG_FRIENDLY_FIRE,
+-OPTIONS_DIALOG_HIDE_CLOAKERS,
+-OPTIONS_DIALOG_3DPLANET,
+-OPTIONS_DIALOG_VIEW_TEXT,
+-OPTIONS_DIALOG_VIEW,
+-OPTIONS_DIALOG_OK,
+-OPTIONS_DIALOG_CANCEL,
+-
+-OPTIONS_DIALOG_QUALITY_TEXT,
+-OPTIONS_DIALOG_INTERPOLATION_ON,
+-OPTIONS_DIALOG_AA_ON,
+-OPTIONS_DIALOG_NOALIGN_ON,
+-OPTIONS_DIALOG_BLEND_ON,
+-OPTIONS_DIALOG_ALPHA_ON,
+-
+-OPTIONS_DIALOG_END
++  OPTIONS_DIALOG_BOX = 0,
++  OPTIONS_DIALOG_STARS_TEXT,
++  OPTIONS_DIALOG_STARS_SLIDER,
++  OPTIONS_DIALOG_RELATIVITY_TEXT,
++  OPTIONS_DIALOG_RELATIVITY_SLIDER,
++  OPTIONS_DIALOG_FRIENDLY_FIRE,
++  OPTIONS_DIALOG_HIDE_CLOAKERS,
++  OPTIONS_DIALOG_3DPLANET,
++  OPTIONS_DIALOG_VIEW_TEXT,
++  OPTIONS_DIALOG_VIEW,
++  OPTIONS_DIALOG_OK,
++  OPTIONS_DIALOG_CANCEL,
++  
++  OPTIONS_DIALOG_QUALITY_TEXT,
++  OPTIONS_DIALOG_INTERPOLATION_ON,
++  OPTIONS_DIALOG_AA_ON,
++  OPTIONS_DIALOG_NOALIGN_ON,
++  OPTIONS_DIALOG_BLEND_ON,
++  OPTIONS_DIALOG_ALPHA_ON,
++  
++  OPTIONS_DIALOG_END
+ };
+ 
+ extern DIALOG old_optionsDialog[];
+ 
+-enum {
+-	MAIN_DIALOG_BOX = 0,
+-	MAIN_DIALOG_MELEE,
+-	MAIN_DIALOG_MELEE_EXTENDED,
+-	MAIN_DIALOG_TEAMS,
+-	MAIN_DIALOG_OPTIONS,
+-	MAIN_DIALOG_HELP,
+-	MAIN_DIALOG_EXIT,
+-};
++enum 
++  {
++    MAIN_DIALOG_BOX = 0,
++    MAIN_DIALOG_MELEE,
++    MAIN_DIALOG_MELEE_EXTENDED,
++    MAIN_DIALOG_TEAMS,
++    MAIN_DIALOG_OPTIONS,
++    MAIN_DIALOG_HELP,
++    MAIN_DIALOG_EXIT,
++  };
+ 
+ extern DIALOG mainDialog[];
+ 
+@@ -184,67 +209,68 @@
+ extern DIALOG select_game_dialog[];
+ 
+ // MELEE_EX - dialog objects
+-enum {
+-	MELEE_EX_DIALOG_BOX = 0,
+-	MELEE_EX_DIALOG_PLAY_GAME,
+-	MELEE_EX_DIALOG_PLAY_NET1SERVER,
+-	MELEE_EX_DIALOG_PLAY_NET1CLIENT,
+-	MELEE_EX_DIALOG_KEYTESTER,
+-	MELEE_EX_DIALOG_SHIPINFO,
+-	MELEE_EX_DIALOG_LICENSE,
+-	MELEE_EX_DIALOG_DIAGNOSTICS,
+-	MELEE_EX_DIALOG_EXIT
++enum 
++  {
++    MELEE_EX_DIALOG_BOX = 0,
++    MELEE_EX_DIALOG_PLAY_GAME,
++    MELEE_EX_DIALOG_PLAY_NET1SERVER,
++    MELEE_EX_DIALOG_PLAY_NET1CLIENT,
++    MELEE_EX_DIALOG_KEYTESTER,
++    MELEE_EX_DIALOG_SHIPINFO,
++    MELEE_EX_DIALOG_LICENSE,
++    MELEE_EX_DIALOG_DIAGNOSTICS,
++    MELEE_EX_DIALOG_EXIT
+ };
+ extern DIALOG melee_ex_dialog[];
+ 
+ // TEAMS - dialog objects
+ enum {
+-	TEAMS_DIALOG_BOX = 0,
+-	TEAMS_DIALOG_TITLE,
+-	TEAMS_DIALOG_PLAYERLIST_TEXT,
+-	TEAMS_DIALOG_PLAYERLIST,
+-	TEAMS_DIALOG_CONTROLLIST,
+-	TEAMS_DIALOG_SELECTCONTROL,
+-	TEAMS_DIALOG_TEAM_NUM,
+-	TEAMS_DIALOG_CONFIG_NUM,
+-	TEAMS_DIALOG_SETUP,
+-	TEAMS_DIALOG_FLEET,
+-	TEAMS_DIALOG_MAINMENU
++  TEAMS_DIALOG_BOX = 0,
++  TEAMS_DIALOG_TITLE,
++  TEAMS_DIALOG_PLAYERLIST_TEXT,
++  TEAMS_DIALOG_PLAYERLIST,
++  TEAMS_DIALOG_CONTROLLIST,
++  TEAMS_DIALOG_SELECTCONTROL,
++  TEAMS_DIALOG_TEAM_NUM,
++  TEAMS_DIALOG_CONFIG_NUM,
++  TEAMS_DIALOG_SETUP,
++  TEAMS_DIALOG_FLEET,
++  TEAMS_DIALOG_MAINMENU
+ };
+ 
+ extern DIALOG teamsDialog[];
+ 
+ // FLEET - dialog objects
+ enum {
+-    FLEET_DIALOG_AVAILABLE_SHIPS_TEXT=0,
+-    FLEET_DIALOG_SHIP_CATAGORIES_TEXT,
+-    FLEET_DIALOG_TW_OFFICIAL_TOGGLE,
+-    FLEET_DIALOG_TW_EXP_TOGGLE,
+-    FLEET_DIALOG_TW_SPECIAL_TOGGLE,
+-    FLEET_DIALOG_SORTBY_TEXT1,
+-    FLEET_DIALOG_SORTBY_BUTTON1,
+-    FLEET_DIALOG_SORTBY_ASCENDING1,
+-    FLEET_DIALOG_AVAILABLE_SHIPS_LIST,
+-    FLEET_DIALOG_FLEET_SHIPS_LIST,
+-    FLEET_DIALOG_PLAYER_FLEET_BUTTON,
+-    FLEET_DIALOG_PLAYER_FLEET_TITLE,
+-    FLEET_DIALOG_SAVE_BUTTON,
+-    FLEET_DIALOG_LOAD_BUTTON,
+-    FLEET_DIALOG_POINT_LIMIT_TEXT,
+-    FLEET_DIALOG_POINT_LIMIT_BUTTON,
+-    FLEET_DIALOG_CURRENT_POINTS_TEXT,
+-    FLEET_DIALOG_CURRENT_POINTS_VALUE,
+-    FLEET_DIALOG_SORTBY_TEXT2,
+-    FLEET_DIALOG_SORTBY_BUTTON2,
+-    FLEET_DIALOG_SORTBY_ASCENDING2,
+-    FLEET_DIALOG_ADD_BUTTON,
+-    FLEET_DIALOG_ADD_ALL_BUTTON,
+-    FLEET_DIALOG_CLEAR,
+-    FLEET_DIALOG_CLEARALL,
+-    FLEET_DIALOG_SHIP_PICTURE_BITMAP,
+-    FLEET_DIALOG_SHIP_SUMMARY_TEXT,
+-    FLEET_DIALOG_BACK_BUTTON,
+-    FLEET_DIALOG_HELP_TEXT/**/
++  FLEET_DIALOG_AVAILABLE_SHIPS_TEXT=0,
++  FLEET_DIALOG_SHIP_CATAGORIES_TEXT,
++  FLEET_DIALOG_TW_OFFICIAL_TOGGLE,
++  FLEET_DIALOG_TW_EXP_TOGGLE,
++  FLEET_DIALOG_TW_SPECIAL_TOGGLE,
++  FLEET_DIALOG_SORTBY_TEXT1,
++  FLEET_DIALOG_SORTBY_BUTTON1,
++  FLEET_DIALOG_SORTBY_ASCENDING1,
++  FLEET_DIALOG_AVAILABLE_SHIPS_LIST,
++  FLEET_DIALOG_FLEET_SHIPS_LIST,
++  FLEET_DIALOG_PLAYER_FLEET_BUTTON,
++  FLEET_DIALOG_PLAYER_FLEET_TITLE,
++  FLEET_DIALOG_SAVE_BUTTON,
++  FLEET_DIALOG_LOAD_BUTTON,
++  FLEET_DIALOG_POINT_LIMIT_TEXT,
++  FLEET_DIALOG_POINT_LIMIT_BUTTON,
++  FLEET_DIALOG_CURRENT_POINTS_TEXT,
++  FLEET_DIALOG_CURRENT_POINTS_VALUE,
++  FLEET_DIALOG_SORTBY_TEXT2,
++  FLEET_DIALOG_SORTBY_BUTTON2,
++  FLEET_DIALOG_SORTBY_ASCENDING2,
++  FLEET_DIALOG_ADD_BUTTON,
++  FLEET_DIALOG_ADD_ALL_BUTTON,
++  FLEET_DIALOG_CLEAR,
++  FLEET_DIALOG_CLEARALL,
++  FLEET_DIALOG_SHIP_PICTURE_BITMAP,
++  FLEET_DIALOG_SHIP_SUMMARY_TEXT,
++  FLEET_DIALOG_BACK_BUTTON,
++  FLEET_DIALOG_HELP_TEXT/**/
+ };
+ 
+ extern DIALOG fleetDialog[];
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-02-13 18:24:22 UTC (rev 113)
++++ trunk/source/scp.cpp	2005-02-13 22:23:45 UTC (rev 114)
+@@ -1,17 +1,17 @@
+ /*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
+ 
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
+ 
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
+ */
+ 
+ #include &lt;stdlib.h&gt;
+@@ -126,28 +126,20 @@
+   return tw_version_string;
+ }
+ 
+-//deprecated.  This mode of using dat files is terrible, I can't believe
+-//this technique was ever created.
+-#define SCPGUI_TITLE   0
+-
+-FILE *debug_file;
+-
+-/*! \brief Blits GUI background bitmap on to a video window */
++/// Blits GUI background bitmap on to a video window
+ void showTitle(VideoWindow *window = &amp;videosystem-&gt;window);
+ 
+-/*! \brief MELEE_EX dialog - selects alternate games as opposed to standard melee. 
+-  From here you can access diagnostics (DIAGNOSTICS dialog) and ship info. 
+-  (SHIPVIEW dialog) You can also test key jamming from this dialog.
+-*/
++/// MELEE_EX dialog - selects alternate games as opposed to standard melee. 
++///
++///  From here you can access diagnostics (DIAGNOSTICS dialog) and ship info. 
++///  (SHIPVIEW dialog) You can also test key jamming from this dialog.
+ void extended_menu(int i = -1);
+ 
+-/*! \brief TEAMS dialog - from here you can select controllers for each player, and access their respective fleets. (FLEET dialog)
+- */
++/// TEAMS dialog - from here you can select controllers for each player, and access their respective fleets. (FLEET dialog)
+ void change_teams();
+ 
+-/*! \brief FLEET dialog - manages fleet compositions for an individual player.
+-  \param player Player index indicating which player's fleet to edit.
+- */
++/// FLEET dialog - manages fleet compositions for an individual player.
++///  \param player Player index indicating which player's fleet to edit.
+ void edit_fleet(int player);
+ 
+ /*! \brief SHIPVIEW dialog - displays statistics and text information (if available) about the currently installed ships.
+@@ -237,7 +229,7 @@
+ std::string titleMusic = &quot;&quot;;
+ 
+ /** 
+-  loads up the title screen and music, and starts playing the background menu music. 
++    loads up the title screen and music, and starts playing the background menu music. 
+ */
+ void prepareTitleScreenAssets() 
+ {
+@@ -278,18 +270,18 @@
+ }
+ 
+ enum {
+-	DIALOG_CONNECT_BOX = 0,
+-	DIALOG_CONNECT_TITLE,
+-	DIALOG_CONNECT_ADDRESS,
+-	DIALOG_CONNECT_ADDRESS_BOX,
+-	DIALOG_CONNECT_ADDRESS_EDIT,
+-	DIALOG_CONNECT_PORT,
+-	DIALOG_CONNECT_PORT_BOX,
+-	DIALOG_CONNECT_PORT_EDIT,
+-//	DIALOG_CONNECT_TWOLOCALS,
+-	DIALOG_CONNECT_OK,
+-	DIALOG_CONNECT_CANCEL,
+-	DIALOG_CONNECT_BLAH
++  DIALOG_CONNECT_BOX = 0,
++  DIALOG_CONNECT_TITLE,
++  DIALOG_CONNECT_ADDRESS,
++  DIALOG_CONNECT_ADDRESS_BOX,
++  DIALOG_CONNECT_ADDRESS_EDIT,
++  DIALOG_CONNECT_PORT,
++  DIALOG_CONNECT_PORT_BOX,
++  DIALOG_CONNECT_PORT_EDIT,
++  //	DIALOG_CONNECT_TWOLOCALS,
++  DIALOG_CONNECT_OK,
++  DIALOG_CONNECT_CANCEL,
++  DIALOG_CONNECT_BLAH
+ };
+ 
+ static DIALOG connect_dialog[] = {
+@@ -302,7 +294,7 @@
+   { d_text_proc,       50,   220,  460,  30,   255,  0,    0,    0,       0,    0,    (void *)&quot;Port #&quot; , NULL, NULL },
+   { d_box_proc,        48,   248,  464,  34,   255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+   { d_edit_proc,       50,   250,  460,  30,   255,  0,    0,    0,       75,   0,    dialog_string[1], NULL, NULL },
+-//{ d_check_proc,      50,   290,  160,  20,   255,  0,    0,    0,       0,    0,    (void *)&quot;Two Local Players&quot;, NULL, NULL },
++  //{ d_check_proc,      50,   290,  160,  20,   255,  0,    0,    0,       0,    0,    (void *)&quot;Two Local Players&quot;, NULL, NULL },
+   { d_button_proc,     50,   320,  160,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Connect&quot;, NULL, NULL },
+   { d_button_proc,     350,  320,  160,  30,   255,  0,    0,    D_EXIT,  0,    0,    (void *)&quot;Abort&quot;, NULL, NULL },
+   { d_tw_yield_proc,   0,    0,    0,    0,    255,  0,    0,    0,       0,    0,    NULL, NULL, NULL },
+@@ -310,19 +302,19 @@
+ };
+ 
+ int connect_menu(VideoWindow *window, char **address, int *port) { STACKTRACE
+-	int i = 0;
++								     int i = 0;
+ 
+-	if (*address)
+-		strncpy(dialog_string[0], *address, 70);
+-	if (port)
+-		sprintf(dialog_string[1], &quot;%d&quot;, *port);
++ if (*address)
++   strncpy(dialog_string[0], *address, 70);
++ if (port)
++   sprintf(dialog_string[1], &quot;%d&quot;, *port);
+ 
+-	i = tw_popup_dialog(window, connect_dialog, DIALOG_CONNECT_ADDRESS_EDIT);
+-	if (i != DIALOG_CONNECT_OK)
+-		return -1;
+-	*port = atoi(dialog_string[1]);
+-	*address = strdup(dialog_string[0]);
+-	return 0;
++ i = tw_popup_dialog(window, connect_dialog, DIALOG_CONNECT_ADDRESS_EDIT);
++ if (i != DIALOG_CONNECT_OK)
++   return -1;
++ *port = atoi(dialog_string[1]);
++ *address = strdup(dialog_string[0]);
++ return 0;
+ }
+ 
+ //#define DIALOG_LISTEN_TWOLOCALS 4
+@@ -330,31 +322,34 @@
+ #define DIALOG_LISTEN_CANCEL    5
+ 
+ static DIALOG listen_dialog[] =
+-{
+-  // (dialog proc)     (x)   (y)   (w)   (h)   (fg)  (bg)  (key) (flags)     (d1)  (d2)  (dp)
+-  { d_box_proc,        120,  100,  300,  140,  255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
+-  { d_text_proc,       140,  110,  240,  25,   255,  0,    0,    0,          0,    0,    (void*)&quot;Listen on which port?&quot;, NULL, NULL },
+-  { d_box_proc,        178,  138,  124,  29,   255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
+-  { d_edit_proc,       180,  140,  120,  25,   255,  0,    0,    0,          5,    0,    dialog_string[1], NULL, NULL },
+-//{ d_check_proc,      140,  170,  160,  20,   255,  0,    0,    0,          0,    0,    (void *)&quot;Two Local Players&quot;, NULL, NULL },
+-  { d_button_proc,     140,  200,  120,  30,   255,  0,    0,    D_EXIT,     0,    0,    (void*) &quot;OK&quot;, NULL, NULL },
+-  { d_button_proc,     280,  200,  120,  30,   255,  0,    0,    D_EXIT,     0,    0,    (void*) &quot;Cancel&quot;, NULL, NULL },
+-  { d_tw_yield_proc,   0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
+-  { NULL,              0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL }
+-};
++  {
++    // (dialog proc)     (x)   (y)   (w)   (h)   (fg)  (bg)  (key) (flags)     (d1)  (d2)  (dp)
++    { d_box_proc,        120,  100,  300,  140,  255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
++    { d_text_proc,       140,  110,  240,  25,   255,  0,    0,    0,          0,    0,    (void*)&quot;Listen on which port?&quot;, NULL, NULL },
++    { d_box_proc,        178,  138,  124,  29,   255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
++    { d_edit_proc,       180,  140,  120,  25,   255,  0,    0,    0,          5,    0,    dialog_string[1], NULL, NULL },
++    { d_button_proc,     140,  200,  120,  30,   255,  0,    0,    D_EXIT,     0,    0,    (void*) &quot;OK&quot;, NULL, NULL },
++    { d_button_proc,     280,  200,  120,  30,   255,  0,    0,    D_EXIT,     0,    0,    (void*) &quot;Cancel&quot;, NULL, NULL },
++    { d_tw_yield_proc,   0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL },
++    { NULL,              0,    0,    0,    0,    255,  0,    0,    0,          0,    0,    NULL, NULL, NULL }
++  };
+ 
+-static int listen_menu(VideoWindow *window, int port) { STACKTRACE
+-	dialog_string[1][0] = '\0';
+-	int p = -1;
+-	sprintf(dialog_string[1], &quot;%d&quot;, port);
+-	while ((p &lt;= 0) || (p &gt; 65535)) {
+-		if (tw_popup_dialog(window, listen_dialog, 2) != DIALOG_LISTEN_OK) {
+-			//game-&gt;quit(&quot;Quit - game aborted from network \&quot;listen\&quot; menu&quot;);
+-			return -1;
+-		}
+-		p = atoi(dialog_string[1]);
++static int listen_menu(VideoWindow *window, int port) 
++{
++  STACKTRACE
++    dialog_string[1][0] = '\0';
++  int p = -1;
++  sprintf(dialog_string[1], &quot;%d&quot;, port);
++  while ((p &lt;= 0) || (p &gt; 65535)) 
++    {
++      if (tw_popup_dialog(window, listen_dialog, 2) != DIALOG_LISTEN_OK) 
++	{
++	  //game-&gt;quit(&quot;Quit - game aborted from network \&quot;listen\&quot; menu&quot;);
++	  return -1;
+ 	}
+-	return p;
++      p = atoi(dialog_string[1]);
++    }
++  return p;
+ }
+ 
+ int is_escape_pressed() 
+@@ -448,79 +443,85 @@
+ }
+ 
+ 
+-void play_net1client ( const char *_address, int _port ) {STACKTRACE
+-	NetLog *log = new NetLog();
+-	log-&gt;init();
+-	log-&gt;type = Log::log_net1client;
+-
+-	log-&gt;set_all_directions(Log::direction_read);
+-	log-&gt;set_direction(Game::channel_client , Log::direction_write | Log::direction_read | NetLog::direction_immediate);
+-	log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_write | Log::direction_read);
+-	
+-	set_config_file(&quot;client.ini&quot;);
+-	char address[128];
+-	int port, i;
+-	while (!log-&gt;net.isConnected()) {
+-		if (!_address) strncpy(address, get_config_string(&quot;Network&quot;, &quot;Address&quot;, &quot;&quot;), 127);
+-		else strncpy(address, _address, 127);
+-		if (_port == -1) port = get_config_int(&quot;Network&quot;, &quot;Port&quot;, 15515);
+-		else port = _port;
+-		char *addressaddress = address;
+-		if (connect_menu(&amp;videosystem-&gt;window, &amp;addressaddress, &amp;port) == -1) 
+-			return;
+-		set_config_string(&quot;Network&quot;, &quot;Address&quot;, addressaddress);
+-		message.out(&quot;...&quot;);
+-		i = ((NetLog*)log)-&gt;net.connect(addressaddress, port, is_escape_pressed);
+-		free(addressaddress);
+-		if (i) {
+-//						while (is_escape_pressed());
+-			while (keypressed()) readkey();
+-			tw_error(&quot;connection failed&quot;);
+-		}
+-	}
+-
+-	log-&gt;net.optimize4latency();
+-	message.out(&quot;connection established&quot;);
+-	
+-	char *gname = detect_gametype(log);
+-	log-&gt;reset();
+-
+-	play_game(gname, log);
+-
+-	free(gname);
+-	return;
++void play_net1client ( const char *_address, int _port ) 
++{
++  STACKTRACE;
++  NetLog *log = new NetLog();
++  log-&gt;init();
++  log-&gt;type = Log::log_net1client;
++  
++  log-&gt;set_all_directions(Log::direction_read);
++  log-&gt;set_direction(Game::channel_client , Log::direction_write | Log::direction_read | NetLog::direction_immediate);
++  log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_write | Log::direction_read);
++  
++  set_config_file(&quot;client.ini&quot;);
++  char address[128];
++  int port, i;
++  while (!log-&gt;net.isConnected()) {
++    if (!_address) strncpy(address, get_config_string(&quot;Network&quot;, &quot;Address&quot;, &quot;&quot;), 127);
++    else strncpy(address, _address, 127);
++    if (_port == -1) port = get_config_int(&quot;Network&quot;, &quot;Port&quot;, 15515);
++    else port = _port;
++    char *addressaddress = address;
++    if (connect_menu(&amp;videosystem-&gt;window, &amp;addressaddress, &amp;port) == -1) 
++      return;
++    set_config_string(&quot;Network&quot;, &quot;Address&quot;, addressaddress);
++    message.out(&quot;...&quot;);
++    i = ((NetLog*)log)-&gt;net.connect(addressaddress, port, is_escape_pressed);
++    free(addressaddress);
++    if (i) 
++      {
++	//						while (is_escape_pressed());
++	while (keypressed()) readkey();
++	tw_error(&quot;connection failed&quot;);
++      }
++  }
++  
++  log-&gt;net.optimize4latency();
++  message.out(&quot;connection established&quot;);
++  
++  char *gname = detect_gametype(log);
++  log-&gt;reset();
++  
++  play_game(gname, log);
++  
++  free(gname);
++  return;
+ }
+ 
+-void play_net1server(const char *_gametype_name, int _port) {STACKTRACE
+-	NetLog *log = new NetLog();
+-	log-&gt;init();
+-
+-	log-&gt;type = Log::log_net1server;
+-	log-&gt;set_all_directions(Log::direction_write | Log::direction_read | NetLog::direction_immediate);
+-	log-&gt;set_direction(Game::channel_client , Log::direction_read);
+-	log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_read);
+-	log-&gt;set_direction(Game::channel_server + Game::_channel_buffered, Log::direction_write | Log::direction_read);
+-	
+-	set_config_file(&quot;client.ini&quot;);
+-	int port;
+-	while (!log-&gt;net.isConnected()) {
+-		if (_port == -1) port = get_config_int(&quot;Network&quot;, &quot;Port&quot;, 15515);
+-		else port = _port;
+-
+-		port = listen_menu( &amp;videosystem-&gt;window, port );
+-		if (port == -1) return;
+-
+-		message.out(&quot;...&quot;);
+-		log-&gt;net.listen(port, is_escape_pressed);
+-		
+-	}
+-
+-	log-&gt;net.optimize4latency();
+-	message.out(&quot;connection established&quot;);
+-	
+-	play_game(_gametype_name, log);
+-
+-	return;
++void play_net1server(const char *_gametype_name, int _port) 
++{
++  STACKTRACE;
++  NetLog *log = new NetLog();
++  log-&gt;init();
++  
++  log-&gt;type = Log::log_net1server;
++  log-&gt;set_all_directions(Log::direction_write | Log::direction_read | NetLog::direction_immediate);
++  log-&gt;set_direction(Game::channel_client , Log::direction_read);
++  log-&gt;set_direction(Game::channel_client + Game::_channel_buffered, Log::direction_read);
++  log-&gt;set_direction(Game::channel_server + Game::_channel_buffered, Log::direction_write | Log::direction_read);
++  
++  set_config_file(&quot;client.ini&quot;);
++  int port;
++  while (!log-&gt;net.isConnected()) 
++    {
++      if (_port == -1) port = get_config_int(&quot;Network&quot;, &quot;Port&quot;, 15515);
++      else port = _port;
++      
++      port = listen_menu( &amp;videosystem-&gt;window, port );
++      if (port == -1) return;
++      
++      message.out(&quot;...&quot;);
++      log-&gt;net.listen(port, is_escape_pressed);
++      
++    }
++  
++  log-&gt;net.optimize4latency();
++  message.out(&quot;connection established&quot;);
++  
++  play_game(_gametype_name, log);
++  
++  return;
+ }
+ 
+ 
+@@ -538,14 +539,7 @@
+ 
+ FONT *TW_font = NULL;
+ 
+-// dialog results
+-/*int mainRet = 0;
+-int shipRet = 0;
+-int keyRet = 0;
+-int fleetRet = 0;
+-int optionsRet= 0;*/
+ 
+-
+ char **player_type = NULL;
+ int *player_config = NULL;
+ int *player_team = NULL;
+@@ -553,54 +547,55 @@
+ Control *load_player(int i) 
+ {
+   STACKTRACE;
+-	char tmp[32];
+-	Control *r = NULL;
++  char tmp[32];
++  Control *r = NULL;
+ 
+-	sprintf (tmp, &quot;Config%d&quot;, player_config[i]);
+-	r = getController(player_type[i], tmp, Game::channel_none);
+-	if (r)
+-	{
+-		r-&gt;load(&quot;scp.ini&quot;, tmp);
+-	}
+-	return r;
++  sprintf (tmp, &quot;Config%d&quot;, player_config[i]);
++  r = getController(player_type[i], tmp, Game::channel_none);
++  if (r)
++    {
++      r-&gt;load(&quot;scp.ini&quot;, tmp);
++    }
++  return r;
+ }
+ 
+ 
+ class MainMenu : public BaseClass 
+ {
+-	public:
+-	virtual void _event(Event * e);
+-	virtual void preinit();
+-	virtual void deinit();
+-	virtual void init(VideoWindow *parent);
+-	virtual void doit();
+-	virtual void enable();
+-	virtual void disable();
+-	int state;
+-	VideoWindow *window;
++public:
++  virtual void _event(Event * e);
++  virtual void preinit();
++  virtual void deinit();
++  virtual void init(VideoWindow *parent);
++  virtual void doit();
++  virtual void enable();
++  virtual void disable();
++  int state;
++  VideoWindow *window;
+ } mainmenu;
+ 
+ void MainMenu::_event(Event *e) 
+ {
+   STACKTRACE;
+-		   
+-	if (e-&gt;type == Event::VIDEO) {
+-		if (e-&gt;subtype == VideoEvent::REDRAW) if (state &amp; 1) showTitle();
+-	}
++  
++  if (e-&gt;type == Event::VIDEO) 
++    {
++      if (e-&gt;subtype == VideoEvent::REDRAW) if (state &amp; 1) showTitle();
++    }
+ }
+ 
+ void MainMenu::enable() 
+ {
+   STACKTRACE;
+ 		   
+-	if (!(state &amp; 2)) window-&gt;add_callback(this);
+-	state |= 3;
++  if (!(state &amp; 2)) 
++    window-&gt;add_callback(this);
++  state |= 3;
+ }
+ 
+ void MainMenu::disable() 
+ {
+-  STACKTRACE;
+-		   
++  STACKTRACE;	   
+   state &amp;=~ 1;
+ }
+ 
+@@ -614,12 +609,14 @@
+ void MainMenu::init(VideoWindow *parent) 
+ {
+   STACKTRACE; 
+-  if (window) window-&gt;init(parent);
+-  else {
+-		window = new VideoWindow();
+-		window-&gt;preinit();
+-		window-&gt;init(parent);
+-	}
++  if (window) 
++    window-&gt;init(parent);
++  else 
++    {
++      window = new VideoWindow();
++      window-&gt;preinit();
++      window-&gt;init(parent);
++    }
+ }
+ 
+ void MainMenu::deinit() 
+@@ -643,62 +640,66 @@
+   char tmp[32];
+   
+   tw_set_config_file(&quot;scp.ini&quot;);
+-  if (!player_type) {		
+-    MAX_PLAYERS        = get_config_int(&quot;Limits&quot;, &quot;MaxPlayers&quot;, 12);
+-    MAX_CONFIGURATIONS = get_config_int(&quot;Limits&quot;, &quot;MaxConfigurations&quot;, 4);
+-    MAX_TEAMS          = get_config_int(&quot;Limits&quot;, &quot;MaxTeams&quot;, 6);
+-    player_type = new char*[MAX_PLAYERS];
+-    player_config = new int[MAX_PLAYERS];
+-    player_team   = new int[MAX_PLAYERS];
+-  }
+-  for (i = 0; i &lt; MAX_PLAYERS; i += 1) {
+-    sprintf(tmp, &quot;Player%d&quot;, i+1);
+-    player_type[i] = strdup(get_config_string(tmp, &quot;Type&quot;, &quot;Human&quot;));
+-    player_config[i] = get_config_int (tmp, &quot;Config&quot;, i % MAX_CONFIGURATIONS);
+-    player_team[i] = get_config_int (tmp, &quot;Team&quot;, 0);
+-  }
++  if (!player_type) 
++    {		
++      MAX_PLAYERS        = get_config_int(&quot;Limits&quot;, &quot;MaxPlayers&quot;, 12);
++      MAX_CONFIGURATIONS = get_config_int(&quot;Limits&quot;, &quot;MaxConfigurations&quot;, 4);
++      MAX_TEAMS          = get_config_int(&quot;Limits&quot;, &quot;MaxTeams&quot;, 6);
++      player_type = new char*[MAX_PLAYERS];
++      player_config = new int[MAX_PLAYERS];
++      player_team   = new int[MAX_PLAYERS];
++    }
++  for (i = 0; i &lt; MAX_PLAYERS; i += 1) 
++    {
++      sprintf(tmp, &quot;Player%d&quot;, i+1);
++      player_type[i] = strdup(get_config_string(tmp, &quot;Type&quot;, &quot;Human&quot;));
++      player_config[i] = get_config_int (tmp, &quot;Config&quot;, i % MAX_CONFIGURATIONS);
++      player_team[i] = get_config_int (tmp, &quot;Team&quot;, 0);
++    }
+   
+   prepareTitleScreenAssets();
+   showTitle();
+   enable();
+   
+   int mainRet;
+-  do {
+-    //mainRet = popup_dialog(mainDialog, MAIN_DIALOG_MELEE);
+-    mainRet = tw_do_dialog(window, mainDialog, MAIN_DIALOG_MELEE);
+-    switch (mainRet) {
+-    case MAIN_DIALOG_MELEE:
+-      disable();
+-      play_game(&quot;Melee&quot;);
+-      enable();
+-      break;
+-    case MAIN_DIALOG_MELEE_EXTENDED:
+-      disable();
+-      extended_menu();
+-      enable();
+-      break;
+-    case MAIN_DIALOG_OPTIONS:
+-      showTitle();
+-      options_menu(NULL);
+-      break;
+-    case MAIN_DIALOG_HELP:
+-      show_file(data_full_path(&quot;ingame.txt&quot;).c_str());
+-      break;
+-    case MAIN_DIALOG_TEAMS:
+-      change_teams();
+-      showTitle();
+-      break;
+-    }
+-  } while((mainRet != MAIN_DIALOG_EXIT) &amp;&amp; (mainRet != -1));
++  do 
++    {
++      //mainRet = popup_dialog(mainDialog, MAIN_DIALOG_MELEE);
++      mainRet = tw_do_dialog(window, mainDialog, MAIN_DIALOG_MELEE);
++      switch (mainRet) {
++      case MAIN_DIALOG_MELEE:
++	disable();
++	play_game(&quot;Melee&quot;);
++	enable();
++	break;
++      case MAIN_DIALOG_MELEE_EXTENDED:
++	disable();
++	extended_menu();
++	enable();
++	break;
++      case MAIN_DIALOG_OPTIONS:
++	showTitle();
++	options_menu(NULL);
++	break;
++      case MAIN_DIALOG_HELP:
++	show_file(data_full_path(&quot;ingame.txt&quot;).c_str());
++	break;
++      case MAIN_DIALOG_TEAMS:
++	change_teams();
++	showTitle();
++	break;
++      }
++    } while((mainRet != MAIN_DIALOG_EXIT) &amp;&amp; (mainRet != -1));
+   
+ }
+ 
+ int tw_main(int argc, char *argv[]);
+ 
+-int main(int argc, char *argv[]) {
+-	int r;
+-	r = tw_main(argc, argv);
+-	return r;
++int main(int argc, char *argv[]) 
++{
++  int r;
++  r = tw_main(argc, argv);
++  return r;
+ }
+ END_OF_MAIN();
+ 
+@@ -714,23 +715,14 @@
+ #endif
+ 
+   if(argc==2&amp;&amp;!strcmp(argv[1],&quot;-test&quot;))
+-      {
+-	return RunTests();
+-      }
++    {
++      return RunTests();
++    }
+   
+   int i;
+   int auto_port = -1;
+   const char *auto_play = NULL, *auto_param = NULL;
+   
+-#ifdef __BEOS__
+-  // set cwd to path of exe 
+-  // to allow running from icon 
+-  char datapath[256];
+-  for (i=strlen(argv[0]) ; argv[0][i]!='/' ; i--);
+-  strncpy(datapath, argv[0], i);
+-  chdir(datapath);
+-#endif
+-
+   log_debug(NULL);
+   time_t start_time = time(NULL);
+   log_debug(&quot;Log started at %s\n&quot;, asctime(localtime(&amp;start_time)));
+@@ -742,211 +734,212 @@
+   videosystem = &video;
+   videosystem-&gt;preinit();
+   
+-  try {
+-    init_time();
+-    init_error();
++  try 
++    {
++      init_time();
++      init_error();
++      
++      set_window_title(APPLICATION_NAME);
++      tw_set_config_file(&quot;client.ini&quot;);
++      
+     
+-    set_window_title(APPLICATION_NAME);
+-    tw_set_config_file(&quot;client.ini&quot;);
+-    
+-    
+-    int screen_width = 640, screen_height = 480, screen_bpp = 32;
+-    int fullscreen = 0;
+-    
+-    auto_unload = get_config_int(&quot;System&quot;, &quot;AutoUnload&quot;, 0);
++      int screen_width = 640, screen_height = 480, screen_bpp = 32;
++      int fullscreen = 0;
++      
++      auto_unload = get_config_int(&quot;System&quot;, &quot;AutoUnload&quot;, 0);
+ 		
+-    const AGUP_THEME *theme = agup_theme_by_name(get_config_string(&quot;Video&quot;, &quot;GuiTheme&quot;, &quot;Photon&quot;));
++      const AGUP_THEME *theme = agup_theme_by_name(get_config_string(&quot;Video&quot;, &quot;GuiTheme&quot;, &quot;Photon&quot;));
++      
++      screen_bpp       = get_config_int(&quot;Video&quot;, &quot;BitsPerPixel&quot;, 16);
++      screen_width     = get_config_int(&quot;Video&quot;, &quot;ScreenWidth&quot;, 640);
++      screen_height    = get_config_int(&quot;Video&quot;, &quot;ScreenHeight&quot;, 480);
++      fullscreen       = get_config_int(&quot;Video&quot;, &quot;FullScreen&quot;, false);
++      
++      SpaceSprite::mip_bias = get_config_int (&quot;View&quot;, &quot;Mip_bias&quot;, 0);
++      SpaceSprite::mip_min = get_config_int (&quot;View&quot;, &quot;Mip_min&quot;, 0);
++      SpaceSprite::mip_max = get_config_int (&quot;View&quot;, &quot;Mip_max&quot;, 0);
++      
++      interpolate_frames = get_config_int(&quot;View&quot;, &quot;InterpolateFrames&quot;, 0);
++      set_tw_aa_mode(get_config_int(&quot;Rendering&quot;, &quot;AA_Mode&quot;, 0));
++      int gamma   = get_config_int(&quot;Video&quot;, &quot;Gamma&quot;, 128);
++      set_gamma( gamma );
++      
++      int inputs = 7;
++      bool sound_enabled = true;
++      
++      // parse command-line arguments
++      for (i = 1; i &lt; argc; i += 1) 
++	{
++	  if (!strcmp(argv[i], &quot;-res&quot;) &amp;&amp; (argc &gt; i + 2)) 
++	    {
++	      log_debug(&quot;command-line argument -res\n&quot;);
++	      screen_width = atoi(argv[i+1]);
++	      screen_height = atoi(argv[i+2]);
++	      i += 2;
++	    }
++	  else if (!strcmp(argv[i], &quot;-bpp&quot;) &amp;&amp; (argc &gt; i + 1)) 
++	    {
++	      log_debug(&quot;command-line argument -bpp\n&quot;);
++	      screen_bpp = atoi(argv[i+1]);
++	      i += 1;
++	    }
++	  else if (!strcmp(argv[i], &quot;-fullscreen&quot;)) 
++	    {
++	      log_debug(&quot;command-line argument -fullscreen\n&quot;);
++	      fullscreen = true;
++	    }
++	  else if (!strcmp(argv[i], &quot;-window&quot;)) 
++	    {
++	      log_debug(&quot;command-line argument -window\n&quot;);
++	      fullscreen = false;
++	    }
++	  else if(!strcmp(argv[i], &quot;-nosound&quot;)) 
++	    {
++	      sound_enabled = false;
++	    }
++	  else if (!strcmp(argv[i], &quot;-nokeyboard&quot;)) 
++	    {
++	      log_debug(&quot;command-line argument -nokeyboard\n&quot;);
++	      inputs &amp;= ~1;
++	    }
++	  else if (!strcmp(argv[i], &quot;-nomouse&quot;)) 
++	    {
++	      log_debug(&quot;command-line argument -nomouse\n&quot;);
++	      inputs &amp;= ~2;
++	    }
++	  else if (!strcmp(argv[i], &quot;-nojoystick&quot;)) 
++	    {
++	      log_debug(&quot;command-line argument -nojoystick\n&quot;);
++	      inputs &amp;= ~4;
++	    }
++	  else if (!strcmp(argv[i], &quot;-noidle&quot;)) 
++	    {
++	      log_debug(&quot;command-line argument -noidle\n&quot;);
++	      _no_idle = 1;
++	    }
++	  else if (strstr(argv[i], COMMAND_LINE_SERVER_LONG)) 
++	    {
++	      if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_SERVER_LONG)) 
++		{
++		  // users can use two formats for the address: an alphanumeric name, like
++		  // &quot;localhost&quot;, or a dotted ip address, like a.b.c.d .  Further, users
++		  // can specify the port here as well, by adding a colon and the number to 
++		  // the end of the address.  
++		  const char * addressStart = strstr(argv[i], COMMAND_LINE_SERVER_LONG) + strlen(COMMAND_LINE_SERVER_LONG);
++		  const char * addressEnd = strstr(addressStart, &quot;:&quot;);
++		  
++		  // user has added a colon, indicating the port.  The port starts at addressEnd
++		  // and goes to the end of argv[i]
++		  if (addressEnd &amp;&amp; strlen(addressEnd) &gt; 1) 
++		    { 
++		      // this is +1 to skip the &quot;:&quot;
++		      serverPort = atoi(addressEnd+1);
++		    }
++		  serverAddress.clear();
++		  serverAddress.append(addressStart, addressEnd-addressStart);
++		  
++		  log_debug(&quot;commandline specified server as : host=[%s], port=[%u]\n&quot;, serverAddress.c_str(), serverPort);
++		}
++	    }
++	  else if (strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG)) 
++	    {
++	      // this is the maximum number of computers that can connect to this program instance. 
++	      // Used in server mode only, no effect otherwise.
++	      if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_MAX_CLIENTS_LONG)) 
++		{
++		  const char * portStart = strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG) + strlen(COMMAND_LINE_MAX_CLIENTS_LONG);
++		  if (strlen(portStart) &gt; 1) 
++		    {
++		      serverMaxClients = atoi(portStart);
++		    }
++		  log_debug(&quot;commandline specified max clients as: serverMaxClients=[%u]\n&quot;, serverMaxClients);
++		}
++	    }
++	  else if (strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) &amp;&amp; (argc &gt; i + 0)) 
++	    {
++	      // this specifies the port this client will listen on.
++	      // Used in client mode only, no effect otherwise.
++	      if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_CLIENT_PORT_LONG)) 
++		{
++		  const char * clientportStart = strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) + strlen(COMMAND_LINE_CLIENT_PORT_LONG);
++		  if (strlen(clientportStart) &gt; 1) 
++		    {
++		      clientPort = atoi(clientportStart);
++		    }
++		  log_debug(&quot;commandline specified client port as : port=[%u]\n&quot;, clientPort);
++		}
++	    }
++	  else if (!strcmp(argv[i], &quot;-play&quot;) &amp;&amp; (argc &gt; i + 2)) 
++	    {
++	      log_debug(&quot;command-line argument -play\n&quot;);
++	      auto_play = argv[i+1];
++	      auto_param = argv[i+2];
++	      i += 2;
++	      if ((argc &gt; i + 0) &amp;&amp; (argv[i][0] != '-')) 
++		{
++		  auto_port = atoi(argv[i]);
++		  i += 1;
++		}
++	    }
++	  else 
++	    {
++	      log_debug(&quot;unrecognized command-line argument:&quot;);
++	      log_debug(argv[i]);
++	      log_debug(&quot;\n&quot;);
++	    }
++	}
+     
+-    screen_bpp       = get_config_int(&quot;Video&quot;, &quot;BitsPerPixel&quot;, 16);
+-    screen_width     = get_config_int(&quot;Video&quot;, &quot;ScreenWidth&quot;, 640);
+-    screen_height    = get_config_int(&quot;Video&quot;, &quot;ScreenHeight&quot;, 480);
+-    fullscreen       = get_config_int(&quot;Video&quot;, &quot;FullScreen&quot;, false);
++      log_debug(&quot;command-line arguments parsed\n&quot;);
+     
+-    SpaceSprite::mip_bias = get_config_int (&quot;View&quot;, &quot;Mip_bias&quot;, 0);
+-    SpaceSprite::mip_min = get_config_int (&quot;View&quot;, &quot;Mip_min&quot;, 0);
+-    SpaceSprite::mip_max = get_config_int (&quot;View&quot;, &quot;Mip_max&quot;, 0);
++      srand(time(NULL));
++      set_color_conversion(COLORCONV_KEEP_TRANS);
+     
+-    interpolate_frames = get_config_int(&quot;View&quot;, &quot;InterpolateFrames&quot;, 0);
+-    set_tw_aa_mode(get_config_int(&quot;Rendering&quot;, &quot;AA_Mode&quot;, 0));
+-    int gamma   = get_config_int(&quot;Video&quot;, &quot;Gamma&quot;, 128);
+-    set_gamma( gamma );
++      videosystem-&gt;set_resolution(screen_width, screen_height, screen_bpp, fullscreen);
++      register_bitmap_file_type(&quot;jpg&quot;, load_jpg, NULL);
+     
+-    int inputs = 7;
+-    bool sound_enabled = true;
+-    
+-    // parse command-line arguments
+-    for (i = 1; i &lt; argc; i += 1) 
+-      {
+-	if (!strcmp(argv[i], &quot;-res&quot;) &amp;&amp; (argc &gt; i + 2)) 
+-	  {
+-	    log_debug(&quot;command-line argument -res\n&quot;);
+-	    screen_width = atoi(argv[i+1]);
+-	    screen_height = atoi(argv[i+2]);
+-	    i += 2;
+-	  }
+-	else if (!strcmp(argv[i], &quot;-bpp&quot;) &amp;&amp; (argc &gt; i + 1)) 
+-	  {
+-	    log_debug(&quot;command-line argument -bpp\n&quot;);
+-	    screen_bpp = atoi(argv[i+1]);
+-	    i += 1;
+-	  }
+-	else if (!strcmp(argv[i], &quot;-fullscreen&quot;)) 
+-	  {
+-	    log_debug(&quot;command-line argument -fullscreen\n&quot;);
+-	    fullscreen = true;
+-	  }
+-	else if (!strcmp(argv[i], &quot;-window&quot;)) 
+-	  {
+-	    log_debug(&quot;command-line argument -window\n&quot;);
+-	    fullscreen = false;
+-	  }
+-	else if(!strcmp(argv[i], &quot;-nosound&quot;)) 
+-	  {
+-	    sound_enabled = false;
+-	  }
+-	else if (!strcmp(argv[i], &quot;-nokeyboard&quot;)) 
+-	  {
+-	    log_debug(&quot;command-line argument -nokeyboard\n&quot;);
+-	    inputs &amp;= ~1;
+-	  }
+-	else if (!strcmp(argv[i], &quot;-nomouse&quot;)) 
+-	  {
+-	    log_debug(&quot;command-line argument -nomouse\n&quot;);
+-	    inputs &amp;= ~2;
+-	  }
+-	else if (!strcmp(argv[i], &quot;-nojoystick&quot;)) 
+-	  {
+-	    log_debug(&quot;command-line argument -nojoystick\n&quot;);
+-	    inputs &amp;= ~4;
+-	  }
+-	else if (!strcmp(argv[i], &quot;-noidle&quot;)) 
+-	  {
+-	    log_debug(&quot;command-line argument -noidle\n&quot;);
+-	    _no_idle = 1;
+-	  }
+-	else if (strstr(argv[i], COMMAND_LINE_SERVER_LONG)) 
+-	  {
+-	    if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_SERVER_LONG)) 
+-	      {
+-		// users can use two formats for the address: an alphanumeric name, like
+-		// &quot;localhost&quot;, or a dotted ip address, like a.b.c.d .  Further, users
+-		// can specify the port here as well, by adding a colon and the number to 
+-		// the end of the address.  
+-		const char * addressStart = strstr(argv[i], COMMAND_LINE_SERVER_LONG) + strlen(COMMAND_LINE_SERVER_LONG);
+-		const char * addressEnd = strstr(addressStart, &quot;:&quot;);
+-		
+-		// user has added a colon, indicating the port.  The port starts at addressEnd
+-		// and goes to the end of argv[i]
+-		if (addressEnd &amp;&amp; strlen(addressEnd) &gt; 1) 
+-		  { 
+-		    // this is +1 to skip the &quot;:&quot;
+-		    serverPort = atoi(addressEnd+1);
+-		  }
+-		serverAddress.clear();
+-		serverAddress.append(addressStart, addressEnd-addressStart);
+-			
+-		log_debug(&quot;commandline specified server as : host=[%s], port=[%u]\n&quot;, serverAddress.c_str(), serverPort);
+-	      }
+-	  }
+-	else if (strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG)) 
+-	  {
+-	    // this is the maximum number of computers that can connect to this program instance. 
+-	    // Used in server mode only, no effect otherwise.
+-	    if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_MAX_CLIENTS_LONG)) 
+-	      {
+-		const char * portStart = strstr(argv[i], COMMAND_LINE_MAX_CLIENTS_LONG) + strlen(COMMAND_LINE_MAX_CLIENTS_LONG);
+-		if (strlen(portStart) &gt; 1) 
+-		  {
+-		    serverMaxClients = atoi(portStart);
+-		  }
+-		log_debug(&quot;commandline specified max clients as: serverMaxClients=[%u]\n&quot;, serverMaxClients);
+-	      }
+-	  }
+-	else if (strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) &amp;&amp; (argc &gt; i + 0)) 
+-	  {
+-	    // this specifies the port this client will listen on.
+-	    // Used in client mode only, no effect otherwise.
+-	    if (strlen(argv[i]) &gt; strlen(COMMAND_LINE_CLIENT_PORT_LONG)) 
+-	      {
+-		const char * clientportStart = strstr(argv[i], COMMAND_LINE_CLIENT_PORT_LONG) + strlen(COMMAND_LINE_CLIENT_PORT_LONG);
+-		if (strlen(clientportStart) &gt; 1) 
+-		  {
+-		    clientPort = atoi(clientportStart);
+-		  }
+-		log_debug(&quot;commandline specified client port as : port=[%u]\n&quot;, clientPort);
+-	      }
+-	  }
+-	else if (!strcmp(argv[i], &quot;-play&quot;) &amp;&amp; (argc &gt; i + 2)) 
+-	  {
+-	    log_debug(&quot;command-line argument -play\n&quot;);
+-	    auto_play = argv[i+1];
+-	    auto_param = argv[i+2];
+-	    i += 2;
+-	    if ((argc &gt; i + 0) &amp;&amp; (argv[i][0] != '-')) 
+-	      {
+-		auto_port = atoi(argv[i]);
+-		i += 1;
+-	      }
+-	  }
+-	else 
+-	  {
+-	    log_debug(&quot;unrecognized command-line argument:&quot;);
+-	    log_debug(argv[i]);
+-	    log_debug(&quot;\n&quot;);
+-	  }
+-      }
+-    
+-    log_debug(&quot;command-line arguments parsed\n&quot;);
+-    
+-    srand(time(NULL));
+-    set_color_conversion(COLORCONV_KEEP_TRANS);
+-    
+-    videosystem-&gt;set_resolution(screen_width, screen_height, screen_bpp, fullscreen);
+-    register_bitmap_file_type(&quot;jpg&quot;, load_jpg, NULL);
+-    
+-    if(!theme)
++      if(!theme)
+ 	theme = agup_theme_by_name(&quot;Photon&quot;);
+-    agup_init(theme);    
+-    gui_shadow_box_proc = d_agup_shadow_box_proc;
+-    gui_ctext_proc = d_agup_ctext_proc;
+-    gui_button_proc = d_agup_button_proc;
+-    gui_edit_proc = d_agup_edit_proc;
+-    gui_list_proc = d_agup_list_proc;
+-    gui_text_list_proc = d_agup_text_list_proc;
++      agup_init(theme);    
++      gui_shadow_box_proc = d_agup_shadow_box_proc;
++      gui_ctext_proc = d_agup_ctext_proc;
++      gui_button_proc = d_agup_button_proc;
++      gui_edit_proc = d_agup_edit_proc;
++      gui_list_proc = d_agup_list_proc;
++      gui_text_list_proc = d_agup_text_list_proc;
+ 
+-    enable_input(inputs);
++      enable_input(inputs);
+     
+-    SoundSystem sound(sound_enabled);
+-    tw_sound = &sound;
+-    tw_sound-&gt;set_sound_volume(tw_sound-&gt;load_sound_volume());
+-    tw_sound-&gt;set_music_volume(tw_sound-&gt;load_music_volume());
++      SoundSystem sound(sound_enabled);
++      tw_sound = &sound;
++      tw_sound-&gt;set_sound_volume(tw_sound-&gt;load_sound_volume());
++      tw_sound-&gt;set_music_volume(tw_sound-&gt;load_music_volume());
+     
+-    showLoadingScreen();
++      showLoadingScreen();
+     
+-    View *v = NULL;
+-    v = get_view ( get_config_string(&quot;View&quot;, &quot;View&quot;, NULL) , NULL );
+-    if (!v) v = get_view ( &quot;Hero&quot;, NULL );
+-    set_view(v);
+-    init_ships();
+-    init_fleet();
++      View *v = NULL;
++      v = get_view ( get_config_string(&quot;View&quot;, &quot;View&quot;, NULL) , NULL );
++      if (!v) v = get_view ( &quot;Hero&quot;, NULL );
++      set_view(v);
++      init_ships();
++      init_fleet();
+     
+-    if (auto_play) {// FIX ME
+-      if (!strcmp(auto_play, &quot;game&quot;)) play_game(auto_param, NULL);
+-    }
+-    else {
+-      mainmenu.preinit();
+-      mainmenu.init(&amp;videosystem-&gt;window);
+-      mainmenu.doit();
+-      mainmenu.deinit();
+-    }
+-
+-    if(game)
+-      {
+-	delete game;
+-	game = NULL;
++      if (auto_play) {// FIX ME
++	if (!strcmp(auto_play, &quot;game&quot;)) play_game(auto_param, NULL);
+       }
+-    disable_input(); 
+-  }
++      else {
++	mainmenu.preinit();
++	mainmenu.init(&amp;videosystem-&gt;window);
++	mainmenu.doit();
++	mainmenu.deinit();
++      }
++
++      if(game)
++	{
++	  delete game;
++	  game = NULL;
++	}
++      disable_input(); 
++    }
+   catch (int i) {
+     if (i == -1) 
+       throw;
+@@ -974,7 +967,7 @@
+     if (__error_flag &amp; 1) throw;
+     tw_error(&quot;Ack!!!\nAn error occured on startup!\nBut I don't know what error!&quot;);
+     if (__error_flag &amp; 1) throw;
+-	}
++  }
+   
+   tw_exit(0);
+   return 0;
+@@ -1042,21 +1035,21 @@
+   }
+     break;
+   case MELEE_EX_DIALOG_PLAY_NET1SERVER: {
+-			const char *gname = select_game_menu();
+-			if (gname) play_net1server(gname);
+-		}
+-		break;
+-		case MELEE_EX_DIALOG_PLAY_NET1CLIENT: {
+-			play_net1client();
+-		}
+-		break;
++    const char *gname = select_game_menu();
++    if (gname) play_net1server(gname);
++  }
++    break;
++  case MELEE_EX_DIALOG_PLAY_NET1CLIENT: {
++    play_net1client();
++  }
++    break;
+   case MELEE_EX_DIALOG_DIAGNOSTICS: {
+     show_diagnostics();
+   }
+     break;
+   case MELEE_EX_DIALOG_LICENSE:
+-  	  show_file(COPYING_FILE);
+-  	  break;
++    show_file(COPYING_FILE);
++    break;
+   case MELEE_EX_DIALOG_SHIPINFO:
+     ship_view_dialog(0, reference_fleet);
+     break;
+@@ -1064,7 +1057,7 @@
+     keyjamming_tester();
+   }
+     break;
+-	}
++  }
+   showTitle();
+   return;
+ }
+@@ -1134,20 +1127,20 @@
+ }
+ 
+ /*
+- *** TEAMS dialog section - end
+- */
++*** TEAMS dialog section - end
++*/
+ 
+ 
+ 
+ 
+ /*
+- *** FLEET dialog section - begin
+- */
++*** FLEET dialog section - begin
++*/
+ 
+ 
+ char *numeric_string[] = {&quot;Zero&quot;, &quot;One&quot;, &quot;Two&quot;, &quot;Three&quot;, &quot;Four&quot;, 
+-		&quot;Five&quot;, &quot;Six&quot;, &quot;Seven&quot;, &quot;Eight&quot;, &quot;Nine&quot;, &quot;Ten&quot;, &quot;Eleven&quot;, 
+-		&quot;Twelve&quot;};
++			  &quot;Five&quot;, &quot;Six&quot;, &quot;Seven&quot;, &quot;Eight&quot;, &quot;Nine&quot;, &quot;Ten&quot;, &quot;Eleven&quot;, 
++			  &quot;Twelve&quot;};
+ 
+ char fleetPlayer[18];
+ char fleetTitleString[100];
+@@ -1159,34 +1152,34 @@
+ 
+ int d_check_proc_fleeteditor(int msg, DIALOG *d, int c)
+ {
+-	if (msg == MSG_CLICK)
+-	{
++  if (msg == MSG_CLICK)
++    {
+ 		
+-		/* track the mouse until it is released */
+-		while (gui_mouse_b()) {
+-//			state2 = ((gui_mouse_x() &gt;= d-&gt;x) &amp;&amp; (gui_mouse_y() &gt;= d-&gt;y) &amp;&amp;
+-//				(gui_mouse_x() &lt; d-&gt;x + d-&gt;w) &amp;&amp; (gui_mouse_y() &lt; d-&gt;y + d-&gt;h));
++      /* track the mouse until it is released */
++      while (gui_mouse_b()) {
++	//			state2 = ((gui_mouse_x() &gt;= d-&gt;x) &amp;&amp; (gui_mouse_y() &gt;= d-&gt;y) &amp;&amp;
++	//				(gui_mouse_x() &lt; d-&gt;x + d-&gt;w) &amp;&amp; (gui_mouse_y() &lt; d-&gt;y + d-&gt;h));
+ 			
+-			/* let other objects continue to animate */
+-			broadcast_dialog_message(MSG_IDLE, 0);
+-		}
++	/* let other objects continue to animate */
++	broadcast_dialog_message(MSG_IDLE, 0);
++      }
+ 		
+-		/* should we close the dialog? */
+-		// imo the following mucho better/ simplere than that messy stuff in the allegro routine
+-		// ... check d_button_proc in guiproc.c in the allegro sources...
++      /* should we close the dialog? */
++      // imo the following mucho better/ simplere than that messy stuff in the allegro routine
++      // ... check d_button_proc in guiproc.c in the allegro sources...
+ 
+-		if (d-&gt;flags &amp; D_SELECTED)
+-			d-&gt;flags &amp;= ~D_SELECTED;
+-		else
+-			d-&gt;flags |= D_SELECTED;
++      if (d-&gt;flags &amp; D_SELECTED)
++	d-&gt;flags &amp;= ~D_SELECTED;
++      else
++	d-&gt;flags |= D_SELECTED;
+ 
+-		if ( d-&gt;flags &amp; D_EXIT)
+-			return D_CLOSE;
++      if ( d-&gt;flags &amp; D_EXIT)
++	return D_CLOSE;
+ 
+-		return D_O_K; 
+-	}
++      return D_O_K; 
++    }
+ 	
+-	return d_agup_check_proc(msg, d, 0);
++  return d_agup_check_proc(msg, d, 0);
+ }
+ 
+ 
+@@ -1195,217 +1188,217 @@
+ 
+ // FLEET - dialog function
+ void edit_fleet(int player) {STACKTRACE
+-	char tmp[40];
+-	char path[80];
+-    char fleetCostString[80] = &quot;&quot;;
+-    char maxFleetCostString[80] = &quot;&quot;;
+-    bool availableFleetDirty = true;
++			       char tmp[40];
++ char path[80];
++ char fleetCostString[80] = &quot;&quot;;
++ char maxFleetCostString[80] = &quot;&quot;;
++ bool availableFleetDirty = true;
+ 
+-    static Fleet::SortingMethod sortMethod1 = (Fleet::SortingMethod) Fleet::SORTING_METHOD_DEFAULT,
+-        sortMethod2 = (Fleet::SortingMethod) Fleet::SORTING_METHOD_DEFAULT;
+-    static bool sortAscending1 = false,
+-        sortAscending2 = false;
++ static Fleet::SortingMethod sortMethod1 = (Fleet::SortingMethod) Fleet::SORTING_METHOD_DEFAULT,
++   sortMethod2 = (Fleet::SortingMethod) Fleet::SORTING_METHOD_DEFAULT;
++ static bool sortAscending1 = false,
++   sortAscending2 = false;
+ 
+ 
+-	sprintf (tmp, &quot;Player%d&quot;, player+1);
+-	Fleet* fleet = new Fleet();
+-	fleet-&gt;load(&quot;fleets.ini&quot;, tmp);
++ sprintf (tmp, &quot;Player%d&quot;, player+1);
++ Fleet* fleet = new Fleet();
++ fleet-&gt;load(&quot;fleets.ini&quot;, tmp);
+ 
+-	if (player + 1 &lt;= 12)
+-		sprintf(fleetPlayer, &quot;Player %s Fleet&quot;, numeric_string[player+1]);
+-	else sprintf(fleetPlayer, &quot;Player%d Fleet&quot;, player+1);
+-	showTitle();
++ if (player + 1 &lt;= 12)
++   sprintf(fleetPlayer, &quot;Player %s Fleet&quot;, numeric_string[player+1]);
++ else sprintf(fleetPlayer, &quot;Player%d Fleet&quot;, player+1);
++ showTitle();
+ 
+-    int fleetRet;
+-    int selectedSlot;
++ int fleetRet;
++ int selectedSlot;
+ 
+-    fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].dp = fleetCostString;
+-    fleetDialog[FLEET_DIALOG_POINT_LIMIT_BUTTON].dp = maxFleetCostString;
++ fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].dp = fleetCostString;
++ fleetDialog[FLEET_DIALOG_POINT_LIMIT_BUTTON].dp = maxFleetCostString;
+     
+-//	// the reference_fleet is used in the list in a hardcoded way, so over&quot;load&quot; it
+-//    Fleet *old_reference_fleet = reference_fleet;
++ //	// the reference_fleet is used in the list in a hardcoded way, so over&quot;load&quot; it
++ //    Fleet *old_reference_fleet = reference_fleet;
+ 
+-	do {
+-		sprintf(title_str, fleet-&gt;getTitle());
+-		sprintf(fleetTitleString, &quot;%s\n%d points&quot;, fleet-&gt;getTitle(), fleet-&gt;getCost());
++ do {
++   sprintf(title_str, fleet-&gt;getTitle());
++   sprintf(fleetTitleString, &quot;%s\n%d points&quot;, fleet-&gt;getTitle(), fleet-&gt;getCost());
+         
+-        fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].dp3 = fleet;
+-        fleetDialog[FLEET_DIALOG_SORTBY_BUTTON1].dp = Fleet::getSortingMethodName(sortMethod1);
+-        fleetDialog[FLEET_DIALOG_SORTBY_BUTTON2].dp = Fleet::getSortingMethodName(sortMethod2);
++   fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].dp3 = fleet;
++   fleetDialog[FLEET_DIALOG_SORTBY_BUTTON1].dp = Fleet::getSortingMethodName(sortMethod1);
++   fleetDialog[FLEET_DIALOG_SORTBY_BUTTON2].dp = Fleet::getSortingMethodName(sortMethod2);
+ 
+-        sprintf(fleetCostString,&quot;%d&quot;, fleet-&gt;getCost());
+-        if (fleet-&gt;getCost() &gt; fleet-&gt;getMaxCost())
+-            fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].bg = makecol8(255,0,0);
+-        else
+-            fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].bg = 0;
++   sprintf(fleetCostString,&quot;%d&quot;, fleet-&gt;getCost());
++   if (fleet-&gt;getCost() &gt; fleet-&gt;getMaxCost())
++     fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].bg = makecol8(255,0,0);
++   else
++     fleetDialog[FLEET_DIALOG_CURRENT_POINTS_VALUE].bg = 0;
+ 
+-        sprintf(maxFleetCostString,&quot;%d %s&quot;, fleet-&gt;getMaxCost(), 
+-                                            Fleet::getFleetCostName(fleet-&gt;getMaxCost()));
++   sprintf(maxFleetCostString,&quot;%d %s&quot;, fleet-&gt;getMaxCost(), 
++	   Fleet::getFleetCostName(fleet-&gt;getMaxCost()));
+ 
+-        if (sortAscending1)
+-            fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;^&quot;;
+-        else
+-            fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;v&quot;;
++   if (sortAscending1)
++     fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;^&quot;;
++   else
++     fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;v&quot;;
+         
+-        if (sortAscending2)
+-            fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;^&quot;;
+-        else
+-            fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;v&quot;;
++   if (sortAscending2)
++     fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;^&quot;;
++   else
++     fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;v&quot;;
+ 
+-        //if the user has selected a different choice of available ships, regenerate the
+-        //list of available ships
+-        if (availableFleetDirty) {
+-            availableFleetDirty = false;
++   //if the user has selected a different choice of available ships, regenerate the
++   //list of available ships
++   if (availableFleetDirty) {
++     availableFleetDirty = false;
+             
+-            //clear out the fleet
+-            reference_fleet-&gt;reset();
++     //clear out the fleet
++     reference_fleet-&gt;reset();
+ 
+-            for (int c=0; c&lt;num_shiptypes; c++) {
+-                switch (shiptypes[c].origin) { 
+-                case SHIP_ORIGIN_TW:
+-                    if (fleetDialog[FLEET_DIALOG_TW_OFFICIAL_TOGGLE].flags &amp; D_SELECTED)
+-                        reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
+-                    break;
++     for (int c=0; c&lt;num_shiptypes; c++) {
++       switch (shiptypes[c].origin) { 
++       case SHIP_ORIGIN_TW:
++	 if (fleetDialog[FLEET_DIALOG_TW_OFFICIAL_TOGGLE].flags &amp; D_SELECTED)
++	   reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
++	 break;
+                 
+-                case SHIP_ORIGIN_UQM:
+-                    if (fleetDialog[FLEET_DIALOG_TW_EXP_TOGGLE].flags &amp; D_SELECTED)
+-                        reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
+-                    break;
++       case SHIP_ORIGIN_UQM:
++	 if (fleetDialog[FLEET_DIALOG_TW_EXP_TOGGLE].flags &amp; D_SELECTED)
++	   reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
++	 break;
+ 
+-                case SHIP_ORIGIN_TW_SPECIAL:
+-                    if (fleetDialog[FLEET_DIALOG_TW_SPECIAL_TOGGLE].flags &amp; D_SELECTED)
+-                        reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
+-                    break;
+-                }
+-            }
+-            reference_fleet-&gt;Sort( sortMethod1, sortAscending1 );
+-            fleetDialog[FLEET_DIALOG_AVAILABLE_SHIPS_LIST].flags |= D_DIRTY;
+-        }/**/
++       case SHIP_ORIGIN_TW_SPECIAL:
++	 if (fleetDialog[FLEET_DIALOG_TW_SPECIAL_TOGGLE].flags &amp; D_SELECTED)
++	   reference_fleet-&gt;addShipType(&amp;shiptypes[c]);
++	 break;
++       }
++     }
++     reference_fleet-&gt;Sort( sortMethod1, sortAscending1 );
++     fleetDialog[FLEET_DIALOG_AVAILABLE_SHIPS_LIST].flags |= D_DIRTY;
++   }/**/
+ 
+-		fleetRet = tw_do_dialog(NULL, fleetDialog, -1);
++   fleetRet = tw_do_dialog(NULL, fleetDialog, -1);
+ 
+-        switch( fleetRet ) {
+-           case FLEET_DIALOG_AVAILABLE_SHIPS_TEXT: break;
+-           case FLEET_DIALOG_SHIP_CATAGORIES_TEXT: break;
++   switch( fleetRet ) {
++   case FLEET_DIALOG_AVAILABLE_SHIPS_TEXT: break;
++   case FLEET_DIALOG_SHIP_CATAGORIES_TEXT: break;
+ 
+-           case FLEET_DIALOG_TW_OFFICIAL_TOGGLE:
+-           case FLEET_DIALOG_TW_EXP_TOGGLE:
+-           case FLEET_DIALOG_TW_SPECIAL_TOGGLE:
+-               availableFleetDirty = true;
+-			   break;
++   case FLEET_DIALOG_TW_OFFICIAL_TOGGLE:
++   case FLEET_DIALOG_TW_EXP_TOGGLE:
++   case FLEET_DIALOG_TW_SPECIAL_TOGGLE:
++     availableFleetDirty = true;
++     break;
+ 
+-           case FLEET_DIALOG_SORTBY_TEXT1: break;
+-           case FLEET_DIALOG_SORTBY_BUTTON1: 
+-               sortMethod1 = Fleet::cycleSortingMethod(sortMethod1);
+-               reference_fleet-&gt;Sort( sortMethod1, sortAscending1 );
+-               fleetDialog[FLEET_DIALOG_SORTBY_BUTTON1].dp = Fleet::getSortingMethodName(sortMethod1);
+-               break;
++   case FLEET_DIALOG_SORTBY_TEXT1: break;
++   case FLEET_DIALOG_SORTBY_BUTTON1: 
++     sortMethod1 = Fleet::cycleSortingMethod(sortMethod1);
++     reference_fleet-&gt;Sort( sortMethod1, sortAscending1 );
++     fleetDialog[FLEET_DIALOG_SORTBY_BUTTON1].dp = Fleet::getSortingMethodName(sortMethod1);
++     break;
+ 
+-           case FLEET_DIALOG_SORTBY_ASCENDING1: 
+-               sortAscending1 = 1 - sortAscending1;
+-               reference_fleet-&gt;Sort( sortMethod1, sortAscending1 );
+-               if (sortAscending1)
+-                   fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;^&quot;;
+-               else
+-                   fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;v&quot;;
+-               break;
++   case FLEET_DIALOG_SORTBY_ASCENDING1: 
++     sortAscending1 = 1 - sortAscending1;
++     reference_fleet-&gt;Sort( sortMethod1, sortAscending1 );
++     if (sortAscending1)
++       fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;^&quot;;
++     else
++       fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING1].dp = (void *)&quot;v&quot;;
++     break;
+ 
+            
+            
+ 
+-           case FLEET_DIALOG_AVAILABLE_SHIPS_LIST:
+-           case FLEET_DIALOG_ADD_BUTTON: 
+-			   int k;
+-			   k = fleetDialog[FLEET_DIALOG_AVAILABLE_SHIPS_LIST].d1;
+-			   if (k &lt; 0 || k &gt;= reference_fleet-&gt;getSize()) {tw_error(&quot;invalid ship choice - bug&quot;);}
++   case FLEET_DIALOG_AVAILABLE_SHIPS_LIST:
++   case FLEET_DIALOG_ADD_BUTTON: 
++     int k;
++     k = fleetDialog[FLEET_DIALOG_AVAILABLE_SHIPS_LIST].d1;
++     if (k &lt; 0 || k &gt;= reference_fleet-&gt;getSize()) {tw_error(&quot;invalid ship choice - bug&quot;);}
+ 
+-               selectedSlot = fleet-&gt;addShipType(reference_fleet-&gt;getShipType(k));
+-               if (selectedSlot != -1)
+-                   fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1 = selectedSlot;
++     selectedSlot = fleet-&gt;addShipType(reference_fleet-&gt;getShipType(k));
++     if (selectedSlot != -1)
++       fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1 = selectedSlot;
+                
+-               break;
++     break;
+ 
+-           case FLEET_DIALOG_PLAYER_FLEET_BUTTON: break;
++   case FLEET_DIALOG_PLAYER_FLEET_BUTTON: break;
+ 
+-           case FLEET_DIALOG_PLAYER_FLEET_TITLE:               
+-               if(do_dialog(fleet_titleDialog, FLEET_TITLE_DIALOG_BOX) == FLEET_TITLE_DIALOG_OK)
+-                   sprintf(fleet-&gt;getTitle(), title_str);
+-               showTitle();
+-               break;
++   case FLEET_DIALOG_PLAYER_FLEET_TITLE:               
++     if(do_dialog(fleet_titleDialog, FLEET_TITLE_DIALOG_BOX) == FLEET_TITLE_DIALOG_OK)
++       sprintf(fleet-&gt;getTitle(), title_str);
++     showTitle();
++     break;
+ 
+-           case FLEET_DIALOG_SAVE_BUTTON: 
+-               sprintf(path, &quot;fleets/&quot;);
+-               if(file_select(&quot;Save Fleet&quot;, path, &quot;scf&quot;)) fleet-&gt;save(path, &quot;Fleet&quot;);
+-               showTitle();
+-               break;
++   case FLEET_DIALOG_SAVE_BUTTON: 
++     sprintf(path, &quot;fleets/&quot;);
++     if(file_select(&quot;Save Fleet&quot;, path, &quot;scf&quot;)) fleet-&gt;save(path, &quot;Fleet&quot;);
++     showTitle();
++     break;
+ 
+-           case FLEET_DIALOG_LOAD_BUTTON: 
+-               sprintf(path, &quot;fleets/&quot;);
+-               if(file_select(&quot;Load Fleet&quot;, path, &quot;scf&quot;)) fleet-&gt;load(path, &quot;Fleet&quot;);
+-               sprintf(title_str, fleet-&gt;getTitle());
+-               sprintf(fleetTitleString, &quot;%s\n%d points&quot;, fleet-&gt;getTitle(), fleet-&gt;getCost());
+-               showTitle();
+-               break;
++   case FLEET_DIALOG_LOAD_BUTTON: 
++     sprintf(path, &quot;fleets/&quot;);
++     if(file_select(&quot;Load Fleet&quot;, path, &quot;scf&quot;)) fleet-&gt;load(path, &quot;Fleet&quot;);
++     sprintf(title_str, fleet-&gt;getTitle());
++     sprintf(fleetTitleString, &quot;%s\n%d points&quot;, fleet-&gt;getTitle(), fleet-&gt;getCost());
++     showTitle();
++     break;
+ 
+-           case FLEET_DIALOG_POINT_LIMIT_TEXT: break;
++   case FLEET_DIALOG_POINT_LIMIT_TEXT: break;
+ 
+-           case FLEET_DIALOG_POINT_LIMIT_BUTTON:
+-               fleet-&gt;cycleMaxFleetCost();
+-               break;
++   case FLEET_DIALOG_POINT_LIMIT_BUTTON:
++     fleet-&gt;cycleMaxFleetCost();
++     break;
+ 
+-           case FLEET_DIALOG_CURRENT_POINTS_TEXT: break;
+-           case FLEET_DIALOG_CURRENT_POINTS_VALUE: break;
+-           case FLEET_DIALOG_SORTBY_TEXT2: break;
++   case FLEET_DIALOG_CURRENT_POINTS_TEXT: break;
++   case FLEET_DIALOG_CURRENT_POINTS_VALUE: break;
++   case FLEET_DIALOG_SORTBY_TEXT2: break;
+ 
+-           case FLEET_DIALOG_SORTBY_BUTTON2: 
+-               sortMethod2 = Fleet::cycleSortingMethod(sortMethod2);
+-               fleet-&gt;Sort( sortMethod2, sortAscending2 );
+-               fleetDialog[FLEET_DIALOG_SORTBY_BUTTON2].dp = Fleet::getSortingMethodName(sortMethod2);
+-               break;
++   case FLEET_DIALOG_SORTBY_BUTTON2: 
++     sortMethod2 = Fleet::cycleSortingMethod(sortMethod2);
++     fleet-&gt;Sort( sortMethod2, sortAscending2 );
++     fleetDialog[FLEET_DIALOG_SORTBY_BUTTON2].dp = Fleet::getSortingMethodName(sortMethod2);
++     break;
+ 
+-           case FLEET_DIALOG_SORTBY_ASCENDING2: 
+-               sortAscending2 = 1 - sortAscending2;
+-               fleet-&gt;Sort( sortMethod2, sortAscending2 );
+-               if (sortAscending2)
+-                   fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;^&quot;;
+-               else
+-                   fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;v&quot;;
+-               break;
++   case FLEET_DIALOG_SORTBY_ASCENDING2: 
++     sortAscending2 = 1 - sortAscending2;
++     fleet-&gt;Sort( sortMethod2, sortAscending2 );
++     if (sortAscending2)
++       fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;^&quot;;
++     else
++       fleetDialog[FLEET_DIALOG_SORTBY_ASCENDING2].dp = (void *)&quot;v&quot;;
++     break;
+ 
+-           case FLEET_DIALOG_ADD_ALL_BUTTON: 
+-               fleet-&gt;addFleet(reference_fleet);
+-               break;
++   case FLEET_DIALOG_ADD_ALL_BUTTON: 
++     fleet-&gt;addFleet(reference_fleet);
++     break;
+ 
+-	       case FLEET_DIALOG_CLEAR: 
+-           case FLEET_DIALOG_FLEET_SHIPS_LIST: 
+-			fleet-&gt;clear_slot(fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1);
+-            if (fleet-&gt;getSize() &lt;= 0)
+-                fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1 = 0;
+-               break;
++   case FLEET_DIALOG_CLEAR: 
++   case FLEET_DIALOG_FLEET_SHIPS_LIST: 
++     fleet-&gt;clear_slot(fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1);
++     if (fleet-&gt;getSize() &lt;= 0)
++       fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1 = 0;
++     break;
+ 
+-           case FLEET_DIALOG_CLEARALL: 
+-               fleet-&gt;reset();
+-               fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1 = 0;
+-               break;
++   case FLEET_DIALOG_CLEARALL: 
++     fleet-&gt;reset();
++     fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1 = 0;
++     break;
+ 
+-           case FLEET_DIALOG_SHIP_PICTURE_BITMAP: break;
++   case FLEET_DIALOG_SHIP_PICTURE_BITMAP: break;
+            
+-           case FLEET_DIALOG_SHIP_SUMMARY_TEXT: break;
+-           case FLEET_DIALOG_BACK_BUTTON: break;
+-           case FLEET_DIALOG_HELP_TEXT:/**/
+-           default:
+-               ;
+-        }
+-		/*if (fleetRet == FLEET_DIALOG_INFO) {
+-			ship_view_dialog(fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1, reference_fleet);
+-			showTitle();
+-		}*/
++   case FLEET_DIALOG_SHIP_SUMMARY_TEXT: break;
++   case FLEET_DIALOG_BACK_BUTTON: break;
++   case FLEET_DIALOG_HELP_TEXT:/**/
++   default:
++     ;
++   }
++   /*if (fleetRet == FLEET_DIALOG_INFO) {
++     ship_view_dialog(fleetDialog[FLEET_DIALOG_FLEET_SHIPS_LIST].d1, reference_fleet);
++     showTitle();
++     }*/
+ 
+-	} while((fleetRet != FLEET_DIALOG_BACK_BUTTON) &amp;&amp; (fleetRet != -1));
++ } while((fleetRet != FLEET_DIALOG_BACK_BUTTON) &amp;&amp; (fleetRet != -1));
+ 
+-	fleet-&gt;save(&quot;fleets.ini&quot;, tmp);
+-	delete fleet;
+-	showTitle();
++ fleet-&gt;save(&quot;fleets.ini&quot;, tmp);
++ delete fleet;
++ showTitle();
+ }
+ 
+ 
+@@ -1531,20 +1524,20 @@
+ }
+ 
+ int scp_fleet_dialog_bitmap_proc(int msg, DIALOG* d, int c) {
+-	//TODO address this: bitmap has to be deleted, but MSG_END does not mean the dialog isn't coming back
+-    /*if (msg == MSG_END &amp;&amp; d-&gt;dp) {
+-		destroy_bitmap( (BITMAP*)d-&gt;dp );
+-		d-&gt;dp = NULL;
+-	}*/
++  //TODO address this: bitmap has to be deleted, but MSG_END does not mean the dialog isn't coming back
++  /*if (msg == MSG_END &amp;&amp; d-&gt;dp) {
++    destroy_bitmap( (BITMAP*)d-&gt;dp );
++    d-&gt;dp = NULL;
++    }*/
+ 
+-	if ((msg != MSG_DRAW || d-&gt;dp) &amp;&amp; (safeToDrawPreview) )
+-		return d_bitmap_proc(msg, d, c);
+-	return D_O_K;
++  if ((msg != MSG_DRAW || d-&gt;dp) &amp;&amp; (safeToDrawPreview) )
++    return d_bitmap_proc(msg, d, c);
++  return D_O_K;
+ }
+ 
+ /*
+- *** FLEET dialog section - end
+- */
++*** FLEET dialog section - end
++*/
+ 
+ 
+ 
+@@ -1556,8 +1549,8 @@
+ 
+ 
+ /*
+- *** SHIPVIEW dialog section - begin
+- */
++*** SHIPVIEW dialog section - begin
++*/
+ void ship_view_dialog(int si, Fleet *fleet) 
+ {
+   int i;
+@@ -1654,46 +1647,46 @@
+ 	      c += sprintf(c, &quot;Name: %s\n&quot;, type-&gt;name);
+ 	      c += sprintf(c, &quot;ID: %s\n&quot;, type-&gt;id);
+ 	      c += sprintf(c, &quot;Cost: %d\n&quot;, type-&gt;cost);
+-				c += sprintf(c, &quot;\n\n\n\nINI file: (%s)\n&quot;, type-&gt;file);
+-				c += sprintf(c, &quot;-------------------------\n%s&quot;, inifile);
++	      c += sprintf(c, &quot;\n\n\n\nINI file: (%s)\n&quot;, type-&gt;file);
++	      c += sprintf(c, &quot;-------------------------\n%s&quot;, inifile);
+ 				
+-				if (shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp &amp;&amp;
+-					strlen((char*)(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp))&gt;0 )
+-				{
+-					free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
+-					shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = (char*)&quot;&quot;;
+-				}
+-				shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = description;
+-				
+-				if (strlen(inifile) &gt;0)
+-					free(inifile);
+-			}
+-			shipviewDialog[SHIPVIEW_DIALOG_PICTURES+0].dp = sprite;
++	      if (shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp &amp;&amp;
++		  strlen((char*)(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp))&gt;0 )
++		{
++		  free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
++		  shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = (char*)&quot;&quot;;
+ 		}
++	      shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = description;
++				
++	      if (strlen(inifile) &gt;0)
++		free(inifile);
++	    }
++	  shipviewDialog[SHIPVIEW_DIALOG_PICTURES+0].dp = sprite;
++	}
+ 
+-		// change font size - begin
+-		if (r == SHIPVIEW_DIALOG_FONT) {
+-			i = shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1;
+-			i = (((i/2) + 2) % 3) - 1;
+-			shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1 = i*2;
+-		}
+-		// change font size - end
++      // change font size - begin
++      if (r == SHIPVIEW_DIALOG_FONT) {
++	i = shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1;
++	i = (((i/2) + 2) % 3) - 1;
++	shipviewDialog[SHIPVIEW_DIALOG_TWYIELD+1].d1 = i*2;
++      }
++      // change font size - end
+ 
+-		r = tw_do_dialog(NULL, shipviewDialog, SHIPVIEW_DIALOG_LIST);
+-	}
+-	// main dialog loop - end
++      r = tw_do_dialog(NULL, shipviewDialog, SHIPVIEW_DIALOG_LIST);
++    }
++  // main dialog loop - end
+ 
+-	if (sprite)
+-		destroy_bitmap(sprite);
+-	if (shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp &amp;&amp;
+-		strlen((char*)(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp))&gt;0 )
+-	{
+-		shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = NULL;
+-		free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
+-	}
++  if (sprite)
++    destroy_bitmap(sprite);
++  if (shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp &amp;&amp;
++      strlen((char*)(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp))&gt;0 )
++    {
++      shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp = NULL;
++      free(shipviewDialog[SHIPVIEW_DIALOG_DESCRIPTION].dp);
++    }
+ 	
+-	videosystem-&gt;redraw();
+-	return;
++  videosystem-&gt;redraw();
++  return;
+ }
+ 
+ /*
+@@ -1702,30 +1695,30 @@
+ 
+ 
+ int get_diagnostics_string ( char *dest ) {//returns length of string
+-	char * tmp = dest;
++  char * tmp = dest;
+ 
+ #	if defined _DEBUG
+-		tmp += sprintf(tmp, &quot;DEBUGGING BUILD!\n&quot;);
++  tmp += sprintf(tmp, &quot;DEBUGGING BUILD!\n&quot;);
+ #	endif
+-	tmp += sprintf(tmp, &quot;ALLEGRO (.h) version   = Allegro %s, %s\n&quot;, 
+-		ALLEGRO_VERSION_STR, ALLEGRO_PLATFORM_STR);
+-	tmp += sprintf(tmp, &quot;ALLEGRO (.dll) version = %s\n&quot;, allegro_id);
+-	tmp += sprintf(tmp, &quot;Compiler = &quot;);
++  tmp += sprintf(tmp, &quot;ALLEGRO (.h) version   = Allegro %s, %s\n&quot;, 
++		 ALLEGRO_VERSION_STR, ALLEGRO_PLATFORM_STR);
++  tmp += sprintf(tmp, &quot;ALLEGRO (.dll) version = %s\n&quot;, allegro_id);
++  tmp += sprintf(tmp, &quot;Compiler = &quot;);
+ #	if defined __MINGW32__
+-		tmp += sprintf(tmp, &quot;MINGW (gcc)\n&quot;);
++  tmp += sprintf(tmp, &quot;MINGW (gcc)\n&quot;);
+ #	elif defined __BORLANDC__
+-		tmp += sprintf(tmp, &quot;Borland\n&quot;);
++  tmp += sprintf(tmp, &quot;Borland\n&quot;);
+ #	elif defined _MSC_VER
+-		tmp += sprintf(tmp, &quot;Microsoft Visual C++\n&quot;);
++  tmp += sprintf(tmp, &quot;Microsoft Visual C++\n&quot;);
+ #	elif defined DJGPP
+-		tmp += sprintf(tmp, &quot;DJGPP (gcc)\n&quot;);
++  tmp += sprintf(tmp, &quot;DJGPP (gcc)\n&quot;);
+ #	elif defined __GNUC__
+-		tmp += sprintf(tmp, &quot;gcc\n&quot;);
++  tmp += sprintf(tmp, &quot;gcc\n&quot;);
+ #	else
+-		tmp += sprintf(tmp, &quot;???\n&quot;);
++  tmp += sprintf(tmp, &quot;???\n&quot;);
+ #	endif
+-	tmp += sprintf(tmp, &quot;Version = %s\n&quot;, tw_version().c_str());
+-	return tmp - dest;
++  tmp += sprintf(tmp, &quot;Version = %s\n&quot;, tw_version().c_str());
++  return tmp - dest;
+ }
+ 
+ // DIAGNOSTICS - dialog function
+@@ -1816,26 +1809,26 @@
+ 
+ 
+ char *playerListboxGetter(int index, int *list_size) {
+-	static char buf[160];
+-	char *tmp = buf;
++  static char buf[160];
++  char *tmp = buf;
+ 
+-	tmp[0] = 0;
+-	if(index &lt; 0) {
+-		*list_size = MAX_PLAYERS;
+-		return NULL;
+-	} else {
+-		tmp += sprintf(tmp, &quot;Player%d&quot;, index + 1);
+-		if (index + 1 &lt; 10) tmp += sprintf(tmp, &quot; &quot;);
+-		tmp += sprintf(tmp, &quot;   %d   %d   %s&quot;, player_team[index], player_config[index], player_type[index]);
+-		if ((strlen(buf) &gt;= 80)) tw_error(&quot;playerListboxGetter string too long&quot;);
+-		return buf;
+-	}
++  tmp[0] = 0;
++  if(index &lt; 0) {
++    *list_size = MAX_PLAYERS;
++    return NULL;
++  } else {
++    tmp += sprintf(tmp, &quot;Player%d&quot;, index + 1);
++    if (index + 1 &lt; 10) tmp += sprintf(tmp, &quot; &quot;);
++    tmp += sprintf(tmp, &quot;   %d   %d   %s&quot;, player_team[index], player_config[index], player_type[index]);
++    if ((strlen(buf) &gt;= 80)) tw_error(&quot;playerListboxGetter string too long&quot;);
++    return buf;
++  }
+ }
+ 
+ char *controlListboxGetter(int index, int *list_size) {
+-	static char tmp[40];
++  static char tmp[40];
+ 
+-	tmp[0] = 0;
++  tmp[0] = 0;
+   if(index &lt; 0) {
+     *list_size = num_controls;
+     return NULL;
+@@ -1847,20 +1840,20 @@
+ /*
+   Path Configuration
+ 
+- */
++*/
+ 
+ std::string home_ini_full_path(std::string path)
+ {
+   char * home = getenv(&quot;HOME&quot;);
+   char dest[2040] = {0};
+   if(home == NULL)
+-   {
+-     if(strstr(path.c_str(), DATAFILE_PATH))
+-       return path;
+-     std::string pth = append_filename(dest, DATAFILE_PATH, &quot;default_ini&quot;, 2039);
+-     append_filename(dest, pth.c_str(), path.c_str(), 2039);
+-     return std::string(dest);
+-   }
++    {
++      if(strstr(path.c_str(), DATAFILE_PATH))
++	return path;
++      std::string pth = append_filename(dest, DATAFILE_PATH, &quot;default_ini&quot;, 2039);
++      append_filename(dest, pth.c_str(), path.c_str(), 2039);
++      return std::string(dest);
++    }
+   else
+     {
+       if(strstr(path.c_str(), home))
+@@ -1911,7 +1904,7 @@
+   const char * ship_name = get_filename(filename);
+   std::string home_file = home_ini_full_path(std::string(&quot;ships/&quot;) + ship_name);
+   if(!exists(home_file.c_str()))
+-     CopyFile(filename, home_file.c_str());
++    CopyFile(filename, home_file.c_str());
+   
+   tw_set_config_file(home_file);
+   int version = get_config_int(&quot;Info&quot;, &quot;Version&quot;, -1);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000059.html">[Tw-light-svn] r113 - in trunk: doc source source/melee
+</A></li>
+	<LI>Next message: <A HREF="000061.html">[Tw-light-svn] r115 - trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

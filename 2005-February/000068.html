@@ -1,0 +1,679 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r122 - in trunk: . gamedata gamedata/xml gamedata/xml/GOB gamedata/xslt source source/games source/melee source/other
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r122%20-%20in%20trunk%3A%20.%20gamedata%20gamedata/xml%20gamedata/xml/GOB%20gamedata/xslt%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200502261150.j1QBom9A002090%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000067.html">
+   <LINK REL="Next"  HREF="000069.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r122 - in trunk: . gamedata gamedata/xml gamedata/xml/GOB gamedata/xslt source source/games source/melee source/other</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r122%20-%20in%20trunk%3A%20.%20gamedata%20gamedata/xml%20gamedata/xml/GOB%20gamedata/xslt%20source%20source/games%20source/melee%20source/other&In-Reply-To=%3C200502261150.j1QBom9A002090%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r122 - in trunk: . gamedata gamedata/xml gamedata/xml/GOB gamedata/xslt source source/games source/melee source/other">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat Feb 26 12:50:48 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000067.html">[Tw-light-svn] r121 - in trunk: . source source/games source/melee source/other
+</A></li>
+        <LI>Next message: <A HREF="000069.html">[Tw-light-svn] r123 - in trunk: gamedata/xml/GOB gamedata/xslt source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#68">[ date ]</a>
+              <a href="thread.html#68">[ thread ]</a>
+              <a href="subject.html#68">[ subject ]</a>
+              <a href="author.html#68">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-26 12:50:40 +0100 (Sat, 26 Feb 2005)
+New Revision: 122
+
+Added:
+   trunk/gamedata/xml/
+   trunk/gamedata/xml/GOB/
+   trunk/gamedata/xml/GOB/start.xml
+   trunk/gamedata/xslt/
+   trunk/gamedata/xslt/load.xsl
+Modified:
+   trunk/makefile
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/other/gup.cpp
+   trunk/source/scp.cpp
+   trunk/sources.lst
+Log:
+Adding XSLT support, linux only version for now,
+It is possible to customize GOB game object using
+gamedata/xml/GOB/start.xml now.
+ 
+
+
+Added: trunk/gamedata/xml/GOB/start.xml
+===================================================================
+--- trunk/gamedata/xml/GOB/start.xml	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/gamedata/xml/GOB/start.xml	2005-02-26 11:50:40 UTC (rev 122)
+@@ -0,0 +1,55 @@
++&lt;GOB&gt;
++  &lt;Area x=&quot;24000&quot; y=&quot;24000&quot;&gt;
++  &lt;SpaceObjects&gt;
++    &lt;Planet_with_station
++      planet_index=&quot;0&quot;
++      datafile=&quot;gob.dat&quot;
++      stationSprite=&quot;station0sprite&quot;
++      station_pic_name=&quot;gob.dat#station0picture.bmp&quot;
++      station_build_name=&quot;supbl&quot;
++    /&gt;
++    &lt;Planet_with_station
++      planet_index=&quot;1&quot;
++      datafile=&quot;gob.dat&quot;
++      stationSprite=&quot;station1sprite&quot;
++      station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
++      station_build_name=&quot;orzne&quot;
++    /&gt;
++    &lt;Planet_with_station
++      planet_index=&quot;2&quot;
++      datafile=&quot;gob.dat&quot;
++      stationSprite=&quot;station2sprite&quot;
++      station_pic_name=&quot;gob.dat#station2picture.bmp&quot;
++      station_build_name=&quot;kohma&quot;
++    /&gt;
++    &lt;Planet_with_station
++      planet_index=&quot;1&quot;
++      datafile=&quot;gob.dat&quot;
++      stationSprite=&quot;station1sprite&quot;
++      station_pic_name=&quot;gob.dat#station1picture.bmp&quot;
++      station_build_name=&quot;utwju&quot;
++    /&gt;
++    &lt;NEW_ENEMY/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++    &lt;GobAsteroid/&gt;
++  &lt;/SpaceObjects&gt;
++  &lt;/Area&gt;
++&lt;/GOB&gt;
+\ No newline at end of file
+
+Added: trunk/gamedata/xslt/load.xsl
+===================================================================
+--- trunk/gamedata/xslt/load.xsl	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/gamedata/xslt/load.xsl	2005-02-26 11:50:40 UTC (rev 122)
+@@ -0,0 +1,38 @@
++&lt;xsl:stylesheet version=&quot;1.0&quot;
++  xmlns:xsl=&quot;<A HREF="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</A>&quot;
++  xmlns:tw=&quot;<A HREF="http://tw-light.berlios.de">http://tw-light.berlios.de</A>&quot;&gt;
++
++
++&lt;xsl:template match=&quot;*&quot;&gt;
++  &lt;xsl:apply-templates/&gt;
++&lt;/xsl:template&gt;
++
++&lt;xsl:template match=&quot;Area&quot;&gt;
++  &lt;xsl:value-of select=&quot;tw:SetMapSize(@<A HREF="https://lists.berlios.de/mailman/listinfo/tw-light-svn">x, at y</A>)&quot;/&gt;
++  &lt;xsl:apply-templates/&gt;    
++&lt;/xsl:template&gt;
++
++&lt;!-- Call game::prepare before adding space objects --&gt;
++&lt;xsl:template match=&quot;SpaceObjects&quot;&gt;
++    &lt;xsl:value-of select=&quot;tw:prepare()&quot;/&gt; 
++    &lt;xsl:value-of select=&quot;tw:AddStars()&quot;/&gt;	
++    &lt;xsl:apply-templates/&gt;
++&lt;/xsl:template&gt;
++
++&lt;xsl:template match=&quot;GobAsteroid&quot;&gt;
++   &lt;xsl:value-of select=&quot;tw:AddGobAsteroid()&quot;/&gt;
++&lt;/xsl:template&gt;
++
++&lt;xsl:template match=&quot;NEW_ENEMY&quot;&gt;
++    &lt;xsl:value-of select=&quot;tw:AddNewEnemy()&quot;/&gt;
++&lt;/xsl:template&gt;
++
++&lt;xsl:template match=&quot;Planet_with_station&quot;&gt;
++    &lt;xsl:value-of select=&quot;tw:AddPlanetWithStation(@planet_index,
++                                                  @datafile,
++						  @stationSprite,
++						  @station_pic_name,
++						  @station_build_name)&quot;/&gt;
++&lt;/xsl:template&gt;
++
++&lt;/xsl:stylesheet&gt;
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/makefile	2005-02-26 11:50:40 UTC (rev 122)
+@@ -76,7 +76,7 @@
+ CFLAGS += -DTW_SVNVERSION=\&quot;$(SVNVERSION)\&quot;
+ 
+ VPATH = tests source source/libraries/agup source/ais source/games \
+-        source/melee source/tests \
++        source/melee source/tests source/xslt \
+         source/other source/ships source/sc1ships source/sc2ships \
+         source/util source/libraries/alogg \
+         source/libraries/jpgalleg source/libraries/jgmod source/libraries/cppunit \
+@@ -121,9 +121,9 @@
+ 	TIMESTAMP = ${shell LC_TIME=&quot;POSIX&quot; date +%c}
+ 	EXPDIR=tw-light-$(PRODUCTVERSION)r$(SVNVERSION)
+ 	CFLAGS += -DLINUX
+-	INCLUDES := ${shell allegro-config --cflags} ${shell sdl-config --cflags} 
++	INCLUDES := ${shell allegro-config --cflags} ${shell sdl-config --cflags} ${shell xslt-config --cflags} ${shell xmlwrapp-config --cflags} 
+ 	CFLAGS += $(INCLUDES)
+-	LIBS_CONFIG := ${shell allegro-config --libs} -pthread ${shell sdl-config --libs} 
++	LIBS_CONFIG := ${shell allegro-config --libs} -pthread ${shell sdl-config --libs} ${shell xslt-config --libs}  ${shell xmlwrapp-config --libs} 
+ 	LIBS += $(LIBS_CONFIG)
+ endif
+ 
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/source/games/ggob.cpp	2005-02-26 11:50:40 UTC (rev 122)
+@@ -91,13 +91,6 @@
+   max_enemies = 0;
+   gobenemy = NULL;
+ 
+-  int i;
+-  for (i = 0; i &lt; 3; i += 1)
+-    stationSprite[i] = NULL;
+-  for (i = 0; i &lt; 3; i += 1)
+-    station_pic_name[i] = NULL;
+-  for (i = 0; i &lt; 3; i += 1)
+-    station_build_name[i] = NULL;
+   defenderSprite = NULL;
+ }
+ 
+@@ -111,8 +104,11 @@
+     }
+   if (done) 
+     {
+-      setGameDone(GAME_STATE_FINISHED );
+-      tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
++      if(_game_state != GAME_STATE_FINISHED)
++	{
++	  setGameDone(GAME_STATE_FINISHED );
++	  tw_alert(&quot;Game Over!\n\nYour ship and its contents are lost!&quot;, &quot;Ok&quot;);
++	}
+     }
+   return GobGameBase::isGameDone();
+ }
+@@ -159,6 +155,19 @@
+   */
+ }
+ 
++SpaceSprite* GobGame::LoadStationSprite(std::string datafile, std::string name)
++{
++  DATAFILE *tmpdata; 
++  tmpdata = load_datafile_object(datafile.c_str(), name.c_str());
++  if (!tmpdata) 
++    {
++      tw_error( (std::string(&quot;couldn't find &quot;) + datafile +  &quot; &quot; + name).c_str() );
++    }
++  SpaceSprite* ss = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED, 64);
++  unload_datafile_object(tmpdata);
++  ss-&gt;permanent_phase_shift(8);  
++  return ss;
++}
+ 
+ void GobGame::init(Log *_log, const std::string&amp; save) 
+ {
+@@ -169,64 +178,16 @@
+   log_file(&quot;server.ini&quot;);
+   max_enemies = get_config_int(&quot;Gob&quot;, &quot;MaxEnemies&quot;, 32);
+   gobenemy = (GobEnemy**) malloc(sizeof(GobEnemy*) * max_enemies);
+-  
+-  size = Vector2(24000, 24000);
+-  
+-  enemy_team = new_team();
+-  
+-  DATAFILE *tmpdata; 
+-  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;station0sprite&quot;);
+-  if (!tmpdata) 
+-    tw_error( &quot;couldn't find gob.dat#station0sprite&quot;);
+-  stationSprite[0] = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED, 64);
+-  unload_datafile_object(tmpdata);
+-  stationSprite[0]-&gt;permanent_phase_shift(8);
+ 
+-  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;station1sprite&quot;);
+-  if (!tmpdata) 
+-    tw_error (&quot;couldn't find gob.dat#station1sprite&quot;);
+-  stationSprite[1] = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED, 64);
+-  unload_datafile_object(tmpdata);
+-  stationSprite[1]-&gt;permanent_phase_shift(8);
+-  
+-  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;station2sprite&quot;);
+-  if (!tmpdata) 
+-    tw_error (&quot;couldn't find gob.dat#station2sprite&quot;);
+-  stationSprite[2] = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED, 64);
+-  unload_datafile_object(tmpdata);
+-  stationSprite[2]-&gt;permanent_phase_shift(8);
+-  
+-  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;defender&quot;);
+-  if (!tmpdata) 
+-    tw_error (&quot;couldn't find gob.dat#defender&quot;);
+-  defenderSprite = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED);
+-  unload_datafile_object(tmpdata);
+-  
++  enemy_team = new_team();
+ 	
+-  station_pic_name[0] = &quot;gob.dat#station0picture.bmp&quot;;
+-  station_pic_name[1] = &quot;gob.dat#station1picture.bmp&quot;;
+-  station_pic_name[2] = &quot;gob.dat#station2picture.bmp&quot;;
+-  station_build_name[0] = &quot;supbl&quot;;
+-  station_build_name[1] = &quot;orzne&quot;;
+-  station_build_name[2] = &quot;kohma&quot;;
+-  
+-  prepare();
++   if(Load(data_full_path(&quot;xml/GOB/start.xml&quot;)) == 1)
++    {
++      tw_error(&quot;unable to locate start.xml&quot;);
++    };
++       
++   //  for (i = 0; i &lt; 19; i += 1) add(new GobAsteroid());
+ 
+-  add(new Stars());
+-	
+-  num_planets = 0;
+-  i = 0;
+-  add_planet_and_station(meleedata.planetSprite, i, 
+-			 stationSprite[i], station_build_name[i], station_pic_name[i]);
+-  i = 1;
+-  add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], station_build_name[i], station_pic_name[i]);
+-  i = 2;
+-  add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], station_build_name[i], station_pic_name[i]);
+-  i = random() % 3;
+-  add_planet_and_station(meleedata.planetSprite, i, stationSprite[i], &quot;utwju&quot;, station_pic_name[i]);
+-  
+-  for (i = 0; i &lt; 19; i += 1) add(new GobAsteroid());
+-
+   int server_players, client_players;
+   tw_set_config_file(&quot;client.ini&quot;);
+   server_players = client_players = get_config_int(&quot;Gob&quot;, &quot;NumPlayers&quot;, 1);
+@@ -257,11 +218,13 @@
+       s-&gt;translate(rotate(Vector2(260, 120), angle));
+       s-&gt;accelerate(s, PI2/3 + angle, 0.17, MAX_SPEED);
+     }
+-  
++
+   for (i = 0; i &lt; gobplayers; i += 1) add ( new RainbowRift() );
+   
+   next_add_new_enemy_time = 1000;
+-  add_new_enemy();
++
++       //  add_new_enemy();
++
+   this-&gt;change_view(&quot;Hero&quot;);
+   view-&gt;window-&gt;locate(
+ 		       0,0,
+@@ -271,10 +234,20 @@
+ 		       );
+   return;
+ }
++
++GobGame::GobGame()
++{
++  DATAFILE *tmpdata; 
++  tmpdata = load_datafile_object(data_full_path(&quot;gob.dat&quot;).c_str(), &quot;defender&quot;);
++  if (!tmpdata) 
++    tw_error (&quot;couldn't find gob.dat#defender&quot;);
++  defenderSprite = new SpaceSprite(tmpdata, 1, SpaceSprite::MASKED | SpaceSprite::MIPMAPED);
++  unload_datafile_object(tmpdata);  
++
++  num_planets = 0;
++}
++
+ GobGame::~GobGame() {
+-  delete stationSprite[0];
+-  delete stationSprite[1];
+-  delete stationSprite[2];
+   delete defenderSprite;
+   int i;
+   for (i = 0; i &lt; gobplayers; i += 1) 
+@@ -290,11 +263,14 @@
+   return;
+ }
+ 
+-void GobGame::add_planet_and_station ( SpaceSprite *planet_sprite, 
+-				       int planet_index, SpaceSprite *station_sprite, 
+-				       const char *builds, const char *background) 
++void GobGame::add_planet_and_station ( int planet_index, 
++				       std::string datafile,
++				       std::string stationSprite,
++				       std::string station_pic_name,
++				       std::string station_build_name
++				       )
+ {
+-  Planet *p = new Planet (size/2, planet_sprite, planet_index);
++  Planet *p = new Planet (size/2, meleedata.planetSprite, planet_index);
+   if (num_planets) while (true) 
+     {
+       SpaceLocation *n;
+@@ -305,7 +281,8 @@
+     }
+   add ( p );
+   
+-  GobStation *gs = new GobStation(station_sprite, p, builds, background);
++  SpaceSprite *station_sprite = LoadStationSprite(data_full_path(datafile), stationSprite);
++  GobStation *gs = new GobStation(station_sprite, p, station_build_name.c_str(), station_pic_name.c_str());
+   gs-&gt;collide_flag_sameship = ALL_LAYERS;
+   gs-&gt;collide_flag_sameteam = ALL_LAYERS;
+   gs-&gt;collide_flag_anyone = ALL_LAYERS;
+@@ -727,7 +704,7 @@
+ 
+   char buffy1[512], buffy2[512];
+   ShipType *otype = s-&gt;ship-&gt;type;
+-  ShipType *ntype = shiptype(build_type);
++  ShipType *ntype = shiptype(_build_type.c_str());
+   if (otype == ntype) 
+     {
+       sprintf (buffy1, &quot;You already have a %s&quot;, ntype-&gt;name);
+@@ -762,12 +739,12 @@
+   return;
+ }
+ 
+-GobStation::GobStation ( SpaceSprite *pic, SpaceLocation *orbit_me, const char *ship, 
+-			 const char *background) : 
++GobStation::GobStation ( SpaceSprite *pic, SpaceLocation *orbit_me, const std::string&amp; ship, 
++			 const std::string&amp; background) : 
+   Orbiter(pic, orbit_me, random() % 200 + 500) 
+ {
+-  build_type = ship;
+-  background_pic = background;
++  _build_type = ship;
++  _background_pic = background;
+   layer = LAYER_CBODIES;
+   mass = 99;
+ }
+@@ -789,10 +766,10 @@
+ void GobStation::station_screen(GobPlayer *s) 
+ {
+   STACKTRACE;
+-  BITMAP *background = load_bitmap(data_full_path(background_pic).c_str(), NULL);
++  BITMAP *background = load_bitmap(data_full_path(_background_pic).c_str(), NULL);
+   if (!background) {
+-    message.print(1000, 15, &quot;%s&quot;, background_pic);
+-    tw_error (&quot;couldn't load station background&quot;);
++    message.print(1000, 15, &quot;%s&quot;, _background_pic.c_str());
++    tw_error ((std::string(&quot;couldn't load station background&quot;) + data_full_path(_background_pic).c_str()).c_str());
+   }
+   game-&gt;window-&gt;lock();
+   aa_set_mode(AA_DITHER);
+@@ -875,10 +852,10 @@
+ 	gobgame-&gt;pause();
+ 	char buffy[256];
+ 	int a;
+-	sprintf(buffy, &quot;First visited station %s at time&quot;, build_type);
++	sprintf(buffy, &quot;First visited station %s at time&quot;, _build_type.c_str());
+ 	a = p-&gt;read_pair(buffy);
+ 	if (a == -1) p-&gt;write_pair(buffy, game-&gt;game_time);
+-	sprintf(buffy, &quot;Visited station %s N times&quot;, build_type);
++	sprintf(buffy, &quot;Visited station %s N times&quot;, _build_type.c_str());
+ 	a = p-&gt;read_pair(buffy);
+ 	if (a == -1) a = 0;
+ 	p-&gt;write_pair(buffy, a+1);
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/source/games/ggob.h	2005-02-26 11:50:40 UTC (rev 122)
+@@ -85,6 +85,7 @@
+ class GobGame : public  GobGameBase
+ {
+  public:
++  GobGame();
+   virtual ~GobGame();
+ 
+   TeamCode enemy_team;
+@@ -112,27 +113,34 @@
+   
+   int next_add_new_enemy_time;
+   
+-  SpaceSprite *stationSprite[3];
+-  char *station_pic_name[3];
+-  char *station_build_name[3];
+   SpaceSprite *defenderSprite;
+ 
+  protected:
++  SpaceSprite* LoadStationSprite(std::string datafile, std::string name);
+   virtual bool handle_key(int k);
+ 
+  public:
+   int num_planets;
+   Planet *planet[16];
+   GobStation *station[16];
+-  void add_planet_and_station ( SpaceSprite *planet_sprite, int planet_index, SpaceSprite *station_sprite, const char *builds, const char *background);
++  //  void add_planet_and_station ( SpaceSprite *planet_sprite, int planet_index, SpaceSprite *station_sprite, const char *builds, const char *background);
++  void add_planet_and_station ( 
++				       int planet_index, 
++				       std::string datafile,
++				       std::string stationSprite,
++				       std::string station_pic_name,
++				       std::string station_build_name
++				);
++
+ };
+ 
+ /// Station where player can buy upgrades and repair his ship
+ class GobStation : public Orbiter {
+  public:
+-  const char *build_type;
+-  const char *background_pic;
+-  GobStation ( SpaceSprite *pic, SpaceLocation *orbit_me, const char *ship, const char *background);
++  std::string _build_type;
++  std::string _background_pic;
++
++  GobStation ( SpaceSprite *pic, SpaceLocation *orbit_me, const std::string&amp; ship, const std::string&amp; background);
+   virtual void buy_new_ship_menu(GobPlayer *s) ;
+   virtual void inflict_damage(SpaceObject *other);
+   virtual void station_screen (GobPlayer *s);
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/source/melee/mgame.cpp	2005-02-26 11:50:40 UTC (rev 122)
+@@ -45,6 +45,7 @@
+ 
+ #include &quot;other/twconfig.h&quot;
+ #include &quot;other/dialogs.h&quot;
++#include &quot;xslt/twexslt.h&quot;
+ 
+ int random_seed[2];
+ 
+@@ -1163,7 +1164,7 @@
+     case KEY_F3:
+       {
+ 	pause();
+-	Load(&quot;&quot;);
++	Load(home_ini_full_path(&quot;save.xml&quot;));
+ 	unpause();
+ 	return true;
+       }
+@@ -1340,6 +1341,21 @@
+ 
+ int Game::Load(std::string xml)
+ {
++  if(!exists(xml.c_str()))
++    return 1;
++
++  // parse the input XML document
++  xml::tree_parser parser(xml.c_str());
++  xml::document &amp;doc = parser.get_document();
++  
++  // parse the stylesheet
++  xslt::stylesheet style(data_full_path(&quot;xslt/load.xsl&quot;).c_str());
++  
++  // transform the XML document using the stylesheet
++  //xml::document &amp;result = style.apply(doc);
++  style.apply(doc);
++
++  //  std::cout &lt;&lt; result;
+   return 0;
+ }
+ 
+
+Modified: trunk/source/other/gup.cpp
+===================================================================
+--- trunk/source/other/gup.cpp	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/source/other/gup.cpp	2005-02-26 11:50:40 UTC (rev 122)
+@@ -372,25 +372,30 @@
+ */
+ 
+ class UpDivineFavor : public Upgrade {
+-	UPGRADE(UpDivineFavor)
+-	bool update(Ship *ship, GobStation *station, GobPlayer *gs) {
+-		name = &quot;Divine Favor (unique)&quot;;
+-		if (strcmp(station-&gt;build_type, &quot;orzne&quot;)) return false;
+-		if (num) return false;
+-		starbucks = 150;
+-		buckazoids = 0;
+-		return true;
+-		}
+-	void execute(Ship *ship, GobStation *station, GobPlayer *gs) {
+-		}
+-	void clear(Ship *oship, Ship *nship, GobPlayer *gs) {
+-		if (!oship) num = 0;
+-		return;
+-		}
+-	void charge(GobPlayer *gs) {
+-		num += 1;
+-		}
+-	} divinefavor;
++  UPGRADE(UpDivineFavor)
++    bool update(Ship *ship, GobStation *station, GobPlayer *gs) 
++  {
++    name = &quot;Divine Favor (unique)&quot;;
++    if (station-&gt;_build_type != &quot;orzne&quot;) 
++      return false;
++    if (num) return false;
++    starbucks = 150;
++    buckazoids = 0;
++    return true;
++  }
++  void execute(Ship *ship, GobStation *station, GobPlayer *gs) 
++  {
++  }
++  void clear(Ship *oship, Ship *nship, GobPlayer *gs) 
++  {
++    if (!oship) num = 0;
++    return;
++  }
++  void charge(GobPlayer *gs) 
++  {
++    num += 1;
++  }
++} divinefavor;
+ 
+ class UpUnholyAura : public Upgrade {
+ 	UPGRADE(UpUnholyAura)
+@@ -426,7 +431,8 @@
+ 	GobDefender *def[6];
+ 	bool update(Ship *ship, GobStation *station, GobPlayer *gs) {
+ 		name = &quot;External Defense System&quot;;
+-		if (strcmp(station-&gt;build_type, &quot;kohma&quot;)) return false;
++		if (station-&gt;_build_type != &quot;kohma&quot;) 
++		  return false;
+ 		if (num &gt;= 6) return false;
+ 		starbucks = 5 + 5 * (num+1) * num;
+ 		buckazoids = 12;
+@@ -462,7 +468,8 @@
+ 	Presence **locater;
+ 	bool update(Ship *ship, GobStation *station, GobPlayer *gs) {
+ 		name = &quot;Planet Locater&quot;;
+-		if (strcmp(station-&gt;build_type, &quot;supbl&quot;)) return false;
++		if (station-&gt;_build_type != &quot;supbl&quot;) 
++		  return false;
+ 		if (num) return false;
+ 		starbucks = 4;
+ 		buckazoids = 5;
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/source/scp.cpp	2005-02-26 11:50:40 UTC (rev 122)
+@@ -36,6 +36,13 @@
+ 
+ #include &quot;tests/testmain.h&quot;
+ 
++#include &lt;xsltwrapp/xsltwrapp.h&gt;
++
++// standard includes
++#include &lt;iostream&gt;
++#include &lt;exception&gt;
++#include &quot;xslt/twexslt.h&quot;
++
+ #ifdef ALLEGRO_MSVC
+ #pragma warning (disable:4786)
+ #endif
+@@ -719,6 +726,10 @@
+       return RunTests();
+     }
+   
++  // prepare the XSLT engine and XML parser
++  xslt::init init;
++  exsltTW_LIGHTRegister();
++
+   int i;
+   int auto_port = -1;
+   const char *auto_play = NULL, *auto_param = NULL;
+
+Modified: trunk/sources.lst
+===================================================================
+--- trunk/sources.lst	2005-02-20 13:20:59 UTC (rev 121)
++++ trunk/sources.lst	2005-02-26 11:50:40 UTC (rev 122)
+@@ -124,3 +124,4 @@
+ source/sc2ships/shpslypr.cpp
+ source/sc2ships/shpzfpst.cpp
+ source/gui.cpp
++source/xslt/twexslt.cpp
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000067.html">[Tw-light-svn] r121 - in trunk: . source source/games source/melee source/other
+</A></li>
+	<LI>Next message: <A HREF="000069.html">[Tw-light-svn] r123 - in trunk: gamedata/xml/GOB gamedata/xslt source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#68">[ date ]</a>
+              <a href="thread.html#68">[ thread ]</a>
+              <a href="subject.html#68">[ subject ]</a>
+              <a href="author.html#68">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

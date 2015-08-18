@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r163 - in trunk/gamedata: . games games/test_game games/test_game/scripts games/test_game/scripts/systems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r163%20-%20in%20trunk/gamedata%3A%20.%20games%20games/test_game%20games/test_game/scripts%20games/test_game/scripts/systems&In-Reply-To=%3C200505140739.j4E7dGAm020224%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000108.html">
+   <LINK REL="Next"  HREF="000110.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r163 - in trunk/gamedata: . games games/test_game games/test_game/scripts games/test_game/scripts/systems</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r163%20-%20in%20trunk/gamedata%3A%20.%20games%20games/test_game%20games/test_game/scripts%20games/test_game/scripts/systems&In-Reply-To=%3C200505140739.j4E7dGAm020224%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r163 - in trunk/gamedata: . games games/test_game games/test_game/scripts games/test_game/scripts/systems">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sat May 14 09:39:16 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000108.html">[Tw-light-svn] r162 - in trunk: . gamedata/default_ini/ships gamedata/images/ships gamedata/images/ships/shpsamat gamedata/python gamedata/ships gamedata/sound/ships gamedata/sound/ships/shpsamat source/ais source/games source/generated source/python source/tml
+</A></li>
+        <LI>Next message: <A HREF="000110.html">[Tw-light-svn] r164 - in trunk: Util/deditor gamedata/default_ini/ships gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source source/ais source/games source/generated source/melee source/other source/python source/tests source/tml source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#109">[ date ]</a>
+              <a href="thread.html#109">[ thread ]</a>
+              <a href="subject.html#109">[ subject ]</a>
+              <a href="author.html#109">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-14 09:38:58 +0200 (Sat, 14 May 2005)
+New Revision: 163
+
+Added:
+   trunk/gamedata/games/
+   trunk/gamedata/games/test_game/
+   trunk/gamedata/games/test_game/data/
+   trunk/gamedata/games/test_game/scripts/start.py
+   trunk/gamedata/games/test_game/scripts/systems/
+   trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py
+   trunk/gamedata/games/test_game/scripts/systems/ixis.py
+   trunk/gamedata/games/test_game/scripts/systems/narike.py
+Removed:
+   trunk/gamedata/test_game/
+Log:
+Moving test_game to game directory
+
+
+Copied: trunk/gamedata/games/test_game (from rev 162, trunk/gamedata/test_game)
+
+Added: trunk/gamedata/games/test_game/scripts/start.py
+===================================================================
+--- trunk/gamedata/test_game/scripts/start.py	2005-05-14 07:03:30 UTC (rev 162)
++++ trunk/gamedata/games/test_game/scripts/start.py	2005-05-14 07:38:58 UTC (rev 163)
+@@ -0,0 +1,76 @@
++#
++# This script executing after loading universe
++#
++
++import tml
++
++
++
++
++
++def abc():
++    print &quot;abc\n&quot;
++
++
++
++# Add player to the game
++tml.GameAction.add_player('Narike', &quot;earcr&quot;, 400, 400)
++
++#tml.GameAction.go_to_point(tml.GameAction.get_player_ship_id(), 1000, 1000, 200)
++tml.GameAction.guard_point(tml.GameAction.get_player_ship_id(), 0, 0, 2000)
++
++tml.EventManager.setSingleTimeEvent(1, 'abc')
++
++#id = tml.GameAction.add_ship('Narike', &quot;earcr&quot;, 2000, 2000, 1)
++
++#tml.GameAction.set_target(id,tml.GameAction.get_double_flag('Narike Silcuu Base'))
++
++#tml.GameAction.go_to_location(id, tml.GameAction.get_player_ship_id(), 200)
++
++# def test_distance():
++#     print &quot;Distance event&quot;
++
++
++#id = tml.EventManager.distanceMoreThen(tml.GameAction.get_player_ship_id(), 0, 0, 1000, 'test_distance')
++#id = tml.EventManager.distanceLessThen(tml.GameAction.get_player_ship_id(), 0, 0, 500,  'test_distance')
++
++# id = tml.EventManager.distanceLessThen(tml.GameAction.get_player_ship_id(),
++#                                        tml.GameAction.get_double_flag('Narike Silcuu Base'),
++#                                        100,  'test_distance')
++
++# id = tml.EventManager.distanceMoreThen(tml.GameAction.get_player_ship_id(),
++#                                        tml.GameAction.get_double_flag('Narike Silcuu Base'),
++#                                        1500,  'test_distance')
++
++
++# def TestPerformance():
++#     id = tml.GameAction.get_double_flag('id')
++#     id += tml.GameAction.get_double_flag('id')
++#     id += tml.GameAction.get_double_flag('id') + 12
++
++    
++# def prn_2():
++#     print 2
++
++# id = tml.EventManager.setRepeatableTimeEvent(1, 'prn_2')
++# print &quot;Time ID:&quot;, id
++# tml.GameAction.save_flag('id',id)
++
++# def stop_prn():
++#     id = tml.GameAction.get_double_flag('id')
++#     print &quot;Stoping id&quot;, id
++#     tml.EventManager.disableEvent(id)
++
++# tml.EventManager.setSingleTimeEvent(5, 'stop_prn')
++
++# def shp_death():
++#     print &quot;Ship shpearch died&quot;
++
++# def aaa():
++#     print &quot;Second&quot;
++    
++#tml.EventManager.shipDeathByName('', 'aaa');
++#tml.EventManager.shipDeathByType('zoqst', 'shp_death');
++# tml.EventManager.shipDeathByType('shosc', 'shp_death');
++# tml.EventManager.shipDeathByType('zoqst', 'shp_death');
++
+
+Added: trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py
+===================================================================
+--- trunk/gamedata/test_game/scripts/systems/gamaonyx.py	2005-05-14 07:03:30 UTC (rev 162)
++++ trunk/gamedata/games/test_game/scripts/systems/gamaonyx.py	2005-05-14 07:38:58 UTC (rev 163)
+@@ -0,0 +1,16 @@
++import tml
++print &quot;Init Gama Onyx star system&quot;
++
++tml.GameAction.add_system('Gama Onyx',200, 200)
++
++tml.GameAction.add_planet('Gama Onyx','I', 1500, 1800)
++tml.GameAction.add_orbiter_station('Gama Onyx',
++                           'I',
++                           'gob.dat',
++                           'station0sprite',
++                           'gob.dat#station0picture.bmp',
++                           'dragr',
++                           'dialogs/welcomecommander.xml')
++
++for i in xrange(20):
++    tml.GameAction.add_asteroid('Gama Onyx')
+
+Added: trunk/gamedata/games/test_game/scripts/systems/ixis.py
+===================================================================
+--- trunk/gamedata/test_game/scripts/systems/ixis.py	2005-05-14 07:03:30 UTC (rev 162)
++++ trunk/gamedata/games/test_game/scripts/systems/ixis.py	2005-05-14 07:38:58 UTC (rev 163)
+@@ -0,0 +1,23 @@
++import tml
++import random
++import math
++print &quot;Init Ixis star system&quot;
++
++tml.GameAction.add_system('Ixis',50, 50)
++
++tml.GameAction.add_planet('Ixis','I', 1500, 1800)
++tml.GameAction.add_orbiter_station('Ixis',
++                           'I',
++                           'gob.dat',
++                           'station0sprite',
++                           'gob.dat#station0picture.bmp',
++                           'choex',
++                           'dialogs/welcomecommander.xml')
++
++for i in xrange(20):
++    tml.GameAction.add_asteroid('Ixis')
++
++
++# Famous Ixis asteroid belt
++for i in xrange(300):
++    tml.GameAction.add_asteroid('Ixis',random.random()*2000, -1, math.radians(90),-1)
+
+Added: trunk/gamedata/games/test_game/scripts/systems/narike.py
+===================================================================
+--- trunk/gamedata/test_game/scripts/systems/narike.py	2005-05-14 07:03:30 UTC (rev 162)
++++ trunk/gamedata/games/test_game/scripts/systems/narike.py	2005-05-14 07:38:58 UTC (rev 163)
+@@ -0,0 +1,18 @@
++import tml
++print &quot;Init Narike star system&quot;
++
++tml.GameAction.add_system('Narike',220, 168)
++
++tml.GameAction.add_planet('Narike','Silcuu', 0, 0)
++
++tml.GameAction.save_flag( 'Narike Silcuu Base',
++                          tml.GameAction.add_orbiter_station('Narike',
++                                                             'Silcuu',
++                                                             'gob.dat',
++                                                             'station0sprite',
++                                                             'gob.dat#station0picture.bmp',
++                                                             'earcr',
++                                                             'dialogs/welcomecommander.xml'))
++
++for i in xrange(20):
++    tml.GameAction.add_asteroid('Narike')
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000108.html">[Tw-light-svn] r162 - in trunk: . gamedata/default_ini/ships gamedata/images/ships gamedata/images/ships/shpsamat gamedata/python gamedata/ships gamedata/sound/ships gamedata/sound/ships/shpsamat source/ais source/games source/generated source/python source/tml
+</A></li>
+	<LI>Next message: <A HREF="000110.html">[Tw-light-svn] r164 - in trunk: Util/deditor gamedata/default_ini/ships gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/python source source/ais source/games source/generated source/melee source/other source/python source/tests source/tml source/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#109">[ date ]</a>
+              <a href="thread.html#109">[ thread ]</a>
+              <a href="subject.html#109">[ subject ]</a>
+              <a href="author.html#109">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

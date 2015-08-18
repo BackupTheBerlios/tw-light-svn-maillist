@@ -1,0 +1,438 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r118 - in trunk: . source source/games source/melee
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r118%20-%20in%20trunk%3A%20.%20source%20source/games%20source/melee&In-Reply-To=%3C200502162031.j1GKVoOZ022555%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000063.html">
+   <LINK REL="Next"  HREF="000065.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r118 - in trunk: . source source/games source/melee</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r118%20-%20in%20trunk%3A%20.%20source%20source/games%20source/melee&In-Reply-To=%3C200502162031.j1GKVoOZ022555%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r118 - in trunk: . source source/games source/melee">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Wed Feb 16 21:31:50 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000063.html">[Tw-light-svn] r117 - trunk/source/util
+</A></li>
+        <LI>Next message: <A HREF="000065.html">[Tw-light-svn] r119 - in trunk: . source/libraries
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#64">[ date ]</a>
+              <a href="thread.html#64">[ thread ]</a>
+              <a href="subject.html#64">[ subject ]</a>
+              <a href="author.html#64">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-16 21:31:49 +0100 (Wed, 16 Feb 2005)
+New Revision: 118
+
+Modified:
+   trunk/makefile
+   trunk/source/games/gdefender.cpp
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+   trunk/source/melee/mgame.cpp
+   trunk/source/melee/mgame.h
+   trunk/source/melee/mmain.cpp
+   trunk/source/melee/mmain.h
+   trunk/source/scp.cpp
+Log:
+1) Adding new string argument for init function in Game class, it must 
+be used for loading game state
+
+2) gamedata folder is set to 'damedata' for debug configuration by 
+default now
+
+
+
+Modified: trunk/makefile
+===================================================================
+--- trunk/makefile	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/makefile	2005-02-16 20:31:49 UTC (rev 118)
+@@ -49,12 +49,16 @@
+ endif
+ 
+ ifndef DATAPATH
+-ifdef win32
++ifdef win32 
+ DATAPATH=gamedata
+ else
++ifdef debug
++DATAPATH=gamedata
++else
+ DATAPATH=/usr/local/share/games/tw-light
+ endif
+ endif
++endif
+ 
+ ifndef EXECPATH
+ ifndef win32
+
+Modified: trunk/source/games/gdefender.cpp
+===================================================================
+--- trunk/source/games/gdefender.cpp	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/games/gdefender.cpp	2005-02-16 20:31:49 UTC (rev 118)
+@@ -74,7 +74,7 @@
+   
+   virtual ~DefenderGame();
+   
+-  virtual void init ( Log *_log ) ;
++  virtual void init ( Log *_log, const std::string&amp; save ) ;
+ 
+   //begin the game
+   void restart();
+@@ -251,9 +251,9 @@
+ 
+ }
+ 
+-void DefenderGame::init( Log * _log) 
++void DefenderGame::init( Log * _log, const std::string&amp; save) 
+ {
+-  Game::init(_log);
++  Game::init(_log, save);
+   
+   prepare();
+   add ( new Stars() );
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/games/ggob.cpp	2005-02-16 20:31:49 UTC (rev 118)
+@@ -160,11 +160,11 @@
+ }
+ 
+ 
+-void GobGame::init(Log *_log) 
++void GobGame::init(Log *_log, const std::string&amp; save) 
+ {
+   STACKTRACE;
+   int i;
+-  Game::init(_log);
++  Game::init(_log, save);
+   
+   log_file(&quot;server.ini&quot;);
+   max_enemies = get_config_int(&quot;Gob&quot;, &quot;MaxEnemies&quot;, 32);
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/games/ggob.h	2005-02-16 20:31:49 UTC (rev 118)
+@@ -90,7 +90,7 @@
+   virtual bool isGameDone();
+   virtual void ship_died(Ship *who, SpaceLocation *source);
+   virtual void preinit();
+-  virtual void init (Log *log);
++  virtual void init (Log *log, const std::string&amp; save);
+ 
+   virtual void play_sound (SAMPLE *sample, SpaceLocation *source, int vol = 256, int freq = 1000);
+ 	
+
+Modified: trunk/source/melee/mgame.cpp
+===================================================================
+--- trunk/source/melee/mgame.cpp	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/melee/mgame.cpp	2005-02-16 20:31:49 UTC (rev 118)
+@@ -832,7 +832,7 @@
+   music = &quot;&quot;;
+ }
+ 
+-void Game::init(Log *_log) 
++void Game::init(Log *_log, const std::string&amp; save) 
+ {
+   STACKTRACE;
+   int i;
+
+Modified: trunk/source/melee/mgame.h
+===================================================================
+--- trunk/source/melee/mgame.h	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/melee/mgame.h	2005-02-16 20:31:49 UTC (rev 118)
+@@ -119,7 +119,7 @@
+ 
+ 
+   virtual void preinit();	///&lt; pre-initialization (enough so that the destructor won't crash) 
+-  virtual void init(Log *log);  ///&lt; initialization (loading data, creating a few game objects, whatever)
++  virtual void init(Log *log, const std::string&amp; save);  ///&lt; initialization (loading data, creating a few game objects, whatever)
+   virtual ~Game();              ///&lt; deallocating memory etc.
+   
+   virtual void init_lag();
+
+Modified: trunk/source/melee/mmain.cpp
+===================================================================
+--- trunk/source/melee/mmain.cpp	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/melee/mmain.cpp	2005-02-16 20:31:49 UTC (rev 118)
+@@ -223,9 +223,9 @@
+ 	kills = NULL;
+ 	num_players = 0;
+ 	}
+-void NormalGame::init(Log *_log) {
++void NormalGame::init(Log *_log, const std::string&amp; save) {
+   STACKTRACE;
+-	Game::init(_log);
++	Game::init(_log, save);
+ 
+ 	team_table_size = 0;
+ 
+
+Modified: trunk/source/melee/mmain.h
+===================================================================
+--- trunk/source/melee/mmain.h	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/melee/mmain.h	2005-02-16 20:31:49 UTC (rev 118)
+@@ -1,17 +1,17 @@
+ /*
+-This file is part of &quot;TW-Light&quot; 
+-                    <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
+-Copyright (C) 2001-2004  TimeWarp development team
++  This file is part of &quot;TW-Light&quot; 
++  <A HREF="http://tw-light.berlios.de/">http://tw-light.berlios.de/</A>
++  Copyright (C) 2001-2004  TimeWarp development team
+ 
+-This program is free software; you can redistribute it and/or modify
+-it under the terms of the GNU General Public License as published by
+-the Free Software Foundation; either version 2 of the License, or
+-(at your option) any later version.
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
+ 
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details.
+ */
+ 
+ #ifndef __MMAIN_H__
+@@ -20,61 +20,62 @@
+ #include &quot;melee.h&quot;
+ #include &quot;mgame.h&quot;
+ 
+-
+-class NormalGame : public Game {
+-	public:
+-	enum { 
+-		num_asteroids = 4 
+-		};
++/// Melee type game
++class NormalGame : public Game 
++{
++ public:
++  enum { 
++    num_asteroids = 4 
++  };
+ 		
+-	~NormalGame();
++  ~NormalGame();
+ 
+-	virtual void calculate();
+-	virtual void preinit();	
+-	virtual void init (Log *_log = NULL);
+-	virtual void set_resolution(int screen_x, int screen_y);
++  virtual void calculate();
++  virtual void preinit();	
++  virtual void init (Log *_log, const std::string&amp; save);
++  virtual void set_resolution(int screen_x, int screen_y);
+ 
+-	virtual void init_players();
+-	virtual void init_objects();
++  virtual void init_players();
++  virtual void init_objects();
+ 
+-	virtual void ship_died(Ship *who, SpaceLocation *source);
+-	//kill history stuff
+-	int num_kills;
+-	struct ShipKill {
+-		int time;
+-		struct Party {
+-			unsigned int ally_flag;
+-			ShipData *data;
+-			ShipType *type;
+-		};
+-		Party victim, killer;
+-		} *kills;
+-	void display_stats();
++  virtual void ship_died(Ship *who, SpaceLocation *source);
++  //kill history stuff
++  int num_kills;
++  struct ShipKill {
++    int time;
++    struct Party {
++      unsigned int ally_flag;
++      ShipData *data;
++      ShipType *type;
++    };
++    Party victim, killer;
++  } *kills;
++  void display_stats();
+ 
+-	virtual int add_player (Control *c, int team_index, const char *name, const char *fleet, const char *fleet_file = &quot;fleets.ini&quot;) ;
+-	virtual bool isGameDone();
+-	int num_players;
+-	Control **player_control;
+-//	ShipPanel **player_panel;
+-	Fleet **player_fleet;
+-	char **player_name;
+-	char *player_attributes;
+-	TeamCode *player_team;
+-	TeamCode *team_table;
+-	int team_table_size;
+-//	virtual void player_said(int who, const char *what);
++  virtual int add_player (Control *c, int team_index, const char *name, const char *fleet, const char *fleet_file = &quot;fleets.ini&quot;) ;
++  virtual bool isGameDone();
++  int num_players;
++  Control **player_control;
++  //	ShipPanel **player_panel;
++  Fleet **player_fleet;
++  char **player_name;
++  char *player_attributes;
++  TeamCode *player_team;
++  TeamCode *team_table;
++  int team_table_size;
++  //	virtual void player_said(int who, const char *what);
+ 
+-	protected:
+-	virtual bool handle_key(int k);
++ protected:
++  virtual bool handle_key(int k);
+ 	
+-	virtual void showHelpText();
++  virtual void showHelpText();
+ 	
+-	int next_choose_new_ships_time;
+-	virtual void choose_new_ships() ;
++  int next_choose_new_ships_time;
++  virtual void choose_new_ships() ;
+ 
+-	int indhealthtoggle, indteamtoggle;
++  int indhealthtoggle, indteamtoggle;
+ 
+-	};
++};
+ 
+ 
+ #endif // __MMAIN_H__
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-02-16 20:27:45 UTC (rev 117)
++++ trunk/source/scp.cpp	2005-02-16 20:31:49 UTC (rev 118)
+@@ -158,7 +158,7 @@
+ 
+ 
+ void play_demo(const char *file_name = &quot;demo.dmo&quot;) ;
+-void play_game(const char *_gametype_name, Log *_log = NULL) ;
++void play_game(const char *_gametype_name, const std::string&amp; save, Log *_log = NULL) ;
+ void play_net1client ( const char * address = NULL, int port = -1 ) ;
+ void play_net1server ( const char *_gametype_name, int port = -1 ) ;
+ 
+@@ -359,7 +359,7 @@
+   return key[KEY_ESC];
+ }
+ 
+-void play_game(const char *_gametype_name, Log *_log) 
++void play_game(const char *_gametype_name,  const std::string&amp; save, Log *_log ) 
+ {
+   STACKTRACE;
+   char gametype_name[1024];
+@@ -397,7 +397,7 @@
+       new_game-&gt;window-&gt;preinit();
+       new_game-&gt;window-&gt;init(&amp;videosystem-&gt;window);
+       new_game-&gt;window-&gt;locate(0,0,0,0,0,1,0,1);
+-      new_game-&gt;init(_log);
++      new_game-&gt;init(_log, save );
+       new_game-&gt;play();
+       new_game-&gt;log-&gt;deinit();
+       new_game-&gt;setGameDone(true);
+@@ -483,7 +483,7 @@
+   char *gname = detect_gametype(log);
+   log-&gt;reset();
+   
+-  play_game(gname, log);
++  play_game(gname, &quot;&quot;, log );
+   
+   free(gname);
+   return;
+@@ -519,7 +519,7 @@
+   log-&gt;net.optimize4latency();
+   message.out(&quot;connection established&quot;);
+   
+-  play_game(_gametype_name, log);
++  play_game(_gametype_name, &quot;&quot;, log);
+   
+   return;
+ }
+@@ -669,7 +669,7 @@
+       switch (mainRet) {
+       case MAIN_DIALOG_MELEE:
+ 	disable();
+-	play_game(&quot;Melee&quot;);
++	play_game(&quot;Melee&quot;, &quot;&quot;, NULL);
+ 	enable();
+ 	break;
+       case MAIN_DIALOG_MELEE_EXTENDED:
+@@ -1024,15 +1024,17 @@
+     i = tw_popup_dialog(NULL, melee_ex_dialog, MELEE_EX_DIALOG_PLAY_GAME);
+   switch (i) {
+   case -1:
+-  case MELEE_EX_DIALOG_EXIT: {
+-    return;
+-  }
++  case MELEE_EX_DIALOG_EXIT: 
++    {
++      return;
++    }
+     break;
+-  case MELEE_EX_DIALOG_PLAY_GAME: {
+-    const char *gname = select_game_menu();
+-    if (gname) play_game(gname);
+-    //			play_game(game_names[melee_ex_dialog[MELEE_EX_DIALOG_GAMELIST].d1], log_types[melee_ex_dialog[MELEE_EX_DIALOG_LOGLIST].d1]);
+-  }
++  case MELEE_EX_DIALOG_PLAY_GAME: 
++    {
++      const char *gname = select_game_menu();
++      if (gname)
++	play_game(gname, &quot;&quot;, NULL);
++    }
+     break;
+   case MELEE_EX_DIALOG_PLAY_NET1SERVER: {
+     const char *gname = select_game_menu();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000063.html">[Tw-light-svn] r117 - trunk/source/util
+</A></li>
+	<LI>Next message: <A HREF="000065.html">[Tw-light-svn] r119 - in trunk: . source/libraries
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#64">[ date ]</a>
+              <a href="thread.html#64">[ thread ]</a>
+              <a href="subject.html#64">[ subject ]</a>
+              <a href="author.html#64">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

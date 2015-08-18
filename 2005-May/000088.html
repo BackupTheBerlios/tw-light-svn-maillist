@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r142 - in trunk/source: . games python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r142%20-%20in%20trunk/source%3A%20.%20games%20python&In-Reply-To=%3C200505011034.j41AYJsV022592%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000087.html">
+   <LINK REL="Next"  HREF="000089.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r142 - in trunk/source: . games python</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r142%20-%20in%20trunk/source%3A%20.%20games%20python&In-Reply-To=%3C200505011034.j41AYJsV022592%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r142 - in trunk/source: . games python">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun May  1 12:34:19 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000087.html">[Tw-light-svn] r141 - trunk/web
+</A></li>
+        <LI>Next message: <A HREF="000089.html">[Tw-light-svn] r143 - in trunk/source: . games other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#88">[ date ]</a>
+              <a href="thread.html#88">[ thread ]</a>
+              <a href="subject.html#88">[ subject ]</a>
+              <a href="author.html#88">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-01 12:34:09 +0200 (Sun, 01 May 2005)
+New Revision: 142
+
+Modified:
+   trunk/source/games/ggob.cpp
+   trunk/source/python/python_class.cpp
+   trunk/source/python/python_class.h
+   trunk/source/scp.cpp
+Log:
+fixed Fake_system bug
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-04-30 22:07:25 UTC (rev 141)
++++ trunk/source/games/ggob.cpp	2005-05-01 10:34:09 UTC (rev 142)
+@@ -261,12 +261,12 @@
+   _name = &quot;FakeSystem_123&quot;;
+   _galaxy.add(s);
+ 
+-  if(!python::exec_file(&quot;start&quot;))
++  if(!python::exec_file(&quot;python/start.py&quot;))
+     {
+       tw_error(&quot;Load statrt script error&quot;);
+       //      throw &quot;Load statrt script error&quot;;
+     }
+-  python::exec_file(&quot;start&quot;);
++  //  python::exec_file(&quot;start&quot;);
+   _galaxy._stars.remove(s);
+   delete s;
+   
+
+Modified: trunk/source/python/python_class.cpp
+===================================================================
+--- trunk/source/python/python_class.cpp	2005-04-30 22:07:25 UTC (rev 141)
++++ trunk/source/python/python_class.cpp	2005-05-01 10:34:09 UTC (rev 142)
+@@ -27,24 +27,29 @@
+ #include &quot;python_class.h&quot;
+ #include &quot;game.h&quot;
+ #include &quot;util/errors.h&quot;
++#include &quot;scp.h&quot;
+ 
+ #include &lt;iostream&gt; 
+ 
+ 
++extern &quot;C&quot;
++{
++  void init_ggob(void);
++}
++
++
+ /*
+  * Start Python
+  */
+ void python::init ()
+ {
+     Py_Initialize ();
++    insert_path(DATAFILE_PATH&quot;/python&quot;);
++    init_ggob();
+ }
+ 
+ void python::cleanup () 
+ {
+-    // Cleanup the global namespace of python interpreter
+-    // Note that we don't have to DECREF data::globals, because they're a
+-    // borrowed reference of py_module.
+-  // Py_XDECREF (module);
+     Py_Finalize ();
+ }
+ 
+@@ -67,10 +72,10 @@
+ /*
+  * Executes the Python statements in the string
+  */
+-void python::exec_string(char * s)
++void python::exec_string(const std::string&amp; s)
+ {
+   STACKTRACE;
+-    PyRun_SimpleString(s);
++    PyRun_SimpleString((char*)s.c_str());
+ }
+ 
+ /*
+@@ -78,21 +83,24 @@
+  */
+ bool python::exec_file (std::string filename)
+ {
+-    PyObject *mod = python::import_module (filename);
+- 
+-    if (!mod)
++  std::string content;
++  FILE * f = fopen(data_full_path(filename).c_str(), &quot;rt&quot;);
++  if(!f)
+     {
+-        std::cerr &lt;&lt; &quot;exec_file: &quot; &lt;&lt; filename &lt;&lt; &quot; load failed: &quot; &lt;&lt; std::endl;
+-        show_traceback ();
+-
+-        return false;
++      tw_error( (std::string(&quot;Unable to fined script: &quot;) + filename).c_str());
++      return false;
+     }
++  int r = 1;
++  while(r)
++    {
++      char buf[1024] = {0};
++      r = fread(buf, 1024-1, 1, f);
++      content += buf;
++    }
+ 
+-    Py_DECREF (mod); 
++   exec_string(content);
++   return true; }
+ 
+-    return true; 
+-}
+-
+ /*
+  * Dump any error information to stderr
+  */
+
+Modified: trunk/source/python/python_class.h
+===================================================================
+--- trunk/source/python/python_class.h	2005-04-30 22:07:25 UTC (rev 141)
++++ trunk/source/python/python_class.h	2005-05-01 10:34:09 UTC (rev 142)
+@@ -67,7 +67,7 @@
+      * 
+      * @param s string containing Python statements to execute.
+      */
+-    static void exec_string(char * s);
++    static void exec_string(const std::string&amp; s);
+     
+     /** 
+      * Executes a Python script.
+
+Modified: trunk/source/scp.cpp
+===================================================================
+--- trunk/source/scp.cpp	2005-04-30 22:07:25 UTC (rev 141)
++++ trunk/source/scp.cpp	2005-05-01 10:34:09 UTC (rev 142)
+@@ -796,8 +796,8 @@
+     }
+   
+   python::init();  
+-  python::insert_path(DATAFILE_PATH&quot;/python&quot;);
+-  init_ggob();
++  //python::insert_path(DATAFILE_PATH&quot;/python&quot;);
++  //init_ggob();
+   //  python::module = python::import_module(&quot;ggob&quot;);
+ 
+   int i;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000087.html">[Tw-light-svn] r141 - trunk/web
+</A></li>
+	<LI>Next message: <A HREF="000089.html">[Tw-light-svn] r143 - in trunk/source: . games other
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#88">[ date ]</a>
+              <a href="thread.html#88">[ thread ]</a>
+              <a href="subject.html#88">[ subject ]</a>
+              <a href="author.html#88">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

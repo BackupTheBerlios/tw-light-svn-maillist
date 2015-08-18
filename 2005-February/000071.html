@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r125 - trunk/source/games
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-February/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r125%20-%20trunk/source/games&In-Reply-To=%3C200502271104.j1RB4e4u003523%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000070.html">
+   <LINK REL="Next"  HREF="000072.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r125 - trunk/source/games</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r125%20-%20trunk/source/games&In-Reply-To=%3C200502271104.j1RB4e4u003523%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r125 - trunk/source/games">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Sun Feb 27 12:04:40 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000070.html">[Tw-light-svn] r124 - in trunk: gamedata/xml/GOB gamedata/xslt source source/games source/melee
+</A></li>
+        <LI>Next message: <A HREF="000072.html">[Tw-light-svn] r126 - trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#71">[ date ]</a>
+              <a href="thread.html#71">[ thread ]</a>
+              <a href="subject.html#71">[ subject ]</a>
+              <a href="author.html#71">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-02-27 12:04:36 +0100 (Sun, 27 Feb 2005)
+New Revision: 125
+
+Modified:
+   trunk/source/games/ggob.cpp
+   trunk/source/games/ggob.h
+Log:
+Fixed panel when jumping between systems
+
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-02-27 09:45:19 UTC (rev 124)
++++ trunk/source/games/ggob.cpp	2005-02-27 11:04:36 UTC (rev 125)
+@@ -90,6 +90,7 @@
+   gobenemy = NULL;
+ 
+   defenderSprite = NULL;
++  _player_panel = NULL;
+ }
+ 
+ void GobGame::prepare()
+@@ -104,6 +105,7 @@
+ 		    maingame-&gt;gobplayer.ship-&gt;get_angle(),
+ 		    maingame-&gt;gobplayer.team);
+       add(maingame-&gt;gobplayer.ship);
++      AddPanel();
+       add_focus(_player_control, _player_control-&gt;channel);
+       maingame-&gt;gobplayer._teleport = 0;
+     }
+@@ -523,7 +525,6 @@
+   num_pairs = 0;
+   pair_list = NULL;
+   ship = NULL;
+-  panel = NULL;
+   total = 0;
+   
+   this-&gt;team = team;
+@@ -624,36 +625,9 @@
+       a = old-&gt;get_angle();
+     }
+   
+-  ship = game-&gt;create_ship ( type-&gt;id, gobgame-&gt;_player_control, pos, a, team);
+-  
+-  
+-  if (panel) 
+-    panel-&gt;die();
+-  panel = NULL;
+-  panel = new ShipPanel(ship);
+-  panel-&gt;always_redraw = true;
+-  panel-&gt;window-&gt;init(game-&gt;window);
+-  if (game-&gt;is_local(gobgame-&gt;_player_control-&gt;channel)) 
+-    {
+-      panel-&gt;window-&gt;locate(
+-			    0,0.9,
+-			    0,0,
+-			    0,0.1,
+-			    0,0.25
+-			    );
+-    }
+-  else 
+-    {
+-      panel-&gt;window-&gt;locate(
+-			    0,0.9,
+-			    0,0.25,
+-			    0,0.1,
+-			    0,0.25
+-			    );
+-    }
+-  panel-&gt;set_depth(10);
+-  game-&gt;add(panel);
+-  
++  ship = game-&gt;create_ship ( type-&gt;id, gobgame-&gt;_player_control, pos, a, team);    
++  gobgame-&gt;AddPanel();
++
+   for (i = 0; upgrade_list[i]; i += 1) 
+     {
+       upgrade_list[i]-&gt;clear(old, ship, this);
+@@ -1049,6 +1023,25 @@
+   //  addsubgame(new GobGame, );
+ }	
+ 
++void GobGame::AddPanel()
++{
++  if (_player_panel) 
++    _player_panel-&gt;die();
++  _player_panel = NULL;
++  _player_panel = new ShipPanel(maingame-&gt;gobplayer.ship);
++  _player_panel-&gt;always_redraw = true;
++  _player_panel-&gt;window-&gt;init(window);
++  
++  _player_panel-&gt;window-&gt;locate(
++			0,0.9,
++			0,0,
++			0,0.1,
++			0,0.25
++			);
++  _player_panel-&gt;set_depth(10);
++  add(_player_panel);
++}
++
+ void MainGobGame::add_gobplayer(const std::string&amp; system)
+ {
+   STACKTRACE;
+@@ -1056,6 +1049,7 @@
+    gobplayer.init(game-&gt;new_team());
+    game-&gt;add_focus(gobgame-&gt;_player_control, gobgame-&gt;_player_control-&gt;channel);
+    gobplayer.new_ship(shiptype(&quot;supbl&quot;));
++
+ }
+ 
+ REGISTER_GAME(MainGobGame, &quot;GOB&quot;)
+
+Modified: trunk/source/games/ggob.h
+===================================================================
+--- trunk/source/games/ggob.h	2005-02-27 09:45:19 UTC (rev 124)
++++ trunk/source/games/ggob.h	2005-02-27 11:04:36 UTC (rev 125)
+@@ -37,7 +37,6 @@
+   ~GobPlayer()
+ ;
+   Ship *ship;
+-  ShipPanel *panel;
+   struct pair 
+   {
+     char *id;
+@@ -105,8 +104,13 @@
+   GobGame();
+   virtual ~GobGame();
+ 
+-  Control * _player_control;
++  ShipPanel *_player_panel;
++  Control   * _player_control;
++
+   TeamCode enemy_team;
++
++  virtual void AddPanel();
++
+   virtual void calculate();
+   virtual int isGameDone();
+   virtual void ship_died(Ship *who, SpaceLocation *source);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000070.html">[Tw-light-svn] r124 - in trunk: gamedata/xml/GOB gamedata/xslt source source/games source/melee
+</A></li>
+	<LI>Next message: <A HREF="000072.html">[Tw-light-svn] r126 - trunk/source/games
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#71">[ date ]</a>
+              <a href="thread.html#71">[ thread ]</a>
+              <a href="subject.html#71">[ subject ]</a>
+              <a href="author.html#71">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

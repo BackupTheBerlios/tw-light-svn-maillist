@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r166 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/python source/games source/generated source/tml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r166%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/python%20source/games%20source/generated%20source/tml&In-Reply-To=%3C200505202106.j4KL6Act017342%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000111.html">
+   <LINK REL="Next"  HREF="000113.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r166 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/python source/games source/generated source/tml</H1>
+    <B>Yura Semashko at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r166%20-%20in%20trunk%3A%20gamedata/games/test_game/dialogs%20gamedata/games/test_game/scripts%20gamedata/python%20source/games%20source/generated%20source/tml&In-Reply-To=%3C200505202106.j4KL6Act017342%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r166 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/python source/games source/generated source/tml">yurand at sheep.berlios.de
+       </A><BR>
+    <I>Fri May 20 23:06:10 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000111.html">[Tw-light-svn] r165 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/images/alien gamedata/python source/generated source/melee source/python source/ships source/tml
+</A></li>
+        <LI>Next message: <A HREF="000113.html">[Tw-light-svn] r167 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images/alien web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: yurand
+Date: 2005-05-20 23:06:09 +0200 (Fri, 20 May 2005)
+New Revision: 166
+
+Modified:
+   trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml
+   trunk/gamedata/games/test_game/scripts/quests.py
+   trunk/gamedata/games/test_game/scripts/start.py
+   trunk/gamedata/python/tml.py
+   trunk/source/games/ggob.cpp
+   trunk/source/generated/tml.py
+   trunk/source/generated/tml_wrap.cpp
+   trunk/source/tml/gameaction.cpp
+   trunk/source/tml/gameaction.h
+   trunk/source/tml/gameevent.cpp
+Log:
+Fixed guard command
+Fixed dialogs
+
+
+Modified: trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml
+===================================================================
+--- trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/gamedata/games/test_game/dialogs/ixis_mining_station_commander.xml	2005-05-20 21:06:09 UTC (rev 166)
+@@ -1 +1 @@
+-&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Welcome to ixis mining station station&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Welcome to Ixis mining station&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I have some question&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Good bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;Do you know&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;We have some precursor wreck here in the asteroid belt. coordinate (1500,5000)&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
++&lt;NODES&gt;&lt;NODE id=&quot;0&quot; name=&quot;Welcome to ixis mining station station&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;Welcome to Ixis mining station&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;I have some question&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;goto(1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;PLAYER_ANSWER text=&quot;Good bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;NODE id=&quot;1&quot; name=&quot;Do you know&quot; music=&quot;music/races/human.mod&quot; background=&quot;images/alien/human.jpg&quot; alien_text=&quot;We have located precursor wreck here in the asteroid belt, coordinates (1500,5000). Please try this ULTRA-TIN-CRACKER device to get inside.&quot; font=&quot;Earth&quot; text_location=&quot;(50,10)&quot;&gt;&lt;PLAYER_ANSWER text=&quot;Bye&quot; appear_condition=&quot;1&quot;&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;endDialog()&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;quests.add_druuge_guardians()&quot;&gt;&lt;/ACTION&gt;&lt;ACTION condition=&quot;1&quot; action=&quot;tml.GameAction.save_flag('have_dr!
+ ax_open_device',1)&quot;&gt;&lt;/ACTION&gt;&lt;/PLAYER_ANSWER&gt;&lt;/NODE&gt;&lt;/NODES&gt;
+\ No newline at end of file
+
+Modified: trunk/gamedata/games/test_game/scripts/quests.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/quests.py	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/gamedata/games/test_game/scripts/quests.py	2005-05-20 21:06:09 UTC (rev 166)
+@@ -17,13 +17,12 @@
+     enemy = tml.GameAction.add_ship('Ixis',
+                                     &quot;kzedr&quot;, 2000, 2000, tml.GameAction.get_enemy_team())
+     tml.GameAction.set_crew(enemy, 10)
++    tml.GameAction.print_message(&quot;HINT: use 'M' key to access star map&quot;, 15)
+ 
+ def escort_transport_to_ixis_ask_help_against_kohr_ah():
+-    print &quot;escort_transport_to_ixis_ask_help_against_kohr_ah&quot;
+     dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/transport_please_help.xml&quot;))
+ 
+ def escort_transport_to_ixis_mission_complete():
+-    print &quot;escort_transport_to_ixis_mission_complete&quot;
+     tml.GameAction.save_flag('escort_transport_to_ixis_mission_completeP', 1)
+     tml.GameAction.remove_location(tml.GameAction.get_double_flag('escort_transport_to_ixis_transport_id'))
+     dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/transport_thanks.xml&quot;))
+@@ -32,7 +31,7 @@
+ # Precursor wrack
+ 
+ def start_precursor_wrack_mission():
+-    tml.GameAction.save_flag('have_drax_open_device', 1)
++    tml.GameAction.save_flag('have_drax_open_device', 0)
+     tml.EventManager.distanceLessThen(tml.GameAction.get_double_flag('precursor_wrack_id'),
+                                       tml.GameAction.get_player_ship_id(),
+                                       200,  'precursor_wrack_first_inspection')
+@@ -48,24 +47,36 @@
+     return False
+ 
+ def precursor_wrack_first_inspection():
+-    dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/precursor_wrack_first_inspection.xml&quot;))
++    if not check_has_drax_open_device():
++        dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/precursor_wrack_first_inspection.xml&quot;))
+ 
++
++def add_druuge_guardians():
++    id = tml.EventManager.distanceLessThen(tml.GameAction.get_double_flag('precursor_wrack_id'),
++                                           tml.GameAction.get_player_ship_id(),
++                                           2500,  'druuge_this_is_crimson_corporation_property_now')
++    for i in xrange(1):
++        enemy = tml.GameAction.add_ship('Ixis',
++                                    &quot;druma&quot;, 1500, 5000, tml.GameAction.get_enemy_team())
++        tml.GameAction.guard_location(enemy, tml.GameAction.get_double_flag('precursor_wrack_id'), 1500)
++
++    
++        
++def druuge_this_is_crimson_corporation_property_now():
++    dialog.runDialogFile(tml.GameConfig.GetAbsolutePath(&quot;dialogs/druuge.xml&quot;))
++
++
+ def win_game_func():
+     tml.GameAction.end_game()
+     congrat = []
+     congrat.append(&quot;&quot;&quot;You win this little demo game&quot;&quot;&quot;)
+     congrat.append(&quot;&quot;)
+-    congrat.append(&quot;&quot;&quot;I apologize for my lame English, and stub dialogs.&quot;&quot;&quot;)
+-    congrat.append(&quot;&quot;&quot;You can contribute by writing better ones.&quot;&quot;&quot;)
+-    congrat.append(&quot;                     Yurand&quot;)
+-    congrat.append(&quot;&quot;)
+     congrat.append(&quot;Programming:&quot;)
+     congrat.append(&quot;  Yura Semashko (Yurand)&quot;)
+     congrat.append(&quot;&quot;)
+-    congrat.append(&quot;Plot idea:&quot;)
++    congrat.append(&quot;Dialogs:&quot;)
+     congrat.append(&quot;  FrungySnack&quot;)
+-    congrat.append(&quot;&quot;)
+-    congrat.append(&quot;Dialogs:&quot;)
++    congrat.append(&quot;  Halleck&quot;)
+     congrat.append(&quot;  Yura Semashko (Yurand)&quot;)
+     congrat.append(&quot;&quot;)
+     congrat.append(&quot;Please, consider help us with TW-Light: Legacies&quot;)
+
+Modified: trunk/gamedata/games/test_game/scripts/start.py
+===================================================================
+--- trunk/gamedata/games/test_game/scripts/start.py	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/gamedata/games/test_game/scripts/start.py	2005-05-20 21:06:09 UTC (rev 166)
+@@ -22,69 +22,3 @@
+ 
+ # Start quests
+ start_precursor_wrack_mission()
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-#tml.GameAction.go_to_point(tml.GameAction.get_player_ship_id(), 1000, 1000, 200)
+-#tml.GameAction.guard_point(tml.GameAction.get_player_ship_id(), 0, 0, 2000)
+-
+-#id = tml.GameAction.add_ship('Narike', &quot;earcr&quot;, 2000, 2000, 1)
+-
+-#tml.GameAction.set_target(id,tml.GameAction.get_double_flag('Narike Silcuu Base'))
+-
+-#tml.GameAction.go_to_location(id, tml.GameAction.get_player_ship_id(), 200)
+-
+-# def test_distance():
+-#     print &quot;Distance event&quot;
+-
+-
+-#id = tml.EventManager.distanceMoreThen(tml.GameAction.get_player_ship_id(), 0, 0, 1000, 'test_distance')
+-#id = tml.EventManager.distanceLessThen(tml.GameAction.get_player_ship_id(), 0, 0, 500,  'test_distance')
+-
+-# id = tml.EventManager.distanceLessThen(tml.GameAction.get_player_ship_id(),
+-#                                        tml.GameAction.get_double_flag('Narike Silcuu Base'),
+-#                                        100,  'test_distance')
+-
+-# id = tml.EventManager.distanceMoreThen(tml.GameAction.get_player_ship_id(),
+-#                                        tml.GameAction.get_double_flag('Narike Silcuu Base'),
+-#                                        1500,  'test_distance')
+-
+-
+-# def TestPerformance():
+-#     id = tml.GameAction.get_double_flag('id')
+-#     id += tml.GameAction.get_double_flag('id')
+-#     id += tml.GameAction.get_double_flag('id') + 12
+-
+-    
+-# def prn_2():
+-#     print 2
+-
+-# id = tml.EventManager.setRepeatableTimeEvent(1, 'prn_2')
+-# print &quot;Time ID:&quot;, id
+-# tml.GameAction.save_flag('id',id)
+-
+-# def stop_prn():
+-#     id = tml.GameAction.get_double_flag('id')
+-#     print &quot;Stoping id&quot;, id
+-#     tml.EventManager.disableEvent(id)
+-
+-# tml.EventManager.setSingleTimeEvent(5, 'stop_prn')
+-
+-# def shp_death():
+-#     print &quot;Ship shpearch died&quot;
+-
+-# def aaa():
+-#     print &quot;Second&quot;
+-    
+-#tml.EventManager.shipDeathByName('', 'aaa');
+-#tml.EventManager.shipDeathByType('zoqst', 'shp_death');
+-# tml.EventManager.shipDeathByType('shosc', 'shp_death');
+-# tml.EventManager.shipDeathByType('zoqst', 'shp_death');
+-
+
+Modified: trunk/gamedata/python/tml.py
+===================================================================
+--- trunk/gamedata/python/tml.py	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/gamedata/python/tml.py	2005-05-20 21:06:09 UTC (rev 166)
+@@ -91,6 +91,8 @@
+     if _newclass:end_game = staticmethod(_tml.GameAction_end_game)
+     __swig_getmethods__[&quot;scroll_text&quot;] = lambda x: _tml.GameAction_scroll_text
+     if _newclass:scroll_text = staticmethod(_tml.GameAction_scroll_text)
++    __swig_getmethods__[&quot;print_message&quot;] = lambda x: _tml.GameAction_print_message
++    if _newclass:print_message = staticmethod(_tml.GameAction_print_message)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -158,6 +160,8 @@
+ 
+ GameAction_scroll_text = _tml.GameAction_scroll_text
+ 
++GameAction_print_message = _tml.GameAction_print_message
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+
+Modified: trunk/source/games/ggob.cpp
+===================================================================
+--- trunk/source/games/ggob.cpp	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/source/games/ggob.cpp	2005-05-20 21:06:09 UTC (rev 166)
+@@ -740,8 +740,8 @@
+ {
+   STACKTRACE;
+   //  channel = c-&gt;channel;
+-  starbucks = 0;
+-  buckazoids = 0;
++  starbucks = 10;
++  buckazoids = 10;
+   kills = 0;
+   value_starbucks = 0;
+   value_buckazoids = 0;
+
+Modified: trunk/source/generated/tml.py
+===================================================================
+--- trunk/source/generated/tml.py	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/source/generated/tml.py	2005-05-20 21:06:09 UTC (rev 166)
+@@ -91,6 +91,8 @@
+     if _newclass:end_game = staticmethod(_tml.GameAction_end_game)
+     __swig_getmethods__[&quot;scroll_text&quot;] = lambda x: _tml.GameAction_scroll_text
+     if _newclass:scroll_text = staticmethod(_tml.GameAction_scroll_text)
++    __swig_getmethods__[&quot;print_message&quot;] = lambda x: _tml.GameAction_print_message
++    if _newclass:print_message = staticmethod(_tml.GameAction_print_message)
+     def __init__(self, *args):
+         _swig_setattr(self, GameAction, 'this', _tml.new_GameAction(*args))
+         _swig_setattr(self, GameAction, 'thisown', 1)
+@@ -158,6 +160,8 @@
+ 
+ GameAction_scroll_text = _tml.GameAction_scroll_text
+ 
++GameAction_print_message = _tml.GameAction_print_message
++
+ class DialogApi(_object):
+     __swig_setmethods__ = {}
+     __setattr__ = lambda self, name, value: _swig_setattr(self, DialogApi, name, value)
+
+Modified: trunk/source/generated/tml_wrap.cpp
+===================================================================
+--- trunk/source/generated/tml_wrap.cpp	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/source/generated/tml_wrap.cpp	2005-05-20 21:06:09 UTC (rev 166)
+@@ -1588,6 +1588,32 @@
+ }
+ 
+ 
++static PyObject *_wrap_GameAction_print_message(PyObject *self, PyObject *args) {
++    PyObject *resultobj;
++    std::string *arg1 = 0 ;
++    int arg2 ;
++    std::string temp1 ;
++    PyObject * obj0 = 0 ;
++    
++    if(!PyArg_ParseTuple(args,(char *)&quot;Oi:GameAction_print_message&quot;,&amp;obj0,&amp;arg2)) goto fail;
++    {
++        if (PyString_Check(obj0)) {
++            temp1 = std::string(PyString_AsString(obj0),
++            PyString_Size(obj0));
++            arg1 = &amp;temp1;
++        } else {
++            SWIG_exception(SWIG_TypeError, &quot;string expected&quot;);
++        }
++    }
++    GameAction::print_message((std::string const &amp;)*arg1,arg2);
++    
++    Py_INCREF(Py_None); resultobj = Py_None;
++    return resultobj;
++    fail:
++    return NULL;
++}
++
++
+ static PyObject *_wrap_new_GameAction(PyObject *self, PyObject *args) {
+     PyObject *resultobj;
+     GameAction *result;
+@@ -3152,6 +3178,7 @@
+ 	 { (char *)&quot;GameAction_set_crew&quot;, _wrap_GameAction_set_crew, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_end_game&quot;, _wrap_GameAction_end_game, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_scroll_text&quot;, _wrap_GameAction_scroll_text, METH_VARARGS },
++	 { (char *)&quot;GameAction_print_message&quot;, _wrap_GameAction_print_message, METH_VARARGS },
+ 	 { (char *)&quot;new_GameAction&quot;, _wrap_new_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;delete_GameAction&quot;, _wrap_delete_GameAction, METH_VARARGS },
+ 	 { (char *)&quot;GameAction_swigregister&quot;, GameAction_swigregister, METH_VARARGS },
+
+Modified: trunk/source/tml/gameaction.cpp
+===================================================================
+--- trunk/source/tml/gameaction.cpp	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/source/tml/gameaction.cpp	2005-05-20 21:06:09 UTC (rev 166)
+@@ -21,6 +21,7 @@
+ #include &quot;melee/mframe.h&quot;
+ #include &quot;games/ggob.h&quot;
+ #include &quot;melee/mship.h&quot;
++#include &quot;melee/mview.h&quot;
+ 
+ #include &lt;map&gt;
+ #include &lt;iostream&gt;
+@@ -83,7 +84,15 @@
+ double GameAction::get_player_ship_id()
+ {
+   STACKTRACE;
+-  return gobgame-&gt;gobplayer.ship-&gt;get_id();
++  if(gobgame-&gt;gobplayer.ship)
++    {
++      return gobgame-&gt;gobplayer.ship-&gt;get_id();
++    }
++  else
++    {
++      tw_error(&quot;Player doesn't have ship!!!&quot;);
++      return -1;
++    }
+ }
+ 
+ std::string GameAction::get_player_star_system()
+@@ -266,3 +275,9 @@
+   videosystem-&gt;set_palette(tmpPal);
+   videosystem-&gt;redraw();
+ }
++
++
++void GameAction::print_message(const std::string&amp; text, int time)
++{
++  message.print(time*1000, 2, &quot;%s&quot;, text.c_str());
++}
+
+Modified: trunk/source/tml/gameaction.h
+===================================================================
+--- trunk/source/tml/gameaction.h	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/source/tml/gameaction.h	2005-05-20 21:06:09 UTC (rev 166)
+@@ -190,6 +190,13 @@
+   /// @param text vector of text strings
+   /// @param background background picture
+   static void scroll_text(const std::vector&lt;std::string&gt;&amp; text, const std::string&amp; background);
++
++  /// Print hint message on screen
++  ///
++  /// @param text message
++  /// @time how long to display
++  static void print_message(const std::string&amp; text, int time);
++
+ };
+ 
+ 
+
+Modified: trunk/source/tml/gameevent.cpp
+===================================================================
+--- trunk/source/tml/gameevent.cpp	2005-05-20 17:57:25 UTC (rev 165)
++++ trunk/source/tml/gameevent.cpp	2005-05-20 21:06:09 UTC (rev 166)
+@@ -378,6 +378,7 @@
+     {
+       m_terminator-&gt;die();
+     }
++  TEventOrderMoveToLocationBase::die();
+ }
+ 
+ bool TEventOrderMoveToLocation::calculate()
+@@ -397,8 +398,8 @@
+     }
+ 
+   
+-  //if(shp-&gt;control-&gt;planet_dangerP())
+-  //    return false;
++  if(shp-&gt;control-&gt;planet_dangerP())
++    return false;
+   
+   // reset the keys for this ship
+   shp-&gt;nextkeys = 0;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000111.html">[Tw-light-svn] r165 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/games/test_game/scripts/systems gamedata/images/alien gamedata/python source/generated source/melee source/python source/ships source/tml
+</A></li>
+	<LI>Next message: <A HREF="000113.html">[Tw-light-svn] r167 - in trunk: gamedata/games/test_game/dialogs gamedata/games/test_game/scripts gamedata/images/alien web
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>

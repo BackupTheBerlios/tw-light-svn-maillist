@@ -1,0 +1,298 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Tw-light-svn] r190 - trunk/source/ships
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/tw-light-svn/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r190%20-%20trunk/source/ships&In-Reply-To=%3C200508310139.j7V1dAxv017326%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000135.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Tw-light-svn] r190 - trunk/source/ships</H1>
+    <B>Paul Forest at BerliOS</B> 
+    <A HREF="mailto:tw-light-svn%40lists.berlios.de?Subject=Re%3A%20%5BTw-light-svn%5D%20r190%20-%20trunk/source/ships&In-Reply-To=%3C200508310139.j7V1dAxv017326%40sheep.berlios.de%3E"
+       TITLE="[Tw-light-svn] r190 - trunk/source/ships">youbastrd at berlios.de
+       </A><BR>
+    <I>Wed Aug 31 03:39:10 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000135.html">[Tw-light-svn] r189 - in trunk: gamedata/images/ships/shpconca source/melee source/ships
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#136">[ date ]</a>
+              <a href="thread.html#136">[ thread ]</a>
+              <a href="subject.html#136">[ subject ]</a>
+              <a href="author.html#136">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: youbastrd
+Date: 2005-08-31 03:38:49 +0200 (Wed, 31 Aug 2005)
+New Revision: 190
+
+Modified:
+   trunk/source/ships/shpalabc.cpp
+Log:
+This is a &quot;fix&quot; for bug #20 (Alary doesn't give credit to killer); unfortunately, it introduces a worse bug.  The worse bug is that the Alary doesn't always spawn after dying.  This is a work in progress.  
+
+Modified: trunk/source/ships/shpalabc.cpp
+===================================================================
+--- trunk/source/ships/shpalabc.cpp	2005-08-26 18:56:59 UTC (rev 189)
++++ trunk/source/ships/shpalabc.cpp	2005-08-31 01:38:49 UTC (rev 190)
+@@ -23,11 +23,32 @@
+ 
+ class AlaryBCTurret;
+ 
++/**
++ * Alary Battlecruiser.  A formitable battleship, with auto-firing turrets,
++ * powerful tracking missiles, damage reduction, and large crew and battery
++ * compliments.  
++ *
++ * The primary weapon fires an AlaryBCTorpedo, which homes in on its target.
++ * A collision with this projectile will generally do less damage.  The 
++ * AlaryBCTorpedo will explode into a collection of AlaryBCWarhead's, each
++ * of which will track towards its target.  
++ * @see AlaryBCTorpedo
++ * @see AlaryBCWarhead
++ * 
++ * Pressing the secondary weapon will toggle the ship's auto-firing and aiming
++ * turrets.
++ * @see AlaryBCTShot
++ * @see AlaryBCTurret
++ * 
++ * Additionally, AlaryBattlecruiser will reduce damage dealt to it when hit.
++ * @see AlaryBC::calculate()
++ */
+ class AlaryBC : public Ship
+ {
+-public:
++private:
+   int    death_frame, exp_frame;
+-  bool   dying;
++  bool   dying; ///&lt; Is this ship dying?
++  //SpaceLocation * killer; ///&lt; When dying, what killed this ship?
+   int    engine_phase;
+   double weaponProximity, weaponVelocity, weaponAccel, weaponTR;
+   double weaponArmour;
+@@ -61,22 +82,88 @@
+   AlaryBCTurret *turret[3];
+   
+ public:
++  /**
++   * Constructs an Alary Battlecruiser.  
++   * @param opos the position in game-space to place the ship
++   * @param shipAngle the angle the ship will be when placed in game-space
++   * @param shipData the data structure for graphics, sounds, victory ditty, etc
++   * @param code ???
++   */
+   AlaryBC (Vector2 opos, double shipAngle, ShipData *shipData, unsigned int code);
+   
++  /**
++   * The ship can be in two modes: not-dying and dying.  
++   * In not-dying mode, the ship performs as normal.  
++   * In dying mode, the ship spins out of control, is drawn as having explosions
++   * on it, and does not respond to Control-fired events.  When a game-tick-timer
++   * has expired, the ship explodes and dies.
++   */
+   virtual void calculate();
++  
++  /**
++   *
++   */
+   virtual int  activate_weapon();
++  
++  /**
++   *
++   */ 
+   virtual void calculate_fire_special();
++  
++  /**
++   *
++   */
+   virtual void calculate_thrust();
++  
++  /**
++   *
++   */
+   virtual void calculate_turn_left();
++  
++  /**
++   *
++   */
+   virtual void calculate_turn_right();
++  
++  /**
++   *
++   */
+   virtual void calculate_hotspots();
++  
++  /**
++   *
++   */
+   virtual void animate(Frame *space);
++  
++  /**
++   *
++   */
+   virtual int  handle_damage(SpaceLocation* source, double normal, double direct);
++  
++  /**
++   *
++   */
+   virtual int  handle_fuel_sap(SpaceLocation *source, double normal);
++  
++  /**
++   *
++   */
+   virtual double handle_speed_loss(SpaceLocation *source, double normal);
+   
++  /**
++   *
++   */
++  virtual void death();
++
++  friend class AlaryBCTorpedo;
++  friend class AlaryBCWarhead;
++  friend class AlaryBCTShot;
++  friend class AlaryBCTurret;
+ };
+ 
++/**
++ * The Alary Battlecruiser's primary weapon.  
++ */
+ class AlaryBCTorpedo : public SpaceObject
+ {
+   int    armour, lifetime, smoke_frame, inactive;
+@@ -145,7 +232,8 @@
+ 
+ 
+ AlaryBC::AlaryBC (Vector2 opos, double shipAngle, ShipData *shipData, unsigned int code) :
+-  Ship(opos, shipAngle, shipData, code)
++  Ship(opos, shipAngle, shipData, code)//,
++  //killer(NULL)
+ {
+ 
+   engines_armour  = get_config_int(&quot;Ship&quot;, &quot;EnginesArmour&quot;, 99);
+@@ -225,15 +313,31 @@
+   if (crew &lt;= 0) 
+     {
+       death_frame -= frame_time;
+-      if (death_frame &lt;= 0) handle_damage(this,777,888);
++      
++      //This is the final death phase, after the ship has spun out
++      //of control.
++      if (death_frame &lt;= 0) {
++         //      remove turrets when dead;
++	for (int i=0; i&lt;3; i++)
++	    turret[i]-&gt;die();
++	/*if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) {
++		game-&gt;ship_died(this, NULL);
++		attributes &amp;= ~ATTRIB_NOTIFY_ON_DEATH;
++	}*/
++	die();
++	//Ship::calculate();
++	return;
++      }
+       turn_step_128 += turn_rate * frame_time;
+       
++      // Add small explosions inside the area of the ship.
+       double aaa, rrr;
+       exp_frame -= frame_time;
+       while (exp_frame &lt;= 0) 
+ 	{
+ 	  exp_frame += 90+tw_random()%300;
+ 	  aaa = PI2 * ((tw_random()%1001)/1000.0);
++	  /** @todo find a replacement for this expensive sqrt() call*/
+ 	  rrr = 66*sqrt((tw_random()%1001)/1000.0);
+ 	  if (tw_random()%2 == 0) 
+ 	    {
+@@ -562,19 +666,6 @@
+ 	} 
+     }
+   
+-  
+-  if ((source == this) &amp;&amp; (dying)) {
+-    //      remove turrets when dead;
+-    int i;
+-    for (i=0; i&lt;3; i++)
+-      turret[i]-&gt;state = 0;
+-    tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
+-    game-&gt;add(new Animation(this, pos,
+-			    game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS, 2.0));
+-    if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) game-&gt;ship_died(this, source);
+-    state = 0; return 0;
+-  }
+-  
+   crew -= total;
+   
+   if(crew &gt; crew_max) 
+@@ -587,6 +678,13 @@
+       total += crew;
+       crew  = 0;
+       dying = true;
++      
++      if (attributes &amp; ATTRIB_NOTIFY_ON_DEATH) {
++        game-&gt;ship_died(this, source);
++        attributes &amp;= ~ATTRIB_NOTIFY_ON_DEATH;
++      }
++      //die();
++      
+       turn_rate = scale_turning(12+tw_random()%80) * (1-2*(tw_random()%2)); 
+       if (engines_armour &gt; 0) 
+ 	{
+@@ -620,7 +718,14 @@
+   return Ship::handle_speed_loss(source, normal);
+ }
+ 
++void AlaryBC::death() {
++  tw_sound-&gt;play_sound(data_full_path(MELEE_BOOMSHIP_SOUND));
++  game-&gt;add(new Animation(this, pos,
++                          game-&gt;meleedata.kaboomSprite, 0, KABOOM_FRAMES, time_ratio, DEPTH_EXPLOSIONS, 2.0));
++  Ship::death();
++}
+ 
++
+ AlaryBCTorpedo::AlaryBCTorpedo(SpaceLocation *creator, double ox, double oy, double oangle, 
+ 			       int oinactive, double oaccel, double  omaxspeed,
+ 			       int olifetime, double oproximity, double oarmour, 
+@@ -660,7 +765,7 @@
+   if (lifetime &lt; 0) 
+     {
+       //launch warheads or die
+-      state = 0;
++      die();
+       return;
+   }
+   
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000135.html">[Tw-light-svn] r189 - in trunk: gamedata/images/ships/shpconca source/melee source/ships
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#136">[ date ]</a>
+              <a href="thread.html#136">[ thread ]</a>
+              <a href="subject.html#136">[ subject ]</a>
+              <a href="author.html#136">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/tw-light-svn">More information about the Tw-light-svn
+mailing list</a><br>
+</body></html>
